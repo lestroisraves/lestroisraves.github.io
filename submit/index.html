@@ -63,8 +63,6 @@
     
       <link rel="stylesheet" href="../assets/css/account.css">
     
-      <link rel="stylesheet" href="../assets/css/formtile.css">
-    
       <link rel="stylesheet" href="../assets/css/notice.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
@@ -384,17 +382,40 @@
 
 <div id="submit-page">
 
-    <div id="notice-tip" class="notice notice-tip event hidden">
-        <span class="notice-icon">💡</span>
-        <div class="notice-content">
-            <strong id="title"></strong>
-            <p id="text"></p>
+    <div id="account-container" class="detail-section hidden">
+        <div class="detail-row">
+            <span class="label">Contributeur</span>
+            <span id="account-role" class="value detail-user"></span>
+        </div>
+
+        <li id="permission-publish" class="permission granted">
+            <span id="icon" class="material-icons">check</span>
+            Publier des évènements
+        </li>
+        <li id="permission-edit" class="permission granted">
+            <span id="icon" class="material-icons">check</span>
+            Editer vos évènements
+        </li>
+        <li id="permission-instant" class="permission denied">
+            <span id="icon" class="material-icons">lock</span>
+            Publier instantanément (sans délais de 3 jours)
+        </li>
+        <li id="permission-admin" class="permission granted hidden">
+            <span id="icon" class="material-icons">check</span>
+            Modération: éditer/supprimer n'importe quel évènement
+        </li>
+
+        <div id="role-request" class="role-request hidden">
+            <p class="role-request-text">
+                Plus d'infos sur
+                <a href="../account/" id="official-role-request">Mon compte</a>
+            </p>
         </div>
     </div>
 
     <!-- SUBMIT CONTAINER -->
     <div id="submit-container" class="submit-section hidden">
-        <article class="formtile-event-tile pico">
+        <article class="submit-tile pico">
             <form id="event-form">
                 <label>
                     Titre de l'évènement

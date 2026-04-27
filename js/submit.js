@@ -1,10 +1,8 @@
 console.log("executing:", document.currentScript?.src);
 
 /* === VARIABLES === */
+const accountContainer = document.getElementById("account-container");
 const submitContainer = document.getElementById("submit-container");
-const noticeTip = document.getElementById("notice-tip");
-const noticeTipTitle = noticeTip.querySelector("#title");
-const noticeTipText = noticeTip.querySelector("#text");
 const noticeSuccess = document.getElementById("notice-success");
 const noticeSuccessText = noticeSuccess.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
@@ -47,26 +45,58 @@ function hideNoticeMessages() {
 }
 
 function showSubmit(user, profile) {
+    const role = profile.role;
+
     submitContainer.classList.remove("hidden");
-    noticeTip.classList.remove("hidden");
+    accountContainer.classList.remove("hidden");
     hideNoticeMessages();
 
-    noticeTipTitle.innerText = "Vous êtes contributeur " + APP_CONFIG.ROLES[profile.role]["label"];
-    noticeTipText.innerText = APP_CONFIG.ROLES[profile.role]["actions"];
-    
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.CATEGORIES[key]["label"]
-        categoryList.appendChild(opt);
-    });
-    categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
+    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[role]["label"];
+
+    /* configure roles */
+    const publishInstant = accountContainer.querySelector("#permission-instant");
+    const adminDetails = accountContainer.querySelector("#permission-admin");
+    const roleRequest = accountContainer.querySelector("#role-request");
+
+    switch(role) {
+        case 0: /* non official */
+            publishInstant.classList.add("denied");
+            publishInstant.classList.remove("granted");
+            publishInstant.querySelector("#icon").innerText = "lock"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.remove("hidden");
+            break;
+        
+        case 1: /* official */
+            publishInstant.classList.remove("denied");
+            publishInstant.classList.add("granted");
+            publishInstant.querySelector("#icon").innerText = "check"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.add("hidden");
+            break;
+
+        case 2: /* admin */
+            publishInstant.classList.remove("denied");
+            publishInstant.classList.add("granted");
+            publishInstant.querySelector("#icon").innerText = "check"
+            adminDetails.classList.remove("hidden");
+            roleRequest.classList.add("hidden");
+            break;
+        
+        default:
+            publishInstant.classList.add("denied");
+            publishInstant.classList.remove("granted");
+            publishInstant.querySelector("#icon").innerText = "lock"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.remove("hidden");
+    }
 
     // initForTest();
 }
 
 function showLoginWarning() {
+    accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
-    noticeTip.classList.add("hidden");
     hideNoticeMessages();
 
     window.location.href = "../account/";
