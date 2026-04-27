@@ -3,6 +3,19 @@
     display: none;
 }
 
+.formtile-tile {
+    max-width: 420px;
+    margin: 1rem auto;
+    padding: 1.2rem 1.8rem;
+    background: var(--md-default-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.formtile-longtext {
+    min-height: 250px;
+}
+
 .account-tile {
     max-width: 720px;
     margin: 0.5rem auto;
@@ -63,6 +76,10 @@
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     padding: 0.2rem 0.8rem 0.2rem 0.8rem;
     margin-bottom: 0.8rem;
+}
+
+.detail-section.hidden {
+    display: none;
 }
 
 .permission {

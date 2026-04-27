@@ -66,7 +66,6 @@ extra_css:
   - assets/css/events.css
   - assets/css/submit.css
   - assets/css/account.css
-  - assets/css/formtile.css
   - assets/css/notice.css
 
 plugins:
