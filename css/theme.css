@@ -1,0 +1,157 @@
+:root {
+    color-scheme: light;
+}
+
+:root,
+[data-md-color-scheme="default"]
+{
+    --primary-white:                    #ffffff;
+    --secondary-gray4:                  #aaaaaa;
+    --primary-success:                  #4caf50;
+    --primary-success--lighter:         #f3fbf5;
+    --primary-warning:                  #ff9800;
+    --primary-warning--lighter:         #fff7e6;
+    --primary-error:                    #f44336;
+    --primary-error--lighter:           #fdecea;
+    --primary-tag-color:                #d1a8a8;
+
+    /* currently used colors */
+    --primary-fg:                       var(--pico-primary);
+    --md-primary-color:                 var(--primary-fg);
+    /* redefine scrollbar colors */
+    --md-accent-fg-color:               var(--primary-fg);
+    /* --md-typeset-color:                  var(--pico-color); */
+
+    /* redefine header colors */
+    --md-primary-fg-color:              var(--primary-fg);
+    --md-primary-bg-color:              var(--primary-white);
+
+    /* redefine footer colors */
+    /* "Copyright..." */
+    --md-footer-fg-color--light:        var(--primary-white);
+    /* "Made with" */
+    --md-footer-fg-color--lighter:      var(--primary-white);
+    /* hover on "Made with" */
+    --md-footer-fg-color:               var(--primary-fg);
+}
+
+
+.md-tabs {
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--md-primary-bg-color);
+}
+
+
+.md-sidebar--primary {
+    background: var(--primary-fg);
+}
+
+.md-nav--primary {
+    background: var(--primary-fg);
+}
+
+
+.md-header {
+    background: var(--primary-fg);
+}
+
+/* color footer */
+.md-footer-meta__inner {
+    background: var(--primary-fg);
+}
+
+/* Hide h1 */
+.md-content h1:first-of-type {
+    display: none;
+}
+
+.md-grid {
+    max-width: initial;
+}
+
+hr {
+    /* define "Horizontal Line" style */
+    border-top: 2px solid var(--md-primary-fg-color);
+}
+
+table, th, td {
+    /* define table borders */
+    border: 1px solid var(--secondary-gray4);
+    border-collapse: collapse;
+}
+
+th {
+    /* define table header style */
+    background-color: var(--secondary-gray4);
+    color: #000000;
+    border: 1px solid #000;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+table tr:first-child th {
+    /* define header border left */
+    border-left: 1px solid var(--secondary-gray4);
+}
+
+table tr th:last-child {
+    /* define header border right */
+    border-right: 1px solid var(--secondary-gray4);
+}
+
+
+/* make/set variables that react to the theme */
+@media screen {
+    [data-md-color-scheme=slate] {
+        --my-default-font-weight: 400;  /* light font weight for dark theme, for easier readability */
+    }
+    [data-md-color-scheme=default] {
+        --my-default-font-weight: 400; /* standard font weight, good for white background */
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: light;
+    }
+}
+
+.md-typeset h1, h2, h3, h4, h5, h6 {
+    font-weight: bold !important;
+    color: var(--md-default--fg-color) !important;
+}
+
+.md-typeset h1 {
+    font-size: 2.5em;
+}
+.md-typeset h2 {
+    font-size: 2em;
+}
+.md-typeset h3 {
+    font-size: 1.7em;
+}
+.md-typeset h4 {
+    font-size: 1.4em;
+}
+.md-typeset h5 {
+    font-size: 1.2em;
+}
+.md-typeset h6 {
+    /* define h6 format (invisible in table of contents) */
+    font-size: 1em !important;
+}
+.md-typeset p {
+    font-size: 0.85em;
+}
+.pico input {
+    font-size: 0.85em;
+}
+
+.pico textarea {
+    font-size: 0.85em;
+}
+
+.pico select {
+    font-size: 1em;
+}
+
