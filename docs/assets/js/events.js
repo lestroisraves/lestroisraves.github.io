@@ -14,7 +14,11 @@ const filterCatChoices = filterPanel.querySelector("#category");
 const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
+const modal = document.getElementById("event-modal");
+const modalContent = document.getElementById("modal-content");
+
 let tags = [];
+let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
 
 /* === FUNCTIONS === */
@@ -56,6 +60,25 @@ function showFilterError(message) {
     filterNoticeError.focus();
 }
 
+function openEventModal(event) {
+    const eventData = renderEventData(event);
+    eventData.descriptionHtml = linkify(eventData.long_description);
+    eventData.addressHtml = event.location_address
+        ? renderMaterialIconText("place", event.location_name + " - " + event.location_address)
+        : renderMaterialIconText("place", event.location_name);
+
+    modalContent.innerHTML = renderEventModal(eventData);
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+
+function closeModal() {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+
 function addTag(value) {
     const tag = value.trim().toLowerCase();
 
@@ -96,14 +119,17 @@ function renderTags() {
     });
 
     tagInput.value = "";
+    
 }
 
-function renderEventTile(event) {
-      const timeHtml = event.event_start_time
+function renderEventData(event) {
+    const eventData = event;
+
+    eventData.timeHtml = event.event_start_time
         ? renderMaterialIconText("schedule", formatTimeForUI(event.event_start_time))
         : "";
 
-    const tagsHtml = event.tags && event.tags.length
+    eventData.tagsHtml = event.tags && event.tags.length
         ? `
             <div class="event-tags">
                 ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
@@ -111,40 +137,67 @@ function renderEventTile(event) {
         `
         : "";
 
-    const imageHtml = event.image_url
+    eventData.imageHtml = event.image_url
         ? ` <div class="event-image-wrapper"><img src="${event.image_url}" class="event-thumbnail" loading="lazy" alt="Event image"></div>`
         : "";
 
-    if (event.image_url) {
-        console.log("image_url:", event.image_url)
+    eventData.price = "Gratuit";
+    if (event.is_free_price) {
+        eventData.price = "Participation libre";
+    } else if (event.min_price && event.max_price) {
+        eventData.price = event.min_price + " à " + event.max_price + " €";
+    } else if (event.max_price) {
+        eventData.price = event.max_price + " €";
     }
 
-    var priceText = "Gratuit";
-    if (event.is_free_price) {
-        priceText = "Participation libre";
-    } else if (event.min_price && event.max_price) {
-        priceText = event.min_price + " à " + event.max_price + " €";
-    } else if (event.max_price) {
-        priceText = event.max_price + " €";
-    }
-    
+    eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]["label"]
+
+    eventData.date = formatDateForUI(event.event_date);
+
+    return eventData;
+}
+
+function renderEventTile(event) {
+    const eventData = renderEventData(event);
+
     return `
-        <div class="event-tile">
-            ${imageHtml}
-            <div class="event-content">
+        <div class="event-tile" role="link" tabindex="0" data-event-id="${eventData.id}">
+            ${eventData.imageHtml}
+            <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 <div class="event-meta">
-                    ${renderMaterialIconText("stars", APP_CONFIG.CATEGORIES[event.category]["label"])}
+                    ${renderMaterialIconText("stars", eventData.categoryLabel)}
                     ${renderMaterialIconText("place", event.location_name)}
                 </div>
                 <div class="event-meta">
-                    ${renderMaterialIconText("event", formatDateForUI(event.event_date))}
-                    ${timeHtml}
-                    ${renderMaterialIconText("sell", priceText)}
+                    ${renderMaterialIconText("event", eventData.date)}
+                    ${eventData.timeHtml}
+                    ${renderMaterialIconText("sell", eventData.price)}
                 </div>
-                ${tagsHtml}
+                ${eventData.tagsHtml}
             </div>
         </div>
+    `;
+}
+
+function renderEventModal(event) {
+    const eventData = renderEventData(event);
+
+    return `
+        ${eventData.imageHtml}
+        <div id="modal-title" class="event-title">${event.title}</div>
+        <div class="event-meta">
+            ${renderMaterialIconText("stars", eventData.categoryLabel)}
+            ${eventData.addressHtml}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("event", eventData.date)}
+            ${eventData.timeHtml}
+            ${renderMaterialIconText("sell", eventData.price)}
+        </div>
+        ${eventData.tagsHtml}
+        <hr>
+        <p id="modal-description" class="modal-description">${eventData.descriptionHtml}</p>
     `;
 }
 
@@ -200,6 +253,8 @@ async function loadEvents() {
     const header = document.getElementById("event-list-header");
     const filter = document.getElementById("event-filter");
 
+    EVENTS = [];
+
     let query = window.supabaseClient
         .from("future_events")
         .select("*")
@@ -221,7 +276,7 @@ async function loadEvents() {
         query = query.overlaps("tags", filters.tags);
     }
 
-    const { data: events, error } = await query.order("event_date", { ascending: true });
+    const { data, error } = await query.order("event_date", { ascending: true });
 
     console.log("Data:", events);
     console.log("Error:", error);
@@ -235,7 +290,9 @@ async function loadEvents() {
         return;
     }
 
-    const grouped = groupEvents(events);
+    EVENTS = data;
+
+    const grouped = groupEvents(EVENTS);
 
     grouped.today = sortByDate(grouped.today);
     grouped.thisWeek = sortByDate(grouped.thisWeek);
@@ -250,8 +307,6 @@ async function loadEvents() {
         renderSection("Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
         renderSection("Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
         renderSection("Prochainement", "Après le " + formatDateForUI(nextSunday), grouped.future);
-
-    // container.innerHTML = data.map(renderEventTile).join("")
 }
 
 /* === LISTENERS === */
@@ -333,6 +388,25 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     loadEvents();
 });
 
+document.addEventListener("click", (e) => {
+    const tile = e.target.closest(".event-tile");
+    if (!tile) return;
+
+    const id = tile.dataset.eventId;
+    const event = EVENTS.find(e => e.id === id);
+    if (!event) return;
+
+    console.log("EVENT:", event);
+    openEventModal(event);
+});
+
+document.querySelector(".modal-close").addEventListener("click", closeModal);
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        closeModal();
+    }
+});
 
 /* Handle typing */
 tagInput.addEventListener("keydown", (e) => {
