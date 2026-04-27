@@ -392,20 +392,6 @@
         </div>
     </div>
 
-    <div id="notice-success" class="notice notice-tip event hidden">
-        <span class="notice-icon">✔️</span>
-        <div class="notice-content">
-            <p id="text"></p>
-        </div>
-    </div>
-
-    <div id="notice-error" class="notice notice-error event hidden">
-        <span class="notice-icon">❌</span>
-        <div class="notice-content">
-            <p id="text"></p>
-        </div>
-    </div>
-
     <!-- SUBMIT CONTAINER -->
     <div id="submit-container" class="submit-section hidden">
         <article class="formtile-event-tile pico">
@@ -474,22 +460,29 @@
                     <input type="file" id="event-image" accept="image/*"/>
                 </label>
 
-                <!-- <label>
-                    Images (3 maximum)
-                    <input
-                        type="file"
-                        id="images"
-                        accept="image/*"
-                        multiple
-                        capture="environment"
-                        required
-                    >
-                </label> -->
+                <div id="notice-success" class="notice notice-tip event hidden">
+                    <span class="notice-icon">✔️</span>
+                    <div class="notice-content">
+                        <strong id="title">Succès</strong>
+                        <p id="text"></p>
+                    </div>
+                </div>
+
+                <div id="notice-error" class="notice notice-error event hidden">
+                    <span class="notice-icon">❌</span>
+                    <div class="notice-content">
+                        <strong id="title">Erreur</strong>
+                        <p id="text"></p>
+                    </div>
+                </div>
 
                 <div>
                     <button type="submit" id="button">Publier</button>
                 </div>
             </form>
+
+
+
         </article>
     </div>
 </div>

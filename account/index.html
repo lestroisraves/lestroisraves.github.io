@@ -391,6 +391,7 @@
     <div id="notice-error" class="notice notice-error hidden">
         <span class="notice-icon">❌</span>
         <div class="notice-content">
+            <strong id="title">Erreur</strong>
             <p id="text"></p>
         </div>
     </div>
@@ -505,37 +506,55 @@
 
     <!-- ACCOUNT -->
     <div id="account-container" class="account-section hidden">
-        <article class="formtile-tile pico">
-            <form id="account-form">
-                <label>
-                    Connecté en tant que:
-                    <input
-                        type="text"
-                        id="account-name"
-                        aria-label="Read-only input"
-                        readonly
-                    >
-                </label>
+        <article class="formtile-event-tile pico">
+            <form id="account-form" >
 
-                <label>
-                    Email
-                    <input
-                        type="email"
-                        id="account-email"
-                        ria-label="Read-only input"
-                        readonly
-                    >
-                </label>
+                <div class="account-identity">
+                    <span class="material-icons" aria-hidden="true">person</span>
+                    <span id="account-name" class="account-name"></span>
+                </div>
 
-                <label>
-                    Role
-                    <input
-                        type="text"
-                        id="account-role"
-                        ria-label="Read-only input"
-                        readonly
-                    >
-                </label>
+                <div class="account-details">
+
+                    <div class="detail-section">
+                        <div class="detail-row">
+                            <span class="label">Email</span>
+                            <span id="account-email" class="value detail-user"></span>
+                        </div>
+                    </div>
+
+                    <div id="detail-section" class="detail-section">
+                        <div class="detail-row">
+                            <span class="label">Contributeur</span>
+                            <span id="account-role" class="value detail-user"></span>
+                        </div>
+
+                        <li id="permission-publish" class="permission granted">
+                            <span id="icon" class="material-icons">check</span>
+                            Publier des évènements
+                        </li>
+                        <li id="permission-edit" class="permission granted">
+                            <span id="icon" class="material-icons">check</span>
+                            Editer vos évènements
+                        </li>
+                        <li id="permission-instant" class="permission denied">
+                            <span id="icon" class="material-icons">lock</span>
+                            Publier instantanément (sans délais de 3 jours)
+                        </li>
+                        <li id="permission-admin" class="permission granted hidden">
+                            <span id="icon" class="material-icons">check</span>
+                            Modération: éditer/supprimer n'importe quel évènement
+                        </li>
+
+                        <div id="role-request" class="role-request hidden">
+                            <p class="role-request-text">
+                                Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
+                                <a href="#" id="official-role-request">Demandez à être contributeur officiel</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
 
                 <div>
                     <button type="submit">Se déconnecter</button>

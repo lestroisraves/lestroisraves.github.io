@@ -2,3 +2,101 @@
 .account-section.hidden {
     display: none;
 }
+
+.account-identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #3f51b5;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.account-identity .material-icons {
+    font-size: 1.2rem;
+}
+
+.account-details {
+    border-top: 1px solid #eee;
+    padding-top: 0.8rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.detail-row .label {
+    color: #777;
+}
+
+.detail-row .value {
+    font-weight: 500;
+}
+
+.detail-user {
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: #e8f0fe;
+    color: #1a3fb4;
+    font-size: 0.7rem;
+}
+
+.detail-section {
+    font-size: 0.75rem;
+    color: #777;
+    list-style: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    padding: 0.2rem 0.8rem 0.2rem 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.permission {
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+}
+
+.permission.granted {
+    color: #39813c;
+}
+
+.permission.granted.hidden {
+    display: none;
+}
+
+.permission.granted .material-icons {
+    color: #4caf50;
+}
+
+.permission.denied {
+    color: #999;
+}
+
+.permission.denied .material-icons {
+    color: #b0b0b0;
+}
+
+.role-request {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.role-request.hidden {
+    display: none;
+}
+
+.role-request-text {
+    margin: 0;
+    color: #666;
+}
+
