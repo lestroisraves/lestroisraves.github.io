@@ -12,16 +12,6 @@
     max-width: 720px;
 }
 
-.formtile-row {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-end;
-}
-
-.formtile-row label {
-    flex: 1;
-}
-
 .formtile-longtext {
     min-height: 250px;
 }
@@ -33,12 +23,6 @@
 }
 
 /* Mobile */
-@media (max-width: 700px) {
-    .formtile-row {
-        flex-direction: column;
-    }
-}
-
 @media (max-width: 400px) {
     .formtile-radio {
         flex-direction: column;

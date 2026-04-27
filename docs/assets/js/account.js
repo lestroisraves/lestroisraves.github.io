@@ -57,6 +57,8 @@ function showSignup() {
 }
 
 function showAccount(user, profile) {
+    const role = profile.role;
+
     signInContainer.classList.add("hidden");
     rstPwdContainer.classList.add("hidden");
     signupContainer.classList.add("hidden");
@@ -64,9 +66,48 @@ function showAccount(user, profile) {
     noticeTip.classList.add("hidden");
     hideErrorNotice();
 
-    document.getElementById("account-email").value = user.email;
-    document.getElementById("account-name").value = profile.name;
-    document.getElementById("account-role").value = APP_CONFIG.ROLES[profile.role]["label"];
+    document.getElementById("account-email").innerText = user.email;
+    document.getElementById("account-name").innerText = profile.name;
+    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[role]["label"];
+
+    /* configure roles */
+    const details = document.getElementById("detail-section");
+    const publishInstant = details.querySelector("#permission-instant");
+    const adminDetails = details.querySelector("#permission-admin");
+    const roleRequest = details.querySelector("#role-request");
+
+    switch(role) {
+        case 0: /* non official */
+            publishInstant.classList.add("denied");
+            publishInstant.classList.remove("granted");
+            publishInstant.querySelector("#icon").innerText = "lock"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.remove("hidden");
+            break;
+        
+        case 1: /* official */
+            publishInstant.classList.remove("denied");
+            publishInstant.classList.add("granted");
+            publishInstant.querySelector("#icon").innerText = "check"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.add("hidden");
+            break;
+
+        case 2: /* admin */
+            publishInstant.classList.remove("denied");
+            publishInstant.classList.add("granted");
+            publishInstant.querySelector("#icon").innerText = "check"
+            adminDetails.classList.remove("hidden");
+            roleRequest.classList.add("hidden");
+            break;
+        
+        default:
+            publishInstant.classList.add("denied");
+            publishInstant.classList.remove("granted");
+            publishInstant.querySelector("#icon").innerText = "lock"
+            adminDetails.classList.add("hidden");
+            roleRequest.classList.remove("hidden");
+    }
 }
 
 async function initAccountPage() {
