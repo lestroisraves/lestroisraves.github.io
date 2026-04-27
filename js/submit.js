@@ -47,7 +47,7 @@ function hideNoticeMessages() {
 }
 
 function showSubmit(user, profile) {
-    const role =0;//profile.role;
+    const role = profile.role;
     noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
     accountContainer.classList.remove("hidden");
