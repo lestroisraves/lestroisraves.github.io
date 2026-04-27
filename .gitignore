@@ -1,0 +1,5 @@
+.vscode/
+.bak/
+site/
+venv/
+pico/
