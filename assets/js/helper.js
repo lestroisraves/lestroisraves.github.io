@@ -51,6 +51,14 @@ function renderMaterialIconText(icon, text) {
 
 }
 
+function linkify(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
 function startOfDay(date) {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
@@ -77,7 +85,6 @@ function sortByDate(events) {
             new Date(a.event_date) - new Date(b.event_date)
     );
 }
-
 
 function formatDateRange(startDate, endDate) {
     return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;

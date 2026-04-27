@@ -79,7 +79,23 @@
     box-shadow: 0 2px 6px rgba(209, 202, 202, 0.08);
     background-color: rgba(0, 0, 0, 0.02);
     border-left: 4px solid var(--pico-primary);
+    
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
 }
+
+
+.event-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.event-tile:focus {
+    /* outline: 2px solid #b8bee0; */
+    outline-offset: 2px;
+}
+
 
 .event-content {
     flex: 1;
@@ -167,17 +183,72 @@
     object-fit: cover;
 }
 
+/* === EVENT CARD ===*/
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 520px;
+    max-height: 85vh;
+
+    padding: 1rem;
+    position: relative;
+    overflow-y: auto;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.modal-description {
+    white-space: pre-line;
+}
+
+
+/* === SCREEN RESPONSIVE === */
 @media (max-width: 550px) {
     .event-tile {
         flex-direction: column;
     }
-
-    /* .event-image-wrapper {
-        height: 100px;
-        overflow: hidden;
-        object-fit: cover;
-        object-position: center; 
-    } */
 
     .event-thumbnail {
         width: 100%;
