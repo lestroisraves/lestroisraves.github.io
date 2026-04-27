@@ -39,6 +39,12 @@ APP_CONFIG = {
             "label": "Autres"
         },
     },
+    DEFAULT_FILTER: {
+        categories: null,
+        tags: null,
+        from: null,
+        to: null
+    },
     API_TIMEOUT_MS: 5000
 };
 
