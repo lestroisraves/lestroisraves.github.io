@@ -50,3 +50,36 @@ function renderMaterialIconText(icon, text) {
             `
 
 }
+
+function startOfDay(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+function getSunday(date) {
+    const d = new Date(date);
+    const day = d.getDay(); // 0 (Sun) → 6 (Sat)
+    const diff = (7 - day) % 7;
+    d.setDate(d.getDate() + diff);
+    return startOfDay(d);
+}
+
+function addDays(date, days) {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return startOfDay(d);
+}
+
+function sortByDate(events) {
+    return events.sort(
+        (a, b) =>
+            new Date(a.event_date) - new Date(b.event_date)
+    );
+}
+
+
+function formatDateRange(startDate, endDate) {
+    return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;
+}
+

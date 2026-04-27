@@ -64,6 +64,7 @@ extra_css:
   - https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.fuchsia.min.css
   - assets/css/theme.css
   - assets/css/events.css
+  - assets/css/filter.css
   - assets/css/submit.css
   - assets/css/account.css
   - assets/css/notice.css

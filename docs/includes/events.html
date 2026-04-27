@@ -1,0 +1,62 @@
+<div id="event-list-header" class="event-list-header hidden">
+    <a href="./submit/" class="btn-outline">
+        <span class="material-icons" aria-hidden="true">add</span>
+        Publier un évènement
+    </a>
+</div>
+
+<section id="event-filter" class="filter-accordion hidden">
+    
+    <button id="filter-toggle" class="accordion-toggle" aria-expanded="false" aria-controls="filter-panel" >
+        <span class="material-icons">filter_list</span>
+        Filtrer
+        <span class="material-icons chevron">expand_more</span>
+    </button>
+
+    
+    <div id="filter-panel" class="accordion-panel" hidden>
+        <form id="filter-form">
+            <label class="pico">
+                <fieldset id="category">
+                <legend>Catégories:</legend></fieldset>
+            </label>
+
+            <label for="tag-input" class="pico">Tags</label>
+            <div class="tag-input-container" id="tag-container">
+                <input type="text" id="tag-input" placeholder="Ajouter un tag..." autocomplete="off">
+            </div>
+
+            <div class="date-range pico">
+                <label>
+                    Du
+                    <input type="date" name="from">
+                </label>
+
+                <label>
+                    au
+                    <input type="date" name="to">
+                </label>
+            </div>
+
+            <div id="filter-error" class="notice notice-error hidden">
+                <span class="notice-icon">❌</span>
+                <div class="notice-content">
+                    <strong id="title">Erreur</strong>
+                    <p id="text"></p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="filter-actions pico">
+                <button type="submit">Appliquer le filtre</button>
+                <button type="button" id="reset-filters" class="secondary">
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<article id="events"></article>
+
+<script type="module" defer src="assets/js/events.js"></script>

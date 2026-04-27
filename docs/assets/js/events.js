@@ -6,39 +6,17 @@ const thisSunday = getSunday(today);
 const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
 
-function startOfDay(date) {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-}
+const filterNoticeError = document.getElementById("filter-error");
+const filterNoticeErrorText = filterNoticeError.querySelector("#text");
+const filterToggle = document.getElementById("filter-toggle");
+const filterPanel = document.getElementById("filter-panel");
+const filterCatChoices = filterPanel.querySelector("#category");
+const tagContainer = document.getElementById("tag-container");
+const tagInput = document.getElementById("tag-input");
 
-function getSunday(date) {
-    const d = new Date(date);
-    const day = d.getDay(); // 0 (Sun) → 6 (Sat)
-    const diff = (7 - day) % 7;
-    d.setDate(d.getDate() + diff);
-    return startOfDay(d);
-}
+let tags = [];
 
-function addDays(date, days) {
-    const d = new Date(date);
-    d.setDate(d.getDate() + days);
-    return startOfDay(d);
-}
-
-function sortByDate(events) {
-    return events.sort(
-        (a, b) =>
-            new Date(a.event_date) - new Date(b.event_date)
-    );
-}
-
-
-function formatDateRange(startDate, endDate) {
-    return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;
-}
-
-
+/* === FUNCTIONS === */
 function groupEvents(events) {
     const groups = {
         today: [],
@@ -65,6 +43,58 @@ function groupEvents(events) {
     });
 
     return groups;
+}
+
+function hideErrorMessages() {
+    filterNoticeError.classList.add("hidden");
+}
+
+function showFilterError(message) {
+    filterNoticeError.classList.remove("hidden");
+    filterNoticeErrorText.innerText = message;
+    filterNoticeError.focus();
+}
+
+function addTag(value) {
+    const tag = value.trim().toLowerCase();
+
+    if (!tag || tags.includes(tag)) {
+        return;
+    }
+
+    tags.push(tag);
+    renderTags();
+}
+
+function removeTag(tagToRemove) {
+    tags = tags.filter(tag => tag !== tagToRemove);
+    renderTags();
+}
+
+function renderTags() {
+    // Remove existing chips
+    tagContainer
+        .querySelectorAll(".tag-chip")
+        .forEach(el => el.remove());
+
+    // Add chips before the input
+    tags.forEach(tag => {
+        const chip = document.createElement("span");
+        chip.className = "tag-chip";
+        chip.textContent = tag;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.innerHTML = "&times;";
+        removeBtn.addEventListener("click", () => {
+            removeTag(tag);
+        });
+
+        chip.appendChild(removeBtn);
+        tagContainer.insertBefore(chip, tagInput);
+    });
+
+    tagInput.value = "";
 }
 
 function renderEventTile(event) {
@@ -134,6 +164,31 @@ function renderSection(sectionTitle, subtitle, events) {
         </div>
     `;
 }
+
+function initFilters() {
+    tags = [];
+    renderTags();
+
+    /* Configure Catgeories */
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const tag = APP_CONFIG.CATEGORIES[key]["label"];
+
+        const label = document.createElement("label");
+        label.className = "category-item";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = tag.toLowerCase();
+        checkbox.name = "categories";
+
+        label.appendChild(checkbox);
+        label.append(" " + tag);
+
+        filterCatChoices.appendChild(label); 
+    });
+
+}
+
 async function loadEvents() {
     if (!window.supabaseClient) {
         console.error("Supabase not initialized");
@@ -142,6 +197,7 @@ async function loadEvents() {
 
     const container = document.getElementById("events");
     const header = document.getElementById("event-list-header");
+    const filter = document.getElementById("event-filter");
 
     const { data: events, error } = await window.supabaseClient
         .from("future_events")
@@ -169,6 +225,7 @@ async function loadEvents() {
     grouped.future = sortByDate(grouped.future);
 
     header.classList.remove("hidden");
+    filter.classList.remove("hidden");
     
     container.innerHTML =
         renderSection("Aujourd'hui", formatDateForUI(today), grouped.today) +
@@ -179,4 +236,120 @@ async function loadEvents() {
     // container.innerHTML = data.map(renderEventTile).join("")
 }
 
+/* === LISTENERS === */
+filterToggle.addEventListener("click", (event) => {
+    event.preventDefault();
+    const isOpen = filterToggle.getAttribute("aria-expanded") === "true";
+
+    filterToggle.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        filterPanel.setAttribute("hidden", "");
+    } else {
+        filterPanel.removeAttribute("hidden");
+    }
+});
+
+document.getElementById("reset-filters").addEventListener("click", (event) => {
+    event.preventDefault();
+    const form = event.target;
+    hideErrorMessages();
+    tags = [];
+    renderTags();
+    document.getElementById("filter-form").reset();
+});
+
+document.getElementById("filter-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.target;
+
+    hideErrorMessages();
+
+    const selectedCategories = Array.from(
+        form.querySelectorAll('input[name="categories"]:checked')
+    ).map(cb => cb.value);
+
+    const from = form.from.value;
+    const to = form.to.value;
+
+    // checks tags
+    tags.forEach(tag => {
+        // if (!/^[a-z0-9-_]+$/.test(tag)) {
+        //     showFilterError("Mauvais format pour les tags")
+        // }
+        // return;
+    });
+
+    // check dates
+    if (from) {
+        if (from < today) {
+            from = today;
+        }
+    }if (to) {
+        if (to < today) {
+            to = today;
+        }
+    }
+    if (from && to) {
+        if (to <= from) {
+            showFilterError("La date de fin doit être supérieure à la date de début");
+            return;
+        }
+    }
+
+    console.log("selected categories:", selectedCategories);
+    console.log("selected tags:", tags);
+    console.log("start date:", from);
+    console.log("end date:", to);
+
+
+    // const filtered = events.filter(event => {
+    //     if (tag && !event.tags.includes(tag)) {
+    //         return false;
+    //     }
+
+    //     if (from && event.event_date < from) {
+    //         return false;
+    //     }
+
+    //     if (to && event.event_date > to) {
+    //         return false;
+    //     }
+
+    //     return true;
+    // });
+
+    // renderEvents(filtered);
+
+    
+    filterToggle.setAttribute("aria-expanded", "false");
+    filterPanel.setAttribute("hidden", "");
+
+});
+
+
+/* Handle typing */
+tagInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        addTag(tagInput.value);
+    }
+
+    if (e.key === "Backspace" && tagInput.value === "" && tags.length) {
+        removeTag(tags[tags.length - 1]);
+    }
+});
+
+/* Handle blur (optional) */
+tagInput.addEventListener("blur", () => {
+    addTag(tagInput.value);
+});
+
+/* Focus input when clicking container */
+tagContainer.addEventListener("click", () => {
+    tagInput.focus();
+});
+
+hideErrorMessages();
+initFilters();
 loadEvents();
