@@ -16,11 +16,6 @@ const tagInput = document.getElementById("tag-input");
 
 const modal = document.getElementById("event-modal");
 const modalContent = document.getElementById("modal-content");
-// const modalTitle = document.getElementById("modal-title");
-// const modalDate = document.getElementById("modal-date");
-// const modalLocation = document.getElementById("modal-location");
-// const modalDescription = document.getElementById("modal-description");
-
 
 let tags = [];
 let EVENTS = [];
@@ -68,13 +63,11 @@ function showFilterError(message) {
 function openEventModal(event) {
     const eventData = renderEventData(event);
     eventData.descriptionHtml = linkify(eventData.long_description);
+    eventData.addressHtml = event.location_address
+        ? renderMaterialIconText("place", event.location_name + " - " + event.location_address)
+        : renderMaterialIconText("place", event.location_name);
+
     modalContent.innerHTML = renderEventModal(eventData);
-
-    // modalTitle.textContent = event.title;
-    // modalDate.textContent = event.event_date;
-    // modalLocation.textContent = event.location_name;
-    // modalDescription.innerHTML = linkify(eventData.long_description);
-
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -195,7 +188,7 @@ function renderEventModal(event) {
         <div id="modal-title" class="event-title">${event.title}</div>
         <div class="event-meta">
             ${renderMaterialIconText("stars", eventData.categoryLabel)}
-            ${renderMaterialIconText("place", event.location_name + " - " + event.location_address)}
+            ${eventData.addressHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", eventData.date)}
