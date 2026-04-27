@@ -15,6 +15,7 @@ const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
 let tags = [];
+let filters = APP_CONFIG.DEFAULT_FILTER;
 
 /* === FUNCTIONS === */
 function groupEvents(events) {
@@ -171,18 +172,18 @@ function initFilters() {
 
     /* Configure Catgeories */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const tag = APP_CONFIG.CATEGORIES[key]["label"];
+        const category = APP_CONFIG.CATEGORIES[key]["label"];
 
         const label = document.createElement("label");
         label.className = "category-item";
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.value = tag.toLowerCase();
+        checkbox.value = category;
         checkbox.name = "categories";
 
         label.appendChild(checkbox);
-        label.append(" " + tag);
+        label.append(" " + category);
 
         filterCatChoices.appendChild(label); 
     });
@@ -199,11 +200,28 @@ async function loadEvents() {
     const header = document.getElementById("event-list-header");
     const filter = document.getElementById("event-filter");
 
-    const { data: events, error } = await window.supabaseClient
+    let query = window.supabaseClient
         .from("future_events")
         .select("*")
         .eq("pending", false)
-        .order("event_date", { ascending: true });
+
+    if (filters.from) {
+        query = query.gte("event_date", filters.from);
+    }
+
+    if (filters.to) {
+        query = query.lte("event_date", filters.to);
+    }
+
+    if (filters.categories) {
+        query = query.in("category", filters.categories);
+    }
+
+    if (filters.tags) {
+        query = query.overlaps("tags", filters.tags);
+    }
+
+    const { data: events, error } = await query.order("event_date", { ascending: true });
 
     console.log("Data:", events);
     console.log("Error:", error);
@@ -255,6 +273,7 @@ document.getElementById("reset-filters").addEventListener("click", (event) => {
     const form = event.target;
     hideErrorMessages();
     tags = [];
+    filters = APP_CONFIG.DEFAULT_FILTER;
     renderTags();
     document.getElementById("filter-form").reset();
 });
@@ -267,7 +286,7 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
 
     const selectedCategories = Array.from(
         form.querySelectorAll('input[name="categories"]:checked')
-    ).map(cb => cb.value);
+    ).map(cb => getCategoryId(cb.value));
 
     const from = form.from.value;
     const to = form.to.value;
@@ -282,49 +301,36 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
 
     // check dates
     if (from) {
-        if (from < today) {
-            from = today;
+        if (new Date(from) < today) {
+            showFilterError("La date de début doit être supérieure aujourd'hui");
+            return;
         }
     }if (to) {
-        if (to < today) {
-            to = today;
+        if (new Date(from) < today) {
+            showFilterError("La date de fin doit être supérieure aujourd'hui");
+            return;
         }
     }
     if (from && to) {
-        if (to <= from) {
-            showFilterError("La date de fin doit être supérieure à la date de début");
+        if (new Date(to) < new Date(from)) {
+            showFilterError("La date de fin doit être supérieure ou égale à la date de début");
             return;
         }
     }
 
-    console.log("selected categories:", selectedCategories);
-    console.log("selected tags:", tags);
-    console.log("start date:", from);
-    console.log("end date:", to);
+    filters = {
+        categories: selectedCategories.length ? selectedCategories : null,
+        tags: tags.length ? tags : null,
+        from: from || null,
+        to: to || null
+    };
 
-
-    // const filtered = events.filter(event => {
-    //     if (tag && !event.tags.includes(tag)) {
-    //         return false;
-    //     }
-
-    //     if (from && event.event_date < from) {
-    //         return false;
-    //     }
-
-    //     if (to && event.event_date > to) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // });
-
-    // renderEvents(filtered);
-
+    console.log("filter:", filters);
     
     filterToggle.setAttribute("aria-expanded", "false");
     filterPanel.setAttribute("hidden", "");
-
+    
+    loadEvents();
 });
 
 
