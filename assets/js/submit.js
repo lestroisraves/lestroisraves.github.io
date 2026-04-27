@@ -3,6 +3,8 @@ console.log("executing:", document.currentScript?.src);
 /* === VARIABLES === */
 const accountContainer = document.getElementById("account-container");
 const submitContainer = document.getElementById("submit-container");
+const noticeTip = document.getElementById("notice-tip");
+const noticeTipText = noticeTip.querySelector("#text");
 const noticeSuccess = document.getElementById("notice-success");
 const noticeSuccessText = noticeSuccess.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
@@ -45,8 +47,8 @@ function hideNoticeMessages() {
 }
 
 function showSubmit(user, profile) {
-    const role = profile.role;
-
+    const role =0;//profile.role;
+    noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
     accountContainer.classList.remove("hidden");
     hideNoticeMessages();
@@ -95,6 +97,7 @@ function showSubmit(user, profile) {
 }
 
 function showLoginWarning() {
+    noticeTip.classList.add("hidden");
     accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
     hideNoticeMessages();
