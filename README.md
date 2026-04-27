@@ -10,5 +10,5 @@ Il existe 3 type d'utilisateurs:
 * **Utilisateur officiel**: ceci concerne les associations, lieux culturels, groupes, etc... qui ont l'habitude de proposer des évènements. Ils peuvent publier un nouvel évènement instantanément.
 
 ---
-[![github](https://img.shields.io/badge/github-frontend-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pages/rcs-cultur/eventscalendar)
+[![github](https://img.shields.io/badge/rcsculture-github.io-black?style=for-the-badge&logo=github&logoColor=white)](https://rcsculture.github.io)
 [![supabase](https://img.shields.io/badge/supabase-backend-darkgreen?style=for-the-badge&logo=github&logoColor=white)](https://supabase.com/dashboard/project/jpicbqssqixagnwejefu)

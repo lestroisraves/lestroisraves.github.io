@@ -155,38 +155,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const {data: { user },} = await window.supabaseClient.auth.getUser();
     console.log("user?", !!user, user?.id);
 
-    /* get image */
-    const file = eventImage.files[0];
-    let imageUrl = null;
-    
-    if (file) {
-        
-        if (file.size > 5_000_000) {
-            eventImage.setAttribute("aria-invalid", "true");
-            showError("Image trop lourde (5Mo maximum");
-            eventImage.focus();
-            button.setAttribute("aria-busy", "false");
-            return;
-        }
-
-        const resizedBlob = await resizeImage(file);
-        const fileName = `event-${crypto.randomUUID()}.jpg`;
-        const { data, error } = await window.supabaseClient.storage.from("event-images")
-            .upload(fileName, resizedBlob, {
-                contentType: "image/jpeg",
-                cacheControl: "3600",
-                upsert: false
-            });
-        if (error) {
-            button.setAttribute("aria-busy", "false");
-            showError("Erreur durant l'upload de l'image");
-            console.error(error);
-            return;
-        }
-        imageUrl = window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl;
-    }
-
-    /* get other data */
+    /* get data */
     const tags = form
         .querySelector("#tags")
         .value.split(",")
@@ -206,12 +175,42 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         if (min_price && max_price && (min_price > max_price))
         {
             minPrice.setAttribute("aria-invalid", "true");
-            form.querySelector('#min_price').focus();
             button.setAttribute("aria-busy", "false");
+            showError("Le prix réduit doit être inférieur au prix normal");
             return;
         }
     } else if (priceChoice == "participation libre") {
         is_free_price = true;
+    }
+
+    /* get image */
+    const file = eventImage.files[0];
+    let imageUrl = null;
+    
+    if (file) {
+        
+        if (file.size > 5_000_000) {
+            eventImage.setAttribute("aria-invalid", "true");
+            showError("Image trop lourde (5Mo maximum");
+            button.setAttribute("aria-busy", "false");
+            return;
+        }
+
+        const resizedBlob = await resizeImage(file);
+        const fileName = `event-${crypto.randomUUID()}.jpg`;
+        const { data, error } = await window.supabaseClient.storage.from("event-images")
+            .upload(fileName, resizedBlob, {
+                contentType: "image/jpeg",
+                cacheControl: "3600",
+                upsert: false
+            });
+        if (error) {
+            button.setAttribute("aria-busy", "false");
+            showError("Problème pendant le téléchargement de l'image");
+            console.error(error);
+            return;
+        }
+        imageUrl = window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl;
     }
 
     const payload = {
@@ -238,7 +237,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError("Erreur de publication");
+        showError("Problème de publication");
         console.error(error);
         return;
     }

@@ -11,7 +11,7 @@ hide:
     </a>
 </div>
 
-<article id="events"></article>
+<article id="events"><progress class="pico" /></article>
 
 <script type="module" defer src="assets/js/events.js"></script>
 
