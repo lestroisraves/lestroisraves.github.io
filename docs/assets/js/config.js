@@ -1,6 +1,6 @@
 console.log("executing:", document.currentScript?.src);
 
-SITE_URL = "https://rcsculture.github.io/agenda/"
+SITE_URL = "https://rcsculture.github.io"
 
 APP_CONFIG = {
     SUPABASE_URL: "https://jpicbqssqixagnwejefu.supabase.co",

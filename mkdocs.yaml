@@ -1,6 +1,6 @@
 
 site_name: Culture Project
-site_url: https://rcsculture.github.io/agenda
+site_url: https://rcsculture.github.io
 
 theme:
   name: material
