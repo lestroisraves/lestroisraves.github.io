@@ -1,0 +1,113 @@
+<div id="submit-page">
+
+    <div id="notice-tip" class="notice notice-tip event hidden">
+        <span class="notice-icon">💡</span>
+        <div class="notice-content">
+            <strong id="title"></strong>
+            <p id="text"></p>
+        </div>
+    </div>
+
+    <div id="notice-success" class="notice notice-tip event hidden">
+        <span class="notice-icon">✔️</span>
+        <div class="notice-content">
+            <p id="text"></p>
+        </div>
+    </div>
+
+    <div id="notice-error" class="notice notice-error event hidden">
+        <span class="notice-icon">❌</span>
+        <div class="notice-content">
+            <p id="text"></p>
+        </div>
+    </div>
+
+    <!-- SUBMIT CONTAINER -->
+    <div id="submit-container" class="submit-section hidden">
+        <article class="formtile-event-tile pico">
+            <form id="event-form">
+                <label>
+                    Titre de l'évènement
+                    <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
+                </label>
+
+                <label>
+                    Nom du lieu
+                    <input type="text" id="location_name" placeholder="" required>
+                </label>
+
+                <label>
+                    Adresse du lieu
+                    <input type="text" id="location_address" placeholder="">
+                </label>
+
+                <label>
+                    Catégorie
+                    <select name="select" id="category" required></select>
+                </label>
+
+                <label>
+                    Description de l'évènement
+                    <textarea id="long_description" class="formtile-longtext" placeholder="" required></textarea>
+                </label>
+
+                <label>
+                    Date
+                    <input type="date" id="event_date" required>
+                </label>
+
+                <label>
+                    Heure de début
+                    <input type="time" id="event_start_time">
+                </label>
+
+                <label>
+                    Tags (mots-clefs pour décrire l'évènement, 4 maximum)
+                    <input type="text" id="tags" placeholder="concert, theatre, exhibition, enfants">
+                </label>
+
+                <label>
+                    Prix / participation
+                    <select name="select" id="price-choice" required>
+                        <option>Gratuit</option>
+                        <option>Participation libre</option>
+                        <option>Payant</option>
+                    </select>
+                </label>
+
+                <label>
+                    Prix
+                    <input type="number" id="max_price" placeholder="0.00" step=0.01 min=0 disabled>
+                </label>
+
+                <label>
+                    Prix réduit
+                    <input type="number" id="min_price" placeholder="0.00" step=0.01 min=0 disabled>
+                </label>
+
+                <label>
+                    Image (maximum 5 Mo)
+                    <input type="file" id="event-image" accept="image/*"/>
+                </label>
+
+                <!-- <label>
+                    Images (3 maximum)
+                    <input
+                        type="file"
+                        id="images"
+                        accept="image/*"
+                        multiple
+                        capture="environment"
+                        required
+                    >
+                </label> -->
+
+                <div>
+                    <button type="submit" id="button">Publier</button>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+
+<script type="module" defer src="../assets/js/submit.js"></script>

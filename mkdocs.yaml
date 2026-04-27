@@ -1,0 +1,74 @@
+
+site_name: Culture Project
+site_url: https://rcsculture.github.io/agenda
+
+theme:
+  name: material
+  favicon: assets/images/logo.ico
+  logo: assets/images/logo.svg
+  custom_dir: docs/assets
+  palette:
+    - scheme: default
+    #   toggle:
+    #     name: Dark mode
+    #     icon: material/weather-sunny
+    # - scheme: slate
+    #   toggle:
+    #     name: Light mode
+    #     icon: material/weather-night
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - admonition
+  - smarty
+  - sane_lists
+  - attr_list
+  - toc:
+      permalink: true
+      toc_depth: 2-4
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Évènements: index.md
+  - Publier un évènement: submit.md
+  - Mon compte: account.md
+
+extra_javascript:
+  - https://unpkg.com/@supabase/supabase-js@2
+  - assets/js/config.js
+  - assets/js/helper.js
+  - assets/js/supabase.js
+
+extra_css:
+  - https://fonts.googleapis.com/icon?family=Material+Icons
+  - https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.fuchsia.min.css
+  - assets/css/theme.css
+  - assets/css/events.css
+  - assets/css/submit.css
+  - assets/css/account.css
+  - assets/css/formtile.css
+  - assets/css/notice.css
+
+plugins:
+    - macros
+
