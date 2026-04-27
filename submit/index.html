@@ -59,6 +59,8 @@
     
       <link rel="stylesheet" href="../assets/css/events.css">
     
+      <link rel="stylesheet" href="../assets/css/filter.css">
+    
       <link rel="stylesheet" href="../assets/css/submit.css">
     
       <link rel="stylesheet" href="../assets/css/account.css">
@@ -421,49 +423,49 @@
 
     <!-- SUBMIT CONTAINER -->
     <div id="submit-container" class="submit-section hidden">
-        <article class="submit-tile pico">
+        <article class="submit-tile">
             <form id="event-form">
-                <label>
+                <label class="pico">
                     Titre de l'évènement
                     <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
                 </label>
 
-                <label>
+                <label class="pico">
                     Nom du lieu
                     <input type="text" id="location_name" placeholder="" required>
-                </label>
+                </label class="pico">
 
-                <label>
+                <label class="pico">
                     Adresse du lieu
                     <input type="text" id="location_address" placeholder="">
                 </label>
 
-                <label>
+                <label class="pico">
                     Catégorie
                     <select name="select" id="category" required></select>
                 </label>
 
-                <label>
+                <label class="pico">
                     Description de l'évènement
                     <textarea id="long_description" class="formtile-longtext" placeholder="" required></textarea>
                 </label>
 
-                <label>
+                <label class="pico">
                     Date
                     <input type="date" id="event_date" required>
                 </label>
 
-                <label>
+                <label class="pico">
                     Heure de début
                     <input type="time" id="event_start_time">
                 </label>
 
-                <label>
-                    Tags (mots-clefs pour décrire l'évènement, 4 maximum)
-                    <input type="text" id="tags" placeholder="concert, theatre, exhibition, enfants">
-                </label>
+                <label for="tag-input" class="pico">Tags (mots-clefs pour décrire l'évènement, 4 maximum)</label>
+                <div class="tag-input-container" id="tag-container">
+                    <input type="text" id="tag-input" placeholder="Ajouter un tag..." autocomplete="off">
+                </div>
 
-                <label>
+                <label class="pico">
                     Prix / participation
                     <select name="select" id="price-choice" required>
                         <option>Gratuit</option>
@@ -472,17 +474,17 @@
                     </select>
                 </label>
 
-                <label>
+                <label class="pico">
                     Prix
                     <input type="number" id="max_price" placeholder="0.00" step=0.01 min=0 disabled>
                 </label>
 
-                <label>
+                <label class="pico">
                     Prix réduit
                     <input type="number" id="min_price" placeholder="0.00" step=0.01 min=0 disabled>
                 </label>
 
-                <label>
+                <label class="pico">
                     Image (maximum 5 Mo)
                     <input type="file" id="event-image" accept="image/*"/>
                 </label>
@@ -503,7 +505,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="pico">
                     <button type="submit" id="button">Publier</button>
                 </div>
             </form>

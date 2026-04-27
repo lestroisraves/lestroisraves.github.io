@@ -1,6 +1,8 @@
 console.log("executing:", document.currentScript?.src);
 
 /* === VARIABLES === */
+const today = startOfDay(new Date());
+
 const accountContainer = document.getElementById("account-container");
 const submitContainer = document.getElementById("submit-container");
 const noticeTip = document.getElementById("notice-tip");
@@ -13,6 +15,10 @@ const categoryList = document.getElementById("category");
 const priceChoice = document.getElementById("free-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
+const tagContainer = document.getElementById("tag-container");
+const tagInput = document.getElementById("tag-input");
+
+let userTags = [];
 
 /* === FUNCTIONS === */
 function initForTest() {
@@ -23,7 +29,6 @@ function initForTest() {
     form.querySelector("#long_description").value = "Le Festival International de Proximité (FIP) vous invite à découvrir une programmation riche et variée pour sa 6ème édition, du 22 au 24 mai 2026.\n\nLe Festival International de Proximité (FIP) est un événement culturel unique qui célèbre les arts du cirque et la créativité à Rabastens et ses environs. Créé en 2021, il transforme la ville en une scène vivante chaque année, grâce à des performances artistiques in situ et une équipe de bénévoles passionnés. Le FIP valorise les talents locaux et crée des liens entre artistes, public et habitants. Venez vivre une expérience immersive et découvrir des spectacles captivants lors de ce week-end de mai.\n\nhttps://festival-le-fip.com/";
     form.querySelector("#event_date").value = "2026-05-22";
     form.querySelector("#event_start_time").value = null;
-    form.querySelector("#tags").value = "cirque, concert, enfants, festival";
     form.querySelector("#price-choice").value = "Payant";
     form.querySelector("#max_price").value = 40;
     form.querySelector("#min_price").value = 4;
@@ -58,7 +63,6 @@ function showSubmit(user, profile) {
     /* configure roles */
     const publishInstant = accountContainer.querySelector("#permission-instant");
     const adminDetails = accountContainer.querySelector("#permission-admin");
-    const roleRequest = accountContainer.querySelector("#role-request");
 
     switch(role) {
         case 0: /* non official */
@@ -66,7 +70,6 @@ function showSubmit(user, profile) {
             publishInstant.classList.remove("granted");
             publishInstant.querySelector("#icon").innerText = "lock"
             adminDetails.classList.add("hidden");
-            roleRequest.classList.remove("hidden");
             break;
         
         case 1: /* official */
@@ -74,7 +77,6 @@ function showSubmit(user, profile) {
             publishInstant.classList.add("granted");
             publishInstant.querySelector("#icon").innerText = "check"
             adminDetails.classList.add("hidden");
-            roleRequest.classList.add("hidden");
             break;
 
         case 2: /* admin */
@@ -82,7 +84,6 @@ function showSubmit(user, profile) {
             publishInstant.classList.add("granted");
             publishInstant.querySelector("#icon").innerText = "check"
             adminDetails.classList.remove("hidden");
-            roleRequest.classList.add("hidden");
             break;
         
         default:
@@ -90,10 +91,63 @@ function showSubmit(user, profile) {
             publishInstant.classList.remove("granted");
             publishInstant.querySelector("#icon").innerText = "lock"
             adminDetails.classList.add("hidden");
-            roleRequest.classList.remove("hidden");
     }
 
+    /* Configure Catgeories */
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const opt = document.createElement("option");
+        opt.innerText = APP_CONFIG.CATEGORIES[key]["label"]
+        categoryList.appendChild(opt);
+    });
+    categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
+
+    /* init userTags */
+    userTags = [];
+    renderTags();
+
     // initForTest();
+}
+
+function addTag(value) {
+    const tag = value.trim().toLowerCase();
+
+    if (!tag || userTags.includes(tag)) {
+        return;
+    }
+
+    userTags.push(tag);
+    renderTags();
+}
+
+function removeTag(tagToRemove) {
+    userTags = userTags.filter(tag => tag !== tagToRemove);
+    renderTags();
+}
+
+function renderTags() {
+    // Remove existing chips
+    tagContainer
+        .querySelectorAll(".tag-chip")
+        .forEach(el => el.remove());
+
+    // Add chips before the input
+    userTags.forEach(tag => {
+        const chip = document.createElement("span");
+        chip.className = "tag-chip";
+        chip.textContent = tag;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.innerHTML = "&times;";
+        removeBtn.addEventListener("click", () => {
+            removeTag(tag);
+        });
+
+        chip.appendChild(removeBtn);
+        tagContainer.insertBefore(chip, tagInput);
+    });
+
+    tagInput.value = "";
 }
 
 function showLoginWarning() {
@@ -175,11 +229,13 @@ document.getElementById('price-choice').addEventListener("change", (event) => {
 document.getElementById("event-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
+    const eventDate = form.querySelector("#event_date")
     const eventImage = form.querySelector("#event-image");
     const button = form.querySelector("#button");
 
     /* init UI */
     hideNoticeMessages();
+    eventDate.setAttribute("aria-invalid", null);
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
     button.setAttribute("aria-busy", "true");
@@ -188,14 +244,25 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const {data: { user },} = await window.supabaseClient.auth.getUser();
     console.log("user?", !!user, user?.id);
 
-    /* get data */
-    const tags = form
-        .querySelector("#tags")
-        .value.split(",")
-        .map((t) => t.trim().toLowerCase())
+    /* get userTags */
+    if (userTags.length > 4) {
+        button.setAttribute("aria-busy", "false");
+        showError("Maximum 4 tags");
+        return;
+    }
+    const tags = userTags.map((t) => t.trim().toLowerCase())
         .filter(Boolean);
-
+    
+    const event_date = form.querySelector('#event_date').value
     const start_time = form.querySelector('#event_start_time').value;
+
+    // check dates
+    if (new Date(event_date) < today) {
+        eventDate.setAttribute("aria-invalid", true);
+        button.setAttribute("aria-busy", "false");
+        showError("La date doit être à partir de aujourd'hui");
+        return;
+    }
 
     const priceChoice = form.querySelector('#price-choice').value.trim().toLowerCase();
     console.log("priceChoice:", priceChoice)
@@ -277,6 +344,28 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     showSuccess("Évènement publié !")
     e.target.reset();
+});
+
+/* Handle typing */
+tagInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        addTag(tagInput.value);
+    }
+
+    if (e.key === "Backspace" && tagInput.value === "" && userTags.length) {
+        removeTag(userTags[userTags.length - 1]);
+    }
+});
+
+/* Handle blur (optional) */
+tagInput.addEventListener("blur", () => {
+    addTag(tagInput.value);
+});
+
+/* Focus input when clicking container */
+tagContainer.addEventListener("click", () => {
+    tagInput.focus();
 });
 
 /* === INITIAL LOAD === */
