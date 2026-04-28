@@ -51,7 +51,7 @@
       
     
     
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.fuchsia.min.css">
     
@@ -399,19 +399,19 @@
         </div>
 
         <li id="permission-publish" class="permission granted">
-            <span id="icon" class="material-icons">check</span>
+            <span id="icon" class="material-symbols-outlined">check</span>
             Publier des évènements
         </li>
         <li id="permission-edit" class="permission granted">
-            <span id="icon" class="material-icons">check</span>
+            <span id="icon" class="material-symbols-outlined">check</span>
             Editer vos évènements
         </li>
         <li id="permission-instant" class="permission denied">
-            <span id="icon" class="material-icons">lock</span>
+            <span id="icon" class="material-symbols-outlined">lock</span>
             Publier instantanément (sans délais de 3 jours)
         </li>
         <li id="permission-admin" class="permission granted hidden">
-            <span id="icon" class="material-icons">check</span>
+            <span id="icon" class="material-symbols-outlined">check</span>
             Modération: éditer/supprimer n'importe quel évènement
         </li>
 
@@ -426,12 +426,12 @@
         <article class="submit-tile">
             <form id="event-form">
                 <label class="pico">
-                    Titre de l'évènement
+                    Titre de l'évènement *
                     <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
                 </label>
 
                 <label class="pico">
-                    Nom du lieu
+                    Nom du lieu *
                     <input type="text" id="location_name" placeholder="" required>
                 </label class="pico">
 
@@ -441,17 +441,35 @@
                 </label>
 
                 <label class="pico">
-                    Catégorie
-                    <select name="select" id="category" required></select>
-                </label>
-
-                <label class="pico">
-                    Description de l'évènement
+                    Description de l'évènement *
                     <textarea id="long_description" class="formtile-longtext" placeholder="" required></textarea>
                 </label>
 
                 <label class="pico">
-                    Date
+                    Téléphone
+                    <input type="text" id="phone" placeholder="">
+                </label>
+
+                <label class="pico">
+                    Site internet
+                    <input type="text" id="site_url" placeholder="">
+                </label>
+
+                <label class="pico">
+                    Catégorie *
+                    <select name="select" id="category" required></select>
+                </label>
+
+                <label class="pico">
+                    Adapté aux enfants ?
+                    <select name="select" id="is_kid_friendly" required>
+                        <option>Oui</option>
+                        <option>Non</option>
+                    </select>
+                </label>
+
+                <label class="pico">
+                    Date *
                     <input type="date" id="event_date" required>
                 </label>
 
@@ -466,7 +484,7 @@
                 </div>
 
                 <label class="pico">
-                    Prix / participation
+                    Prix / participation *
                     <select name="select" id="price-choice" required>
                         <option>Gratuit</option>
                         <option>Participation libre</option>

@@ -12,6 +12,7 @@ const noticeSuccessText = noticeSuccess.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
 const categoryList = document.getElementById("category");
+const isKidFriendly = document.getElementById("is_kid_friendly");
 const priceChoice = document.getElementById("free-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
@@ -100,6 +101,8 @@ function showSubmit(user, profile) {
         categoryList.appendChild(opt);
     });
     categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
+
+    isKidFriendly.value = "Oui";
 
     /* init userTags */
     userTags = [];
@@ -328,7 +331,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         min_price: min_price,
         max_price: max_price,
         category: getCategoryId(categoryList.value),
-        image_url: imageUrl
+        image_url: imageUrl,
+        phone: form.querySelector('#phone').value,
+        site_url: form.querySelector('#site_url').value,
+        is_kid_friendly: form.querySelector('#is_kid_friendly').value === "Oui"
     }
     console.log("submit payload:", payload)
 

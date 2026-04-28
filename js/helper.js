@@ -44,20 +44,39 @@ function formatTimeForUI(timeString) {
 
 function renderMaterialIconText(icon, text) {
     return `<span class="event-icon-text">
-                <span class="material-icons">${icon}</span>
+                <span class="material-symbols-outlined">${icon}</span>
                 <span class="text">${text}</span>
             </span>
             `
-
 }
+
+function renderMaterialIcon(icon) {
+    return `<span class="event-icon-text">
+                <span class="material-symbols-outlined">${icon}</span>
+            </span>
+            `
+}
+
+// function linkify(text) {
+//     const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+//     return text.replace(urlRegex, (url) => {
+//         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+//     });
+// }
 
 function linkify(text) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urlRegex = /(\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+)/gi;
 
     return text.replace(urlRegex, (url) => {
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        const href = url.startsWith("http")
+            ? url
+            : `https://${url}`;
+
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
     });
 }
+
 
 function startOfDay(date) {
     const d = new Date(date);
