@@ -43,7 +43,7 @@
 }
 
 /* Icon sizing */
-.btn-outline .material-icons {
+.btn-outline .material-symbols-outlined {
     font-size: 1rem;
 }
 
@@ -144,8 +144,8 @@
     align-items: center;
 }
 
-.event-icon-text .material-icons {
-    font-size: 1rem;
+.event-icon-text .material-symbols-outlined {
+    font-size: 0.8rem;
     flex-shrink: 0;
 }
 

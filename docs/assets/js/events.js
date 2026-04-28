@@ -63,9 +63,18 @@ function showFilterError(message) {
 function openEventModal(event) {
     const eventData = renderEventData(event);
     eventData.descriptionHtml = linkify(eventData.long_description);
+
     eventData.addressHtml = event.location_address
-        ? renderMaterialIconText("place", event.location_name + " - " + event.location_address)
-        : renderMaterialIconText("place", event.location_name);
+        ? renderMaterialIconText("distance", event.location_address)
+        : "";
+
+    eventData.phoneHtml = event.phone
+        ? renderMaterialIconText("call", event.phone)
+        : "";
+
+    eventData.siteUrlHtml = event.site_url
+        ? renderMaterialIconText("language", linkify(event.site_url))
+        : "";
 
     modalContent.innerHTML = renderEventModal(eventData);
     modal.classList.remove("hidden");
@@ -150,6 +159,10 @@ function renderEventData(event) {
         eventData.price = event.max_price + " €";
     }
 
+    eventData.kidFriendlyHtml = event.is_kid_friendly
+        ? renderMaterialIconText("child_hat", "Adapté aux enfants")
+        : "";
+
     eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]["label"]
 
     eventData.date = formatDateForUI(event.event_date);
@@ -174,6 +187,9 @@ function renderEventTile(event) {
                     ${eventData.timeHtml}
                     ${renderMaterialIconText("sell", eventData.price)}
                 </div>
+                <div class="event-meta">
+                    ${eventData.kidFriendlyHtml}
+                </div>
                 ${eventData.tagsHtml}
             </div>
         </div>
@@ -188,12 +204,20 @@ function renderEventModal(event) {
         <div id="modal-title" class="event-title">${event.title}</div>
         <div class="event-meta">
             ${renderMaterialIconText("stars", eventData.categoryLabel)}
+            ${renderMaterialIconText("place", event.location_name)}
             ${eventData.addressHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", eventData.date)}
             ${eventData.timeHtml}
             ${renderMaterialIconText("sell", eventData.price)}
+        </div>
+        <div class="event-meta">
+            ${eventData.kidFriendlyHtml}
+        </div>
+        <div class="event-meta">
+            ${eventData.siteUrlHtml}
+            ${eventData.phoneHtml}
         </div>
         ${eventData.tagsHtml}
         <hr>

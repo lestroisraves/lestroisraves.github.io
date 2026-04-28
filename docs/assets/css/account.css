@@ -34,7 +34,7 @@
     font-weight: 600;
 }
 
-.account-identity .material-icons {
+.account-identity .material-symbols-outlined {
     font-size: 1.2rem;
 }
 
@@ -98,7 +98,7 @@
     display: none;
 }
 
-.permission.granted .material-icons {
+.permission.granted .material-symbols-outlined {
     color: #4caf50;
 }
 
@@ -106,7 +106,7 @@
     color: #999;
 }
 
-.permission.denied .material-icons {
+.permission.denied .material-symbols-outlined {
     color: #b0b0b0;
 }
 

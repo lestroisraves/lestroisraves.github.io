@@ -60,7 +60,7 @@ extra_javascript:
   - assets/js/supabase.js
 
 extra_css:
-  - https://fonts.googleapis.com/icon?family=Material+Icons
+  - https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined
   - https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.fuchsia.min.css
   - assets/css/theme.css
   - assets/css/events.css
@@ -72,3 +72,4 @@ extra_css:
 plugins:
     - macros
 
+# <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_location" />
