@@ -1,5 +1,6 @@
 console.log("executing:", document.currentScript?.src);
 
+/* === VARIABLES === */
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
 const thisSunday = getSunday(today);
@@ -10,7 +11,8 @@ const filterNoticeError = document.getElementById("filter-error");
 const filterNoticeErrorText = filterNoticeError.querySelector("#text");
 const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
-const filterCatChoices = filterPanel.querySelector("#category");
+const filterCatChoices = filterPanel.querySelector("#filter-category");
+const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
 const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
@@ -58,6 +60,48 @@ function showFilterError(message) {
     filterNoticeError.classList.remove("hidden");
     filterNoticeErrorText.innerText = message;
     filterNoticeError.focus();
+}
+
+function initFilters() {
+    tags = [];
+    renderTags();
+
+    /* Configure categories */
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const category = APP_CONFIG.CATEGORIES[key];
+
+        const label = document.createElement("label");
+        label.className = "category-item";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = category;
+        checkbox.name = "categories";
+
+        label.appendChild(checkbox);
+        label.append(" " + category);
+
+        filterCatChoices.appendChild(label); 
+    });
+
+    /* Configure parental guide */
+    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+        const pg = APP_CONFIG.PARENTAL_GUIDE[key];
+
+        const label = document.createElement("label");
+        label.className = "pg-item";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = pg;
+        checkbox.name = "pg";
+
+        label.appendChild(checkbox);
+        label.append(" " + pg);
+
+        filterParentalGuideChoices.appendChild(label); 
+    });
+
 }
 
 function openEventModal(event) {
@@ -159,11 +203,13 @@ function renderEventData(event) {
         eventData.price = event.max_price + " €";
     }
 
-    eventData.kidFriendlyHtml = event.is_kid_friendly
-        ? renderMaterialIconText("child_hat", "Adapté aux enfants")
-        : "";
+    eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[event.parental_guide]);
+    if (event.parental_guide == 2)
+    {
+        eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
+    }
 
-    eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]["label"]
+    eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]
 
     eventData.date = formatDateForUI(event.event_date);
 
@@ -180,7 +226,7 @@ function renderEventTile(event) {
                 <div class="event-title">${event.title}</div>
                 <div class="event-meta">
                     ${renderMaterialIconText("stars", eventData.categoryLabel)}
-                    ${renderMaterialIconText("place", event.location_name)}
+                    ${eventData.parentalGuideHtml}
                 </div>
                 <div class="event-meta">
                     ${renderMaterialIconText("event", eventData.date)}
@@ -188,7 +234,7 @@ function renderEventTile(event) {
                     ${renderMaterialIconText("sell", eventData.price)}
                 </div>
                 <div class="event-meta">
-                    ${eventData.kidFriendlyHtml}
+                    ${renderMaterialIconText("place", event.location_name)}
                 </div>
                 ${eventData.tagsHtml}
             </div>
@@ -204,8 +250,7 @@ function renderEventModal(event) {
         <div id="modal-title" class="event-title">${event.title}</div>
         <div class="event-meta">
             ${renderMaterialIconText("stars", eventData.categoryLabel)}
-            ${renderMaterialIconText("place", event.location_name)}
-            ${eventData.addressHtml}
+            ${eventData.parentalGuideHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", eventData.date)}
@@ -213,7 +258,8 @@ function renderEventModal(event) {
             ${renderMaterialIconText("sell", eventData.price)}
         </div>
         <div class="event-meta">
-            ${eventData.kidFriendlyHtml}
+            ${renderMaterialIconText("place", event.location_name)}
+            ${eventData.addressHtml}
         </div>
         <div class="event-meta">
             ${eventData.siteUrlHtml}
@@ -243,30 +289,6 @@ function renderSection(sectionTitle, subtitle, events) {
     `;
 }
 
-function initFilters() {
-    tags = [];
-    renderTags();
-
-    /* Configure Catgeories */
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const category = APP_CONFIG.CATEGORIES[key]["label"];
-
-        const label = document.createElement("label");
-        label.className = "category-item";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = category;
-        checkbox.name = "categories";
-
-        label.appendChild(checkbox);
-        label.append(" " + category);
-
-        filterCatChoices.appendChild(label); 
-    });
-
-}
-
 async function loadEvents() {
     if (!window.supabaseClient) {
         console.error("Supabase not initialized");
@@ -294,6 +316,10 @@ async function loadEvents() {
 
     if (filters.categories) {
         query = query.in("category", filters.categories);
+    }
+
+    if (filters.pg) {
+        query = query.in("parental_guide", filters.pg);
     }
 
     if (filters.tags) {
@@ -350,11 +376,19 @@ filterToggle.addEventListener("click", (event) => {
 document.getElementById("reset-filters").addEventListener("click", (event) => {
     event.preventDefault();
     const form = event.target;
+
     hideErrorMessages();
+
+    /* remove all filters */
     tags = [];
     filters = APP_CONFIG.DEFAULT_FILTER;
     renderTags();
     document.getElementById("filter-form").reset();
+
+    /* hide panel abd load events */
+    filterToggle.setAttribute("aria-expanded", "false");
+    filterPanel.setAttribute("hidden", "");
+    loadEvents();
 });
 
 document.getElementById("filter-form").addEventListener("submit", (event) => {
@@ -366,6 +400,10 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     const selectedCategories = Array.from(
         form.querySelectorAll('input[name="categories"]:checked')
     ).map(cb => getCategoryId(cb.value));
+
+    const selectedPg = Array.from(
+        form.querySelectorAll('input[name="pg"]:checked')
+    ).map(cb => getPgId(cb.value));
 
     const from = form.from.value;
     const to = form.to.value;
@@ -399,6 +437,7 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
 
     filters = {
         categories: selectedCategories.length ? selectedCategories : null,
+        pg: selectedPg.length ? selectedPg : null,
         tags: tags.length ? tags : null,
         from: from || null,
         to: to || null
@@ -406,9 +445,9 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
 
     console.log("filter:", filters);
     
+    /* hide panel abd load events */
     filterToggle.setAttribute("aria-expanded", "false");
     filterPanel.setAttribute("hidden", "");
-    
     loadEvents();
 });
 

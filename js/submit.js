@@ -12,7 +12,7 @@ const noticeSuccessText = noticeSuccess.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
 const categoryList = document.getElementById("category");
-const isKidFriendly = document.getElementById("is_kid_friendly");
+const parentalGuideList = document.getElementById("parental_guide");
 const priceChoice = document.getElementById("free-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
@@ -59,7 +59,7 @@ function showSubmit(user, profile) {
     accountContainer.classList.remove("hidden");
     hideNoticeMessages();
 
-    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[role]["label"];
+    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[role];
 
     /* configure roles */
     const publishInstant = accountContainer.querySelector("#permission-instant");
@@ -94,15 +94,21 @@ function showSubmit(user, profile) {
             adminDetails.classList.add("hidden");
     }
 
-    /* Configure Catgeories */
+    /* Configure categories  */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
         const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.CATEGORIES[key]["label"]
+        opt.innerText = APP_CONFIG.CATEGORIES[key]
         categoryList.appendChild(opt);
     });
-    categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
+    categoryList.value = APP_CONFIG.CATEGORIES[0];
 
-    isKidFriendly.value = "Oui";
+    /* Configure parental guide */
+    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+        const opt = document.createElement("option");
+        opt.innerText = APP_CONFIG.PARENTAL_GUIDE[key]
+        parentalGuideList.appendChild(opt);
+    });
+    parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0];
 
     /* init userTags */
     userTags = [];
