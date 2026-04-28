@@ -1,15 +1,29 @@
 # Supabase
 
+## Delete old events
+In `Integration` be sure that `pg_cron` extension is installed so you can create a Job in `CRON`.
+
+Job schedule:  `0 6 * * *` (everyday at 6:00 AM)
+
+Job script:
+```sql
+DELETE FROM public.events
+    WHERE event_date < CURRENT_DATE - INTERVAL '1 day';
+```
+
 ## Only show events from today to future
 Create a public SQL view
 
 ```sql
-CREATE VIEW public.future_events AS
-WITH
+create view public.future_events
+with
   (security_invoker = on) as
-SELECT *
-FROM public.events
-WHERE event_date >= CURRENT_DATE;
+select
+  *
+from
+  events
+where
+  event_date >= CURRENT_DATE;
 ```
 
 ✅ Runs entirely in Postgres

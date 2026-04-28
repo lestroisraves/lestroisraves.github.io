@@ -68,7 +68,7 @@ function showAccount(user, profile) {
 
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
-    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[role]["label"];
+    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[role];
 
     /* configure roles */
     const details = document.getElementById("detail-section");

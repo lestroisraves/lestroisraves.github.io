@@ -1,3 +1,4 @@
+/* === ERRORS/MESSAGES === */
 function localizeAuthError(error) {
   // error is typically an object with { name, message, code, status, ... }
   const code = error?.code || error?.name;
@@ -16,32 +17,33 @@ function localizeAuthError(error) {
   return dict[code] || "Une erreur est survenue. Veuillez réessayer.";
 }
 
-function getCategoryId(category) {
-    var catId = 4;
+/* === DATA HELPER === */
+function getCategoryId(label) {
+    var id = 4;
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        if (category == APP_CONFIG.CATEGORIES[key]["label"])
+        if (label == APP_CONFIG.CATEGORIES[key])
         {
-            catId = key;
+            id = key;
             return;
         }
     });
-    return catId;
+    return id;
 }
 
-function formatDateForUI(dateString) {
-    const date = new Date(dateString);
-
-    return date.toLocaleDateString("fr-FR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
+function getPgId(label) {
+    var id = 4;
+    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+        if (label == APP_CONFIG.PARENTAL_GUIDE[key])
+        {
+            id = key;
+            return;
+        }
     });
+    return id;
 }
 
-function formatTimeForUI(timeString) {
-    return timeString.slice(0, 5);  // "18:30:45" => "18:30"
-}
 
+/* === HTML RENDERING === */
 function renderMaterialIconText(icon, text) {
     return `<span class="event-icon-text">
                 <span class="material-symbols-outlined">${icon}</span>
@@ -49,21 +51,6 @@ function renderMaterialIconText(icon, text) {
             </span>
             `
 }
-
-function renderMaterialIcon(icon) {
-    return `<span class="event-icon-text">
-                <span class="material-symbols-outlined">${icon}</span>
-            </span>
-            `
-}
-
-// function linkify(text) {
-//     const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-//     return text.replace(urlRegex, (url) => {
-//         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-//     });
-// }
 
 function linkify(text) {
     const urlRegex = /(\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+)/gi;
@@ -77,6 +64,20 @@ function linkify(text) {
     });
 }
 
+/* === DATE & TIME === */
+function formatDateForUI(dateString) {
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+}
+
+function formatTimeForUI(timeString) {
+    return timeString.slice(0, 5);  // "18:30:45" => "18:30"
+}
 
 function startOfDay(date) {
     const d = new Date(date);

@@ -17,13 +17,18 @@
     <div id="filter-panel" class="accordion-panel" hidden>
         <form id="filter-form">
             <label class="pico">
-                <fieldset id="category">
-                <legend>Catégories:</legend></fieldset>
+                <fieldset id="filter-category">
+                <legend>Catégories</legend></fieldset>
+            </label>
+
+            <label class="pico">
+                <fieldset id="filter-parental-guide">
+                <legend>Guide Parental</legend></fieldset>
             </label>
 
             <label for="tag-input" class="pico">Tags</label>
             <div class="tag-input-container" id="tag-container">
-                <input type="text" id="tag-input" placeholder="Ajouter un tag..." autocomplete="off">
+                <input type="text" id="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
             </div>
 
             <div class="date-range pico">
@@ -49,9 +54,7 @@
             <!-- Actions -->
             <div class="filter-actions pico">
                 <button type="submit">Appliquer le filtre</button>
-                <button type="button" id="reset-filters" class="secondary">
-                    Reset
-                </button>
+                <button type="button" id="reset-filters" class="secondary">Enlever le filtre</button>
             </div>
         </form>
     </div>
@@ -62,13 +65,7 @@
         <button class="modal-close" aria-label="Close">
             <span class="material-symbols-outlined">close</span>
         </button>
-        <div id="modal-content" class="modal-content">
-            <!-- <div id="modal-title" class="event-title"></div>
-            <p id="modal-date"></p>
-            <p id="modal-location"></p>
-            <hr>
-            <p id="modal-description" class="modal-description"></p> -->
-        </div>
+        <div id="modal-content" class="modal-content"></div>
     </div>
 </div>
 
