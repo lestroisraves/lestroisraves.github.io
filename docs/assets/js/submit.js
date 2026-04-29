@@ -262,6 +262,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const tags = userTags.map((t) => t.trim().toLowerCase())
         .filter(Boolean);
     
+    const long_description = form.querySelector('#long_description').value
     const event_date = form.querySelector('#event_date').value
     const start_time = form.querySelector('#event_start_time').value;
 
@@ -326,7 +327,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     const payload = {
         title: form.querySelector('#title').value,
-        long_description: form.querySelector('#long_description').value,
+        long_description: long_description === "" ? null : long_description,
         event_date: form.querySelector('#event_date').value,
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,

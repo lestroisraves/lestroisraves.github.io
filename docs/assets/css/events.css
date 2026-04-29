@@ -68,11 +68,10 @@
     color: #777;
 }
 
-
 .event-tile {
     display: flex;
     gap: 0.5rem;
-    padding: 0.1rem 1rem 0.1rem 1rem;
+    padding: 0;
     margin-bottom: 0.9rem;
     border-radius: 8px;
     background: var(--md-default-bg-color);
@@ -84,7 +83,6 @@
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
 }
-
 
 .event-tile:hover {
     transform: translateY(-2px);
@@ -98,11 +96,13 @@
 
 
 .event-content {
+    padding: 0.1rem 1rem 0.1rem 1rem;
     flex: 1;
 }
 
 .event-image-wrapper {
     /* height: 160px; */
+    border-radius: 8px;
     overflow: hidden;
 }
 

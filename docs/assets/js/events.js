@@ -154,7 +154,6 @@ function closeModal() {
 
 function openEventModal(event) {
     const eventData = renderEventData(event);
-    eventData.descriptionHtml = linkify(eventData.long_description);
 
     eventData.addressHtml = event.location_address
         ? renderMaterialIconText("distance", event.location_address)
@@ -172,7 +171,15 @@ function openEventModal(event) {
         ? renderMaterialIconText("fork_spoon", "À manger sur place")
         : "";
 
+    eventData.descriptionHtml = event.long_description
+        ? `
+          <hr>
+          <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
+          `
+        : "";
+
     modalContent.innerHTML = renderEventModal(eventData);
+
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -275,8 +282,8 @@ function renderEventModal(event) {
             ${eventData.phoneHtml}
         </div>
         ${eventData.tagsHtml}
-        <hr>
-        <p id="modal-description" class="modal-description">${eventData.descriptionHtml}</p>
+        ${eventData.descriptionHtml}
+        
     `;
 }
 
