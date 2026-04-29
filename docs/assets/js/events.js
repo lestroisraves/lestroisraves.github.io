@@ -19,6 +19,7 @@ const tagInput = document.getElementById("tag-input");
 const modal = document.getElementById("event-modal");
 const modalContent = document.getElementById("modal-content");
 
+let user = null;
 let tags = [];
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
@@ -180,6 +181,18 @@ function openEventModal(event) {
 
     modalContent.innerHTML = renderEventModal(eventData);
 
+    console.log(user);
+    console.log(eventData.created_by);
+    if (user && user.id && user.id === eventData.created_by)
+    {
+        modal.querySelector("#modal-actions").classList.remove("hidden");
+    }
+    else
+    {
+        modal.querySelector("#modal-actions").classList.add("hidden");
+    }
+    
+
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -310,6 +323,14 @@ async function loadEvents() {
         console.error("Supabase not initialized");
         return;
     }
+
+    /* get user info */
+    const { data:{ session } } = await window.supabaseClient.auth.getSession();
+    console.log("session:", session);
+    if (session?.user) {
+        user = session.user;
+    }
+    console.log("user?", !!user, user?.id);
 
     const container = document.getElementById("events");
     const header = document.getElementById("event-list-header");
