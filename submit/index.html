@@ -51,7 +51,7 @@
       
     
     
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,1,0">
     
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.fuchsia.min.css">
     
@@ -441,18 +441,8 @@
                 </label>
 
                 <label class="pico">
-                    Description de l'évènement *
-                    <textarea id="long_description" class="formtile-longtext" placeholder="" required></textarea>
-                </label>
-
-                <label class="pico">
-                    Téléphone
-                    <input type="text" id="phone" placeholder="">
-                </label>
-
-                <label class="pico">
-                    Site internet
-                    <input type="text" id="site_url" placeholder="">
+                    Description de l'évènement
+                    <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
                 </label>
 
                 <label class="pico">
@@ -479,6 +469,25 @@
                 <div class="tag-input-container" id="tag-container">
                     <input type="text" id="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
                 </div>
+
+                <label class="pico">
+                    Téléphone
+                    <input type="text" id="phone" placeholder="">
+                </label>
+
+                <label class="pico">
+                    Site internet
+                    <input type="text" id="site_url" placeholder="">
+                </label>
+
+                <label class="pico">
+                    <fieldset>
+                        <label>
+                            <input name="to_eat" type="checkbox" role="switch" />
+                            À manger sur place
+                        </label>
+                    </fieldset>
+                </label>
 
                 <label class="pico">
                     Prix / participation *

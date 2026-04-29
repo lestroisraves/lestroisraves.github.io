@@ -104,34 +104,6 @@ function initFilters() {
 
 }
 
-function openEventModal(event) {
-    const eventData = renderEventData(event);
-    eventData.descriptionHtml = linkify(eventData.long_description);
-
-    eventData.addressHtml = event.location_address
-        ? renderMaterialIconText("distance", event.location_address)
-        : "";
-
-    eventData.phoneHtml = event.phone
-        ? renderMaterialIconText("call", event.phone)
-        : "";
-
-    eventData.siteUrlHtml = event.site_url
-        ? renderMaterialIconText("language", linkify(event.site_url))
-        : "";
-
-    modalContent.innerHTML = renderEventModal(eventData);
-    modal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-}
-
-
-function closeModal() {
-    modal.classList.add("hidden");
-    document.body.style.overflow = "";
-}
-
-
 function addTag(value) {
     const tag = value.trim().toLowerCase();
 
@@ -175,6 +147,43 @@ function renderTags() {
     
 }
 
+function closeModal() {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+function openEventModal(event) {
+    const eventData = renderEventData(event);
+
+    eventData.addressHtml = event.location_address
+        ? renderMaterialIconText("distance", event.location_address)
+        : "";
+
+    eventData.phoneHtml = event.phone
+        ? renderMaterialIconText("call", event.phone)
+        : "";
+
+    eventData.siteUrlHtml = event.site_url
+        ? renderMaterialIconText("language", linkify(event.site_url))
+        : "";
+
+    eventData.eatHtml = event.to_eat
+        ? renderMaterialIconText("fork_spoon", "À manger sur place")
+        : "";
+
+    eventData.descriptionHtml = event.long_description
+        ? `
+          <hr>
+          <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
+          `
+        : "";
+
+    modalContent.innerHTML = renderEventModal(eventData);
+
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
 function renderEventData(event) {
     const eventData = event;
 
@@ -203,10 +212,16 @@ function renderEventData(event) {
         eventData.price = event.max_price + " €";
     }
 
-    eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[event.parental_guide]);
-    if (event.parental_guide == 2)
+    switch (event.parental_guide)
     {
-        eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
+        case 1:
+            eventData.parentalGuideHtml = renderMaterialIconText("child_friendly", APP_CONFIG.PARENTAL_GUIDE[1]);
+            break;
+        case 2:
+            eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
+            break;
+        default:
+            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
     }
 
     eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]
@@ -256,6 +271,7 @@ function renderEventModal(event) {
             ${renderMaterialIconText("event", eventData.date)}
             ${eventData.timeHtml}
             ${renderMaterialIconText("sell", eventData.price)}
+            ${eventData.eatHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("place", event.location_name)}
@@ -266,8 +282,8 @@ function renderEventModal(event) {
             ${eventData.phoneHtml}
         </div>
         ${eventData.tagsHtml}
-        <hr>
-        <p id="modal-description" class="modal-description">${eventData.descriptionHtml}</p>
+        ${eventData.descriptionHtml}
+        
     `;
 }
 

@@ -262,6 +262,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const tags = userTags.map((t) => t.trim().toLowerCase())
         .filter(Boolean);
     
+    const long_description = form.querySelector('#long_description').value
     const event_date = form.querySelector('#event_date').value
     const start_time = form.querySelector('#event_start_time').value;
 
@@ -272,6 +273,8 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         showError("La date doit être à partir de aujourd'hui");
         return;
     }
+
+    const toEat = form.querySelector('input[name="to_eat"]').checked;
 
     const priceChoice = form.querySelector('#price-choice').value.trim().toLowerCase();
     console.log("priceChoice:", priceChoice)
@@ -324,7 +327,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     const payload = {
         title: form.querySelector('#title').value,
-        long_description: form.querySelector('#long_description').value,
+        long_description: long_description === "" ? null : long_description,
         event_date: form.querySelector('#event_date').value,
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
@@ -340,7 +343,8 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         image_url: imageUrl,
         phone: form.querySelector('#phone').value,
         site_url: form.querySelector('#site_url').value,
-        is_kid_friendly: form.querySelector('#is_kid_friendly').value === "Oui"
+        parental_guide: getPgId(parentalGuideList.value),
+        to_eat: toEat
     }
     console.log("submit payload:", payload)
 
