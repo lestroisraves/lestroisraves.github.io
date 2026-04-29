@@ -78,7 +78,6 @@
     box-shadow: 0 2px 6px rgba(209, 202, 202, 0.08);
     background-color: rgba(0, 0, 0, 0.02);
     border-left: 4px solid var(--pico-primary);
-    
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
@@ -94,9 +93,9 @@
     outline-offset: 2px;
 }
 
-
 .event-content {
-    padding: 0.1rem 1rem 0.1rem 1rem;
+    margin-top: 0rem;
+    padding: 0rem 0.8rem 0.1rem 0.8rem;
     flex: 1;
 }
 
@@ -104,6 +103,7 @@
     /* height: 160px; */
     border-radius: 8px;
     overflow: hidden;
+    margin-bottom: 0rem;
 }
 
 .event-thumbnail {
@@ -111,14 +111,14 @@
     max-width: 240px;
     height: auto;        /* fill tile height */
     min-height: 100%;
+    margin-bottom: 0rem;
 }
-
 
 .event-title {
     color: var(--pico-h2-color);
     font-size: 0.9rem;
     font-weight: 900;
-    margin: 0.5rem 0 0.1rem 0;
+    margin: 0.4rem 0 0.1rem 0;
 }
 
 .event-meta {
