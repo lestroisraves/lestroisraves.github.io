@@ -273,6 +273,8 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         return;
     }
 
+    const toEat = form.querySelector('input[name="to_eat"]').checked;
+
     const priceChoice = form.querySelector('#price-choice').value.trim().toLowerCase();
     console.log("priceChoice:", priceChoice)
     var is_free_price = false;
@@ -340,7 +342,8 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         image_url: imageUrl,
         phone: form.querySelector('#phone').value,
         site_url: form.querySelector('#site_url').value,
-        is_kid_friendly: form.querySelector('#is_kid_friendly').value === "Oui"
+        parental_guide: getPgId(parentalGuideList.value),
+        to_eat: toEat
     }
     console.log("submit payload:", payload)
 
