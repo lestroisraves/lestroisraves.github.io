@@ -161,7 +161,7 @@ function renderTags() {
 }
 
 function showLoginWarning() {
-    session.profile = null;
+    user_profile = null;
     noticeTip.classList.add("hidden");
     accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
