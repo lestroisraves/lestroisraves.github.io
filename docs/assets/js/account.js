@@ -117,18 +117,17 @@ async function initAccountPage() {
     {
         if (session?.user) {
             const { data: profile, error } = await window.supabaseClient.from('profiles')
-                .select('name, role')
+                .select("*")
                 .eq('id', session.user.id)
                 .single();
 
-            if (error) {
-                console.error(error);
-                showLogin();
+            if (!error){
+                showAccount(session.user, profile);
+                return
             }
-            showAccount(session.user, profile);
-        } else {
-            showLogin();
+            console.error(error);
         }
+        showLogin();
     });
   
     return subscription; // (optional) for unsubscribe later

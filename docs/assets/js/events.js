@@ -1,4 +1,6 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "events.js");
+
+import { openEventModal } from "./modal.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -16,10 +18,10 @@ const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-g
 const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
-const modal = document.getElementById("event-modal");
-const modalContent = document.getElementById("modal-content");
+const eventModal = document.getElementById("event-modal");
+const eventModalContent = document.getElementById("modal-content");
 
-let user = null;
+let user_profile = null;
 let tags = [];
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
@@ -148,56 +150,7 @@ function renderTags() {
     
 }
 
-function closeModal() {
-    modal.classList.add("hidden");
-    document.body.style.overflow = "";
-}
-
-function openEventModal(event) {
-    const eventData = renderEventData(event);
-
-    eventData.addressHtml = event.location_address
-        ? renderMaterialIconText("distance", event.location_address)
-        : "";
-
-    eventData.phoneHtml = event.phone
-        ? renderMaterialIconText("call", event.phone)
-        : "";
-
-    eventData.siteUrlHtml = event.site_url
-        ? renderMaterialIconText("language", linkify(event.site_url))
-        : "";
-
-    eventData.eatHtml = event.to_eat
-        ? renderMaterialIconText("fork_spoon", "À manger sur place")
-        : "";
-
-    eventData.descriptionHtml = event.long_description
-        ? `
-          <hr>
-          <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
-          `
-        : "";
-
-    modalContent.innerHTML = renderEventModal(eventData);
-
-    console.log(user);
-    console.log(eventData.created_by);
-    if (user && user.id && user.id === eventData.created_by)
-    {
-        modal.querySelector("#modal-actions").classList.remove("hidden");
-    }
-    else
-    {
-        modal.querySelector("#modal-actions").classList.add("hidden");
-    }
-    
-
-    modal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-}
-
-function renderEventData(event) {
+function renderEventData(event, details = false) {
     const eventData = event;
 
     eventData.timeHtml = event.event_start_time
@@ -241,6 +194,32 @@ function renderEventData(event) {
 
     eventData.date = formatDateForUI(event.event_date);
 
+    if (details) {
+        // render extra information for event modal
+        eventData.addressHtml = event.location_address
+            ? renderMaterialIconText("distance", event.location_address)
+            : "";
+
+        eventData.phoneHtml = event.phone
+            ? renderMaterialIconText("call", event.phone)
+            : "";
+
+        eventData.siteUrlHtml = event.site_url
+            ? renderMaterialIconText("language", linkify(event.site_url))
+            : "";
+
+        eventData.eatHtml = event.to_eat
+            ? renderMaterialIconText("fork_spoon", "À manger sur place")
+            : "";
+
+        eventData.descriptionHtml = event.long_description
+            ? `
+            <hr>
+            <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
+            `
+            : "";
+    }
+
     return eventData;
 }
 
@@ -271,9 +250,18 @@ function renderEventTile(event) {
 }
 
 function renderEventModal(event) {
-    const eventData = renderEventData(event);
+    const eventData = renderEventData(event, true);
 
-    return `
+    if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
+    {
+        eventModal.querySelector("#modal-actions").classList.remove("hidden");
+    }
+    else
+    {
+        eventModal.querySelector("#modal-actions").classList.add("hidden");
+    }
+
+    eventModalContent.innerHTML = `
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
         <div class="event-meta">
@@ -324,13 +312,11 @@ async function loadEvents() {
         return;
     }
 
-    /* get user info */
-    const { data:{ session } } = await window.supabaseClient.auth.getSession();
-    console.log("session:", session);
-    if (session?.user) {
-        user = session.user;
+    /* get session info */
+    const session = await getSessionUserProfile();
+    if (session?.profile) {
+        user_profile = session.profile;
     }
-    console.log("user?", !!user, user?.id);
 
     const container = document.getElementById("events");
     const header = document.getElementById("event-list-header");
@@ -397,6 +383,8 @@ async function loadEvents() {
 }
 
 /* === LISTENERS === */
+
+/* FILTERS */
 filterToggle.addEventListener("click", (event) => {
     event.preventDefault();
     const isOpen = filterToggle.getAttribute("aria-expanded") === "true";
@@ -488,26 +476,7 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     loadEvents();
 });
 
-document.addEventListener("click", (e) => {
-    const tile = e.target.closest(".event-tile");
-    if (!tile) return;
-
-    const id = tile.dataset.eventId;
-    const event = EVENTS.find(e => e.id === id);
-    if (!event) return;
-
-    console.log("EVENT:", event);
-    openEventModal(event);
-});
-
-document.querySelector(".modal-close").addEventListener("click", closeModal);
-
-modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
-
+/* HANDLE TAGS */
 /* Handle typing */
 tagInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === ",") {
@@ -530,6 +499,21 @@ tagContainer.addEventListener("click", () => {
     tagInput.focus();
 });
 
+/* open event modal */
+document.addEventListener("click", (e) => {
+    const tile = e.target.closest(".event-tile");
+    if (!tile) return;
+
+    const id = tile.dataset.eventId;
+    const event = EVENTS.find(e => e.id === id);
+    if (!event) return;
+
+    console.log("EVENT:", event);
+    renderEventModal(event, true);    
+    openEventModal(event);
+});
+
+/* === MAIN === */
 hideErrorMessages();
 initFilters();
 loadEvents();

@@ -57,6 +57,7 @@ extra_javascript:
   - https://unpkg.com/@supabase/supabase-js@2
   - assets/js/config.js
   - assets/js/helper.js
+  - assets/js/user_profile.js
   - assets/js/supabase.js
 
 extra_css:
@@ -68,6 +69,7 @@ extra_css:
   - assets/css/submit.css
   - assets/css/account.css
   - assets/css/notice.css
+  - assets/css/modal.css
 
 plugins:
     - macros
