@@ -1,5 +1,7 @@
 console.log("executing:", document.currentScript?.src);
 
+import { openErrorModal, openSuccessModal } from "./modal.js";
+
 /* === VARIABLES === */
 const today = startOfDay(new Date());
 
@@ -7,10 +9,6 @@ const accountContainer = document.getElementById("account-container");
 const submitContainer = document.getElementById("submit-container");
 const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
-const noticeSuccess = document.getElementById("notice-success");
-const noticeSuccessText = noticeSuccess.querySelector("#text");
-const noticeError = document.getElementById("notice-error");
-const noticeErrorText = noticeError.querySelector("#text");
 const categoryList = document.getElementById("category");
 const parentalGuideList = document.getElementById("parental_guide");
 const priceChoice = document.getElementById("free-choice");
@@ -36,30 +34,11 @@ function initForTest() {
     form.querySelector("#min_price").value = 4;
 }
 
-function showError(message) {
-    noticeError.classList.remove("hidden");
-    noticeErrorText.innerText = message;
-    noticeError.focus();
-}
-
-function showSuccess(message) {
-    noticeSuccess.classList.remove("hidden");
-    noticeSuccessText.innerText = message;
-    noticeSuccess.focus();
-}
-
-function hideNoticeMessages() {
-    noticeSuccess.classList.add("hidden");
-    noticeError.classList.add("hidden");
-}
-
 function showSubmit(user, profile) {
     user_profile = profile;
     noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
     accountContainer.classList.remove("hidden");
-    hideNoticeMessages();
-
     accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
@@ -165,8 +144,6 @@ function showLoginWarning() {
     noticeTip.classList.add("hidden");
     accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
-    hideNoticeMessages();
-
     window.location.href = "../account/";
 }
 
@@ -235,7 +212,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const button = form.querySelector("#button");
 
     /* init UI */
-    hideNoticeMessages();
+    tagInput.setAttribute("aria-invalid", null);
     eventDate.setAttribute("aria-invalid", null);
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
@@ -244,7 +221,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     /* get userTags */
     if (userTags.length > 4) {
         button.setAttribute("aria-busy", "false");
-        showError("Maximum 4 tags");
+        tagInput.setAttribute("aria-invalid", true);
+        tagInput.focus();
+        openErrorModal("Maximum 4 tags");
+        userTags
         return;
     }
     const tags = userTags.map((t) => t.trim().toLowerCase())
@@ -256,9 +236,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     // check dates
     if (new Date(event_date) < today) {
-        eventDate.setAttribute("aria-invalid", true);
         button.setAttribute("aria-busy", "false");
-        showError("La date doit être à partir de aujourd'hui");
+        eventDate.setAttribute("aria-invalid", true);
+        eventDate.focus();
+        openErrorModal("La date doit être à partir de aujourd'hui");
         return;
     }
 
@@ -274,9 +255,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
         if (min_price && max_price && (min_price > max_price))
         {
-            minPrice.setAttribute("aria-invalid", "true");
             button.setAttribute("aria-busy", "false");
-            showError("Le prix réduit doit être inférieur au prix normal");
+            minPrice.setAttribute("aria-invalid", true);
+            minPrice.focus();
+            openErrorModal("Le prix réduit doit être inférieur au prix normal");
             return;
         }
     } else if (priceChoice == "participation libre") {
@@ -290,9 +272,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     if (file) {
         
         if (file.size > 5_000_000) {
-            eventImage.setAttribute("aria-invalid", "true");
-            showError("Image trop lourde (5Mo maximum");
             button.setAttribute("aria-busy", "false");
+            eventImage.setAttribute("aria-invalid", true);
+            eventImage.focus();
+            openErrorModal("Image trop lourde (5Mo maximum");
             return;
         }
 
@@ -306,7 +289,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
             });
         if (error) {
             button.setAttribute("aria-busy", "false");
-            showError("Problème pendant le téléchargement de l'image");
+            openErrorModal("Problème pendant le téléchargement de l'image");
             console.error(error);
             return;
         }
@@ -341,12 +324,12 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError("Problème de publication");
+        openErrorModal("Problème de publication");
         console.error(error);
         return;
     }
 
-    showSuccess("Évènement publié !")
+    openSuccessModal("Évènement publié !")
     e.target.reset();
 });
 

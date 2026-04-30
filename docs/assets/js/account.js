@@ -1,7 +1,9 @@
 console.log("executing:", document.currentScript?.src);
 
+import { openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
+
 /* === VARIABLES === */
-let isAuthenticatedLifecycleStarted = false
+let user_profile = null;
 
 const rstPwdContainer = document.getElementById("rstpwd-container");
 const signInContainer = document.getElementById("signin-container");
@@ -11,6 +13,8 @@ const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
+
+const officialRequestModal = document.getElementById("official-request-modal");
 
 /* === FUNCTIONS === */
 function showNoticeTip(message) {
@@ -57,7 +61,7 @@ function showSignup() {
 }
 
 function showAccount(user, profile) {
-    const role = profile.role;
+    user_profile = profile;
 
     signInContainer.classList.add("hidden");
     rstPwdContainer.classList.add("hidden");
@@ -68,7 +72,7 @@ function showAccount(user, profile) {
 
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
-    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[role];
+    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
     const details = document.getElementById("detail-section");
@@ -76,7 +80,7 @@ function showAccount(user, profile) {
     const adminDetails = details.querySelector("#permission-admin");
     const roleRequest = details.querySelector("#role-request");
 
-    switch(role) {
+    switch(user_profile.role) {
         case 0: /* non official */
             publishInstant.classList.add("denied");
             publishInstant.classList.remove("granted");
@@ -111,6 +115,7 @@ function showAccount(user, profile) {
 }
 
 async function initAccountPage() {
+    user_profile = null;
     const { data:{ session } } = await window.supabaseClient.auth.getSession();
     console.log("session:", session);
     const {  data: subscription } = await window.supabaseClient.auth.onAuthStateChange(async (_event, session) =>
@@ -252,6 +257,15 @@ document.getElementById("account-form").addEventListener("submit", async (event)
         noticeErrorText.innerText = localizeAuthError(err);
         console.error("sign-out failed:", err);
     }
+    user_profile = null;
+});
+
+/* open official request modal */
+document.getElementById("official-role-request").addEventListener("click", (event) => {
+    event.preventDefault();
+    if (!user_profile) return;
+
+    openRoleRequestModal(user_profile);
 });
 
 /* === INITIAL LOAD === */

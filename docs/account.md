@@ -4,6 +4,7 @@ hide:
   - toc
 ---
 
+{% include 'includes/popup.html' %}
 {% include 'includes/account.html' %}
 
 

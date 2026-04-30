@@ -19,7 +19,7 @@ const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
 const eventModal = document.getElementById("event-modal");
-const eventModalContent = document.getElementById("modal-content");
+const eventModalContent = document.getElementById("event-modal-content");
 
 let user_profile = null;
 let tags = [];

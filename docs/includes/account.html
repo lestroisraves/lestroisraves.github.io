@@ -8,10 +8,9 @@
     </div>
 
     <div id="notice-error" class="notice notice-error hidden">
-        <span class="notice-icon">❌</span>
         <div class="notice-content">
-            <strong id="title">Erreur</strong>
-            <p id="text"></p>
+            <span class="notice-icon">❌</span>
+            <span id="text"></span>
         </div>
     </div>
 
@@ -183,6 +182,37 @@
 
         <article id="account-events"></article>
     </div>
+
+    <div id="official-request-modal" class="modal-overlay hidden">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <button id="modal-close" class="modal-close" aria-label="Close">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            
+            <div id="modal-content" class="modal-content">
+                <p>
+                    Vous souhaitez être contributeur <strong>officiel</strong>.
+                    Veuillez décrire votre demande:
+                </p>
+
+                <textarea
+                    class="details-textarea"
+                    id="details-input"
+                    placeholder="Description de votre demande (minimum 50 charactères)"
+                    minlength="50"
+                    row="5"
+                ></textarea>
+            </div>
+            
+            <div id="modal-actions" class="modal-actions">
+                <button id="modal-official-request-btn" class="modal-btn send" disabled>
+                    Envoyer
+                    <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script type="module" defer src="../assets/js/modal.js"></script>
 <script type="module" defer src="../assets/js/account.js"></script>
