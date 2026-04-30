@@ -1,13 +1,14 @@
 # Rabastens-Coufouleux-Salvagnac Calendrier d'évènements culturels
 
-Ce projet a pour but d'offrir un site web proposant les différents évènements culturels disponibles à Rabastens, Coufouleux, Salvagnac et aux alentours.
+Ce projet a pour but d'offrir un site web proposant les différents évènements culturels disponibles à Rabastens, Coufouleux, Salvagnac (81 Tarn) et aux alentours.
 
 En créant un compte simplement et gratuitement, chaque utilisateur a également la possibilité de publier un nouvel évènement.
 
-Il existe 3 type d'utilisateurs:
-* **Anonyme** : peut seulement parcourir la liste des évènements disponible.
-* **Utilisateur non-officiel**: peut proposer l'ajout d'un évènement qui sera publié au bout de 3 jours.
-* **Utilisateur officiel**: ceci concerne les associations, lieux culturels, groupes, etc... qui ont l'habitude de proposer des évènements. Ils peuvent publier un nouvel évènement instantanément.
+Il existe 4 type d'utilisateurs:
+* **Visiteur**: ne possède pas de compte, peut visualiser la liste des évènements mais ne peut pas poster un nouvel évènement.
+* **Contributeur non-officiel**: peut proposer l'ajout d'un évènement qui sera publié au bout de 3 jours.
+* **Contributeur officiel**: ceci concerne les associations, lieux culturels, groupes, etc... qui ont l'habitude de proposer des évènements. Ils peuvent publier un nouvel évènement instantanément.
+* **Administrateur**: modérateur du site web: ils ont la possibilité de refuser ou d'accepter la publication d'un évènement, ils peuvent accepter ou refuser la requête d'un contributeur à passer 'officiel'. La liste des admins et leur contact est disponible sur le site web.
 
 ---
 [![github](https://img.shields.io/badge/rcsculture-github.io-black?style=for-the-badge&logo=github&logoColor=white)](https://rcsculture.github.io)
