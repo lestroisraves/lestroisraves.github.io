@@ -65,6 +65,8 @@
     
       <link rel="stylesheet" href="assets/css/notice.css">
     
+      <link rel="stylesheet" href="assets/css/modal.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -442,19 +444,51 @@
     </div>
 </section>
 
-<div id="event-modal" class="modal-overlay hidden">
-    <div class="modal-card" role="dialog" aria-modal="true">
-        <button class="modal-close" aria-label="Close">
+<div id="delete-modal" class="modal-overlay delete hidden">
+    <div class="modal-card modal-small" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Close">
             <span class="material-symbols-outlined">close</span>
         </button>
+
+        <div class="modal-content">
+            <h3>Confirmez la suppression</h3>
+
+            <p>
+                Cette action est <strong>irréversible</strong>.
+                Pour confirmer, tapez le code suivant :
+            </p>
+
+            <div class="confirm-code" id="confirm-code"></div>
+
+            <input
+                type="text"
+                id="confirm-input"
+                placeholder="Tapez le code"
+                inputmode="numeric"
+                maxlength="4"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="modal-actions">
+            <button id="confirm-delete-btn" class="modal-delete-event" disabled>
+                Supprimer cet évènement
+                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="event-modal" class="modal-overlay hidden">
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Close">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
         <div id="modal-content" class="modal-content"></div>
 
         <div id="modal-actions" class="modal-actions hidden">
-            <!-- <button id="modal-edit-event" class="modal-edit-event">
-                Editer cet évènement
-                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-            </button> -->
-            <button id="modal-delete-event" class="modal-edit-event delete">
+            <button id="modal-delete-event-btn" class="modal-delete-event">
                 Supprimer cet évènement
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
@@ -464,6 +498,7 @@
 
 <article id="events"></article>
 
+<script type="module" defer src="assets/js/modal.js"></script>
 <script type="module" defer src="assets/js/events.js"></script>
 
 <html data-theme="light">
@@ -537,6 +572,8 @@
         <script src="assets/js/config.js"></script>
       
         <script src="assets/js/helper.js"></script>
+      
+        <script src="assets/js/user_profile.js"></script>
       
         <script src="assets/js/supabase.js"></script>
       

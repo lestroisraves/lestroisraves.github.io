@@ -19,6 +19,7 @@ const maxPrice = document.getElementById("max_price");
 const tagContainer = document.getElementById("tag-container");
 const tagInput = document.getElementById("tag-input");
 
+let user_profile = null;
 let userTags = [];
 
 /* === FUNCTIONS === */
@@ -53,19 +54,19 @@ function hideNoticeMessages() {
 }
 
 function showSubmit(user, profile) {
-    const role = profile.role;
+    user_profile = profile;
     noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
     accountContainer.classList.remove("hidden");
     hideNoticeMessages();
 
-    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[role];
+    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
     const publishInstant = accountContainer.querySelector("#permission-instant");
     const adminDetails = accountContainer.querySelector("#permission-admin");
 
-    switch(role) {
+    switch(user_profile.role) {
         case 0: /* non official */
             publishInstant.classList.add("denied");
             publishInstant.classList.remove("granted");
@@ -160,6 +161,7 @@ function renderTags() {
 }
 
 function showLoginWarning() {
+    session.profile = null;
     noticeTip.classList.add("hidden");
     accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
@@ -169,19 +171,9 @@ function showLoginWarning() {
 }
 
 async function initSubmitPage() {
-    const { data:{ session } } = await window.supabaseClient.auth.getSession();
-    console.log("session:", session);
-    if (session?.user) {
-        const { data: profile, error } = await window.supabaseClient.from('profiles')
-            .select('name, role')
-            .eq('id', session.user.id)
-            .single();
-
-        if (error) {
-            console.error(error);
-            showLoginWarning();
-        }
-        showSubmit(session.user, profile);
+    const session = await getSessionUserProfile();
+    if (session?.session?.user && session?.profile) {
+        showSubmit(session.session.user, session.profile);
     } else {
         showLoginWarning();
     }
@@ -248,10 +240,6 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
     button.setAttribute("aria-busy", "true");
-
-    /* get user info */
-    const {data: { user },} = await window.supabaseClient.auth.getUser();
-    console.log("user?", !!user, user?.id);
 
     /* get userTags */
     if (userTags.length > 4) {
@@ -333,9 +321,9 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         location_name: form.querySelector('#location_name').value,
         location_address: form.querySelector('#location_address').value,
         tags,
-        pending: false,
-        is_anonymous: !user,
-        created_by: user?.id ?? null,
+        pending: user_profile.role == 0,
+        is_anonymous: !user_profile,
+        created_by: user_profile?.id ?? null,
         is_free_price: is_free_price,
         min_price: min_price,
         max_price: max_price,
