@@ -104,79 +104,6 @@ function initFilters() {
 
 }
 
-function renderEventData(event, details = false) {
-    const eventData = event;
-
-    eventData.timeHtml = event.event_start_time
-        ? renderMaterialIconText("schedule", formatTimeForUI(event.event_start_time))
-        : "";
-
-    eventData.tagsHtml = event.tags && event.tags.length
-        ? `
-            <div class="event-tags">
-                ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-            </div>
-        `
-        : "";
-
-    eventData.imageHtml = event.image_url
-        ? ` <div class="event-image-wrapper"><img src="${event.image_url}" class="event-thumbnail" loading="lazy" alt="Event image"></div>`
-        : "";
-
-    eventData.price = "Gratuit";
-    if (event.is_free_price) {
-        eventData.price = "Participation libre";
-    } else if (event.min_price && event.max_price) {
-        eventData.price = event.min_price + " à " + event.max_price + " €";
-    } else if (event.max_price) {
-        eventData.price = event.max_price + " €";
-    }
-
-    switch (event.parental_guide)
-    {
-        case 1:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_friendly", APP_CONFIG.PARENTAL_GUIDE[1]);
-            break;
-        case 2:
-            eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
-            break;
-        default:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
-    }
-
-    eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]
-
-    eventData.date = formatDateForUI(event.event_date);
-
-    if (details) {
-        // render extra information for event modal
-        eventData.addressHtml = event.location_address
-            ? renderMaterialIconText("distance", event.location_address)
-            : "";
-
-        eventData.phoneHtml = event.phone
-            ? renderMaterialIconText("call", event.phone)
-            : "";
-
-        eventData.siteUrlHtml = event.site_url
-            ? renderMaterialIconText("language", linkify(event.site_url))
-            : "";
-
-        eventData.eatHtml = event.to_eat
-            ? renderMaterialIconText("fork_spoon", "À manger sur place")
-            : "";
-
-        eventData.descriptionHtml = event.long_description
-            ? `
-            <hr>
-            <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
-            `
-            : "";
-    }
-
-    return eventData;
-}
-
 function renderEventTile(event) {
     const eventData = renderEventData(event);
 
@@ -305,10 +232,8 @@ async function loadEvents() {
 
     const { data, error } = await query.order("event_date", { ascending: true });
 
-    console.log("Data:", events);
-    console.log("Error:", error);
-
     if (error) {
+        console.log("Error:", error);
         container.innerText = "ERREUR survenue durant le chargement des évènements";
         return;
     }

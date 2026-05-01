@@ -16,6 +16,11 @@ const noticeErrorText = noticeError.querySelector("#text");
 
 const officialRequestModal = document.getElementById("official-request-modal");
 
+const myEvents = document.getElementById("my-events");
+const adminSection = document.getElementById("admin-section");
+const officialRequests = document.getElementById("official-requests");
+const pendingEvents = document.getElementById("pending-events");
+
 /* === FUNCTIONS === */
 function showNoticeTip(message) {
     noticeTip.classList.remove("hidden");
@@ -60,8 +65,9 @@ function showSignup() {
     showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
 }
 
-function showAccount(user, profile) {
+async function showAccount(user, profile) {
     user_profile = profile;
+    console.log("user_profile:", user_profile);
 
     signInContainer.classList.add("hidden");
     rstPwdContainer.classList.add("hidden");
@@ -81,12 +87,14 @@ function showAccount(user, profile) {
     const roleRequest = details.querySelector("#role-request");
 
     switch(user_profile.role) {
+
         case 0: /* non official */
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
+            adminSection.classList.add("hidden");
             break;
         
         case 1: /* official */
@@ -95,6 +103,7 @@ function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
+            adminSection.classList.add("hidden");
             break;
 
         case 2: /* admin */
@@ -103,6 +112,10 @@ function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.remove("hidden");
             roleRequest.classList.add("hidden");
+            adminSection.classList.remove("hidden");
+
+            await getPendingEvents();
+            await getOfficialRequests();
             break;
         
         default:
@@ -111,7 +124,10 @@ function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
+            adminSection.classList.add("hidden");
     }
+
+    await getMyPublications();
 }
 
 async function initAccountPage() {
@@ -127,7 +143,7 @@ async function initAccountPage() {
                 .single();
 
             if (!error){
-                showAccount(session.user, profile);
+                await showAccount(session.user, profile);
                 return
             }
             console.error(error);
@@ -136,6 +152,106 @@ async function initAccountPage() {
     });
   
     return subscription; // (optional) for unsubscribe later
+}
+
+function renderMyPublications(event) {
+    const eventData = renderEventData(event);
+
+    const html = `
+        <div class="event-small-tile">
+            <div class="event-small-main">
+                <span class="event-small-title">${event.title}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${eventData.categoryLabel}</span>
+                ·
+                <span class="event-small-date">${eventData.date}</span>
+                ·
+                <span class="event-small-place">${event.location_name}</span>
+                </span>
+            </div>
+
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn delete" aria-label="Delete">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+        </div>
+    
+    `
+
+    // const html = `
+    //     <div class="small-event-tile">
+    //         <div class="event-content">
+    //             <strong>${event.title}</strong>
+    //             <div class="event-meta">
+    //                 ${renderMaterialIconText("stars", eventData.categoryLabel)}
+    //                 ${renderMaterialIconText("event", eventData.date)}
+    //                 ${renderMaterialIconText("sell", eventData.price)}
+    //                 ${renderMaterialIconText("place", event.location_name)}
+    //             </div>
+    //         </div>
+    //     </div>
+    // `;
+
+    return html;
+}
+
+async function getMyPublications() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("events") /* fetch also old events from my creation */
+        .select("*")
+        .eq("created_by", user_profile.id)
+        .order("event_date", { ascending: true });
+
+    if (error) {
+        console.log("Error:", error)
+        myEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        return;
+    }
+    if (!data || data.length === 0) {
+        myEvents.innerText = "Pas d'évènements en cours";
+        return;
+    }
+    myEvents.innerHTML = data.map(renderMyPublications).join("")
+}
+
+async function getPendingEvents() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("future_events") /* fetch only future events */
+        .select("*")
+        .eq("pending", true)
+        .order("event_date", { ascending: true });
+
+    if (error) {
+        console.log("Error:", error)
+        pendingEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        return;
+    }
+    if (!data || data.length === 0) {
+        pendingEvents.innerText = "Pas d'évènements en attente de publication";
+        return;
+    }
+}
+
+async function getOfficialRequests() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("official_request", true);
+
+    if (error) {
+        console.log("Error:", error)
+        officialRequests.innerText = "ERREUR survenue durant le chargement des requêtes";
+        return;
+    }
+    if (!data || data.length === 0) {
+        officialRequests.innerText = "Pas de requêtes en cours";
+        return;
+    }
 }
 
 /* === LISTENERS === */

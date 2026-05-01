@@ -25,7 +25,12 @@
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
-.account-identity {
+.account-tile.hidden {
+    display: none;
+}
+
+
+.account-section-title {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -34,7 +39,7 @@
     font-weight: 600;
 }
 
-.account-identity .material-symbols-outlined {
+.account-section-title .material-symbols-outlined {
     font-size: 1.2rem;
 }
 
@@ -129,6 +134,103 @@
     margin: 0;
     color: #666;
 }
+
+#admin-section.hidden {
+    display: none;
+}
+
+.event-small-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 0.1rem 0.5rem;
+  margin-top: 0.6rem;
+  border-radius: 8px;
+  border-left: 2px solid var(--pico-primary);
+  background: var(--pico-card-background-color, #fff);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.event-small-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.event-small-tile:focus {
+    /* outline: 2px solid #b8bee0; */
+    outline-offset: 2px;
+}
+
+.event-small-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.event-small-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-small-meta {
+  font-size: 0.60rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-small-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.event-small-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.event-small-icon-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Hover / active */
+.event-small-icon-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.event-small-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* Variants */
+.event-small-icon-btn.info {
+  color: #1976d2;
+}
+
+.event-small-icon-btn.delete {
+  color: #d32f2f;
+}
+
+.event-small-icon-btn.delete:hover {
+  background-color: rgba(211, 47, 47, 0.15);
+}
+
 
 @media (max-width: 350px) {
     .detail-row {
