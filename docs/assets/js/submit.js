@@ -1,6 +1,7 @@
 console.log("executing:", document.currentScript?.src);
 
 import { openErrorModal, openSuccessModal } from "./modal.js";
+import { tagInput, userTags, clearTags } from "./tags.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -14,11 +15,8 @@ const parentalGuideList = document.getElementById("parental_guide");
 const priceChoice = document.getElementById("free-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
-const tagContainer = document.getElementById("tag-container");
-const tagInput = document.getElementById("tag-input");
 
 let user_profile = null;
-let userTags = [];
 
 /* === FUNCTIONS === */
 function initForTest() {
@@ -91,52 +89,9 @@ function showSubmit(user, profile) {
     parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0];
 
     /* init userTags */
-    userTags = [];
-    renderTags();
+    clearTags();
 
     // initForTest();
-}
-
-function addTag(value) {
-    const tag = value.trim().toLowerCase();
-
-    if (!tag || userTags.includes(tag)) {
-        return;
-    }
-
-    userTags.push(tag);
-    renderTags();
-}
-
-function removeTag(tagToRemove) {
-    userTags = userTags.filter(tag => tag !== tagToRemove);
-    renderTags();
-}
-
-function renderTags() {
-    // Remove existing chips
-    tagContainer
-        .querySelectorAll(".tag-chip")
-        .forEach(el => el.remove());
-
-    // Add chips before the input
-    userTags.forEach(tag => {
-        const chip = document.createElement("span");
-        chip.className = "tag-chip";
-        chip.textContent = tag;
-
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.innerHTML = "&times;";
-        removeBtn.addEventListener("click", () => {
-            removeTag(tag);
-        });
-
-        chip.appendChild(removeBtn);
-        tagContainer.insertBefore(chip, tagInput);
-    });
-
-    tagInput.value = "";
 }
 
 function showLoginWarning() {
@@ -212,7 +167,6 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const button = form.querySelector("#button");
 
     /* init UI */
-    tagInput.setAttribute("aria-invalid", null);
     eventDate.setAttribute("aria-invalid", null);
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
@@ -221,7 +175,6 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     /* get userTags */
     if (userTags.length > 4) {
         button.setAttribute("aria-busy", "false");
-        tagInput.setAttribute("aria-invalid", true);
         tagInput.focus();
         openErrorModal("Maximum 4 tags");
         userTags
@@ -331,28 +284,6 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     openSuccessModal("Évènement publié !")
     e.target.reset();
-});
-
-/* Handle typing */
-tagInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault();
-        addTag(tagInput.value);
-    }
-
-    if (e.key === "Backspace" && tagInput.value === "" && userTags.length) {
-        removeTag(userTags[userTags.length - 1]);
-    }
-});
-
-/* Handle blur (optional) */
-tagInput.addEventListener("blur", () => {
-    addTag(tagInput.value);
-});
-
-/* Focus input when clicking container */
-tagContainer.addEventListener("click", () => {
-    tagInput.focus();
 });
 
 /* === INITIAL LOAD === */
