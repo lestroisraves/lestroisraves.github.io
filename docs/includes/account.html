@@ -147,22 +147,32 @@
                             <span id="account-role" class="value detail-user"></span>
                         </div>
 
-                        <li id="permission-publish" class="permission granted">
+                        <li class="permission granted">
                             <span id="icon" class="material-symbols-outlined">check</span>
                             Publier des évènements
                         </li>
-                        <li id="permission-edit" class="permission granted">
+                        <li class="permission granted">
                             <span id="icon" class="material-symbols-outlined">check</span>
                             Editer vos évènements
                         </li>
-                        <li id="permission-instant" class="permission denied">
+                        <li id="permission-official" class="permission denied">
                             <span id="icon" class="material-symbols-outlined">lock</span>
                             Publier instantanément (sans délais de 3 jours)
                         </li>
-                        <li id="permission-admin" class="permission granted hidden">
-                            <span id="icon" class="material-symbols-outlined">check</span>
-                            Modération: éditer/supprimer n'importe quel évènement
-                        </li>
+                        <div id="permission-admin" class="hidden">
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une publication
+                            </li>
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: supprimer n'importe quel évènement
+                            </li>
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une requête contributeur "Officiel"
+                            </li>
+                        </div>
                     
                         <div id="role-request" class="role-request hidden">
                             <p class="role-request-text">
@@ -214,5 +224,4 @@
     </div>
 </div>
 
-<!-- <script type="module" defer src="../assets/js/modal.js"></script> -->
 <script type="module" defer src="../assets/js/account.js"></script>

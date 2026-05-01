@@ -76,40 +76,40 @@ function showAccount(user, profile) {
 
     /* configure roles */
     const details = document.getElementById("detail-section");
-    const publishInstant = details.querySelector("#permission-instant");
-    const adminDetails = details.querySelector("#permission-admin");
+    const permissionOfficial = details.querySelector("#permission-official");
+    const permissionAdmin = details.querySelector("#permission-admin");
     const roleRequest = details.querySelector("#role-request");
 
     switch(user_profile.role) {
         case 0: /* non official */
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
             break;
         
         case 1: /* official */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
             break;
 
         case 2: /* admin */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.remove("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.remove("hidden");
             roleRequest.classList.add("hidden");
             break;
         
         default:
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
     }
 }

@@ -82,6 +82,10 @@
     display: none;
 }
 
+#permission-admin.hidden {
+    display: none;
+}
+
 .permission {
     font-size: 0.6rem;
     display: flex;
