@@ -9,11 +9,16 @@
     --secondary-gray4:                  #aaaaaa;
     --primary-success:                  #4caf50;
     --primary-success--lighter:         #f3fbf5;
+    --primary-success--text:            #1b5e20;
     --primary-warning:                  #ff9800;
     --primary-warning--lighter:         #fff7e6;
-    --primary-error:                    #f44336;
+    --primary-warning--text:            #7a4a00;
+    --primary-error:                    #bf1a0e;
     --primary-error--lighter:           #fdecea;
+    --primary-error--text:              #8a1c1c;
+    --primary-request:                  #0a797d;
     --primary-tag-color:                #d1a8a8;
+    --primary-textarea:                 #837e7e;
 
     /* currently used colors */
     --primary-fg:                       var(--pico-primary);
@@ -32,7 +37,7 @@
     /* "Made with" */
     --md-footer-fg-color--lighter:      var(--primary-white);
     /* hover on "Made with" */
-    --md-footer-fg-color:               var(--primary-fg);
+    --md-footer-fg-color:               var(--pico-primary-hover);
 }
 
 
@@ -98,6 +103,20 @@ table tr th:last-child {
     /* define header border right */
     border-right: 1px solid var(--secondary-gray4);
 }
+
+/* footer */
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem; /* space between icon and text */
+}
+
+.github-icon {
+    width: 1em;
+    height: 1em;
+}
+
 
 
 /* make/set variables that react to the theme */

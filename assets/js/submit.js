@@ -1,5 +1,8 @@
 console.log("executing:", document.currentScript?.src);
 
+import { openErrorModal, openSuccessModal } from "./modal.js";
+import { tagInput, userTags, clearTags } from "./tags.js";
+
 /* === VARIABLES === */
 const today = startOfDay(new Date());
 
@@ -7,20 +10,13 @@ const accountContainer = document.getElementById("account-container");
 const submitContainer = document.getElementById("submit-container");
 const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
-const noticeSuccess = document.getElementById("notice-success");
-const noticeSuccessText = noticeSuccess.querySelector("#text");
-const noticeError = document.getElementById("notice-error");
-const noticeErrorText = noticeError.querySelector("#text");
 const categoryList = document.getElementById("category");
 const parentalGuideList = document.getElementById("parental_guide");
 const priceChoice = document.getElementById("free-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
-const tagContainer = document.getElementById("tag-container");
-const tagInput = document.getElementById("tag-input");
 
 let user_profile = null;
-let userTags = [];
 
 /* === FUNCTIONS === */
 function initForTest() {
@@ -36,63 +32,44 @@ function initForTest() {
     form.querySelector("#min_price").value = 4;
 }
 
-function showError(message) {
-    noticeError.classList.remove("hidden");
-    noticeErrorText.innerText = message;
-    noticeError.focus();
-}
-
-function showSuccess(message) {
-    noticeSuccess.classList.remove("hidden");
-    noticeSuccessText.innerText = message;
-    noticeSuccess.focus();
-}
-
-function hideNoticeMessages() {
-    noticeSuccess.classList.add("hidden");
-    noticeError.classList.add("hidden");
-}
-
 function showSubmit(user, profile) {
     user_profile = profile;
     noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
     accountContainer.classList.remove("hidden");
-    hideNoticeMessages();
-
     accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
-    const publishInstant = accountContainer.querySelector("#permission-instant");
-    const adminDetails = accountContainer.querySelector("#permission-admin");
+    const permissionOfficial = accountContainer.querySelector("#permission-official");
+    const permissionAdmin = accountContainer.querySelector("#permission-admin");
 
     switch(user_profile.role) {
         case 0: /* non official */
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
             break;
         
         case 1: /* official */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.add("hidden");
             break;
 
         case 2: /* admin */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.remove("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.remove("hidden");
             break;
         
         default:
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
     }
 
     /* Configure categories  */
@@ -112,52 +89,9 @@ function showSubmit(user, profile) {
     parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0];
 
     /* init userTags */
-    userTags = [];
-    renderTags();
+    clearTags();
 
     // initForTest();
-}
-
-function addTag(value) {
-    const tag = value.trim().toLowerCase();
-
-    if (!tag || userTags.includes(tag)) {
-        return;
-    }
-
-    userTags.push(tag);
-    renderTags();
-}
-
-function removeTag(tagToRemove) {
-    userTags = userTags.filter(tag => tag !== tagToRemove);
-    renderTags();
-}
-
-function renderTags() {
-    // Remove existing chips
-    tagContainer
-        .querySelectorAll(".tag-chip")
-        .forEach(el => el.remove());
-
-    // Add chips before the input
-    userTags.forEach(tag => {
-        const chip = document.createElement("span");
-        chip.className = "tag-chip";
-        chip.textContent = tag;
-
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.innerHTML = "&times;";
-        removeBtn.addEventListener("click", () => {
-            removeTag(tag);
-        });
-
-        chip.appendChild(removeBtn);
-        tagContainer.insertBefore(chip, tagInput);
-    });
-
-    tagInput.value = "";
 }
 
 function showLoginWarning() {
@@ -165,8 +99,6 @@ function showLoginWarning() {
     noticeTip.classList.add("hidden");
     accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
-    hideNoticeMessages();
-
     window.location.href = "../account/";
 }
 
@@ -235,7 +167,6 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const button = form.querySelector("#button");
 
     /* init UI */
-    hideNoticeMessages();
     eventDate.setAttribute("aria-invalid", null);
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
@@ -244,7 +175,9 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     /* get userTags */
     if (userTags.length > 4) {
         button.setAttribute("aria-busy", "false");
-        showError("Maximum 4 tags");
+        tagInput.focus();
+        openErrorModal("Maximum 4 tags");
+        userTags
         return;
     }
     const tags = userTags.map((t) => t.trim().toLowerCase())
@@ -256,9 +189,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     // check dates
     if (new Date(event_date) < today) {
-        eventDate.setAttribute("aria-invalid", true);
         button.setAttribute("aria-busy", "false");
-        showError("La date doit être à partir de aujourd'hui");
+        eventDate.setAttribute("aria-invalid", true);
+        eventDate.focus();
+        openErrorModal("La date doit être à partir de aujourd'hui");
         return;
     }
 
@@ -274,9 +208,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
         if (min_price && max_price && (min_price > max_price))
         {
-            minPrice.setAttribute("aria-invalid", "true");
             button.setAttribute("aria-busy", "false");
-            showError("Le prix réduit doit être inférieur au prix normal");
+            minPrice.setAttribute("aria-invalid", true);
+            minPrice.focus();
+            openErrorModal("Le prix réduit doit être inférieur au prix normal");
             return;
         }
     } else if (priceChoice == "participation libre") {
@@ -290,9 +225,10 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     if (file) {
         
         if (file.size > 5_000_000) {
-            eventImage.setAttribute("aria-invalid", "true");
-            showError("Image trop lourde (5Mo maximum");
             button.setAttribute("aria-busy", "false");
+            eventImage.setAttribute("aria-invalid", true);
+            eventImage.focus();
+            openErrorModal("Image trop lourde (5Mo maximum");
             return;
         }
 
@@ -306,7 +242,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
             });
         if (error) {
             button.setAttribute("aria-busy", "false");
-            showError("Problème pendant le téléchargement de l'image");
+            openErrorModal("Problème pendant le téléchargement de l'image");
             console.error(error);
             return;
         }
@@ -341,35 +277,13 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError("Problème de publication");
+        openErrorModal("Problème de publication");
         console.error(error);
         return;
     }
 
-    showSuccess("Évènement publié !")
+    openSuccessModal("Évènement publié !")
     e.target.reset();
-});
-
-/* Handle typing */
-tagInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault();
-        addTag(tagInput.value);
-    }
-
-    if (e.key === "Backspace" && tagInput.value === "" && userTags.length) {
-        removeTag(userTags[userTags.length - 1]);
-    }
-});
-
-/* Handle blur (optional) */
-tagInput.addEventListener("blur", () => {
-    addTag(tagInput.value);
-});
-
-/* Focus input when clicking container */
-tagContainer.addEventListener("click", () => {
-    tagInput.focus();
 });
 
 /* === INITIAL LOAD === */

@@ -36,19 +36,19 @@
 .notice-tip {
     background-color: var(--primary-success--lighter);
     border-left: 4px solid var(--primary-success);
-    color: #1b5e20;
+    color: var(--primary-success--text);
 }
 
 .notice-warning {
     background-color: var(--primary-warning--lighter);
     border-left: 4px solid var(--primary-warning);
-    color: #7a4a00;
+    color: var(--primary-warning--text);
 }
 
 .notice-error {
     background-color: var(--primary-error--lighter);
     border-left: 4px solid var(--primary-error);
-    color: #8a1c1c;
+    color: var(--primary-error--text);
 }
 
 .notice.compact {

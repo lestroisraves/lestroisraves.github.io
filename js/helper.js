@@ -110,3 +110,76 @@ function formatDateRange(startDate, endDate) {
     return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;
 }
 
+function renderEventData(event, details = false) {
+    const eventData = event;
+
+    eventData.timeHtml = eventData.event_start_time
+        ? renderMaterialIconText("schedule", formatTimeForUI(eventData.event_start_time))
+        : "";
+
+    eventData.tagsHtml = eventData.tags && eventData.tags.length
+        ? `
+            <div class="event-tags">
+                ${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+        `
+        : "";
+
+    eventData.imageHtml = eventData.image_url
+        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" loading="lazy" alt="Event image"></div>`
+        : "";
+
+    eventData.price = "Gratuit";
+    if (eventData.is_free_price) {
+        eventData.price = "Participation libre";
+    } else if (eventData.min_price && eventData.max_price) {
+        eventData.price = eventData.min_price + " à " + eventData.max_price + " €";
+    } else if (eventData.max_price) {
+        eventData.price = eventData.max_price + " €";
+    }
+
+    switch (eventData.parental_guide)
+    {
+        case 1:
+            eventData.parentalGuideHtml = renderMaterialIconText("child_friendly", APP_CONFIG.PARENTAL_GUIDE[1]);
+            break;
+        case 2:
+            eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
+            break;
+        default:
+            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
+    }
+
+    eventData.categoryLabel = APP_CONFIG.CATEGORIES[eventData.category]
+
+    eventData.date = formatDateForUI(eventData.event_date);
+
+    if (details) {
+        // render extra information for event modal
+        eventData.addressHtml = eventData.location_address
+            ? renderMaterialIconText("distance", eventData.location_address)
+            : "";
+
+        eventData.phoneHtml = eventData.phone
+            ? renderMaterialIconText("call", eventData.phone)
+            : "";
+
+        eventData.siteUrlHtml = eventData.site_url
+            ? renderMaterialIconText("language", linkify(eventData.site_url))
+            : "";
+
+        eventData.eatHtml = eventData.to_eat
+            ? renderMaterialIconText("fork_spoon", "À manger sur place")
+            : "";
+
+        eventData.descriptionHtml = eventData.long_description
+            ? `
+            <hr>
+            <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
+            `
+            : "";
+    }
+
+    return eventData;
+}
+

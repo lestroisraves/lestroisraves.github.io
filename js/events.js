@@ -1,6 +1,7 @@
 console.log("executing:", "events.js");
 
 import { openEventModal } from "./modal.js";
+import { tagInput, userTags, clearTags } from "./tags.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -15,14 +16,11 @@ const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
 const filterCatChoices = filterPanel.querySelector("#filter-category");
 const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
-const tagContainer = document.getElementById("tag-container");
-const tagInput = document.getElementById("tag-input");
 
 const eventModal = document.getElementById("event-modal");
-const eventModalContent = document.getElementById("modal-content");
+const eventModalContent = document.getElementById("event-modal-content");
 
 let user_profile = null;
-let tags = [];
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
 
@@ -66,8 +64,7 @@ function showFilterError(message) {
 }
 
 function initFilters() {
-    tags = [];
-    renderTags();
+    clearTags();
 
     /* Configure categories */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
@@ -105,122 +102,6 @@ function initFilters() {
         filterParentalGuideChoices.appendChild(label); 
     });
 
-}
-
-function addTag(value) {
-    const tag = value.trim().toLowerCase();
-
-    if (!tag || tags.includes(tag)) {
-        return;
-    }
-
-    tags.push(tag);
-    renderTags();
-}
-
-function removeTag(tagToRemove) {
-    tags = tags.filter(tag => tag !== tagToRemove);
-    renderTags();
-}
-
-function renderTags() {
-    // Remove existing chips
-    tagContainer
-        .querySelectorAll(".tag-chip")
-        .forEach(el => el.remove());
-
-    // Add chips before the input
-    tags.forEach(tag => {
-        const chip = document.createElement("span");
-        chip.className = "tag-chip";
-        chip.textContent = tag;
-
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.innerHTML = "&times;";
-        removeBtn.addEventListener("click", () => {
-            removeTag(tag);
-        });
-
-        chip.appendChild(removeBtn);
-        tagContainer.insertBefore(chip, tagInput);
-    });
-
-    tagInput.value = "";
-    
-}
-
-function renderEventData(event, details = false) {
-    const eventData = event;
-
-    eventData.timeHtml = event.event_start_time
-        ? renderMaterialIconText("schedule", formatTimeForUI(event.event_start_time))
-        : "";
-
-    eventData.tagsHtml = event.tags && event.tags.length
-        ? `
-            <div class="event-tags">
-                ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-            </div>
-        `
-        : "";
-
-    eventData.imageHtml = event.image_url
-        ? ` <div class="event-image-wrapper"><img src="${event.image_url}" class="event-thumbnail" loading="lazy" alt="Event image"></div>`
-        : "";
-
-    eventData.price = "Gratuit";
-    if (event.is_free_price) {
-        eventData.price = "Participation libre";
-    } else if (event.min_price && event.max_price) {
-        eventData.price = event.min_price + " à " + event.max_price + " €";
-    } else if (event.max_price) {
-        eventData.price = event.max_price + " €";
-    }
-
-    switch (event.parental_guide)
-    {
-        case 1:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_friendly", APP_CONFIG.PARENTAL_GUIDE[1]);
-            break;
-        case 2:
-            eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
-            break;
-        default:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
-    }
-
-    eventData.categoryLabel = APP_CONFIG.CATEGORIES[event.category]
-
-    eventData.date = formatDateForUI(event.event_date);
-
-    if (details) {
-        // render extra information for event modal
-        eventData.addressHtml = event.location_address
-            ? renderMaterialIconText("distance", event.location_address)
-            : "";
-
-        eventData.phoneHtml = event.phone
-            ? renderMaterialIconText("call", event.phone)
-            : "";
-
-        eventData.siteUrlHtml = event.site_url
-            ? renderMaterialIconText("language", linkify(event.site_url))
-            : "";
-
-        eventData.eatHtml = event.to_eat
-            ? renderMaterialIconText("fork_spoon", "À manger sur place")
-            : "";
-
-        eventData.descriptionHtml = event.long_description
-            ? `
-            <hr>
-            <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
-            `
-            : "";
-    }
-
-    return eventData;
 }
 
 function renderEventTile(event) {
@@ -351,10 +232,8 @@ async function loadEvents() {
 
     const { data, error } = await query.order("event_date", { ascending: true });
 
-    console.log("Data:", events);
-    console.log("Error:", error);
-
     if (error) {
+        console.log("Error:", error);
         container.innerText = "ERREUR survenue durant le chargement des évènements";
         return;
     }
@@ -405,9 +284,8 @@ document.getElementById("reset-filters").addEventListener("click", (event) => {
     hideErrorMessages();
 
     /* remove all filters */
-    tags = [];
     filters = APP_CONFIG.DEFAULT_FILTER;
-    renderTags();
+    clearTags();
     document.getElementById("filter-form").reset();
 
     /* hide panel abd load events */
@@ -434,7 +312,7 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     const to = form.to.value;
 
     // checks tags
-    tags.forEach(tag => {
+    userTags.forEach(tag => {
         // if (!/^[a-z0-9-_]+$/.test(tag)) {
         //     showFilterError("Mauvais format pour les tags")
         // }
@@ -463,7 +341,7 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     filters = {
         categories: selectedCategories.length ? selectedCategories : null,
         pg: selectedPg.length ? selectedPg : null,
-        tags: tags.length ? tags : null,
+        tags: userTags.length ? userTags : null,
         from: from || null,
         to: to || null
     };
@@ -476,29 +354,6 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
     loadEvents();
 });
 
-/* HANDLE TAGS */
-/* Handle typing */
-tagInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault();
-        addTag(tagInput.value);
-    }
-
-    if (e.key === "Backspace" && tagInput.value === "" && tags.length) {
-        removeTag(tags[tags.length - 1]);
-    }
-});
-
-/* Handle blur (optional) */
-tagInput.addEventListener("blur", () => {
-    addTag(tagInput.value);
-});
-
-/* Focus input when clicking container */
-tagContainer.addEventListener("click", () => {
-    tagInput.focus();
-});
-
 /* open event modal */
 document.addEventListener("click", (e) => {
     const tile = e.target.closest(".event-tile");
@@ -509,7 +364,7 @@ document.addEventListener("click", (e) => {
     if (!event) return;
 
     console.log("EVENT:", event);
-    renderEventModal(event, true);    
+    renderEventModal(event, true);
     openEventModal(event);
 });
 

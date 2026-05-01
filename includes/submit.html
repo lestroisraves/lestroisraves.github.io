@@ -8,28 +8,40 @@
         </div>
     </div>
 
-    <div id="account-container" class="detail-section hidden">
+    <div id="account-container" class="account-tile detail-section hidden">
         <div class="detail-row">
             <span class="label">Contributeur</span>
             <span id="account-role" class="value detail-user"></span>
         </div>
 
-        <li id="permission-publish" class="permission granted">
-            <span id="icon" class="material-symbols-outlined">check</span>
-            Publier des évènements
-        </li>
-        <li id="permission-edit" class="permission granted">
-            <span id="icon" class="material-symbols-outlined">check</span>
-            Editer vos évènements
-        </li>
-        <li id="permission-instant" class="permission denied">
-            <span id="icon" class="material-symbols-outlined">lock</span>
-            Publier instantanément (sans délais de 3 jours)
-        </li>
-        <li id="permission-admin" class="permission granted hidden">
-            <span id="icon" class="material-symbols-outlined">check</span>
-            Modération: éditer/supprimer n'importe quel évènement
-        </li>
+        <ul>
+            <li class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Publier des évènements
+            </li>
+            <li class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Editer vos évènements
+            </li>
+            <li id="permission-official" class="permission denied">
+                <span id="icon" class="material-symbols-outlined">lock</span>
+                Publier instantanément (sans délais de 3 jours)
+            </li>
+            <ul id="permission-admin" class="hidden">
+                <li class="permission granted">
+                    <span id="icon" class="material-symbols-outlined">check</span>
+                    Modération: accepter/refuser une publication
+                </li>
+                <li class="permission granted">
+                    <span id="icon" class="material-symbols-outlined">check</span>
+                    Modération: supprimer n'importe quel évènement
+                </li>
+                <li class="permission granted">
+                    <span id="icon" class="material-symbols-outlined">check</span>
+                    Modération: accepter/refuser une requête contributeur "Officiel"
+                </li>
+            </ul>
+        </ul>
 
         <p>
             Plus d'infos sur
@@ -128,22 +140,6 @@
                     Image (maximum 5 Mo)
                     <input type="file" id="event-image" accept="image/*"/>
                 </label>
-
-                <div id="notice-success" class="notice notice-tip event hidden">
-                    <span class="notice-icon">✔️</span>
-                    <div class="notice-content">
-                        <strong id="title">Succès</strong>
-                        <p id="text"></p>
-                    </div>
-                </div>
-
-                <div id="notice-error" class="notice notice-error event hidden">
-                    <span class="notice-icon">❌</span>
-                    <div class="notice-content">
-                        <strong id="title">Erreur</strong>
-                        <p id="text"></p>
-                    </div>
-                </div>
 
                 <div class="pico">
                     <button type="submit" id="button">Publier</button>

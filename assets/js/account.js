@@ -1,7 +1,9 @@
 console.log("executing:", document.currentScript?.src);
 
+import { openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
+
 /* === VARIABLES === */
-let isAuthenticatedLifecycleStarted = false
+let user_profile = null;
 
 const rstPwdContainer = document.getElementById("rstpwd-container");
 const signInContainer = document.getElementById("signin-container");
@@ -11,6 +13,13 @@ const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
+
+const officialRequestModal = document.getElementById("official-request-modal");
+
+const myEvents = document.getElementById("my-events");
+const adminSection = document.getElementById("admin-section");
+const officialRequests = document.getElementById("official-requests");
+const pendingEvents = document.getElementById("pending-events");
 
 /* === FUNCTIONS === */
 function showNoticeTip(message) {
@@ -56,8 +65,9 @@ function showSignup() {
     showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
 }
 
-function showAccount(user, profile) {
-    const role = profile.role;
+async function showAccount(user, profile) {
+    user_profile = profile;
+    console.log("user_profile:", user_profile);
 
     signInContainer.classList.add("hidden");
     rstPwdContainer.classList.add("hidden");
@@ -68,49 +78,60 @@ function showAccount(user, profile) {
 
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
-    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[role];
+    document.getElementById("account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
     const details = document.getElementById("detail-section");
-    const publishInstant = details.querySelector("#permission-instant");
-    const adminDetails = details.querySelector("#permission-admin");
+    const permissionOfficial = details.querySelector("#permission-official");
+    const permissionAdmin = details.querySelector("#permission-admin");
     const roleRequest = details.querySelector("#role-request");
 
-    switch(role) {
+    switch(user_profile.role) {
+
         case 0: /* non official */
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
+            adminSection.classList.add("hidden");
             break;
         
         case 1: /* official */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
+            adminSection.classList.add("hidden");
             break;
 
         case 2: /* admin */
-            publishInstant.classList.remove("denied");
-            publishInstant.classList.add("granted");
-            publishInstant.querySelector("#icon").innerText = "check"
-            adminDetails.classList.remove("hidden");
+            permissionOfficial.classList.remove("denied");
+            permissionOfficial.classList.add("granted");
+            permissionOfficial.querySelector("#icon").innerText = "check"
+            permissionAdmin.classList.remove("hidden");
             roleRequest.classList.add("hidden");
+            adminSection.classList.remove("hidden");
+
+            await getPendingEvents();
+            await getOfficialRequests();
             break;
         
         default:
-            publishInstant.classList.add("denied");
-            publishInstant.classList.remove("granted");
-            publishInstant.querySelector("#icon").innerText = "lock"
-            adminDetails.classList.add("hidden");
+            permissionOfficial.classList.add("denied");
+            permissionOfficial.classList.remove("granted");
+            permissionOfficial.querySelector("#icon").innerText = "lock"
+            permissionAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
+            adminSection.classList.add("hidden");
     }
+
+    await getMyPublications();
 }
 
 async function initAccountPage() {
+    user_profile = null;
     const { data:{ session } } = await window.supabaseClient.auth.getSession();
     console.log("session:", session);
     const {  data: subscription } = await window.supabaseClient.auth.onAuthStateChange(async (_event, session) =>
@@ -122,7 +143,7 @@ async function initAccountPage() {
                 .single();
 
             if (!error){
-                showAccount(session.user, profile);
+                await showAccount(session.user, profile);
                 return
             }
             console.error(error);
@@ -133,16 +154,161 @@ async function initAccountPage() {
     return subscription; // (optional) for unsubscribe later
 }
 
+function renderMyPublications(event) {
+    const eventData = renderEventData(event);
+
+    const html = `
+        <div class="event-small-tile" role="link" tabindex="0" data-event-id="${event.id}">
+            <div class="event-small-main">
+                <span class="event-small-title">${event.title}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${eventData.categoryLabel}</span>
+                ·
+                <span class="event-small-date">${eventData.date}</span>
+                ·
+                <span class="event-small-place">${event.location_name}</span>
+                </span>
+            </div>
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn delete" aria-label="Supprimer">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+        </div>
+    
+    `
+    return html;
+}
+
+async function getMyPublications() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("events") /* fetch also old events from my creation */
+        .select("*")
+        .eq("created_by", user_profile.id)
+        .order("event_date", { ascending: true });
+
+    if (error) {
+        console.error(error)
+        myEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        return;
+    }
+    if (!data || data.length === 0) {
+        myEvents.innerText = "Pas d'évènements en cours";
+        return;
+    }
+    myEvents.innerHTML = data.map(renderMyPublications).join("")
+}
+
+function renderPendingEvents(event) {
+    const eventData = renderEventData(event);
+
+    const html = `
+        <div class="event-small-tile" role="link" tabindex="0" data-event-id="${event.id}">
+            <div class="event-small-main">
+                <span class="event-small-title">${event.title}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${eventData.categoryLabel}</span>
+                ·
+                <span class="event-small-date">${eventData.date}</span>
+                ·
+                <span class="event-small-place">${event.location_name}</span>
+                </span>
+            </div>
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn accept" aria-label="Accepter">
+                    <span class="material-symbols-outlined">check_circle</span>
+                </button>
+                <button class="event-small-icon-btn delete" aria-label="Rejeter">
+                    <span class="material-symbols-outlined">cancel</span>
+                </button>
+            </div>
+        </div>
+    
+    `
+    return html;
+}
+
+async function getPendingEvents() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("events")
+        .select("*")
+        .eq("pending", true)
+        .order("event_date", { ascending: true });
+
+    console.log("pending events:", data);
+
+    if (error) {
+        console.error(error)
+        pendingEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        return;
+    }
+    if (!data || data.length === 0) {
+        pendingEvents.innerText = "Pas d'évènements en attente de publication";
+        return;
+    }
+    
+    pendingEvents.innerHTML = data.map(renderPendingEvents).join("")
+}
+
+function renderOfficialRequests(profile) {
+    const html = `
+        <div class="event-small-tile" role="link" tabindex="0" data-profile-id="${profile.id}">
+            <div class="event-small-main">
+                <span class="event-small-title">${profile.name}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${profile.email}</span>
+                </span>
+            </div>
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn accept" aria-label="Accepter">
+                    <span class="material-symbols-outlined">check_circle</span>
+                </button>
+                <button class="event-small-icon-btn delete" aria-label="Rejeter">
+                    <span class="material-symbols-outlined">cancel</span>
+                </button>
+            </div>
+        </div>
+    
+    `
+    return html;
+}
+
+async function getOfficialRequests() {
+    /* fetch data */
+    const { data, error } = await window.supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("official_request", true);
+
+    if (error) {
+        console.error(error)
+        officialRequests.innerText = "ERREUR survenue durant le chargement des requêtes";
+        return;
+    }
+    if (!data || data.length === 0) {
+        officialRequests.innerText = "Pas de requêtes en cours";
+        return;
+    }
+    officialRequests.innerHTML = data.map(renderOfficialRequests).join("")
+}
+
 /* === LISTENERS === */
 
 /* Switch login/signup/reset password */
 document.getElementById("show-signup").addEventListener("click", (event) => {
     event.preventDefault();
+    document.getElementById("signup-form").reset();
     showSignup();
 });
 
 document.getElementById("show-signin").addEventListener("click", (event) => {
     event.preventDefault();
+    document.getElementById("signin-form").reset();
     showLogin();
 });
 
@@ -252,7 +418,18 @@ document.getElementById("account-form").addEventListener("submit", async (event)
         noticeErrorText.innerText = localizeAuthError(err);
         console.error("sign-out failed:", err);
     }
+    user_profile = null;
+    document.getElementById("signin-form").reset();
 });
+
+/* open official request modal */
+document.getElementById("official-role-request").addEventListener("click", (event) => {
+    event.preventDefault();
+    if (!user_profile) return;
+
+    openRoleRequestModal(user_profile);
+});
+
 
 /* === INITIAL LOAD === */
 initAccountPage().catch(console.error);

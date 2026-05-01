@@ -20,6 +20,14 @@
     z-index: 2000;
 }
 
+.modal-overlay.success {
+    z-index: 2000;
+}
+
+.modal-overlay.error {
+    z-index: 2000;
+}
+
 .modal-overlay.hidden {
     display: none;
 }
@@ -36,6 +44,16 @@
     overflow-y: auto;
 
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-card.success {
+    background-color: var(--primary-success--lighter);
+    color: var(--primary-success--text);
+}
+
+.modal-card.error {
+    background-color: var(--primary-error--lighter);
+    color: var(--primary-error--text);
 }
 
 .modal-close {
@@ -78,18 +96,18 @@
     display: none;
 }
 
-.modal-delete-event {
+.modal-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
 
     padding: 0.45rem 0.9rem;
-    border: 1.5px solid #d32f2f;
+    border: 1.5px solid var(-primary-textarea);
     border-radius: 999px;
 
     background: transparent;
-    color: #d32f2f;
+    color: var(-primary-textarea);
 
     font-size: 0.75rem;
     font-weight: 500;
@@ -101,23 +119,32 @@
         transform 0.1s ease;
 }
 
-.modal-delete-event:hover {
-    background-color: rgba(211, 47, 47, 0.08);
+.modal-btn.delete {
+    border: 1.5px solid var(--primary-error);
+    color: var(--primary-error);
 }
 
-.modal-delete-event:active {
+.modal-btn.send {
+    border: 1.5px solid var(--primary-request);
+    color: var(--primary-request);
+}
+
+.modal-btn:hover {
+    background-color: rgba(255, 0, 0, 0.08);
+}
+
+.modal-btn:active {
     transform: scale(0.97);
 }
 
-.modal-delete-event:disabled {
+.modal-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     background: transparent;
     pointer-events: none;
 }
 
-
-.modal-delete-event .material-icons {
+.modal-btn .material-icons {
     font-size: 1rem;
 }
 
@@ -130,18 +157,47 @@
     padding: 0.5rem;
 
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.3rem;
 
     background: #f7f8fc;
     border-radius: 8px;
-    color: #3f51b5;
+    color: var(--primary-fg);
 }
 
 #confirm-input {
     width: 100%;
     text-align: center;
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+}
+    
+.details-textarea {
+    width: 100%;
+    min-height: 120px;
+
+    padding: 0.6rem 0.7rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+
+    color: var(-primary-textarea);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+
+    resize: vertical;
+    outline: none;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.details-textarea::placeholder {
+    color: var(--secondary-gray4);
+}
+
+.details-textarea:focus {
+    border-color: var(--primary-fg);
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
 }
