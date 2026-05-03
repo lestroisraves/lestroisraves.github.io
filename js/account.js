@@ -4,6 +4,9 @@ import { openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.
 
 /* === VARIABLES === */
 let user_profile = null;
+let MY_EVENTS = [];
+let PENDING_EVENTS = [];
+let OFFICIAL_REQUESTS = [];
 
 const rstPwdContainer = document.getElementById("rstpwd-container");
 const signInContainer = document.getElementById("signin-container");
@@ -158,7 +161,7 @@ function renderMyPublications(event) {
     const eventData = renderEventData(event);
 
     const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-event-id="${event.id}">
+        <div class="event-small-tile" role="link" tabindex="0" data-action="show-myevent" data-event-id="${event.id}">
             <div class="event-small-main">
                 <span class="event-small-title">${event.title}</span>
                 <span class="event-small-meta">
@@ -171,8 +174,61 @@ function renderMyPublications(event) {
             </div>
 
             <div class="event-small-actions">
-                <button class="event-small-icon-btn delete" aria-label="Supprimer">
+                <button class="event-small-icon-btn delete" data-action="delete-myevent" data-event-id="${event.id}" aria-label="Supprimer">
                     <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+        </div>
+    `
+    return html;
+}
+
+function renderPendingEvents(event) {
+    const eventData = renderEventData(event);
+
+    const html = `
+        <div class="event-small-tile" role="link" tabindex="0" data-action="show-pendingevent" data-event-id="${event.id}">
+            <div class="event-small-main">
+                <span class="event-small-title">${event.title}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${eventData.categoryLabel}</span>
+                ·
+                <span class="event-small-date">${eventData.date}</span>
+                ·
+                <span class="event-small-place">${event.location_name}</span>
+                </span>
+            </div>
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn info" data-action="accept-pendingevent" data-event-id="${event.id}" aria-label="Accepter">
+                    <span class="material-symbols-outlined fat">check</span>
+                </button>
+                <button class="event-small-icon-btn delete" data-action="reject-pendingevent" data-event-id="${event.id}" aria-label="Rejeter">
+                    <span class="material-symbols-outlined fat">close</span>
+                </button>
+            </div>
+        </div>
+    
+    `
+    return html;
+}
+
+function renderOfficialRequests(profile) {
+    const html = `
+        <div class="event-small-tile" role="link" tabindex="0" data-action="show-profile" data-profile-id="${profile.id}">
+            <div class="event-small-main">
+                <span class="event-small-title">${profile.name}</span>
+                <span class="event-small-meta">
+                <span class="event-small-category">${profile.email}</span>
+                </span>
+            </div>
+
+            <div class="event-small-actions">
+                <button class="event-small-icon-btn info" data-action="accept-profile" data-profile-id="${profile.id}" aria-label="Accepter">
+                    <span class="material-symbols-outlined fat">check</span>
+                </button>
+                <button class="event-small-icon-btn delete" data-action="reject-profile" data-profile-id="${profile.id}" aria-label="Rejeter">
+                    <span class="material-symbols-outlined fat">close</span>
                 </button>
             </div>
         </div>
@@ -183,6 +239,7 @@ function renderMyPublications(event) {
 
 async function getMyPublications() {
     /* fetch data */
+    MY_EVENTS = [];
     const { data, error } = await window.supabaseClient
         .from("events") /* fetch also old events from my creation */
         .select("*")
@@ -198,41 +255,13 @@ async function getMyPublications() {
         myEvents.innerText = "Pas d'évènements en cours";
         return;
     }
+    MY_EVENTS = data;
     myEvents.innerHTML = data.map(renderMyPublications).join("")
-}
-
-function renderPendingEvents(event) {
-    const eventData = renderEventData(event);
-
-    const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-event-id="${event.id}">
-            <div class="event-small-main">
-                <span class="event-small-title">${event.title}</span>
-                <span class="event-small-meta">
-                <span class="event-small-category">${eventData.categoryLabel}</span>
-                ·
-                <span class="event-small-date">${eventData.date}</span>
-                ·
-                <span class="event-small-place">${event.location_name}</span>
-                </span>
-            </div>
-
-            <div class="event-small-actions">
-                <button class="event-small-icon-btn accept" aria-label="Accepter">
-                    <span class="material-symbols-outlined">check_circle</span>
-                </button>
-                <button class="event-small-icon-btn delete" aria-label="Rejeter">
-                    <span class="material-symbols-outlined">cancel</span>
-                </button>
-            </div>
-        </div>
-    
-    `
-    return html;
 }
 
 async function getPendingEvents() {
     /* fetch data */
+    PENDING_EVENTS = [];
     const { data, error } = await window.supabaseClient
         .from("events")
         .select("*")
@@ -250,36 +279,13 @@ async function getPendingEvents() {
         pendingEvents.innerText = "Pas d'évènements en attente de publication";
         return;
     }
-    
+    PENDING_EVENTS = data;
     pendingEvents.innerHTML = data.map(renderPendingEvents).join("")
-}
-
-function renderOfficialRequests(profile) {
-    const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-profile-id="${profile.id}">
-            <div class="event-small-main">
-                <span class="event-small-title">${profile.name}</span>
-                <span class="event-small-meta">
-                <span class="event-small-category">${profile.email}</span>
-                </span>
-            </div>
-
-            <div class="event-small-actions">
-                <button class="event-small-icon-btn accept" aria-label="Accepter">
-                    <span class="material-symbols-outlined">check_circle</span>
-                </button>
-                <button class="event-small-icon-btn delete" aria-label="Rejeter">
-                    <span class="material-symbols-outlined">cancel</span>
-                </button>
-            </div>
-        </div>
-    
-    `
-    return html;
 }
 
 async function getOfficialRequests() {
     /* fetch data */
+    OFFICIAL_REQUESTS = [];
     const { data, error } = await window.supabaseClient
         .from("profiles")
         .select("*")
@@ -294,7 +300,50 @@ async function getOfficialRequests() {
         officialRequests.innerText = "Pas de requêtes en cours";
         return;
     }
+    OFFICIAL_REQUESTS = data;
     officialRequests.innerHTML = data.map(renderOfficialRequests).join("")
+}
+
+function handleAction(el) {
+
+    const action = el.dataset.action;
+
+    switch (action) {
+        case "show-myevent":
+            console.log("show my event", el.dataset.eventId)
+        break;
+
+        case "delete-myevent":
+            console.log("delete my event", el.dataset.eventId)
+        break;
+
+        case "show-pendingevent":
+            console.log("show pending event", el.dataset.eventId)
+        break;
+
+        case "accept-pendingevent":
+            console.log("accept pending event", el.dataset.eventId)
+        break;
+
+        case "reject-pendingevent":
+            console.log("reject pending event", el.dataset.eventId)
+        break;
+
+        case "show-profile":
+            console.log("show profile", el.dataset.profileId)
+        break;
+
+        case "accept-profile":
+            console.log("accept profile", el.dataset.profileId)
+        break;
+
+        case "reject-profile":
+            console.log("reject profile", el.dataset.profileId)
+        break;
+
+        default:
+            console.warn("Unknown action:", action);
+    }
 }
 
 /* === LISTENERS === */
@@ -430,6 +479,23 @@ document.getElementById("official-role-request").addEventListener("click", (even
     openRoleRequestModal(user_profile);
 });
 
+/* account actions */
+document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+
+    handleAction(el);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+
+  const el = e.target.closest("[data-action]");
+  if (!el) return;
+
+  e.preventDefault(); // prevent page scroll on Space
+  handleAction(el);
+});
 
 /* === INITIAL LOAD === */
 initAccountPage().catch(console.error);

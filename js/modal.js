@@ -165,7 +165,7 @@ confirmDeleteBtn?.addEventListener("click", async () => {
 /* role modal listeners */
 officialRequestModal?.addEventListener("click", (event) => {
     if (event.target === officialRequestModal) {
-        closeEventModal();
+        closeRoleRequestModal();
     }
 });
 

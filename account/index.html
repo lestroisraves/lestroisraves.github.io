@@ -554,33 +554,33 @@
                             <span class="label">Contributeur</span>
                             <span id="account-role" class="value detail-user"></span>
                         </div>
-                        <ul>
+                        <ul class="detail-section-list">
                             <li class="permission granted">
                                 <span id="icon" class="material-symbols-outlined">check</span>
                                 Publier des évènements
                             </li>
                             <li class="permission granted">
                                 <span id="icon" class="material-symbols-outlined">check</span>
-                                Editer vos évènements
+                                Supprimer vos évènements
                             </li>
                             <li id="permission-official" class="permission denied">
                                 <span id="icon" class="material-symbols-outlined">lock</span>
                                 Publier instantanément (sans délais de 3 jours)
                             </li>
-                            <ul id="permission-admin" class="hidden">
-                                <li class="permission granted">
-                                    <span id="icon" class="material-symbols-outlined">check</span>
-                                    Modération: accepter/refuser une publication
-                                </li>
-                                <li class="permission granted">
-                                    <span id="icon" class="material-symbols-outlined">check</span>
-                                    Modération: supprimer n'importe quel évènement
-                                </li>
-                                <li class="permission granted">
-                                    <span id="icon" class="material-symbols-outlined">check</span>
-                                    Modération: accepter/refuser une requête contributeur "Officiel"
-                                </li>
-                            </ul>
+                        </ul>
+                        <ul id="permission-admin" class="detail-section-list hidden">
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une publication
+                            </li>
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: supprimer n'importe quel évènement
+                            </li>
+                            <li class="permission granted">
+                                <span id="icon" class="material-symbols-outlined">check</span>
+                                Modération: accepter/refuser une requête contributeur "Officiel"
+                            </li>
                         </ul>
 
                         <div id="role-request" class="role-request hidden">
@@ -625,6 +625,23 @@
             </div>
         </article>
 
+    </div>
+</div>
+
+<div id="event-modal" class="modal-overlay hidden">
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div id="event-modal-content" class="modal-content"></div>
+
+        <div id="modal-actions" class="modal-actions hidden">
+            <button id="modal-delete-event-btn" class="modal-btn delete">
+                Supprimer cet évènement
+                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+            </button>
+        </div>
     </div>
 </div>
 

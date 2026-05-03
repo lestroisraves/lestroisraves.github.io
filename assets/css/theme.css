@@ -7,15 +7,18 @@
 {
     --primary-white:                    #ffffff;
     --secondary-gray4:                  #aaaaaa;
-    --primary-success:                  #4caf50;
+    --primary-success:                  #0b6b3b;
     --primary-success--lighter:         #f3fbf5;
     --primary-success--text:            #1b5e20;
     --primary-warning:                  #ff9800;
     --primary-warning--lighter:         #fff7e6;
     --primary-warning--text:            #7a4a00;
-    --primary-error:                    #bf1a0e;
+    --primary-error:                    #d32f2f;
     --primary-error--lighter:           #fdecea;
     --primary-error--text:              #8a1c1c;
+    --primary-info:                     #165fa8;
+    --primary-info--lighter:            #9ccdff;
+    --primary-info--text:               #1976d2;
     --primary-request:                  #0a797d;
     --primary-tag-color:                #d1a8a8;
     --primary-textarea:                 #837e7e;
