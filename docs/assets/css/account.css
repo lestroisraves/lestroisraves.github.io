@@ -87,6 +87,14 @@
     display: none;
 }
 
+
+.detail-section-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
 #permission-admin.hidden {
     display: none;
 }
