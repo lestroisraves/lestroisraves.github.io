@@ -7,6 +7,7 @@ import { tagInput, userTags, clearTags } from "./tags.js";
 const today = startOfDay(new Date());
 
 const accountContainer = document.getElementById("account-container");
+const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
 const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
@@ -40,6 +41,7 @@ function showSubmit(user, profile) {
     accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
+    permissionDetails.innerHTML = renderAccountPermissionDetails();
     const permissionOfficial = accountContainer.querySelector("#permission-official");
     const permissionAdmin = accountContainer.querySelector("#permission-admin");
 

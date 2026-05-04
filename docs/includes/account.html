@@ -146,35 +146,9 @@
                             <span class="label">Contributeur</span>
                             <span id="account-role" class="value detail-user"></span>
                         </div>
-                        <ul class="detail-section-list">
-                            <li class="permission granted">
-                                <span id="icon" class="material-symbols-outlined">check</span>
-                                Publier des évènements
-                            </li>
-                            <li class="permission granted">
-                                <span id="icon" class="material-symbols-outlined">check</span>
-                                Supprimer vos évènements
-                            </li>
-                            <li id="permission-official" class="permission denied">
-                                <span id="icon" class="material-symbols-outlined">lock</span>
-                                Publier instantanément (sans délais de 3 jours)
-                            </li>
-                        </ul>
-                        <ul id="permission-admin" class="detail-section-list hidden">
-                            <li class="permission granted">
-                                <span id="icon" class="material-symbols-outlined">check</span>
-                                Modération: accepter/refuser une publication
-                            </li>
-                            <li class="permission granted">
-                                <span id="icon" class="material-symbols-outlined">check</span>
-                                Modération: supprimer n'importe quel évènement
-                            </li>
-                            <li class="permission granted">
-                                <span id="icon" class="material-symbols-outlined">check</span>
-                                Modération: accepter/refuser une requête contributeur "Officiel"
-                            </li>
-                        </ul>
-                    
+
+                        <div id="detail-permission"></div>
+
                         <div id="role-request" class="role-request hidden">
                             <p class="role-request-text">
                                 Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
@@ -182,7 +156,6 @@
                             </p>
                         </div>
                     </div>
-                    
                 </div>
 
                 <div>
@@ -228,10 +201,42 @@
         
         <div id="event-modal-content" class="modal-content"></div>
         
-        <div id="modal-actions" class="modal-actions hidden">
+        <div id="modal-actions-myevents" class="modal-actions hidden">
             <button id="modal-delete-event-btn" class="modal-btn delete">
                 Supprimer cet évènement
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+            </button>
+        </div>
+
+        <div id="modal-actions-pendingevents" class="modal-actions hidden">
+            <button id="modal-accept-event-btn" class="modal-btn info">
+                Accepter
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+            </button>
+            <button id="modal-reject-event-btn" class="modal-btn delete">
+                Rejeter
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="profile-modal" class="modal-overlay hidden">
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div id="profile-modal-content" class="modal-content"></div>
+        
+        <div id="modal-actions-profile" class="modal-actions">
+            <button id="modal-accept-profile-btn" class="modal-btn info">
+                Accepter
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+            </button>
+            <button id="modal-reject-profile-btn" class="modal-btn delete">
+                Rejeter
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
     </div>
@@ -246,7 +251,7 @@
         <div id="modal-content" class="modal-content">
             <p>
                 Vous souhaitez être contributeur <strong>officiel</strong>.
-                Veuillez décrire votre demande:
+                Veuillez décrire votre demande (minimum 50 charactères):
             </p>
 
             <textarea
@@ -259,7 +264,7 @@
         </div>
         
         <div id="modal-actions" class="modal-actions">
-            <button id="modal-official-request-btn" class="modal-btn send" disabled>
+            <button id="modal-official-request-btn" class="modal-btn info" disabled>
                 Envoyer
                 <span class="material-symbols-outlined" aria-hidden="true">send</span>
             </button>

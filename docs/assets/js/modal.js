@@ -5,11 +5,17 @@ const errorModal = document.getElementById("error-modal");
 
 const eventModal = document.getElementById("event-modal");
 const deleteEventBtn = document.getElementById("modal-delete-event-btn");
+const acceptEventBtn = document.getElementById("modal-accept-event-btn");
+const rejectEventBtn = document.getElementById("modal-reject-event-btn");
 
-const deleteModal = document.getElementById("delete-modal");
+const profileModal = document.getElementById("profile-modal");
+const acceptProfileBtn = document.getElementById("modal-accept-profile-btn");
+const rejectProfileBtn = document.getElementById("modal-reject-profile-btn");
+
+const confirmModal = document.getElementById("confirm-modal");
 const confirmCodeEl = document.getElementById("confirm-code");
 const confirmInput = document.getElementById("confirm-input");
-const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+const confirmBtn = document.getElementById("confirm-btn");
 
 const officialRequestModal = document.getElementById("official-request-modal");
 const officialRequestInput = document.getElementById("details-input");
@@ -32,6 +38,13 @@ export function openErrorModal(text) {
     document.body.style.overflow = "hidden";
 }
 
+export function openProfileModal(profile) {
+    currentProfile = profile;
+
+    profileModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
 export function openEventModal(event) {
     currentEvent = event;
 
@@ -39,15 +52,15 @@ export function openEventModal(event) {
     document.body.style.overflow = "hidden";
 }
 
-export function openDeleteModal() {
+export function openConfirmModal(type, action) {
     generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
     confirmCodeEl.textContent = generatedCode;
 
     confirmInput.value = "";
-    confirmDeleteBtn.disabled = true;
-    confirmDeleteBtn.setAttribute("aria-busy", "false");
+    confirmBtn.disabled = true;
+    confirmBtn.setAttribute("aria-busy", "false");
 
-    deleteModal.classList.remove("hidden");
+    confirmModal.classList.remove("hidden");
     confirmInput.focus();
 }
 
@@ -72,20 +85,52 @@ function closeErrorModal() {
     document.body.style.overflow = "";
 }
 
+function closeProfileModal() {
+    currentProfile = null;
+    profileModal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
 function closeEventModal() {
     currentEvent = null;
     eventModal.classList.add("hidden");
     document.body.style.overflow = "";
 }
 
-function closeDeleteModal() {
+function closeConfirmModal() {
     generatedCode = null;
-    deleteModal.classList.add("hidden");
+    confirmModal.classList.add("hidden");
 }
 
 function closeRoleRequestModal() {
     currentProfile = null;
     officialRequestModal.classList.add("hidden");
+}
+
+async function deleteEvent(event) {
+    console.log("deleting event:", event.id);
+    const { data, error } = await window.supabaseClient
+        .from("events")
+        .delete()
+        .eq("id", event.id);
+    return error;
+    
+}
+
+async function acceptEvent(event) {
+    
+}
+
+async function rejectEvent(event) {
+    
+}
+
+async function acceptProfile(profile) {
+    
+}
+
+async function rejectprofile(profile) {
+    
 }
 
 /* === LISTENERS === */
@@ -117,34 +162,53 @@ eventModal?.addEventListener("click", (event) => {
 
 eventModal?.querySelector("#modal-close").addEventListener("click", closeEventModal);
 
-deleteEventBtn?.addEventListener("click", openDeleteModal);
+deleteEventBtn?.addEventListener("click", () => {
+    openConfirmModal('event', 'delete');
+});
 
-/* confirm delete modal listeners */
-deleteModal?.addEventListener("click", (event) => {
-    if (event.target === deleteModal) {
-        closeDeleteModal();
+acceptEventBtn?.addEventListener("click", () => {
+    openConfirmModal('event', 'accept');
+});
+
+rejectEventBtn?.addEventListener("click", () => {
+    openConfirmModal('event', 'reject');
+});
+
+/* profile modal listeners */
+profileModal?.addEventListener("click", (event) => {
+    if (event.target === profileModal) {
+        closeProfileModal();
     }
 });
 
-deleteModal?.querySelector("#modal-close").addEventListener("click", closeDeleteModal);
+profileModal?.querySelector("#modal-close").addEventListener("click", closeProfileModal);
 
-confirmInput?.addEventListener("input", (event) => {
-    confirmDeleteBtn.disabled = event.target.value !== generatedCode;
+acceptProfileBtn?.addEventListener("click", () => {
+    openConfirmModal('profile', 'accept');
 });
 
-confirmDeleteBtn?.addEventListener("click", async () => {
+rejectProfileBtn?.addEventListener("click", () => {
+    openConfirmModal('profile', 'reject');
+});
+
+/* confirm delete modal listeners */
+confirmModal?.addEventListener("click", (event) => {
+    if (event.target === confirmModal) {
+        closeConfirmModal();
+    }
+});
+
+confirmModal?.querySelector("#modal-close").addEventListener("click", closeConfirmModal);
+
+confirmInput?.addEventListener("input", (event) => {
+    confirmBtn.disabled = event.target.value !== generatedCode;
+});
+
+confirmBtn?.addEventListener("click", async () => {
     if (!currentEvent) return;
 
-    confirmDeleteBtn.setAttribute("aria-busy", "true");
-
-    // SUPABASE DELETE
-    console.log("Deleting event:", currentEvent.id);
-    const { data, error } = await window.supabaseClient
-        .from("events")
-        .delete()
-        .eq("id", currentEvent.id);
-
-    confirmDeleteBtn.setAttribute("aria-busy", "false");
+    // ACTION
+    const error = await deleteEvent(currentEvent);
 
     if (error) {
         openErrorModal("Un problème est survenu");
@@ -152,7 +216,7 @@ confirmDeleteBtn?.addEventListener("click", async () => {
         return;
     }
 
-    closeDeleteModal();
+    closeConfirmModal();
     closeEventModal();
     openSuccessModal("Évènement supprimé ! La page va se rafraichir automatiquement.");
     

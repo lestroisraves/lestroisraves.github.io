@@ -1,6 +1,6 @@
 console.log("executing:", document.currentScript?.src);
 
-import { openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
+import { openEventModal, openProfileModal, openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
 
 /* === VARIABLES === */
 let user_profile = null;
@@ -17,8 +17,12 @@ const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
 
+const eventModal = document.getElementById("event-modal");
+const eventModalContent = document.getElementById("event-modal-content");
+const profileModalContent = document.getElementById("profile-modal-content");
 const officialRequestModal = document.getElementById("official-request-modal");
 
+const permissionDetails = document.getElementById("detail-permission");
 const myEvents = document.getElementById("my-events");
 const adminSection = document.getElementById("admin-section");
 const officialRequests = document.getElementById("official-requests");
@@ -79,6 +83,7 @@ async function showAccount(user, profile) {
     noticeTip.classList.add("hidden");
     hideErrorNotice();
 
+    permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
     document.getElementById("account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
@@ -157,6 +162,71 @@ async function initAccountPage() {
     return subscription; // (optional) for unsubscribe later
 }
 
+function renderEventModal(event, my_events=false) {
+    const eventData = renderEventData(event, true);
+
+    if (my_events)
+    {
+        eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
+        eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
+    }
+    else
+    {
+        eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
+        eventModal.querySelector("#modal-actions-pendingevents").classList.remove("hidden");
+    }
+
+    eventModalContent.innerHTML = `
+        ${eventData.imageHtml}
+        <div id="modal-title" class="event-title">${event.title}</div>
+        <div class="event-meta">
+            ${renderMaterialIconText("stars", eventData.categoryLabel)}
+            ${eventData.parentalGuideHtml}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("event", eventData.date)}
+            ${eventData.timeHtml}
+            ${renderMaterialIconText("sell", eventData.price)}
+            ${eventData.eatHtml}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("place", event.location_name)}
+            ${eventData.addressHtml}
+        </div>
+        <div class="event-meta">
+            ${eventData.siteUrlHtml}
+            ${eventData.phoneHtml}
+        </div>
+        ${eventData.tagsHtml}
+        ${eventData.descriptionHtml}
+        
+    `;
+}
+
+function renderProfileModal(profile) {
+    profileModalContent.innerHTML = `
+        <div class="account-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">person</span>
+            <span id="account-name" class="account-name">${profile.name}</span>
+        </div>
+
+        <div class="account-details">
+            <div class="detail-section">
+                <div class="detail-row">
+                    <span class="label">Email</span>
+                    <span id="account-email" class="value detail-user">${profile.email}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="account-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">format_quote</span>
+            <span class="account-name">Description de la demande</span>
+        </div>
+        <blockquote class="user-quote">${linkify(profile.official_request_details)}</blockquote>
+    `;
+}
+
 function renderMyPublications(event) {
     const eventData = renderEventData(event);
 
@@ -171,12 +241,6 @@ function renderMyPublications(event) {
                 ·
                 <span class="event-small-place">${event.location_name}</span>
                 </span>
-            </div>
-
-            <div class="event-small-actions">
-                <button class="event-small-icon-btn delete" data-action="delete-myevent" data-event-id="${event.id}" aria-label="Supprimer">
-                    <span class="material-symbols-outlined">delete</span>
-                </button>
             </div>
         </div>
     `
@@ -198,17 +262,7 @@ function renderPendingEvents(event) {
                 <span class="event-small-place">${event.location_name}</span>
                 </span>
             </div>
-
-            <div class="event-small-actions">
-                <button class="event-small-icon-btn info" data-action="accept-pendingevent" data-event-id="${event.id}" aria-label="Accepter">
-                    <span class="material-symbols-outlined fat">check</span>
-                </button>
-                <button class="event-small-icon-btn delete" data-action="reject-pendingevent" data-event-id="${event.id}" aria-label="Rejeter">
-                    <span class="material-symbols-outlined fat">close</span>
-                </button>
-            </div>
         </div>
-    
     `
     return html;
 }
@@ -222,17 +276,7 @@ function renderOfficialRequests(profile) {
                 <span class="event-small-category">${profile.email}</span>
                 </span>
             </div>
-
-            <div class="event-small-actions">
-                <button class="event-small-icon-btn info" data-action="accept-profile" data-profile-id="${profile.id}" aria-label="Accepter">
-                    <span class="material-symbols-outlined fat">check</span>
-                </button>
-                <button class="event-small-icon-btn delete" data-action="reject-profile" data-profile-id="${profile.id}" aria-label="Rejeter">
-                    <span class="material-symbols-outlined fat">close</span>
-                </button>
-            </div>
         </div>
-    
     `
     return html;
 }
@@ -310,35 +354,24 @@ function handleAction(el) {
 
     switch (action) {
         case "show-myevent":
-            console.log("show my event", el.dataset.eventId)
-        break;
-
-        case "delete-myevent":
-            console.log("delete my event", el.dataset.eventId)
+            const my_event = MY_EVENTS.find(e => e.id === el.dataset.eventId);
+            if (!my_event) return;
+            renderEventModal(my_event, true);
+            openEventModal(my_event);
         break;
 
         case "show-pendingevent":
-            console.log("show pending event", el.dataset.eventId)
-        break;
-
-        case "accept-pendingevent":
-            console.log("accept pending event", el.dataset.eventId)
-        break;
-
-        case "reject-pendingevent":
-            console.log("reject pending event", el.dataset.eventId)
+            const pending_event = PENDING_EVENTS.find(e => e.id === el.dataset.eventId);
+            if (!pending_event) return;
+            renderEventModal(pending_event, false);
+            openEventModal(pending_event);
         break;
 
         case "show-profile":
-            console.log("show profile", el.dataset.profileId)
-        break;
-
-        case "accept-profile":
-            console.log("accept profile", el.dataset.profileId)
-        break;
-
-        case "reject-profile":
-            console.log("reject profile", el.dataset.profileId)
+            const request_profile = OFFICIAL_REQUESTS.find(e => e.id === el.dataset.profileId);
+            if (!request_profile) return;
+            renderProfileModal(request_profile);
+            openProfileModal(request_profile);
         break;
 
         default:

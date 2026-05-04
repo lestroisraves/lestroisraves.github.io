@@ -4,7 +4,7 @@ hide:
   - toc
 ---
 
-{% include 'includes/event_confirm_delete.html' %}
+{% include 'includes/confirm_modal.html' %}
 {% include 'includes/popup.html' %}
 {% include 'includes/events.html' %}
 

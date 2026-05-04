@@ -119,17 +119,21 @@
         transform 0.1s ease;
 }
 
+.modal-btn.info {
+    border: 1.5px solid var(--primary-info);
+    color: var(--primary-info);
+}
+
 .modal-btn.delete {
     border: 1.5px solid var(--primary-error);
     color: var(--primary-error);
 }
 
-.modal-btn.send {
-    border: 1.5px solid var(--primary-request);
-    color: var(--primary-request);
+.modal-btn.info:hover {
+    background-color: rgba(0, 0, 255, 0.08);
 }
 
-.modal-btn:hover {
+.modal-btn.delete:hover {
     background-color: rgba(255, 0, 0, 0.08);
 }
 
