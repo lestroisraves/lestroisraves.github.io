@@ -110,6 +110,39 @@ function formatDateRange(startDate, endDate) {
     return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;
 }
 
+function renderAccountPermissionDetails() {
+    return `
+        <div class="detail-section-list">
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Publier des évènements
+            </div>
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Editer vos évènements
+            </div>
+            <div id="permission-official" class="permission denied">
+                <span id="icon" class="material-symbols-outlined">lock</span>
+                Publier instantanément (sans délais de 3 jours)
+            </div>
+        </div>
+        <div id="permission-admin" class="detail-section-list hidden">
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Modération: accepter/refuser une nouvelle publication
+            </div>
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Modération: accepter/refuser une requête contributeur "Officiel"
+            </div>
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                Modération: supprimer n'importe quel évènement
+            </div>
+        </div>
+    `
+}
+
 function renderEventData(event, details = false) {
     const eventData = event;
 

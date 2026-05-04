@@ -363,8 +363,7 @@ document.addEventListener("click", (e) => {
     const event = EVENTS.find(e => e.id === id);
     if (!event) return;
 
-    console.log("EVENT:", event);
-    renderEventModal(event, true);
+    renderEventModal(event);
     openEventModal(event);
 });
 
