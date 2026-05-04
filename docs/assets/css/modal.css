@@ -205,3 +205,15 @@
     border-color: var(--primary-fg);
     box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
 }
+
+.textarea-wrapper {
+    position: relative;
+}
+
+.char-counter {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    font-size: 0.65rem;
+    color: #888;
+}

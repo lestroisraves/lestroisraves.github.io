@@ -13,9 +13,11 @@ const acceptProfileBtn = document.getElementById("modal-accept-profile-btn");
 const rejectProfileBtn = document.getElementById("modal-reject-profile-btn");
 
 const confirmModal = document.getElementById("confirm-modal");
+const confirmTitle = document.getElementById("confirm-title");
 const confirmCodeEl = document.getElementById("confirm-code");
 const confirmInput = document.getElementById("confirm-input");
 const confirmBtn = document.getElementById("confirm-btn");
+const confirmBtnIcon = document.getElementById("confirm-btn-icon");
 
 const officialRequestModal = document.getElementById("official-request-modal");
 const officialRequestInput = document.getElementById("details-input");
@@ -24,6 +26,7 @@ const officialRequestSendBtn = document.getElementById("modal-official-request-b
 let generatedCode = null;
 let currentEvent = null;
 let currentProfile = null;
+let currentModal = null;
 
 /* === FUNCTIONS === */
 export function openSuccessModal(text) {
@@ -40,15 +43,26 @@ export function openErrorModal(text) {
 
 export function openProfileModal(profile) {
     currentProfile = profile;
-
+    currentModal = profileModal;
     profileModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 
 export function openEventModal(event) {
     currentEvent = event;
-
+    currentModal = eventModal;
     eventModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openRoleRequestModal(profile) {
+    currentProfile = profile;
+    currentModal = officialRequestModal;
+    officialRequestInput.value = "";
+    officialRequestSendBtn.disabled = true;
+    officialRequestSendBtn.setAttribute("aria-busy", "false");
+
+    officialRequestModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 
@@ -58,21 +72,58 @@ export function openConfirmModal(type, action) {
 
     confirmInput.value = "";
     confirmBtn.disabled = true;
-    confirmBtn.setAttribute("aria-busy", "false");
+
+    switch (action) {
+        case "delete":
+            confirmTitle.innerHTML = "Pour <strong>supprimer l'évènement</strong>, tapez le code suivant :";
+            confirmBtn.innerText = "Supprimer";
+            confirmBtnIcon.innerText = "delete";
+            confirmBtn.classList.add("delete");
+            confirmBtn.classList.remove("info");
+            confirmBtn.dataset.action = "delete-event";
+            break;
+
+        case "accept":
+            if (type == "event") {
+                confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
+                confirmBtn.dataset.action = "accept-event";
+            } else {
+                confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
+                confirmBtn.dataset.action = "accept-official-request";
+            }
+            confirmBtn.innerText = "Accepter";
+            confirmBtn.classList.remove("delete");
+            confirmBtn.classList.add("info");
+            confirmBtnIcon.innerText = "check";
+            break;
+
+        case "reject":
+            if (type == "event") {
+                confirmTitle.innerHTML = "Pour <strong>rejeter la publication</strong>, tapez le code suivant :";
+                confirmBtn.dataset.action = "reject-event";
+            } else {
+                confirmTitle.innerHTML = "Pour <strong>rejeter la requête</strong>, tapez le code suivant :";
+                confirmBtn.dataset.action = "reject-official-request";
+            }
+            confirmBtn.innerText = "Rejeter";
+            confirmBtn.classList.add("delete");
+            confirmBtn.classList.remove("info");
+            confirmBtnIcon.innerText = "close";
+            break;
+
+        default:
+            confirmTitle.innerHTML = "";
+            confirmBtn.innerText = "";
+            confirmBtnIcon.innerText = "";
+            confirmBtn.classList.remove("delete");
+            confirmBtn.classList.remove("info");
+            confirmBtn.dataset.action = "";
+            return;
+            
+    }
 
     confirmModal.classList.remove("hidden");
     confirmInput.focus();
-}
-
-export function openRoleRequestModal(profile) {
-    currentProfile = profile;
-
-    officialRequestInput.value = "";
-    officialRequestSendBtn.disabled = true;
-    officialRequestSendBtn.setAttribute("aria-busy", "false");
-
-    officialRequestModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
 }
 
 function closeSuccessModal() {
@@ -85,26 +136,19 @@ function closeErrorModal() {
     document.body.style.overflow = "";
 }
 
-function closeProfileModal() {
-    currentProfile = null;
-    profileModal.classList.add("hidden");
-    document.body.style.overflow = "";
-}
-
-function closeEventModal() {
-    currentEvent = null;
-    eventModal.classList.add("hidden");
-    document.body.style.overflow = "";
+function closeCurrentModal() {
+    if (currentModal) {
+        currentModal.classList.add("hidden");
+        document.body.style.overflow = "";
+        currentModal = null;
+        currentProfile = null;
+        currentEvent = null;
+    }
 }
 
 function closeConfirmModal() {
     generatedCode = null;
     confirmModal.classList.add("hidden");
-}
-
-function closeRoleRequestModal() {
-    currentProfile = null;
-    officialRequestModal.classList.add("hidden");
 }
 
 async function deleteEvent(event) {
@@ -114,23 +158,53 @@ async function deleteEvent(event) {
         .delete()
         .eq("id", event.id);
     return error;
-    
 }
 
 async function acceptEvent(event) {
-    
+    console.log("accepting event:", event.id);
+    const { error } = await window.supabaseClient
+        .from("events")
+        .update({
+            pending: false
+        })
+        .eq("id", event.id);
+    return error;
+
+    // todo: send email
 }
 
 async function rejectEvent(event) {
-    
+    console.log("rejecting event:", event.id);
+    const error = await deleteEvent(event);  // if event rejected, it is deleted
+
+    // todo: send email
 }
 
 async function acceptProfile(profile) {
-    
+    console.log("accepting official request from user:", profile.id);
+    const { error } = await window.supabaseClient
+        .from("profiles")
+        .update({
+            role: 1,
+            official_request: false
+        })
+        .eq("id", profile.id);
+    return error;
+
+    // todo: send email
 }
 
 async function rejectprofile(profile) {
-    
+    console.log("rejecting official request from user:", profile.id);
+    const { error } = await window.supabaseClient
+        .from("profiles")
+        .update({
+            official_request: false
+        })
+        .eq("id", profile.id);
+    return error;
+
+    // todo: send email
 }
 
 /* === LISTENERS === */
@@ -156,11 +230,11 @@ errorModal?.querySelector("#modal-close").addEventListener("click", closeErrorMo
 /* event modal listeners */
 eventModal?.addEventListener("click", (event) => {
     if (event.target === eventModal) {
-        closeEventModal();
+        closeCurrentModal();
     }
 });
 
-eventModal?.querySelector("#modal-close").addEventListener("click", closeEventModal);
+eventModal?.querySelector("#modal-close").addEventListener("click", closeCurrentModal);
 
 deleteEventBtn?.addEventListener("click", () => {
     openConfirmModal('event', 'delete');
@@ -177,11 +251,11 @@ rejectEventBtn?.addEventListener("click", () => {
 /* profile modal listeners */
 profileModal?.addEventListener("click", (event) => {
     if (event.target === profileModal) {
-        closeProfileModal();
+        closeCurrentModal();
     }
 });
 
-profileModal?.querySelector("#modal-close").addEventListener("click", closeProfileModal);
+profileModal?.querySelector("#modal-close").addEventListener("click", closeCurrentModal);
 
 acceptProfileBtn?.addEventListener("click", () => {
     openConfirmModal('profile', 'accept');
@@ -205,10 +279,46 @@ confirmInput?.addEventListener("input", (event) => {
 });
 
 confirmBtn?.addEventListener("click", async () => {
-    if (!currentEvent) return;
+    const action = confirmBtn.dataset.action;
+    var successMsg = "";
+    var error = null;
+    
+    switch (action) {
+        
+        case "delete-event":
+            if (!currentEvent) return;
+            error = await deleteEvent(currentEvent);
+            successMsg = "Évènement supprimé ! La page va se rafraichir automatiquement."
+            break;
 
-    // ACTION
-    const error = await deleteEvent(currentEvent);
+        case "accept-event":
+            if (!currentEvent) return;
+            error = await acceptEvent(currentEvent);
+            successMsg = "Évènement accepté ! La page va se rafraichir automatiquement."
+            break;
+
+        case "reject-event":
+            if (!currentEvent) return;
+            error = await rejectEvent(currentEvent);
+            successMsg = "Évènement rejeté ! La page va se rafraichir automatiquement."
+            break;
+
+        case "accept-official-request":
+            if (!currentProfile) return;
+            error = await acceptProfile(currentProfile);
+            successMsg = "Requête acceptée ! La page va se rafraichir automatiquement."
+            break;
+
+        case "reject-official-request":
+            if (!currentProfile) return;
+            error = await rejectprofile(currentProfile);
+            successMsg = "Requête rejetée ! La page va se rafraichir automatiquement."
+            break;
+
+        default:
+            console.warn("Unknown action:", action);
+            return;
+    }
 
     if (error) {
         openErrorModal("Un problème est survenu");
@@ -216,9 +326,9 @@ confirmBtn?.addEventListener("click", async () => {
         return;
     }
 
+    openSuccessModal(successMsg);
     closeConfirmModal();
-    closeEventModal();
-    openSuccessModal("Évènement supprimé ! La page va se rafraichir automatiquement.");
+    closeCurrentModal();
     
     setTimeout(function () {
         window.location.reload();
@@ -229,11 +339,11 @@ confirmBtn?.addEventListener("click", async () => {
 /* role modal listeners */
 officialRequestModal?.addEventListener("click", (event) => {
     if (event.target === officialRequestModal) {
-        closeRoleRequestModal();
+        closeCurrentModal();
     }
 });
 
-officialRequestModal?.querySelector("#modal-close").addEventListener("click", closeRoleRequestModal);
+officialRequestModal?.querySelector("#modal-close").addEventListener("click", closeCurrentModal);
 
 officialRequestInput?.addEventListener("input", (event) => {
     officialRequestSendBtn.disabled = event.target.value.length < 50;
@@ -242,19 +352,15 @@ officialRequestInput?.addEventListener("input", (event) => {
 officialRequestSendBtn?.addEventListener("click", async () => {
     if (!currentProfile) return;
 
-    officialRequestSendBtn.setAttribute("aria-busy", "true");
-
     // SUPABASE UPDATE PROFILES
     console.log("Official role request for user", currentProfile);
-    const { data, error } = await window.supabaseClient
+    const { error } = await window.supabaseClient
         .from("profiles")
         .update({
             official_request: true,
             official_request_details: officialRequestInput.value
         })
         .eq("id", currentProfile.id); // auth.uid()
-
-    officialRequestSendBtn.setAttribute("aria-busy", "false");
 
     if (error) {
         openErrorModal("Un problème est survenu");
@@ -263,7 +369,7 @@ officialRequestSendBtn?.addEventListener("click", async () => {
     }
 
     openSuccessModal("Requête envoyée !");
-    closeRoleRequestModal();
+    closeCurrentModal();
 });
 
 

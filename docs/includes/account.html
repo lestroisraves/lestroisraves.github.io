@@ -251,16 +251,30 @@
         <div id="modal-content" class="modal-content">
             <p>
                 Vous souhaitez être contributeur <strong>officiel</strong>.
-                Veuillez décrire votre demande (minimum 50 charactères):
+                Veuillez décrire votre demande (minimum 100 charactères):
             </p>
 
-            <textarea
+            <!-- <textarea
                 class="details-textarea"
                 id="details-input"
                 placeholder="Description de votre demande (minimum 50 charactères)"
                 minlength="50"
                 row="5"
-            ></textarea>
+            ></textarea> -->
+            
+            <div class="textarea-wrapper">
+                <textarea
+                    class="details-textarea"
+                    id="details-input"
+                    placeholder="Description de votre demande (minimum 100 charactères)"
+                    minlength="100"
+                    row="8"
+                ></textarea>
+                <div class="char-counter">
+                    <span id="count">0</span>/100
+                </div>
+            </div>
+
         </div>
         
         <div id="modal-actions" class="modal-actions">

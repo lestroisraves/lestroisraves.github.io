@@ -6,6 +6,7 @@ In `Integration` be sure that `pg_cron` extension is installed so you can create
 Job schedule:  `0 6 * * *` (everyday at 6:00 AM)
 
 Job script:
+
 ```sql
 DELETE FROM public.events
     WHERE event_date < CURRENT_DATE - INTERVAL '1 day';
@@ -34,4 +35,18 @@ where
 ! To update everytime events table structure changes (new column for example)
 ```
 DROP VIEW IF EXISTS public.future_events
+```
+
+## Publish pending events after 3 days
+In `Integration` be sure that `pg_cron` extension is installed so you can create a Job in `CRON`.
+
+Job schedule:  `0 1 * * *` (everyday at 1:00 AM)
+
+Job script:
+
+```sql
+UPDATE events
+SET pending = false
+WHERE pending = pending
+AND created_at <= now() - interval '3 days';
 ```

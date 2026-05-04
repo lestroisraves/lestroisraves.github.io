@@ -5,13 +5,8 @@
         </button>
 
         <div class="modal-content">
-            <p>
-                La suppression de l'évènement est <strong>irréversible</strong>.
-                Pour confirmer, tapez le code suivant :
-            </p>
-
+            <p id="confirm-title"></p>
             <div class="confirm-code" id="confirm-code"></div>
-
             <input
                 type="text"
                 id="confirm-input"
@@ -24,8 +19,7 @@
 
         <div class="modal-actions">
             <button id="confirm-btn" class="modal-btn delete" disabled>
-                Supprimer cet évènement
-                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+                <span id="confirm-btn-icon" class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
     </div>

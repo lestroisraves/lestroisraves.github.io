@@ -349,7 +349,6 @@ async function getOfficialRequests() {
 }
 
 function handleAction(el) {
-
     const action = el.dataset.action;
 
     switch (action) {
@@ -514,16 +513,15 @@ document.getElementById("official-role-request").addEventListener("click", (even
 
 /* account actions */
 document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-action]");
+    const el = e.target.closest(".event-small-tile[data-action]");
     if (!el) return;
-
     handleAction(el);
 });
 
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter" && e.key !== " ") return;
 
-  const el = e.target.closest("[data-action]");
+  const el = e.target.closest(".event-small-tile[data-action]");
   if (!el) return;
 
   e.preventDefault(); // prevent page scroll on Space
