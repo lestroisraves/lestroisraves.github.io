@@ -68,6 +68,38 @@
     color: #777;
 }
 
+.events-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.events-tabs .tab {
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    border: none;
+    background: #f1f5f9;
+    color: #334155;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.7rem;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.events-tabs .tab:hover {
+    background: #e2e8f0;
+}
+
+.events-tabs .tab.active {
+    background: #4f46e5;
+    color: white;
+}
+
+.events-section.hidden {
+    display: none;
+}
+
 .event-tile {
     display: flex;
     gap: 0.5rem;
@@ -207,5 +239,10 @@
     .event-list-header .btn-outline {
         width: 100%;
     }
+
+    .events-tabs {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 }
 
