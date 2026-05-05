@@ -284,6 +284,7 @@ document.getElementById("reset-filters").addEventListener("click", (event) => {
     const form = event.target;
 
     hideErrorMessages();
+    
 
     /* remove all filters */
     filters = APP_CONFIG.DEFAULT_FILTER;
@@ -294,6 +295,39 @@ document.getElementById("reset-filters").addEventListener("click", (event) => {
     filterToggle.setAttribute("aria-expanded", "false");
     filterPanel.setAttribute("hidden", "");
     loadEvents();
+});
+
+document.addEventListener("click", (e) => {
+    const tab = e.target.closest(".events-tabs .tab");
+    if (!tab) return;
+
+    const wasActive = tab.classList.contains("active");
+
+    // reset everything
+    document.querySelectorAll(".events-tabs .tab")
+        .forEach(t => t.classList.remove("active"));
+
+    
+    if (wasActive) {
+        // No tab active → show ALL sections
+        // document.querySelectorAll(".events-section")
+        // .forEach(section => section.classList.remove("hidden"));
+        return;
+    }
+
+    // Activate clicked tab
+    tab.classList.add("active");
+ 
+    // Show only its section
+    // document.querySelectorAll(".events-section")
+    //     .forEach(section => section.classList.add("hidden"));
+
+    // const target = tab.dataset.target;
+
+    // document
+    //     .getElementById(`events-${target}`)
+    //     ?.classList.remove("hidden");
+
 });
 
 document.getElementById("filter-form").addEventListener("submit", (event) => {
