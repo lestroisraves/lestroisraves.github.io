@@ -201,7 +201,7 @@ async function loadEvents() {
 
     const container = document.getElementById("events");
     const header = document.getElementById("event-list-header");
-    const tabs = document.getElementById("event-tab");
+    const tabs = document.getElementById("event-tabs");
     const filter = document.getElementById("event-filter");
 
     EVENTS = [];
@@ -253,7 +253,7 @@ async function loadEvents() {
     grouped.future = sortByDate(grouped.future);
 
     header.classList.remove("hidden");
-    tabs.classList.remove("hiddent");
+    tabs.classList.remove("hidden");
     filter.classList.remove("hidden");
     
     container.innerHTML =
