@@ -21,6 +21,7 @@ const confirmBtnIcon = document.getElementById("confirm-btn-icon");
 
 const officialRequestModal = document.getElementById("official-request-modal");
 const officialRequestInput = document.getElementById("details-input");
+const officialRequestCharCount = document.getElementById("request-char-count");
 const officialRequestSendBtn = document.getElementById("modal-official-request-btn");
 
 let generatedCode = null;
@@ -346,7 +347,8 @@ officialRequestModal?.addEventListener("click", (event) => {
 officialRequestModal?.querySelector("#modal-close").addEventListener("click", closeCurrentModal);
 
 officialRequestInput?.addEventListener("input", (event) => {
-    officialRequestSendBtn.disabled = event.target.value.length < 50;
+    officialRequestSendBtn.disabled = event.target.value.length < 100;
+    officialRequestCharCount.innerText = event.target.value.length;
 });
 
 officialRequestSendBtn?.addEventListener("click", async () => {

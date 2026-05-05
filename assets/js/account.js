@@ -273,7 +273,7 @@ function renderOfficialRequests(profile) {
             <div class="event-small-main">
                 <span class="event-small-title">${profile.name}</span>
                 <span class="event-small-meta">
-                <span class="event-small-category">${profile.email}</span>
+                    <span class="event-small-category">${profile.email}</span>
                 </span>
             </div>
         </div>
@@ -500,6 +500,9 @@ document.getElementById("account-form").addEventListener("submit", async (event)
         console.error("sign-out failed:", err);
     }
     user_profile = null;
+    MY_EVENTS = [];
+    PENDING_EVENTS = [];
+    OFFICIAL_REQUESTS = [];
     document.getElementById("signin-form").reset();
 });
 

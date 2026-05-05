@@ -217,7 +217,11 @@
 .event-small-meta {
     font-size: 0.60rem;
     color: #666;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    
+    white-space: normal;
+    overflow-wrap: break-word;
+
     overflow: hidden;
     text-overflow: ellipsis;
 }
