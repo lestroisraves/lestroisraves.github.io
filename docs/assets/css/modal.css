@@ -186,15 +186,17 @@
     line-height: 1.5;
 
     color: var(-primary-textarea);
-    border: 1px solid #ccc;
+    border: none;
+    border-left: 4px solid #ccc;
     border-radius: 10px;
+    background-color: #fcfcfc;
 
     resize: vertical;
     outline: none;
 
-    transition:
+    /* transition:
         border-color 0.15s ease,
-        box-shadow 0.15s ease;
+        box-shadow 0.15s ease; */
 }
 
 .details-textarea::placeholder {
@@ -203,7 +205,7 @@
 
 .details-textarea:focus {
     border-color: var(--primary-fg);
-    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+    /* box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15); */
 }
 
 .textarea-wrapper {
