@@ -53,6 +53,10 @@
     padding-bottom: 0.4rem;
 }
 
+.section-header.hidden {
+    display: none;
+}
+
 .section-title {
     /* margin: 0rem; */
     font-size: 0.9rem;
@@ -94,6 +98,10 @@
 .events-tabs .tab.active {
     background: #4f46e5;
     color: white;
+}
+
+.events-tabs.hidden {
+    display: none;
 }
 
 .events-section.hidden {

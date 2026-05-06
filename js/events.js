@@ -169,14 +169,14 @@ function renderEventModal(event) {
     `;
 }
 
-function renderSection(sectionTitle, subtitle, events) {
+function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return "";
     }
 
     return `
         
-        <div class="section-header">
+        <div id="event-${sectionId}" class="section-header hidden">
             <span class="section-title">${sectionTitle}</span>
             <br>
             <span class="section-subtitle">${subtitle}</span>
@@ -257,10 +257,10 @@ async function loadEvents() {
     filter.classList.remove("hidden");
     
     container.innerHTML =
-        renderSection("Aujourd'hui", formatDateForUI(today), grouped.today) +
-        renderSection("Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
-        renderSection("Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
-        renderSection("Prochainement", "Après le " + formatDateForUI(nextSunday), grouped.future);
+        renderSection("today", "Aujourd'hui", formatDateForUI(today), grouped.today) +
+        renderSection("this-week", "Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
+        renderSection("next-week", "Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
+        renderSection("later", "Prochainement", "Après le " + formatDateForUI(nextSunday), grouped.future);
 }
 
 /* === LISTENERS === */
@@ -307,11 +307,10 @@ document.addEventListener("click", (e) => {
     document.querySelectorAll(".events-tabs .tab")
         .forEach(t => t.classList.remove("active"));
 
-    
     if (wasActive) {
         // No tab active → show ALL sections
-        // document.querySelectorAll(".events-section")
-        // .forEach(section => section.classList.remove("hidden"));
+        document.querySelectorAll(".section-header")
+        .forEach(section => section.classList.remove("hidden"));
         return;
     }
 
@@ -319,14 +318,14 @@ document.addEventListener("click", (e) => {
     tab.classList.add("active");
  
     // Show only its section
-    // document.querySelectorAll(".events-section")
-    //     .forEach(section => section.classList.add("hidden"));
+    document.querySelectorAll(".section-header")
+        .forEach(section => section.classList.add("hidden"));
 
-    // const target = tab.dataset.target;
+    const target = tab.dataset.target;
 
-    // document
-    //     .getElementById(`events-${target}`)
-    //     ?.classList.remove("hidden");
+    document
+        .getElementById(`events-${target}`)
+        ?.classList.remove("hidden");
 
 });
 
