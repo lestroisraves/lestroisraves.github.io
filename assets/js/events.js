@@ -171,18 +171,30 @@ function renderEventModal(event) {
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
-        return "";
+        return `
+        <div id="event-${sectionId}" class="section-tab empty hidden">
+            <div class="section-header">
+                <span class="section-title">${sectionTitle}</span>
+                <br>
+                <span class="section-subtitle">${subtitle}</span>
+            </div>
+            <div class="event-list">
+                <h6>Pas d'évènements</h6>
+            </div>
+        </div>
+        `;
     }
 
     return `
-        
-        <div id="event-${sectionId}" class="section-header hidden">
-            <span class="section-title">${sectionTitle}</span>
-            <br>
-            <span class="section-subtitle">${subtitle}</span>
-        </div>
-        <div class="event-list">
-            ${events.map(renderEventTile).join("")}
+        <div id="event-${sectionId}" class="section-tab no-empty">
+            <div class="section-header">
+                <span class="section-title">${sectionTitle}</span>
+                <br>
+                <span class="section-subtitle">${subtitle}</span>
+            </div>
+            <div class="event-list">
+                ${events.map(renderEventTile).join("")}
+            </div>
         </div>
     `;
 }
@@ -309,7 +321,9 @@ document.addEventListener("click", (e) => {
 
     if (wasActive) {
         // No tab active → show ALL sections
-        document.querySelectorAll(".section-header")
+        document.querySelectorAll(".section-tab.empty")
+        .forEach(section => section.classList.add("hidden"));
+        document.querySelectorAll(".section-tab.no-empty")
         .forEach(section => section.classList.remove("hidden"));
         return;
     }
@@ -318,13 +332,13 @@ document.addEventListener("click", (e) => {
     tab.classList.add("active");
  
     // Show only its section
-    document.querySelectorAll(".section-header")
+    document.querySelectorAll(".section-tab")
         .forEach(section => section.classList.add("hidden"));
 
     const target = tab.dataset.target;
 
     document
-        .getElementById(`events-${target}`)
+        .getElementById(`event-${target}`)
         ?.classList.remove("hidden");
 
 });
