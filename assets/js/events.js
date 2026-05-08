@@ -156,18 +156,10 @@ function renderEventModal(event) {
         <div class="event-meta place">
             ${eventData.parentalGuideHtml}
         </div>
-        <div class="event-meta">
-            ${eventData.addressHtml}
-        </div>
-        <div class="event-meta">
-            ${eventData.eatHtml}
-        </div>
-        <div class="event-meta">
-            ${eventData.siteUrlHtml}
-        </div>
-        <div class="event-meta">
-            ${eventData.phoneHtml}
-        </div>
+        ${eventData.addressHtml}
+        ${eventData.eatHtml}
+        ${eventData.siteUrlHtml}
+        ${eventData.phoneHtml}
         ${eventData.tagsHtml}
         ${eventData.descriptionHtml}
         

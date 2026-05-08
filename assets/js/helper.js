@@ -235,19 +235,27 @@ function renderEventData(event, details = false) {
     if (details) {
         // render extra information for event modal
         eventData.addressHtml = eventData.location_address
-            ? renderMaterialIconText("distance", eventData.location_address)
+            ? `<div class="event-meta">
+                    ${renderMaterialIconText("distance", eventData.location_address)}
+               </div>`
             : "";
 
         eventData.phoneHtml = eventData.phone
-            ? renderMaterialIconText("call", eventData.phone)
+            ? `<div class="event-meta">
+                    ${renderMaterialIconText("call", eventData.phone)}
+               </div>`
             : "";
 
         eventData.siteUrlHtml = eventData.site_url
-            ? renderMaterialIconText("language", linkify(eventData.site_url))
+            ? `<div class="event-meta">
+                    ${renderMaterialIconText("language", linkify(eventData.site_url))}
+               </div>`
             : "";
 
         eventData.eatHtml = eventData.to_eat
-            ? renderMaterialIconText("fork_spoon", "À manger sur place")
+            ? `<div class="event-meta">
+                    ${renderMaterialIconText("fork_spoon", "À manger sur place")}
+               </div>`
             : "";
 
         eventData.descriptionHtml = eventData.long_description
