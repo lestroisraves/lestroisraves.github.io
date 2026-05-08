@@ -157,7 +157,7 @@ function renderEventModal(event) {
         <div class="event-meta">
             ${eventData.addressHtml}
         </div>
-        div class="event-meta">
+        <div class="event-meta">
             ${eventData.eatHtml}
         </div>
         <div class="event-meta">
