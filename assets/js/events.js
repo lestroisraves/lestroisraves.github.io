@@ -108,18 +108,17 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" style="border-color:${APP_CONFIG.CATEGORIES[eventData.category]["color"]};" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile cat${eventData.category}" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
-                <div class="event-meta">
-                    ${renderMaterialIconText("event", eventData.date)}
-                    ${eventData.timeHtml}
+                <div class="event-meta place">
+                    ${eventData.locationHtml}
                     ${eventData.parentalGuideHtml}
-                    ${renderMaterialIconText("confirmation_number", eventData.price)}
                 </div>
                 <div class="event-meta">
-                    ${renderMaterialIconText("place", event.location_name)}
+                    ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
+                    ${renderMaterialIconText("sell", eventData.price)}
                 </div>
                 ${eventData.tagsHtml}
             </div>
@@ -143,15 +142,16 @@ function renderEventModal(event) {
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
         ${eventData.categoryHtml}
-        <div class="event-meta">
-            ${renderMaterialIconText("event", eventData.date)}
-            ${eventData.timeHtml}
+        <div class="event-meta place">
+            ${eventData.locationHtml}
             ${eventData.parentalGuideHtml}
-            ${renderMaterialIconText("confirmation_number", eventData.price)}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
+            ${renderMaterialIconText("sell", eventData.price)}
             ${eventData.eatHtml}
         </div>
         <div class="event-meta">
-            ${renderMaterialIconText("place", event.location_name)}
             ${eventData.addressHtml}
         </div>
         <div class="event-meta">

@@ -79,6 +79,38 @@ function formatTimeForUI(timeString) {
     return timeString.slice(0, 5);  // "18:30:45" => "18:30"
 }
 
+function formatEventDate(dateStr, timeStr) {
+    const date = new Date(dateStr);
+
+    // French date parts
+    const options = {
+        weekday: "short",
+        day: "numeric",
+        month: "long"
+    };
+
+    let formattedDate = date.toLocaleDateString("fr-FR", options);
+
+    // Capitalize first letter (Vendredi…)
+    formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+
+    // Build final string
+    let result = `<strong>${formattedDate}</strong>`;
+
+    if (timeStr) {
+        // assume "18:30:45" => "18:30"
+        const [hour, min] = timeStr.slice(0, 5).split(":");
+        if (min == "00") {
+            result += ` - ${hour}h`;
+        } else {
+            result += ` - ${hour}h${min}`;
+        }
+        
+    }
+
+  return result;
+}
+
 function startOfDay(date) {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
@@ -147,20 +179,27 @@ function renderEventData(event, details = false) {
     const eventData = event;
 
     eventData.categoryHtml = `
-        <div class="event-meta category" style="color:${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
-        ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
+        <div class="event-meta category cat${eventData.category}">
+            ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
         </div>
     `
 
-    eventData.timeHtml = eventData.event_start_time
-        ? renderMaterialIconText("schedule", formatTimeForUI(eventData.event_start_time))
-        : "";
+    // eventData.timeHtml = eventData.event_start_time
+    //     ? renderMaterialIconText("schedule", formatTimeForUI(eventData.event_start_time))
+    //     : "";
+
+    // eventData.date = formatDateForUI(eventData.event_date);
+
+    eventData.locationHtml = `
+        <span class="event-icon-text">
+            <span class="material-symbols-outlined">place</span>
+            <span class="text"><strong>${eventData.location_name}</strong></span>
+        </span>
+        `
 
     eventData.tagsHtml = eventData.tags && eventData.tags.length
         ? `
-            <div class="event-tags">
-                ${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-            </div>
+            <div class="event-tags">${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
         `
         : "";
 
@@ -176,6 +215,10 @@ function renderEventData(event, details = false) {
     } else if (eventData.max_price) {
         eventData.price = eventData.max_price + " €";
     }
+    // eventData.priceHtml = `<span class="price-tag">
+    //                             <img src="assets/images/ticket.png" class="icon">
+    //                             <span class="text">${eventData.price}</span>
+    //                         </span>`
 
     switch (eventData.parental_guide)
     {
@@ -188,8 +231,6 @@ function renderEventData(event, details = false) {
         default:
             eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
     }
-
-    eventData.date = formatDateForUI(eventData.event_date);
 
     if (details) {
         // render extra information for event modal

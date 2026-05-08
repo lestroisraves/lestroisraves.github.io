@@ -15,7 +15,7 @@ APP_CONFIG = {
     },
     CATEGORIES: {
         0: {
-            "label": "Concert et club",
+            "label": "Concert",
             "color": "#524ED2",
             "icon": "music_note_2"
         },
