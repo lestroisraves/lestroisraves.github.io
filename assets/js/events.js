@@ -114,11 +114,13 @@ function renderEventTile(event) {
                 ${eventData.categoryHtml}
                 <div class="event-meta place">
                     ${eventData.locationHtml}
-                    ${eventData.parentalGuideHtml}
                 </div>
                 <div class="event-meta">
                     ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
                     ${renderMaterialIconText("sell", eventData.price)}
+                </div>
+                <div class="event-meta place">
+                    ${eventData.parentalGuideHtml}
                 </div>
                 ${eventData.tagsHtml}
             </div>
@@ -144,15 +146,19 @@ function renderEventModal(event) {
         ${eventData.categoryHtml}
         <div class="event-meta place">
             ${eventData.locationHtml}
-            ${eventData.parentalGuideHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
             ${renderMaterialIconText("sell", eventData.price)}
-            ${eventData.eatHtml}
+        </div>
+        <div class="event-meta place">
+            ${eventData.parentalGuideHtml}
         </div>
         <div class="event-meta">
             ${eventData.addressHtml}
+        </div>
+        div class="event-meta">
+            ${eventData.eatHtml}
         </div>
         <div class="event-meta">
             ${eventData.siteUrlHtml}
