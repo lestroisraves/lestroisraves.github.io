@@ -68,7 +68,7 @@ function initFilters() {
 
     /* Configure categories */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const category = APP_CONFIG.CATEGORIES[key];
+        const category = APP_CONFIG.CATEGORIES[key]["label"];
 
         const label = document.createElement("label");
         label.className = "category-item";
@@ -108,17 +108,15 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile" style="border-color:${APP_CONFIG.CATEGORIES[eventData.category]["color"]};" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
-                <div class="event-meta">
-                    ${renderMaterialIconText("stars", eventData.categoryLabel)}
-                    ${eventData.parentalGuideHtml}
-                </div>
+                ${eventData.categoryHtml}
                 <div class="event-meta">
                     ${renderMaterialIconText("event", eventData.date)}
                     ${eventData.timeHtml}
-                    ${renderMaterialIconText("sell", eventData.price)}
+                    ${eventData.parentalGuideHtml}
+                    ${renderMaterialIconText("confirmation_number", eventData.price)}
                 </div>
                 <div class="event-meta">
                     ${renderMaterialIconText("place", event.location_name)}
@@ -144,14 +142,12 @@ function renderEventModal(event) {
     eventModalContent.innerHTML = `
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
-        <div class="event-meta">
-            ${renderMaterialIconText("stars", eventData.categoryLabel)}
-            ${eventData.parentalGuideHtml}
-        </div>
+        ${eventData.categoryHtml}
         <div class="event-meta">
             ${renderMaterialIconText("event", eventData.date)}
             ${eventData.timeHtml}
-            ${renderMaterialIconText("sell", eventData.price)}
+            ${eventData.parentalGuideHtml}
+            ${renderMaterialIconText("confirmation_number", eventData.price)}
             ${eventData.eatHtml}
         </div>
         <div class="event-meta">

@@ -77,10 +77,10 @@ function showSubmit(user, profile) {
     /* Configure categories  */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
         const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.CATEGORIES[key]
+        opt.innerText = APP_CONFIG.CATEGORIES[key]["label"]
         categoryList.appendChild(opt);
     });
-    categoryList.value = APP_CONFIG.CATEGORIES[0];
+    categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
 
     /* Configure parental guide */
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
