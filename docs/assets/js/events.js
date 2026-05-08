@@ -109,7 +109,6 @@ function renderEventTile(event) {
 
     return `
         <div class="event-tile" role="link" tabindex="0" data-event-id="${eventData.id}">
-            ${eventData.imageHtml}
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 <div class="event-meta">
