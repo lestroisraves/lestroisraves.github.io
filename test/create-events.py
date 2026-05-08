@@ -94,14 +94,19 @@ def generate_events(n: int):
         category = random.randrange(5)
         if category == 0:
             image = "celine.webp"
+            location_name = random.choice(["Bikini", "Le Rex", "Café des Sports", "Métronum"])
         elif category == 1:
             image = "cirque.webp"
+            location_name = random.choice(["Colo N Co", "Le pré vert", "La briqueterie"])
         elif category == 2:
             image = "projection.webp"
+            location_name = random.choice(["La Halle Rabastens", "Cinéma Albi", "Chez Vincent", "Promenade des Lices"])
         elif category == 3:
             image = "peinture.webp"
+            location_name = random.choice(["Musé Des Arts", "Au Cercle", "Café du bord du monde", "Chez Jeanine"])
         else:
             image = "misc.webp"
+            location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])
 
         event = {
             "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
@@ -109,16 +114,16 @@ def generate_events(n: int):
             "is_test": True,
             "category": category,
             "event_date": (today + timedelta(days=i)).isoformat(),
-            "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 59)).isoformat()]),
-            "location_name": f"Test Place #{i + 1}",
-            "location_address": f"",
+            "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
+            "location_name": location_name,
+            "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
             "is_free_price": is_free_price,
             "min_price": min_price,
             "max_price": max_price,
-            "long_description": f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nhttps://github.com/rcsculture/rcsculture.github.io",
+            "long_description": f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com",
             "pending": False,
             "phone": random.choice([None, "06.01.12.13.14"]),
-            "site_url": random.choice([None, "https://github.com/rcsculture/rcsculture.github.io"]),
+            "site_url": random.choice([None, "https://rcsculture.github.io"]),
             "to_eat": random.choice([True, False]),
             "parental_guide": random.randrange(3),
             "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],

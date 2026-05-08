@@ -19,8 +19,20 @@
     --primary-info:                     #165fa8;
     --primary-info--lighter:            #9ccdff;
     --primary-info--text:               #1976d2;
-    --primary-tag-color:                #d1a8a8;
+    --primary-tag-color:                #085066;
     --primary-textarea:                 #837e7e;
+
+    /* event categories */
+    --category0:                        #3838AB; /* Concert */
+    --category0--light:                 #eef2ff;
+    --category1:                        #d97706; /* Spectacle vivant */
+    --category1--light:                 #fffbeb;
+    --category2:                        #15803d; /* Projection */
+    --category2--light:                 #f0fdf4;
+    --category3:                        #ec4899; /* Art visuel */
+    --category3--light:                 #fdf2f8;
+    --category4:                        #5C6370; /* Autre */
+    --category4--light:                 #F0F1F3;
 
     /* currently used colors */
     --primary-fg:                       var(--pico-primary);
