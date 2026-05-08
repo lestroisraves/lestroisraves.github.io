@@ -159,7 +159,7 @@ function renderEventData(event, details = false) {
         : "";
 
     eventData.imageHtml = eventData.image_url
-        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" loading="lazy" alt="Event image"></div>`
+        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" alt="image évènement"></div>`
         : "";
 
     eventData.price = "Gratuit";
