@@ -21,7 +21,7 @@ function localizeAuthError(error) {
 function getCategoryId(label) {
     var id = 4;
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        if (label == APP_CONFIG.CATEGORIES[key])
+        if (label == APP_CONFIG.CATEGORIES[key]["label"])
         {
             id = key;
             return;
@@ -146,6 +146,12 @@ function renderAccountPermissionDetails() {
 function renderEventData(event, details = false) {
     const eventData = event;
 
+    eventData.categoryHtml = `
+        <div class="event-meta category" style="color:${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
+        ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
+        </div>
+    `
+
     eventData.timeHtml = eventData.event_start_time
         ? renderMaterialIconText("schedule", formatTimeForUI(eventData.event_start_time))
         : "";
@@ -182,8 +188,6 @@ function renderEventData(event, details = false) {
         default:
             eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
     }
-
-    eventData.categoryLabel = APP_CONFIG.CATEGORIES[eventData.category]
 
     eventData.date = formatDateForUI(eventData.event_date);
 

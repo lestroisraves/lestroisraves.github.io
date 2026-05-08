@@ -14,11 +14,31 @@ APP_CONFIG = {
         2: "Admin",
     },
     CATEGORIES: {
-        0: "Concert et club",
-        1: "Spectacle vivant",
-        2: "Projection",
-        3: "Art visuel",
-        4: "Autres"
+        0: {
+            "label": "Concert et club",
+            "color": "#524ED2",
+            "icon": "music_note_2"
+        },
+        1: {
+            "label": "Spectacle vivant",
+            "color": "#007A50",
+            "icon": "festival"
+        },
+        2: {
+            "label": "Projection",
+            "color": "#6F277D",
+            "icon": "theater_comedy"
+        },
+        3: {
+            "label": "Art visuel",
+            "color": "#B78800",
+            "icon": "palette"
+        },
+        4: {
+            "label": "Autres",
+            "color": "#5C6370",
+            "icon": "stadium"
+        }
     },
     PARENTAL_GUIDE: {
         0: "Tout public",
