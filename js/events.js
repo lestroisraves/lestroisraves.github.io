@@ -149,6 +149,8 @@ function renderEventModal(event) {
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
+        </div>
+        <div class="event-meta place">
             ${renderMaterialIconText("sell", eventData.price)}
         </div>
         <div class="event-meta place">
@@ -162,6 +164,8 @@ function renderEventModal(event) {
         </div>
         <div class="event-meta">
             ${eventData.siteUrlHtml}
+        </div>
+        <div class="event-meta">
             ${eventData.phoneHtml}
         </div>
         ${eventData.tagsHtml}
