@@ -79,36 +79,39 @@ function formatTimeForUI(timeString) {
     return timeString.slice(0, 5);  // "18:30:45" => "18:30"
 }
 
-function formatEventDate(dateStr, timeStr) {
+
+function formatEventDate(dateStr) {
     const date = new Date(dateStr);
 
     // French date parts
     const options = {
         weekday: "short",
         day: "numeric",
-        month: "long"
+        month: "short"
     };
 
-    let formattedDate = date.toLocaleDateString("fr-FR", options);
+    var formattedDate = date.toLocaleDateString("fr-FR", options);
 
     // Capitalize first letter (Vendredi…)
-    formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    return `<strong>${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</strong>`;
+}
+
+function formatEventDateTime(dateStr, timeStr) {
+    var formattedDate = formatEventDate(dateStr);
 
     // Build final string
-    let result = `<strong>${formattedDate}</strong>`;
-
     if (timeStr) {
         // assume "18:30:45" => "18:30"
         const [hour, min] = timeStr.slice(0, 5).split(":");
         if (min == "00") {
-            result += ` - ${hour}h`;
+            formattedDate += ` - ${hour}h`;
         } else {
-            result += ` - ${hour}h${min}`;
+            formattedDate += ` - ${hour}h${min}`;
         }
         
     }
 
-  return result;
+  return formattedDate;
 }
 
 function startOfDay(date) {
@@ -139,7 +142,12 @@ function sortByDate(events) {
 }
 
 function formatDateRange(startDate, endDate) {
-    return `Du ${formatDateForUI(startDate)} au ${formatDateForUI(endDate)}`;
+    if (startDate.toLocaleDateString() == endDate.toLocaleDateString()) {
+        /* this week sunday == tomorrow */
+        return `Demain ${formatEventDate(startDate)}`;
+    } else {
+        return `Du ${formatEventDate(startDate)} au ${formatEventDate(endDate)}`;
+    }
 }
 
 function renderAccountPermissionDetails() {
