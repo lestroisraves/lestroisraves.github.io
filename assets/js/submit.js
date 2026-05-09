@@ -165,8 +165,12 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
     const eventDate = form.querySelector("#event_date")
+    const endDate = form.querySelector("#end_date")
     const eventImage = form.querySelector("#event-image");
     const button = form.querySelector("#button");
+    const long_description = form.querySelector('#long_description').value
+    const start_time = form.querySelector('#event_start_time').value;
+    const toEat = form.querySelector('input[name="to_eat"]').checked;
 
     /* init UI */
     eventDate.setAttribute("aria-invalid", null);
@@ -185,12 +189,8 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const tags = userTags.map((t) => t.trim().toLowerCase())
         .filter(Boolean);
     
-    const long_description = form.querySelector('#long_description').value
-    const event_date = form.querySelector('#event_date').value
-    const start_time = form.querySelector('#event_start_time').value;
-
     // check dates
-    if (new Date(event_date) < today) {
+    if (new Date(eventDate.value) < today) {
         button.setAttribute("aria-busy", "false");
         eventDate.setAttribute("aria-invalid", true);
         eventDate.focus();
@@ -198,8 +198,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         return;
     }
 
-    const toEat = form.querySelector('input[name="to_eat"]').checked;
-
+    /* set price */
     const priceChoice = form.querySelector('#price-choice').value.trim().toLowerCase();
     console.log("priceChoice:", priceChoice)
     var is_free_price = false;
@@ -254,7 +253,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     const payload = {
         title: form.querySelector('#title').value,
         long_description: long_description === "" ? null : long_description,
-        event_date: form.querySelector('#event_date').value,
+        event_date: eventDate.value,
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
         location_address: form.querySelector('#location_address').value,

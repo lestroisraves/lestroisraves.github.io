@@ -104,6 +104,36 @@ function initFilters() {
 
 }
 
+function renderSection(sectionId, sectionTitle, subtitle, events) {
+    if (events.length === 0) {
+        return `
+        <div id="event-${sectionId}" class="section-tab empty hidden">
+            <div class="section-header">
+                <span class="section-title">${sectionTitle}</span>
+                <br>
+                <span class="section-subtitle">${subtitle}</span>
+            </div>
+            <div class="event-list">
+                <h6>Pas d'évènements</h6>
+            </div>
+        </div>
+        `;
+    }
+
+    return `
+        <div id="event-${sectionId}" class="section-tab no-empty">
+            <div class="section-header">
+                <span class="section-title">${sectionTitle}</span>
+                <br>
+                <span class="section-subtitle">${subtitle}</span>
+            </div>
+            <div class="event-list">
+                ${events.map(renderEventTile).join("")}
+            </div>
+        </div>
+    `;
+}
+
 function renderEventTile(event) {
     const eventData = renderEventData(event);
 
@@ -114,12 +144,10 @@ function renderEventTile(event) {
                 ${eventData.categoryHtml}
                 <div class="event-meta place">
                     ${eventData.locationHtml}
+                    ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
                 </div>
                 <div class="event-meta">
-                    ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
                     ${renderMaterialIconText("sell", eventData.price)}
-                </div>
-                <div class="event-meta place">
                     ${eventData.parentalGuideHtml}
                 </div>
                 ${eventData.tagsHtml}
@@ -148,7 +176,7 @@ function renderEventModal(event) {
             ${eventData.locationHtml}
         </div>
         <div class="event-meta">
-            ${renderMaterialIconText("event", formatEventDate(eventData.event_date, eventData.event_start_time))}
+            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
         </div>
         <div class="event-meta place">
             ${renderMaterialIconText("sell", eventData.price)}
@@ -163,36 +191,6 @@ function renderEventModal(event) {
         ${eventData.tagsHtml}
         ${eventData.descriptionHtml}
         
-    `;
-}
-
-function renderSection(sectionId, sectionTitle, subtitle, events) {
-    if (events.length === 0) {
-        return `
-        <div id="event-${sectionId}" class="section-tab empty hidden">
-            <div class="section-header">
-                <span class="section-title">${sectionTitle}</span>
-                <br>
-                <span class="section-subtitle">${subtitle}</span>
-            </div>
-            <div class="event-list">
-                <h6>Pas d'évènements</h6>
-            </div>
-        </div>
-        `;
-    }
-
-    return `
-        <div id="event-${sectionId}" class="section-tab no-empty">
-            <div class="section-header">
-                <span class="section-title">${sectionTitle}</span>
-                <br>
-                <span class="section-subtitle">${subtitle}</span>
-            </div>
-            <div class="event-list">
-                ${events.map(renderEventTile).join("")}
-            </div>
-        </div>
     `;
 }
 
@@ -266,10 +264,10 @@ async function loadEvents() {
     filter.classList.remove("hidden");
     
     container.innerHTML =
-        renderSection("today", "Aujourd'hui", formatDateForUI(today), grouped.today) +
+        renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("this-week", "Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
         renderSection("next-week", "Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
-        renderSection("later", "Prochainement", "Après le " + formatDateForUI(nextSunday), grouped.future);
+        renderSection("later", "Prochainement", "Dès le " + formatEventDate(addDays(nextSunday, 1)), grouped.future);
 }
 
 /* === LISTENERS === */
