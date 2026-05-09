@@ -174,6 +174,7 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
 
     /* init UI */
     eventDate.setAttribute("aria-invalid", null);
+    endDate.setAttribute("aria-invalid", null);
     eventImage.setAttribute("aria-invalid", null);
     minPrice.setAttribute("aria-invalid", null);
     button.setAttribute("aria-busy", "true");
@@ -190,12 +191,25 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         .filter(Boolean);
     
     // check dates
+    var nb_days = 1;
     if (new Date(eventDate.value) < today) {
         button.setAttribute("aria-busy", "false");
         eventDate.setAttribute("aria-invalid", true);
         eventDate.focus();
         openErrorModal("La date doit être à partir de aujourd'hui");
         return;
+    }
+
+    if (endDate.value) {
+        if (new Date(endDate.value) <= new Date(eventDate.value)) {
+            button.setAttribute("aria-busy", "false");
+            endDate.setAttribute("aria-invalid", true);
+            endDate.focus();
+            openErrorModal("La date de fin doit être à strictement supérieure à la date de début");
+            return;
+        }
+
+        nb_days = Math.round((new Date(endDate.value + "T00:00:00") - new Date(eventDate.value + "T00:00:00")) / 86400000) + 1;  // 86400000ms per day
     }
 
     /* set price */
@@ -250,39 +264,44 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
         imageUrl = window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl;
     }
 
-    const payload = {
-        title: form.querySelector('#title').value,
-        long_description: long_description === "" ? null : long_description,
-        event_date: eventDate.value,
-        event_start_time: start_time === "" ? null : start_time,
-        location_name: form.querySelector('#location_name').value,
-        location_address: form.querySelector('#location_address').value,
-        tags,
-        pending: user_profile.role == 0,
-        is_anonymous: !user_profile,
-        created_by: user_profile?.id ?? null,
-        is_free_price: is_free_price,
-        min_price: min_price,
-        max_price: max_price,
-        category: getCategoryId(categoryList.value),
-        image_url: imageUrl,
-        phone: form.querySelector('#phone').value,
-        site_url: form.querySelector('#site_url').value,
-        parental_guide: getPgId(parentalGuideList.value),
-        to_eat: toEat
-    }
-    console.log("submit payload:", payload)
+    for (let day = 0; day < nb_days; day++) {
+        const payload = {
+            title: form.querySelector('#title').value,
+            long_description: long_description === "" ? null : long_description,
+            event_date: addDays(eventDate.value, day).toLocaleDateString("fr-CA"),
+            event_start_time: start_time === "" ? null : start_time,
+            location_name: form.querySelector('#location_name').value,
+            location_address: form.querySelector('#location_address').value,
+            tags,
+            pending: user_profile.role == 0,
+            is_test: "is_test" in userTags,
+            created_by: user_profile?.id ?? null,
+            is_free_price: is_free_price,
+            min_price: min_price,
+            max_price: max_price,
+            category: getCategoryId(categoryList.value),
+            image_url: imageUrl,
+            phone: form.querySelector('#phone').value,
+            site_url: form.querySelector('#site_url').value,
+            parental_guide: getPgId(parentalGuideList.value),
+            to_eat: toEat
+        }
+        console.log("submit event payload:", payload)
 
-    const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
+        const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
+        if (error) {
+            button.setAttribute("aria-busy", "false");
+            if ((nb_days > 1) && (day > 0)) {
+                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`);
+            } else {
+                openErrorModal("Problème de publication");
+            }
+            console.error(error);
+            return;
+        }
+    }
 
     button.setAttribute("aria-busy", "false");
-
-    if (error) {
-        openErrorModal("Problème de publication");
-        console.error(error);
-        return;
-    }
-
     openSuccessModal("Évènement publié !")
     e.target.reset();
 });
