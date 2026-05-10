@@ -4,6 +4,8 @@ const successModal = document.getElementById("success-modal");
 const errorModal = document.getElementById("error-modal");
 
 const eventModal = document.getElementById("event-modal");
+const eventModalCard = document.getElementById("event-card");
+const eventModalContent = document.getElementById("event-modal-content");
 const deleteEventBtn = document.getElementById("modal-delete-event-btn");
 const acceptEventBtn = document.getElementById("modal-accept-event-btn");
 const rejectEventBtn = document.getElementById("modal-reject-event-btn");
@@ -49,9 +51,120 @@ export function openProfileModal(profile) {
     document.body.style.overflow = "hidden";
 }
 
-export function openEventModal(event) {
+function renderEventModal(event) {
+    const eventData = renderEventData(event, true);
+
+    if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
+    {
+        eventModal.querySelector("#modal-actions").classList.remove("hidden");
+    }
+    else
+    {
+        eventModal.querySelector("#modal-actions").classList.add("hidden");
+    }
+
+    eventModalCard.classList.forEach(cls => {
+        if (cls.startsWith("cat-")) {
+            eventModalCard.classList.remove(cls);
+        }
+    });
+    eventModalCard.classList.add("cat-" + eventData.category);
+
+    eventModalContent.innerHTML = `
+        ${eventData.imageHtml}
+        <div id="modal-title" class="event-title">${event.title}</div>
+        ${eventData.categoryHtml}
+        <div class="event-meta place">
+            ${eventData.locationHtml}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
+        </div>
+        <div class="event-meta place">
+            ${renderMaterialIconText("sell", eventData.price)}
+        </div>
+        <div class="event-meta place">
+            ${eventData.parentalGuideHtml}
+        </div>
+        ${eventData.addressHtml}
+        ${eventData.eatHtml}
+        ${eventData.siteUrlHtml}
+        ${eventData.phoneHtml}
+        ${eventData.tagsHtml}
+        ${eventData.descriptionHtml}
+    `;
+}
+
+export function openEventModal(event, type, user_profile=null) {
     currentEvent = event;
     currentModal = eventModal;
+
+    const eventData = renderEventData(event, true);
+
+    switch (type) {
+        case "my-event":
+            eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
+            eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
+            break;
+
+        case "pending-event":
+            eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
+            eventModal.querySelector("#modal-actions-pendingevents").classList.remove("hidden");
+            break;
+
+        default:  // classic event
+            if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
+            {
+                eventModal.querySelector("#modal-actions").classList.remove("hidden");
+            }
+            else
+            {
+                eventModal.querySelector("#modal-actions").classList.add("hidden");
+            }
+    }
+
+    eventModalCard.classList.forEach(cls => {
+        if (cls.startsWith("cat-")) {
+            eventModalCard.classList.remove(cls);
+        }
+    });
+    eventModalCard.classList.add("cat-" + eventData.category);
+
+    eventData.imageHtml = eventData.image_url
+        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" alt="image évènement"></div>`
+        : "";
+
+    eventData.pendingHtml = eventData.pending
+        ? ` <div class="event-meta pending">
+                ${renderMaterialIconText("hourglass_top", "En attente de publication")}
+            </div>`
+        : "";
+
+    eventModalContent.innerHTML = `
+        ${eventData.imageHtml}
+        <div id="modal-title" class="event-title">${event.title}</div>
+        ${eventData.categoryHtml}
+        <div class="event-meta place">
+            ${eventData.locationHtml}
+        </div>
+        <div class="event-meta">
+            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
+        </div>
+        <div class="event-meta place">
+            ${renderMaterialIconText("sell", eventData.price)}
+        </div>
+        <div class="event-meta place">
+            ${eventData.parentalGuideHtml}
+        </div>
+        ${eventData.addressHtml}
+        ${eventData.eatHtml}
+        ${eventData.siteUrlHtml}
+        ${eventData.phoneHtml}
+        ${eventData.pendingHtml}
+        ${eventData.tagsHtml}
+        ${eventData.descriptionHtml}
+    `;
+
     eventModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }

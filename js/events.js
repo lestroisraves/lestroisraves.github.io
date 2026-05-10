@@ -17,9 +17,6 @@ const filterPanel = document.getElementById("filter-panel");
 const filterCatChoices = filterPanel.querySelector("#filter-category");
 const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
 
-const eventModal = document.getElementById("event-modal");
-const eventModalContent = document.getElementById("event-modal-content");
-
 let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
@@ -138,7 +135,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile cat${eventData.category}" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile cat-${eventData.category}" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -153,44 +150,6 @@ function renderEventTile(event) {
                 ${eventData.tagsHtml}
             </div>
         </div>
-    `;
-}
-
-function renderEventModal(event) {
-    const eventData = renderEventData(event, true);
-
-    if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
-    {
-        eventModal.querySelector("#modal-actions").classList.remove("hidden");
-    }
-    else
-    {
-        eventModal.querySelector("#modal-actions").classList.add("hidden");
-    }
-
-    eventModalContent.innerHTML = `
-        ${eventData.imageHtml}
-        <div id="modal-title" class="event-title">${event.title}</div>
-        ${eventData.categoryHtml}
-        <div class="event-meta place">
-            ${eventData.locationHtml}
-        </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
-        </div>
-        <div class="event-meta place">
-            ${renderMaterialIconText("sell", eventData.price)}
-        </div>
-        <div class="event-meta place">
-            ${eventData.parentalGuideHtml}
-        </div>
-        ${eventData.addressHtml}
-        ${eventData.eatHtml}
-        ${eventData.siteUrlHtml}
-        ${eventData.phoneHtml}
-        ${eventData.tagsHtml}
-        ${eventData.descriptionHtml}
-        
     `;
 }
 
@@ -407,8 +366,8 @@ document.addEventListener("click", (e) => {
     const event = EVENTS.find(e => e.id === id);
     if (!event) return;
 
-    renderEventModal(event);
-    openEventModal(event);
+    // renderEventModal(event);
+    openEventModal(event, "classic", user_profile);
 });
 
 /* === MAIN === */
