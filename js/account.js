@@ -190,7 +190,7 @@ function renderProfileModal(profile) {
 function renderEventSmallTile(event, data_action) {
     const eventData = renderEventData(event);
 
-    const pending = (data_action == "show-myevent") && eventData.pending
+    const pending = eventData.pending
         ? "pending"
         : ""
     
@@ -229,6 +229,11 @@ function renderOfficialRequests(profile) {
 async function getMyPublications() {
     /* fetch data */
     MY_EVENTS = [];
+    myEvents.classList.add("hidden");
+    myEventsSection.querySelector(".badge").classList.add("none");
+    myEventsSection.setAttribute("Disabled", true);
+    myEventsSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("events") /* fetch also old events from my creation */
         .select("*")
@@ -237,16 +242,17 @@ async function getMyPublications() {
 
     if (error) {
         console.error(error)
-        myEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        myEventsSection.querySelector(".badge").innerText = "?";
+        myEvents.classList.remove("hidden");
+        myEvents.innerText = "Erreur survenue durant le chargement des évènements";
         return;
     }
     if (!data || data.length === 0) {
-        myEventsSection.querySelector(".notification").classList.add("hidden");
-        myEvents.innerText = "Vous n'avez publié aucun évènement";
         return;
     }
     MY_EVENTS = data;
-    myEventsSection.querySelector(".notification").classList.remove("hidden");
+    myEventsSection.setAttribute("Disabled", false);
+    myEventsSection.querySelector(".badge").classList.remove("none");
     myEventsSection.querySelector(".badge").innerText = data.length;
     myEvents.innerHTML = data.map(item => renderEventSmallTile(item, "show-myevent")).join("")
 }
@@ -254,6 +260,11 @@ async function getMyPublications() {
 async function getPendingEvents() {
     /* fetch data */
     PENDING_EVENTS = [];
+    pendingEvents.classList.add("hidden");
+    pendingEventsSection.querySelector(".badge").classList.add("none");
+    pendingEventsSection.setAttribute("Disabled", true);
+    pendingEventsSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("events")
         .select("*")
@@ -264,16 +275,17 @@ async function getPendingEvents() {
 
     if (error) {
         console.error(error)
-        pendingEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        pendingEvents.classList.remove("hidden");
+        pendingEventsSection.querySelector(".badge").innerText = "?";
+        pendingEvents.innerText = "Erreur survenue durant le chargement des évènements";
         return;
     }
     if (!data || data.length === 0) {
-        pendingEventsSection.querySelector(".notification").classList.add("hidden");
-        pendingEvents.innerText = "Pas d'évènements en attente de publication";
         return;
     }
     PENDING_EVENTS = data;
-    pendingEventsSection.querySelector(".notification").classList.remove("hidden");
+    pendingEventsSection.setAttribute("Disabled", false);
+    pendingEventsSection.querySelector(".badge").classList.remove("none");
     pendingEventsSection.querySelector(".badge").innerText = data.length;
     pendingEvents.innerHTML = data.map(item => renderEventSmallTile(item, "show-pendingevent")).join("")
 }
@@ -281,6 +293,11 @@ async function getPendingEvents() {
 async function getOfficialRequests() {
     /* fetch data */
     OFFICIAL_REQUESTS = [];
+    officialRequests.classList.add("hidden");
+    offReqSection.querySelector(".badge").classList.add("none");
+    offReqSection.setAttribute("Disabled", true);
+    offReqSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("profiles")
         .select("*")
@@ -288,16 +305,18 @@ async function getOfficialRequests() {
 
     if (error) {
         console.error(error)
-        officialRequests.innerText = "ERREUR survenue durant le chargement des requêtes";
+        officialRequests.classList.remove("hidden");
+        offReqSection.querySelector(".badge").innerText = "?";
+        officialRequests.innerText = "Erreur survenue durant le chargement des requêtes";
         return;
     }
     if (!data || data.length === 0) {
-        offReqSection.querySelector(".notification").classList.add("hidden");
-        officialRequests.innerText = "Pas de requêtes en cours";
         return;
     }
+
     OFFICIAL_REQUESTS = data;
-    offReqSection.querySelector(".notification").classList.remove("hidden");
+    offReqSection.setAttribute("Disabled", false);
+    offReqSection.querySelector(".badge").classList.remove("none");
     offReqSection.querySelector(".badge").innerText = data.length;
     officialRequests.innerHTML = data.map(renderOfficialRequests).join("")
 }
@@ -309,14 +328,12 @@ function handleAction(el) {
         case "show-myevent":
             const my_event = MY_EVENTS.find(e => e.id === el.dataset.eventId);
             if (!my_event) return;
-            // renderEventModal(my_event, true);
             openEventModal(my_event, "my-event");
         break;
 
         case "show-pendingevent":
             const pending_event = PENDING_EVENTS.find(e => e.id === el.dataset.eventId);
             if (!pending_event) return;
-            // renderEventModal(pending_event, false);
             openEventModal(pending_event, "pending-event");
         break;
 
@@ -488,6 +505,8 @@ document.addEventListener("keydown", (e) => {
 /* display admin requests list */
 offReqSection.addEventListener("click", (event) => {
     event.preventDefault();
+    if (offReqSection.getAttribute("disabled") === "true") return;
+
     const isOpen = offReqSection.getAttribute("aria-expanded") === "true";
 
     offReqSection.setAttribute("aria-expanded", String(!isOpen));
@@ -503,6 +522,8 @@ offReqSection.addEventListener("click", (event) => {
 
 pendingEventsSection.addEventListener("click", (event) => {
     event.preventDefault();
+    if (pendingEventsSection.getAttribute("disabled") === "true") return;
+
     const isOpen = pendingEventsSection.getAttribute("aria-expanded") === "true";
 
     pendingEventsSection.setAttribute("aria-expanded", String(!isOpen));
@@ -513,6 +534,23 @@ pendingEventsSection.addEventListener("click", (event) => {
     } else {
         pendingEvents.classList.remove("hidden");
         pendingEventsSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+myEventsSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (myEventsSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = myEventsSection.getAttribute("aria-expanded") === "true";
+
+    myEventsSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        myEvents.classList.add("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        myEvents.classList.remove("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_less";
     }
 });
 

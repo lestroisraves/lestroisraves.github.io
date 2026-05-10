@@ -39,6 +39,10 @@
     font-weight: 600;
 }
 
+.account-section-title .material-symbols-outlined {
+    font-size: 1.2rem;
+}
+
 .account-section-title.details {
     display: flex;
     align-items: center;
@@ -50,10 +54,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    color: #3f51b5;
-    font-size: 1rem;
-    font-weight: 600;
-}
+} 
 
 .header-left .material-symbols-outlined {
     font-size: 1.2rem;
@@ -66,11 +67,12 @@
     cursor: pointer;
 }
 
-.notification.hidden {
-    display: none;
-}
-
 .badge {
+    position: absolute;
+    top: -17px;
+    left: 100%;
+    margin-left: -6px;     /* small overlap with icon */
+
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
@@ -83,16 +85,8 @@
     border-radius: 999px;
 }
 
-.badge.notif {
-    position: absolute;
-    top: -17px;
-    right: -10px;
-}
-
-.badge.my-events-nb {
-    background: transparent;
-    color: #ccc;
-    font-weight: 500;
+.badge.none {
+    background: #757575
 }
 
 .request-list.hidden {
@@ -299,8 +293,6 @@
 .event-small-tile.cat-4 {
     border-color: var(--category4);
 }
-
-
 
 .event-small-main {
     display: flex;

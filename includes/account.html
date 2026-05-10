@@ -166,30 +166,28 @@
 
         <article id="admin-section" class="hidden">
             <div class="account-tile">
-                <div id="official-req-section" class="account-section-title details" aria-expanded="false" aria-controls="off-req-panel">
+                <div id="official-req-section" class="account-section-title details" aria-expanded="false">
                     <div class="header-left">
                         <span class="material-symbols-outlined" aria-hidden="true">send</span>
                         <span class="account-name">Req. contrib. officiel</span>
-                        <div class="notification hidden">
-                            <span class="badge notif">0</span>
+                        <div class="notification">
+                            <span class="badge none">0</span>
                         </div>
                     </div>
-
                     <span class="material-symbols-outlined chevron">expand_more</span>
                 </div>
                 <div id="official-requests" class="request-list hidden"></div>
             </div>
 
             <div class="account-tile">
-                <div id="pending-events-section" class="account-section-title details" aria-expanded="false" aria-controls="pending-events-panel">
+                <div id="pending-events-section" class="account-section-title details" aria-expanded="false">
                     <div class="header-left">
                         <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
                         <span class="account-name">Publications en attente</span>
-                        <div class="notification hidden">
-                            <span class="badge notif">0</span>
+                        <div class="notification">
+                            <span class="badge none">0</span>
                         </div>
                     </div>
-
                     <span class="material-symbols-outlined chevron">expand_more</span>
                 </div>
                 <div id="pending-events" class="request-list hidden"></div>
@@ -197,16 +195,17 @@
         </article>
 
         <div class="account-tile">
-            <div id="my-events-section" class="account-section-title details">
+            <div id="my-events-section" class="account-section-title details" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">event</span>
                     <span class="account-name">Mes publications</span>
+                    <div class="notification">
+                        <span class="badge none">0</span>
+                    </div>
                 </div>
-                <div class="notification hidden">
-                    <span class="badge my-events-nb">0</span>
-                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="my-events"></div>
+            <div id="my-events" class="request-list hidden"></div>
         </div>
 
     </div>
