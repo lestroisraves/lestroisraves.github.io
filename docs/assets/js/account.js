@@ -17,14 +17,15 @@ const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
 
-const eventModal = document.getElementById("event-modal");
-const eventModalContent = document.getElementById("event-modal-content");
 const profileModalContent = document.getElementById("profile-modal-content");
 const officialRequestModal = document.getElementById("official-request-modal");
 
 const permissionDetails = document.getElementById("detail-permission");
+const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
 const adminSection = document.getElementById("admin-section");
+const pendingEventsSection = document.getElementById("pending-events-section");
+const offReqSection = document.getElementById("official-req-section");
 const officialRequests = document.getElementById("official-requests");
 const pendingEvents = document.getElementById("pending-events");
 
@@ -162,47 +163,6 @@ async function initAccountPage() {
     return subscription; // (optional) for unsubscribe later
 }
 
-function renderEventModal(event, my_events=false) {
-    const eventData = renderEventData(event, true);
-
-    if (my_events)
-    {
-        eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
-        eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
-    }
-    else
-    {
-        eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
-        eventModal.querySelector("#modal-actions-pendingevents").classList.remove("hidden");
-    }
-
-    eventModalContent.innerHTML = `
-        ${eventData.imageHtml}
-        <div id="modal-title" class="event-title">${event.title}</div>
-        <div class="event-meta">
-            ${renderMaterialIconText("stars", eventData.categoryLabel)}
-            ${eventData.parentalGuideHtml}
-        </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("event", eventData.date)}
-            ${eventData.timeHtml}
-            ${renderMaterialIconText("sell", eventData.price)}
-            ${eventData.eatHtml}
-        </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("place", event.location_name)}
-            ${eventData.addressHtml}
-        </div>
-        <div class="event-meta">
-            ${eventData.siteUrlHtml}
-            ${eventData.phoneHtml}
-        </div>
-        ${eventData.tagsHtml}
-        ${eventData.descriptionHtml}
-        
-    `;
-}
-
 function renderProfileModal(profile) {
     profileModalContent.innerHTML = `
         <div class="account-section-title">
@@ -227,40 +187,25 @@ function renderProfileModal(profile) {
     `;
 }
 
-function renderMyPublications(event) {
+function renderEventSmallTile(event, data_action) {
     const eventData = renderEventData(event);
 
+    const pending = eventData.pending
+        ? "pending"
+        : ""
+    
     const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-action="show-myevent" data-event-id="${event.id}">
+        <div class="event-small-tile cat-${event.category} ${pending}" role="link" tabindex="0" data-action="${data_action}" data-event-id="${event.id}">
             <div class="event-small-main">
-                <span class="event-small-title">${event.title}</span>
-                <span class="event-small-meta">
-                <span class="event-small-category">${eventData.categoryLabel}</span>
-                ·
-                <span class="event-small-date">${eventData.date}</span>
-                ·
-                <span class="event-small-place">${event.location_name}</span>
+                <span class="event-small-title non-wrap">${event.title}</span>
+                <span class="event-small-meta non-wrap">
+                    <span class="event-small-category cat-${event.category}"><strong>${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</strong></span>
+                    .
+                    <span>${formatEventDateTime(eventData.event_date)}</span>
+                    .
+                    <span class="non-wrap">${eventData.location_name}</span>
                 </span>
-            </div>
-        </div>
-    `
-    return html;
-}
-
-function renderPendingEvents(event) {
-    const eventData = renderEventData(event);
-
-    const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-action="show-pendingevent" data-event-id="${event.id}">
-            <div class="event-small-main">
-                <span class="event-small-title">${event.title}</span>
-                <span class="event-small-meta">
-                <span class="event-small-category">${eventData.categoryLabel}</span>
-                ·
-                <span class="event-small-date">${eventData.date}</span>
-                ·
-                <span class="event-small-place">${event.location_name}</span>
-                </span>
+                
             </div>
         </div>
     `
@@ -271,9 +216,9 @@ function renderOfficialRequests(profile) {
     const html = `
         <div class="event-small-tile" role="link" tabindex="0" data-action="show-profile" data-profile-id="${profile.id}">
             <div class="event-small-main">
-                <span class="event-small-title">${profile.name}</span>
+                <span class="event-small-title non-wrap">${profile.name}</span>
                 <span class="event-small-meta">
-                    <span class="event-small-category">${profile.email}</span>
+                    <span">${profile.email}</span>
                 </span>
             </div>
         </div>
@@ -284,6 +229,11 @@ function renderOfficialRequests(profile) {
 async function getMyPublications() {
     /* fetch data */
     MY_EVENTS = [];
+    myEvents.classList.add("hidden");
+    myEventsSection.querySelector(".badge").classList.add("none");
+    myEventsSection.setAttribute("Disabled", true);
+    myEventsSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("events") /* fetch also old events from my creation */
         .select("*")
@@ -292,20 +242,29 @@ async function getMyPublications() {
 
     if (error) {
         console.error(error)
-        myEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        myEventsSection.querySelector(".badge").innerText = "?";
+        myEvents.classList.remove("hidden");
+        myEvents.innerText = "Erreur survenue durant le chargement des évènements";
         return;
     }
     if (!data || data.length === 0) {
-        myEvents.innerText = "Pas d'évènements en cours";
         return;
     }
     MY_EVENTS = data;
-    myEvents.innerHTML = data.map(renderMyPublications).join("")
+    myEventsSection.setAttribute("Disabled", false);
+    myEventsSection.querySelector(".badge").classList.remove("none");
+    myEventsSection.querySelector(".badge").innerText = data.length;
+    myEvents.innerHTML = data.map(item => renderEventSmallTile(item, "show-myevent")).join("")
 }
 
 async function getPendingEvents() {
     /* fetch data */
     PENDING_EVENTS = [];
+    pendingEvents.classList.add("hidden");
+    pendingEventsSection.querySelector(".badge").classList.add("none");
+    pendingEventsSection.setAttribute("Disabled", true);
+    pendingEventsSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("events")
         .select("*")
@@ -316,20 +275,29 @@ async function getPendingEvents() {
 
     if (error) {
         console.error(error)
-        pendingEvents.innerText = "ERREUR survenue durant le chargement des évènements";
+        pendingEvents.classList.remove("hidden");
+        pendingEventsSection.querySelector(".badge").innerText = "?";
+        pendingEvents.innerText = "Erreur survenue durant le chargement des évènements";
         return;
     }
     if (!data || data.length === 0) {
-        pendingEvents.innerText = "Pas d'évènements en attente de publication";
         return;
     }
     PENDING_EVENTS = data;
-    pendingEvents.innerHTML = data.map(renderPendingEvents).join("")
+    pendingEventsSection.setAttribute("Disabled", false);
+    pendingEventsSection.querySelector(".badge").classList.remove("none");
+    pendingEventsSection.querySelector(".badge").innerText = data.length;
+    pendingEvents.innerHTML = data.map(item => renderEventSmallTile(item, "show-pendingevent")).join("")
 }
 
 async function getOfficialRequests() {
     /* fetch data */
     OFFICIAL_REQUESTS = [];
+    officialRequests.classList.add("hidden");
+    offReqSection.querySelector(".badge").classList.add("none");
+    offReqSection.setAttribute("Disabled", true);
+    offReqSection.querySelector(".badge").innerText = 0;
+
     const { data, error } = await window.supabaseClient
         .from("profiles")
         .select("*")
@@ -337,14 +305,19 @@ async function getOfficialRequests() {
 
     if (error) {
         console.error(error)
-        officialRequests.innerText = "ERREUR survenue durant le chargement des requêtes";
+        officialRequests.classList.remove("hidden");
+        offReqSection.querySelector(".badge").innerText = "?";
+        officialRequests.innerText = "Erreur survenue durant le chargement des requêtes";
         return;
     }
     if (!data || data.length === 0) {
-        officialRequests.innerText = "Pas de requêtes en cours";
         return;
     }
+
     OFFICIAL_REQUESTS = data;
+    offReqSection.setAttribute("Disabled", false);
+    offReqSection.querySelector(".badge").classList.remove("none");
+    offReqSection.querySelector(".badge").innerText = data.length;
     officialRequests.innerHTML = data.map(renderOfficialRequests).join("")
 }
 
@@ -355,15 +328,13 @@ function handleAction(el) {
         case "show-myevent":
             const my_event = MY_EVENTS.find(e => e.id === el.dataset.eventId);
             if (!my_event) return;
-            renderEventModal(my_event, true);
-            openEventModal(my_event);
+            openEventModal(my_event, "my-event");
         break;
 
         case "show-pendingevent":
             const pending_event = PENDING_EVENTS.find(e => e.id === el.dataset.eventId);
             if (!pending_event) return;
-            renderEventModal(pending_event, false);
-            openEventModal(pending_event);
+            openEventModal(pending_event, "pending-event");
         break;
 
         case "show-profile":
@@ -529,6 +500,58 @@ document.addEventListener("keydown", (e) => {
 
   e.preventDefault(); // prevent page scroll on Space
   handleAction(el);
+});
+
+/* display admin requests list */
+offReqSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (offReqSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = offReqSection.getAttribute("aria-expanded") === "true";
+
+    offReqSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        officialRequests.classList.add("hidden");
+        offReqSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        officialRequests.classList.remove("hidden");
+        offReqSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+pendingEventsSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (pendingEventsSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = pendingEventsSection.getAttribute("aria-expanded") === "true";
+
+    pendingEventsSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        pendingEvents.classList.add("hidden");
+        pendingEventsSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        pendingEvents.classList.remove("hidden");
+        pendingEventsSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+myEventsSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (myEventsSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = myEventsSection.getAttribute("aria-expanded") === "true";
+
+    myEventsSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        myEvents.classList.add("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        myEvents.classList.remove("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_less";
+    }
 });
 
 /* === INITIAL LOAD === */

@@ -164,51 +164,69 @@
             </form>
         </article>
 
-        <div class="account-tile">
-            <div class="account-section-title">
-                <span class="material-symbols-outlined" aria-hidden="true">event</span>
-                <span class="account-name">Mes publications</span>
-            </div>
-            <div id="my-events"></div>
-        </div>
-
         <article id="admin-section" class="hidden">
             <div class="account-tile">
-                <div class="account-section-title">
-                    <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
-                    <span class="account-name">Publications en attente</span>
+                <div id="official-req-section" class="account-section-title details" aria-expanded="false">
+                    <div class="header-left">
+                        <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                        <span class="account-name">Req. contrib. officiel</span>
+                        <div class="notification">
+                            <span class="badge none">0</span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined chevron">expand_more</span>
                 </div>
-                <div id="pending-events"></div>
+                <div id="official-requests" class="request-list hidden"></div>
             </div>
 
             <div class="account-tile">
-                <div class="account-section-title">
-                    <span class="material-symbols-outlined" aria-hidden="true">send</span>
-                    <span class="account-name">Requêtes contributeur "officiel"</span>
+                <div id="pending-events-section" class="account-section-title details" aria-expanded="false">
+                    <div class="header-left">
+                        <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
+                        <span class="account-name">Publications en attente</span>
+                        <div class="notification">
+                            <span class="badge none">0</span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined chevron">expand_more</span>
                 </div>
-                <div id="official-requests"></div>
+                <div id="pending-events" class="request-list hidden"></div>
             </div>
         </article>
+
+        <div class="account-tile">
+            <div id="my-events-section" class="account-section-title details" aria-expanded="false">
+                <div class="header-left">
+                    <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                    <span class="account-name">Mes publications</span>
+                    <div class="notification">
+                        <span class="badge none">0</span>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <div id="my-events" class="request-list hidden"></div>
+        </div>
 
     </div>
 </div>
 
 <div id="event-modal" class="modal-overlay hidden">
-    <div class="modal-card" role="dialog" aria-modal="true">
+    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
         <button id="modal-close" class="modal-close" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         
         <div id="event-modal-content" class="modal-content"></div>
         
-        <div id="modal-actions-myevents" class="modal-actions hidden">
+        <div id="modal-actions-myevents" class="modal-actions event hidden">
             <button id="modal-delete-event-btn" class="modal-btn delete">
                 Supprimer cet évènement
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
 
-        <div id="modal-actions-pendingevents" class="modal-actions hidden">
+        <div id="modal-actions-pendingevents" class="modal-actions event hidden">
             <button id="modal-accept-event-btn" class="modal-btn info">
                 Accepter
                 <span class="material-symbols-outlined" aria-hidden="true">check</span>

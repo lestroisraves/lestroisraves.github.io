@@ -187,17 +187,10 @@ function renderEventData(event, details = false) {
     const eventData = event;
 
     eventData.categoryHtml = `
-        <div class="event-meta category cat${eventData.category}">
+        <div class="event-meta category cat-${eventData.category}">
             ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
         </div>
     `
-
-    // eventData.timeHtml = eventData.event_start_time
-    //     ? renderMaterialIconText("schedule", formatTimeForUI(eventData.event_start_time))
-    //     : "";
-
-    // eventData.date = formatDateForUI(eventData.event_date);
-
     eventData.locationHtml = `
         <span class="event-icon-text">
             <span class="material-symbols-outlined">place</span>
@@ -211,10 +204,6 @@ function renderEventData(event, details = false) {
         `
         : "";
 
-    eventData.imageHtml = eventData.image_url
-        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" alt="image évènement"></div>`
-        : "";
-
     eventData.price = "Gratuit";
     if (eventData.is_free_price) {
         eventData.price = "Participation libre";
@@ -223,10 +212,6 @@ function renderEventData(event, details = false) {
     } else if (eventData.max_price) {
         eventData.price = eventData.max_price + " €";
     }
-    // eventData.priceHtml = `<span class="price-tag">
-    //                             <img src="assets/images/ticket.png" class="icon">
-    //                             <span class="text">${eventData.price}</span>
-    //                         </span>`
 
     switch (eventData.parental_guide)
     {
