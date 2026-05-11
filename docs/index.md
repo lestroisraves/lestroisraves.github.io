@@ -4,10 +4,14 @@ hide:
   - toc
 ---
 
-{% include 'includes/confirm_modal.html' %}
-{% include 'includes/popup.html' %}
-{% include 'includes/events.html' %}
+{% include 'includes/modals/event_modal.html' %}
+{% include 'includes/modals/confirm_modal.html' %}
+{% include 'includes/modals/popup.html' %}
+{% include 'includes/nav/events_header.html' %}
+{% include 'includes/forms/events_filter_form.html' %}
 
 {% block html %}
+<article id="events"></article>
+<script type="module" defer src="assets/js/events.js"></script>
 <html data-theme="light">
 {% endblock %}

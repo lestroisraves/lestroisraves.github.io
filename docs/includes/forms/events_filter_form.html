@@ -1,17 +1,3 @@
-<div id="event-list-header" class="event-list-header hidden">
-    <a href="./submit/" class="btn-outline">
-        <span class="material-symbols-outlined" aria-hidden="true">add</span>
-        Publier un évènement
-    </a>
-</div>
-
-<div id="event-tabs" class="events-tabs hidden">
-  <button class="tab" data-target="today">Aujourd'hui</button>
-  <button class="tab" data-target="this-week">Cette semaine</button>
-  <button class="tab" data-target="next-week">Semaine prochaine</button>
-  <button class="tab" data-target="later">Prochainement</button>
-</div>
-
 <section id="event-filter" class="filter-accordion hidden">
     
     <button id="filter-toggle" class="accordion-toggle" aria-expanded="false" aria-controls="filter-panel" >
@@ -66,24 +52,3 @@
         </form>
     </div>
 </section>
-
-<div id="event-modal" class="modal-overlay hidden">
-    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
-            <span class="material-symbols-outlined">close</span>
-        </button>
-        
-        <div id="event-modal-content" class="modal-content"></div>
-        
-        <div id="modal-actions" class="modal-actions event hidden">
-            <button id="modal-delete-event-btn" class="modal-btn delete">
-                Supprimer cet évènement
-                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-            </button>
-        </div>
-    </div>
-</div>
-
-<article id="events"></article>
-
-<script type="module" defer src="assets/js/events.js"></script>

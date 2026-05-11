@@ -113,13 +113,14 @@ export function openEventModal(event, type, user_profile=null) {
             break;
 
         default:  // classic event
+            eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
             if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
             {
-                eventModal.querySelector("#modal-actions").classList.remove("hidden");
+                eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
             }
             else
             {
-                eventModal.querySelector("#modal-actions").classList.add("hidden");
+                eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
             }
     }
 

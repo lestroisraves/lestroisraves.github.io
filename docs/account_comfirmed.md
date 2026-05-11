@@ -4,7 +4,7 @@ hide:
   - toc
 ---
 
-{% include 'includes/account_confirmed.html' %}
+{% include 'includes/account/account_confirmed.html' %}
 
 
 {% block html %}
