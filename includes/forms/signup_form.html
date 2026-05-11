@@ -1,0 +1,45 @@
+<div id="signup-container" class="account-section hidden">
+    <article class="formtile-tile pico">
+        <form id="signup-form">
+            <label>
+                Email
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="email@exemple.fr"
+                    required
+                >
+            </label>
+
+            <label>
+                Nom / pseudo
+                <input
+                    type="text"
+                    id="display_name"
+                    placeholder="Votre nom public"
+                    required
+                >
+            </label>
+
+            <label>
+                Mot de passe
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Minimum 8 caractères"
+                    minlength="8"
+                    required
+                >
+            </label>
+
+            <div>
+                <button type="submit" id="button">Créer un compte</button>
+            </div>
+        </form>
+
+        <p>
+            Déjà un compte ?
+            <a href="#" id="show-signin">Se connecter</a>
+        </p>
+    </article>
+</div>

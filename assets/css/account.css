@@ -51,6 +51,7 @@
 }
 
 .header-left {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -61,18 +62,22 @@
 }
 
 .notification {
-    position: relative;
+    /* position: relative;
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+    gap: 0.4rem; */
+    position: absolute;
+    top: -6px;
+    left: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.badge {
-    position: absolute;
-    top: -17px;
-    left: 100%;
-    margin-left: -6px;     /* small overlap with icon */
 
+.badge {
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
@@ -83,11 +88,38 @@
     line-height: 16px;
     text-align: center;
     border-radius: 999px;
+    white-space: nowrap
 }
 
 .badge.none {
     background: #757575
 }
+
+.badge.pending {
+    display: inline-flex;
+    align-items: center;
+    color: #d97706;
+    background-color: #ffeedb;
+    /* gap: 0.1rem; */
+    min-width: 0;
+}
+
+.badge.pending .material-symbols-outlined {
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+/* 
+.badge.pending .text {
+    display: block;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+} */
+
+.badge.pending.hidden {
+    display: none;
+}
+
 
 .request-list.hidden {
     display: none;
@@ -139,9 +171,9 @@
 
 
 .detail-section-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 

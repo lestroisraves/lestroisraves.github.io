@@ -382,6 +382,33 @@
 
   <h1>Évènements</h1>
 
+<div id="event-modal" class="modal-overlay hidden">
+    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div id="event-modal-content" class="modal-content"></div>
+
+        <div id="modal-actions-myevents" class="modal-actions event hidden">
+            <button id="modal-delete-event-btn" class="modal-btn delete">
+                Supprimer cet évènement
+                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+            </button>
+        </div>
+
+        <div id="modal-actions-pendingevents" class="modal-actions event hidden">
+            <button id="modal-accept-event-btn" class="modal-btn info">
+                Accepter
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+            </button>
+            <button id="modal-reject-event-btn" class="modal-btn delete">
+                Rejeter
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
+        </div>
+    </div>
+</div>
 <div id="confirm-modal" class="modal-overlay delete hidden">
     <div class="modal-card modal-small" role="dialog" aria-modal="true">
         <button id="modal-close" class="modal-close" aria-label="Fermer">
@@ -445,7 +472,6 @@
   <button class="tab" data-target="next-week">Semaine prochaine</button>
   <button class="tab" data-target="later">Prochainement</button>
 </div>
-
 <section id="event-filter" class="filter-accordion hidden">
 
     <button id="filter-toggle" class="accordion-toggle" aria-expanded="false" aria-controls="filter-panel" >
@@ -501,27 +527,8 @@
     </div>
 </section>
 
-<div id="event-modal" class="modal-overlay hidden">
-    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
-            <span class="material-symbols-outlined">close</span>
-        </button>
-
-        <div id="event-modal-content" class="modal-content"></div>
-
-        <div id="modal-actions" class="modal-actions event hidden">
-            <button id="modal-delete-event-btn" class="modal-btn delete">
-                Supprimer cet évènement
-                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-            </button>
-        </div>
-    </div>
-</div>
-
 <article id="events"></article>
-
 <script type="module" defer src="assets/js/events.js"></script>
-
 <html data-theme="light">
 
 

@@ -231,6 +231,7 @@ async function getMyPublications() {
     MY_EVENTS = [];
     myEvents.classList.add("hidden");
     myEventsSection.querySelector(".badge").classList.add("none");
+    myEventsSection.querySelector(".badge.pending").classList.add("hidden");
     myEventsSection.setAttribute("Disabled", true);
     myEventsSection.querySelector(".badge").innerText = 0;
 
@@ -251,6 +252,11 @@ async function getMyPublications() {
         return;
     }
     MY_EVENTS = data;
+    const pendingEvents = data.filter(e => e.pending === true);
+    if (pendingEvents.length > 0) {
+        myEventsSection.querySelector(".badge.pending").classList.remove("hidden");
+        myEventsSection.querySelector(".badge.pending .text").innerText = pendingEvents.length;
+    }
     myEventsSection.setAttribute("Disabled", false);
     myEventsSection.querySelector(".badge").classList.remove("none");
     myEventsSection.querySelector(".badge").innerText = data.length;

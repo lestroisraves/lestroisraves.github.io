@@ -1,0 +1,90 @@
+<div id="account-container" class="account-section hidden">
+    <article class="account-tile pico">
+        <form id="account-form">
+            
+            <div class="account-section-title">
+                <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                <span id="account-name" class="account-name"></span>
+            </div>
+
+            <div class="account-details">
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Email</span>
+                        <span id="account-email" class="value detail-user"></span>
+                    </div>
+                </div>
+
+                <div id="detail-section" class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Contributeur</span>
+                        <span id="account-role" class="value detail-user"></span>
+                    </div>
+
+                    <div id="detail-permission"></div>
+
+                    <div id="role-request" class="role-request hidden">
+                        <p class="role-request-text">
+                            Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
+                            <a href="#" id="official-role-request">Demandez à être contributeur officiel</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit">Se déconnecter</button>
+            </div>
+        </form>
+    </article>
+
+    <article id="admin-section" class="hidden">
+        <div class="account-tile">
+            <div id="official-req-section" class="account-section-title details" aria-expanded="false">
+                <div class="header-left">
+                    <span class="material-symbols-outlined" aria-hidden="true">send</span>
+                    <span class="account-name">Req. contrib. officiel</span>
+                    <div class="notification">
+                        <span class="badge none">0</span>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <div id="official-requests" class="request-list hidden"></div>
+        </div>
+
+        <div class="account-tile">
+            <div id="pending-events-section" class="account-section-title details" aria-expanded="false">
+                <div class="header-left">
+                    <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
+                    <span class="account-name">Publications en attente</span>
+                    <div class="notification">
+                        <span class="badge none">0</span>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <div id="pending-events" class="request-list hidden"></div>
+        </div>
+    </article>
+
+    <div class="account-tile">
+        <div id="my-events-section" class="account-section-title details" aria-expanded="false">
+            <div class="header-left">
+                <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                <span class="account-name">Mes publications</span>
+                <div class="notification">
+                    <span class="badge none">0</span>
+                    <span class="badge pending hidden">
+                        <span class="material-symbols-outlined">hourglass_top</span>
+                        <span class="text">0</span>
+                    </span>
+                </div>
+            </div>
+            <span class="material-symbols-outlined chevron">expand_more</span>
+        </div>
+        <div id="my-events" class="request-list hidden"></div>
+    </div>
+
+</div>

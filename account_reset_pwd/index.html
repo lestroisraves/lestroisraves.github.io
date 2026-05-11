@@ -370,61 +370,58 @@
 
   <h1>Account reset pwd</h1>
 
-<div id="account-page">
-    <div id="notice-tip" class="notice notice-tip">
-        <span class="notice-icon">💡</span>
-        <div class="notice-content">
-            <strong>Reinitialisation du mot de pass</strong>
-            <p>Vous avez demander à réinitialiser votre mot de passe.</p>
-        </div>
-    </div>
-
-    <div id="notice-success" class="notice notice-tip event hidden">
-        <div class="notice-content">
-            <span class="notice-icon">✔️</span>
-            <span id="text"></span>
-        </div>
-    </div>
-
-    <div id="notice-error" class="notice notice-error hidden">
-        <div class="notice-content">
-            <span class="notice-icon">❌</span>
-            <span id="text"></span>
-        </div>
-    </div>
-
-    <!-- RESET PASSWORD -->
-    <div id="reset-pwd-container" class="account-section">
-        <article class="formtile-tile pico">
-            <form id="reset-pwd-form">
-                <label>
-                    Nouveau mot de passe
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Minimum 8 caractères"
-                        minlength="8"
-                        required
-                    >
-                    <input
-                        type="password"
-                        id="passwordConfirm"
-                        placeholder="Confirmez votre mot de passe"
-                        minlength="8"
-                        required
-                    >
-                </label>
-
-                <div>
-                    <button type="submit" id="button">Réinitialiser</button>
-                </div>
-            </form>
-        </article>
+<div id="notice-tip" class="notice notice-tip">
+    <span class="notice-icon">💡</span>
+    <div class="notice-content">
+        <strong>Reinitialisation du mot de pass</strong>
+        <p>Vous avez demander à réinitialiser votre mot de passe.</p>
     </div>
 </div>
 
-<script type="module" defer src="../assets/js/account_reset_pwd.js"></script>
+<div id="notice-success" class="notice notice-tip event hidden">
+    <div class="notice-content">
+        <span class="notice-icon">✔️</span>
+        <span id="text"></span>
+    </div>
+</div>
 
+<div id="notice-error" class="notice notice-error hidden">
+    <div class="notice-content">
+        <span class="notice-icon">❌</span>
+        <span id="text"></span>
+    </div>
+</div>
+
+<!-- RESET PASSWORD -->
+<div id="reset-pwd-container" class="account-section">
+    <article class="formtile-tile pico">
+        <form id="reset-pwd-form">
+            <label>
+                Nouveau mot de passe
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Minimum 8 caractères"
+                    minlength="8"
+                    required
+                >
+                <input
+                    type="password"
+                    id="passwordConfirm"
+                    placeholder="Confirmez votre mot de passe"
+                    minlength="8"
+                    required
+                >
+            </label>
+
+            <div>
+                <button type="submit" id="button">Réinitialiser</button>
+            </div>
+        </form>
+    </article>
+</div>
+
+<script type="module" defer src="../assets/js/account_reset_pwd.js"></script>
 <html data-theme="light">
 
 

@@ -6,10 +6,11 @@ import { tagInput, userTags, clearTags } from "./tags.js";
 /* === VARIABLES === */
 const today = startOfDay(new Date());
 
-const accountContainer = document.getElementById("account-container");
+const accountRole = document.getElementById("account-role");
 const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
 const noticeTip = document.getElementById("notice-tip");
+const noticeTipTitle = noticeTip.querySelector("#title");
 const noticeTipText = noticeTip.querySelector("#text");
 const categoryList = document.getElementById("category");
 const parentalGuideList = document.getElementById("parental_guide");
@@ -37,13 +38,16 @@ function showSubmit(user, profile) {
     user_profile = profile;
     noticeTip.classList.remove("hidden");
     submitContainer.classList.remove("hidden");
-    accountContainer.classList.remove("hidden");
-    accountContainer.querySelector("#account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
+    accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
+
+    /* configure tip */ 
+    noticeTipTitle.innerText = "Publiez ici un évènement";
+    noticeTipText.innerText = "Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours";
 
     /* configure roles */
     permissionDetails.innerHTML = renderAccountPermissionDetails();
-    const permissionOfficial = accountContainer.querySelector("#permission-official");
-    const permissionAdmin = accountContainer.querySelector("#permission-admin");
+    const permissionOfficial = permissionDetails.querySelector("#permission-official");
+    const permissionAdmin = permissionDetails.querySelector("#permission-admin");
 
     switch(user_profile.role) {
         case 0: /* non official */
@@ -99,7 +103,6 @@ function showSubmit(user, profile) {
 function showLoginWarning() {
     user_profile = null;
     noticeTip.classList.add("hidden");
-    accountContainer.classList.add("hidden");
     submitContainer.classList.add("hidden");
     window.location.href = "../account/";
 }
