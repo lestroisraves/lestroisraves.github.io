@@ -11,23 +11,6 @@ SUPABASE_URL = "https://jpicbqssqixagnwejefu.supabase.co"
 SUPABASE_KEY = "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_"
 SUPABASE_IMAGE_STORAGE = f"{SUPABASE_URL}/storage/v1/object/public/event-images/"
 EVENTS_FILE = os.path.expandvars("$PROJECT_ROOT_FOLDER\\test\\dummy-events.json")
-ROLES = [
-    "Non-Officiel",
-    "Officiel",
-    "Admin",
-]
-CATEGORIES = [
-    "Concert et club",
-    "Spectacle vivant",
-    "Projection",
-    "Art visuel",
-    "Autres"
-]
-PARENTAL_GUIDE = [
-    "Tout public",
-    "Pour les enfants",
-    "Déconseillé aux enfants"
-]
 TEST_TAGS = [
     "rock",
     "festival",

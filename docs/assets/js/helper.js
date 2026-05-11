@@ -180,6 +180,12 @@ function renderAccountPermissionDetails() {
                 Modération: supprimer n'importe quel évènement
             </div>
         </div>
+        <div id="permission-super-admin" class="detail-section-list hidden">
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                <span >Admin: Changer le role d'un contributeur</span>
+            </div>
+        </div>
     `
 }
 

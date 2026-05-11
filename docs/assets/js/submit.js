@@ -64,7 +64,7 @@ function showSubmit(user, profile) {
             permissionAdmin.classList.add("hidden");
             break;
 
-        case 2: /* admin */
+        case 2,3: /* moderateur/admin */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"

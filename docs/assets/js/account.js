@@ -1,10 +1,11 @@
 console.log("executing:", document.currentScript?.src);
 
-import { openEventModal, openProfileModal, openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
+import { openEventModal, openProfileModal, openRoleRequestModal, openErrorModal, openSuccessModal, openUpdateRoleModal } from "./modal.js";
 
 /* === VARIABLES === */
 let user_profile = null;
 let MY_EVENTS = [];
+let PROFILES = [];
 let PENDING_EVENTS = [];
 let OFFICIAL_REQUESTS = [];
 
@@ -23,7 +24,14 @@ const officialRequestModal = document.getElementById("official-request-modal");
 const permissionDetails = document.getElementById("detail-permission");
 const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
+
 const adminSection = document.getElementById("admin-section");
+const superAdminSection = document.getElementById("super-admin-section");
+const updateRoleSection = document.getElementById("update-role-section");
+const updateRoleForm = document.getElementById("update-role-form");
+const userSearchInput = document.getElementById("user-search");
+const userSearchSuggestions = document.getElementById("suggestions");
+
 const pendingEventsSection = document.getElementById("pending-events-section");
 const offReqSection = document.getElementById("official-req-section");
 const officialRequests = document.getElementById("official-requests");
@@ -93,6 +101,7 @@ async function showAccount(user, profile) {
     const details = document.getElementById("detail-section");
     const permissionOfficial = details.querySelector("#permission-official");
     const permissionAdmin = details.querySelector("#permission-admin");
+    const permissionSuperAdmin = details.querySelector("#permission-super-admin");
     const roleRequest = details.querySelector("#role-request");
 
     switch(user_profile.role) {
@@ -102,8 +111,10 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
             break;
         
         case 1: /* official */
@@ -111,20 +122,32 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
             break;
 
-        case 2: /* admin */
+        case 2,3: /* moderateur/admin */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.remove("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
             adminSection.classList.remove("hidden");
+            superAdminSection.classList.add("hidden");
 
             await getPendingEvents();
             await getOfficialRequests();
+
+            if (user_profile.role == 3)
+            {
+                permissionSuperAdmin.classList.remove("hidden");
+                superAdminSection.classList.remove("hidden");
+
+                await getProfiles();
+            }
             break;
         
         default:
@@ -132,8 +155,10 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
     }
 
     await getMyPublications();
@@ -224,6 +249,26 @@ function renderOfficialRequests(profile) {
         </div>
     `
     return html;
+}
+
+async function getProfiles() {
+    /* fetch data */
+    PROFILES = [];
+    updateRoleForm.classList.add("hidden");
+    const { data, error } = await window.supabaseClient
+        .from("profiles") /* fetch also old events from my creation */
+        .select("*");
+
+    if (error) {
+        console.error(error)
+        updateRoleForm.classList.remove("hidden");
+        updateRoleForm.innerText = "Erreur survenue durant le chargement des utilisateurs";
+        return;
+    }
+    if (!data || data.length === 0) {
+        return;
+    }
+    PROFILES = data;
 }
 
 async function getMyPublications() {
@@ -477,6 +522,7 @@ document.getElementById("account-form").addEventListener("submit", async (event)
         console.error("sign-out failed:", err);
     }
     user_profile = null;
+    PROFILES = [];
     MY_EVENTS = [];
     PENDING_EVENTS = [];
     OFFICIAL_REQUESTS = [];
@@ -509,6 +555,24 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* display admin requests list */
+updateRoleSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (updateRoleSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = updateRoleSection.getAttribute("aria-expanded") === "true";
+
+    updateRoleSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        updateRoleForm.classList.add("hidden");
+        updateRoleSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        updateRoleForm.classList.remove("hidden");
+        updateRoleSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+
 offReqSection.addEventListener("click", (event) => {
     event.preventDefault();
     if (offReqSection.getAttribute("disabled") === "true") return;
@@ -559,6 +623,50 @@ myEventsSection.addEventListener("click", (event) => {
         myEventsSection.querySelector(".chevron").innerText = "expand_less";
     }
 });
+
+userSearchInput.addEventListener("input", () => {
+    const value = userSearchInput.value.toLowerCase().trim();
+    userSearchSuggestions.innerHTML = "";
+
+    if (value.length < 2) {
+        userSearchInput.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    const matches = PROFILES.filter(p =>
+        p.email.toLowerCase().includes(value)
+    ).slice(0, 5); // limit results
+
+    if (matches.length === 0) {
+        userSearchInput.classList.remove("looking");
+        userSearchSuggestions.classList.add("hidden");
+        return;
+    }
+
+    for (const profile of matches) {
+        const span = document.createElement("span");
+        span.textContent = profile.email;
+        span.dataset.id = profile.id;
+
+        span.addEventListener("click", () => {
+            userSearchInput.value = profile.email;
+            userSearchSuggestions.classList.add("hidden");
+            onUserSelected(profile);
+        });
+
+        userSearchSuggestions.appendChild(span);
+    }
+
+    userSearchInput.classList.add("looking");
+    userSearchSuggestions.classList.remove("hidden");
+});
+
+function onUserSelected(profile) {
+    console.log("Selected user:", profile);
+    userSearchInput.classList.remove("looking");
+    userSearchSuggestions.classList.add("hidden");
+}
 
 /* === INITIAL LOAD === */
 initAccountPage().catch(console.error);

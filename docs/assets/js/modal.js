@@ -14,6 +14,9 @@ const profileModal = document.getElementById("profile-modal");
 const acceptProfileBtn = document.getElementById("modal-accept-profile-btn");
 const rejectProfileBtn = document.getElementById("modal-reject-profile-btn");
 
+const updateRoleModal = document.getElementById("update-role-modal");
+const updateRoleBtn = document.getElementById("modal-update-role-btn");
+
 const confirmModal = document.getElementById("confirm-modal");
 const confirmTitle = document.getElementById("confirm-title");
 const confirmCodeEl = document.getElementById("confirm-code");
@@ -51,48 +54,10 @@ export function openProfileModal(profile) {
     document.body.style.overflow = "hidden";
 }
 
-function renderEventModal(event) {
-    const eventData = renderEventData(event, true);
-
-    if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
-    {
-        eventModal.querySelector("#modal-actions").classList.remove("hidden");
-    }
-    else
-    {
-        eventModal.querySelector("#modal-actions").classList.add("hidden");
-    }
-
-    eventModalCard.classList.forEach(cls => {
-        if (cls.startsWith("cat-")) {
-            eventModalCard.classList.remove(cls);
-        }
-    });
-    eventModalCard.classList.add("cat-" + eventData.category);
-
-    eventModalContent.innerHTML = `
-        ${eventData.imageHtml}
-        <div id="modal-title" class="event-title">${event.title}</div>
-        ${eventData.categoryHtml}
-        <div class="event-meta place">
-            ${eventData.locationHtml}
-        </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
-        </div>
-        <div class="event-meta place">
-            ${renderMaterialIconText("sell", eventData.price)}
-        </div>
-        <div class="event-meta place">
-            ${eventData.parentalGuideHtml}
-        </div>
-        ${eventData.addressHtml}
-        ${eventData.eatHtml}
-        ${eventData.siteUrlHtml}
-        ${eventData.phoneHtml}
-        ${eventData.tagsHtml}
-        ${eventData.descriptionHtml}
-    `;
+export function openUpdateRoleModal() {
+    currentModal = updateRoleModal;
+    updateRoleModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
 }
 
 export function openEventModal(event, type, user_profile=null) {
@@ -114,7 +79,7 @@ export function openEventModal(event, type, user_profile=null) {
 
         default:  // classic event
             eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
-            if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role === 2)))
+            if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role >= 2)))
             {
                 eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
             }
