@@ -6,11 +6,20 @@ import supabase
 import random
 import json
 import keyring
+import certifi
+import httpx
+os.environ["SSL_CERT_FILE"] = certifi.where()
+
 
 SUPABASE_URL = "https://jpicbqssqixagnwejefu.supabase.co"
-SUPABASE_KEY = "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_"
+SUPABASE_ANON_KEY = "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_"
+SUPABASE_SERVICE_ROLE_KEY = keyring.get_password("rcsculture.supabase.servicerolekey", "rcsculture")
 SUPABASE_IMAGE_STORAGE = f"{SUPABASE_URL}/storage/v1/object/public/event-images/"
 EVENTS_FILE = os.path.expandvars("$PROJECT_ROOT_FOLDER\\test\\dummy-events.json")
+USERS_FILE = os.path.expandvars("$PROJECT_ROOT_FOLDER\\test\\dummy-users.json")
+USER_EMAIL_PREFIX = "testuser"
+USER_NAME_PREFIX = "Test User"
+USER_OFFICIAL_REQUEST_DETAIL = f"Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
 TEST_TAGS = [
     "rock",
     "festival",
@@ -22,6 +31,10 @@ TEST_TAGS = [
     "clown",
     "accoustique",
 ]
+
+OPTIONS=supabase.ClientOptions(httpx_client=httpx.Client(verify=False))
+
+
 
 class BytesDumpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -43,23 +56,37 @@ def write_event_file(events: list):
     with open(EVENTS_FILE, "wb") as _f:
         _f.write(data.encode('utf-8'))
 
+def write_user_file(users: list):
+    print("write users in file...")
+    data = json.dumps(users, indent=4, ensure_ascii=False, cls=BytesDumpEncoder)
+    with open(USERS_FILE, "wb") as _f:
+        _f.write(data.encode('utf-8'))
+
 
 def delete_events():
     print("delete all 'is_test' events...")
-    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
-    supabase_db.auth.sign_in_with_password(
-        {
-            "email": "olivier.gohier@protonmail.com",
-            "password": keyring.get_password("supabase.rcsculture", "olivier.gohier@protonmail.com"),
-        }
-    )
+    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, options=OPTIONS)
     supabase_db.table("events").delete().eq("is_test", True).execute()
+
+
+def delete_users():
+    print("delete all 'testusers' users...")
+    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, options=OPTIONS)
+    page = 1
+    per_page = 1000
+    while True:
+        resp = supabase_db.auth.admin.list_users(page=page, per_page=per_page)
+        if len(resp) == 0:
+            break
+        to_delete = [u for u in resp if (u.email or "").startswith("testuser")]
+        for u in to_delete:
+            supabase_db.auth.admin.delete_user(u.id)
+        page += 1
 
 
 def generate_events(n: int):
     today = date.today()
     events = []
-
     print("generate events...")
     for i in range(n):
         price = random.randrange(3)
@@ -104,7 +131,7 @@ def generate_events(n: int):
             "min_price": min_price,
             "max_price": max_price,
             "long_description": f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com",
-            "pending": False,
+            "pending": random.choice([True, False, False, False]),
             "phone": random.choice([None, "06.01.12.13.14"]),
             "site_url": random.choice([None, "https://rcsculture.github.io"]),
             "to_eat": random.choice([True, False]),
@@ -112,70 +139,91 @@ def generate_events(n: int):
             "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],
             "image_url": SUPABASE_IMAGE_STORAGE + image
         }
-
         events.append(event)
-
     return events
 
 
-def update_supabase(events: list):
-    print("update 'events' table...")
-    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
-    supabase_db.auth.sign_in_with_password(
-        {
-            "email": "olivier.gohier@protonmail.com",
-            "password": keyring.get_password("supabase.rcsculture", "olivier.gohier@protonmail.com"),
+def generate_users(n: int):
+    users = []
+    print("generate users...")
+    for i in range(n):
+        role = random.randrange(2)
+        if role == 0:
+            official_request = random.choice([True, False])
+            official_request_details = USER_OFFICIAL_REQUEST_DETAIL
+        else:
+            official_request = False
+            official_request_details = ""
+
+        user = {
+            "email": f"{USER_EMAIL_PREFIX}{i}@rcs.tst",
+            "name": f"{USER_NAME_PREFIX} {i}",
+            "pwd": f"{USER_EMAIL_PREFIX}{i}",
+            "role": role,
+            "official_request": official_request,
+            "official_request_details": official_request_details
         }
-    )
+        users.append(user)
+    return users
+
+
+def update_supabase_events(events: list):
+    print("update 'events' table...")
+    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, options=OPTIONS)
     for event in events:
         supabase_db.table("events").insert(event,).execute()
 
 
+def update_supabase_users(users: list):
+    print("update 'auth.users' table...")
+    supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, options=OPTIONS)
+    for user in users:
+        response = supabase_db.auth.admin.create_user(
+            {
+                "email": user["email"],
+                "password": user["pwd"],
+                "user_metadata": {"display_name": user["name"]},
+            }
+        )
+        supabase_db.table("profiles").update(
+            {
+                "role": user["role"],
+                "official_request": user["official_request"],
+                "official_request_details": user["official_request_details"]
+            }).eq("id", response.user.id).execute()
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("nb", type=int, help="number of test events to create (from today)")
+    parser.add_argument("-d", "--delete", action="store_true", help="delete only items and do not create (users or events)")
+    subparsers = parser.add_subparsers(title="sub-commands", help="sub-command help")
+    subparsers.required = True
+    subparsers.dest = 'subcommand'
+
+    event_parser = subparsers.add_parser("event", help="create test events")
+    event_parser.add_argument("nb", type=int, help="number of test events to create (from today)")
+
+    user_parser = subparsers.add_parser("user", help="create test users")
+    user_parser.add_argument("nb", type=int, help="number of test users to create")
+
     args = parser.parse_args()
-        
-    delete_events()
-    events = generate_events(args.nb)
-    write_event_file(events)
-    update_supabase(events)
+    
+    if args.subcommand == "event":
+        delete_events()
+        if not args.delete:
+            events = generate_events(args.nb)
+            write_event_file(events)
+            
+            update_supabase_events(events)
+
+    elif args.subcommand == "user":
+        delete_users()
+        if not args.delete:
+            users = generate_users(args.nb)
+            write_user_file(users)
+            update_supabase_users(users)
 
 
 if __name__ == "__main__":
     main()
-
-    # supabase_db: supabase.Client = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
-    # auth = supabase_db.auth.sign_in_with_password(
-    #     {
-    #         "email": "olivier.gohier@protonmail.com",
-    #         "password": keyring.get_password("supabase.rcsculture", "olivier.gohier@protonmail.com"),
-    #     }
-    # )
-    # response = (supabase_db.table("events")
-    #     .insert({
-    #         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
-    #         "title": "Test Event #1",
-    #         "is_test": True,
-    #         "category": 3,
-    #         "event_date": "2026-05-07",
-    #         "event_start_time": "22:19:00",
-    #         "location_name": "Test Place #1",
-    #         "location_address": "",
-    #         "is_free_price": 0,
-    #         "min_price": 0,
-    #         "max_price": 0,
-    #         "long_description": "This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nhttps://github.com/rcsculture/rcsculture.github.io",
-    #         "pending": False,
-    #         "phone": None,
-    #         "site_url": "https://github.com/rcsculture/rcsculture.github.io",
-    #         "to_eat": True,
-    #         "parental_guide": 0,
-    #         "tags": [
-    #             "enfant",
-    #             "is_test"
-    #         ],
-    #     },)
-    #     .execute()
-    # )
 

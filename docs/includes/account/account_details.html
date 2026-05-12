@@ -48,7 +48,7 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="update-role-form" class="update-role-form hidden">
+            <form id="update-role-form" class="update-role-form hidden">
                 <div class="autocomplete">
                     <input
                         type="text"
@@ -60,7 +60,38 @@
 
                     <div id="suggestions" class="suggestions hidden"></div>
                 </div>
-            </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Nom</span>
+                        <span id="profile-name" class="value detail-user">-</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Email</span>
+                        <span id="profile-email" class="value detail-user">-</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Role</span>
+                        <span id="profile-role" class="value detail-user">-</span>
+                    </div>
+                </div>
+                
+                <label class="pico">
+                    Nouveau role
+                    <select name="select" id="roles" required></select>
+                </label>
+
+                <div class="pico">
+                    <button type="submit" id="update-role-button" disabled>Changer</button>
+                </div>
+            
+            </form>
         </div>
     </article>
 
