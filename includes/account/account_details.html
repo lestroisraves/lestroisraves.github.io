@@ -39,6 +39,62 @@
         </form>
     </article>
 
+    <article id="super-admin-section" class="hidden">
+        <div class="account-tile">
+            <div id="update-role-section" class="account-section-title details" aria-expanded="false">
+                <div class="header-left">
+                    <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+                    <span class="account-name">Config. contributeur</span>
+                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <form id="update-role-form" class="update-role-form hidden">
+                <div class="autocomplete">
+                    <input
+                        type="text"
+                        id="user-search"
+                        class="user-search"
+                        placeholder="Rechercher un utilisateur par email…"
+                        autocomplete="off"
+                    />
+
+                    <div id="suggestions" class="suggestions hidden"></div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Nom</span>
+                        <span id="profile-name" class="value detail-user">-</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Email</span>
+                        <span id="profile-email" class="value detail-user">-</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Role</span>
+                        <span id="profile-role" class="value detail-user">-</span>
+                    </div>
+                </div>
+                
+                <label class="pico">
+                    Nouveau role
+                    <select name="select" id="roles" required></select>
+                </label>
+
+                <div class="pico">
+                    <button type="submit" id="update-role-button" disabled>Changer</button>
+                </div>
+            
+            </form>
+        </div>
+    </article>
+
     <article id="admin-section" class="hidden">
         <div class="account-tile">
             <div id="official-req-section" class="account-section-title details" aria-expanded="false">

@@ -366,7 +366,6 @@ document.addEventListener("click", (e) => {
     const event = EVENTS.find(e => e.id === id);
     if (!event) return;
 
-    // renderEventModal(event);
     openEventModal(event, "classic", user_profile);
 });
 

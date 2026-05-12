@@ -11,7 +11,8 @@ APP_CONFIG = {
     ROLES: {
         0: "Non-Officiel",
         1: "Officiel",
-        2: "Admin",
+        2: "Modérateur",
+        3: "Admin"
     },
     CATEGORIES: {
         0: {

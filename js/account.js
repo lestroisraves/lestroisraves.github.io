@@ -1,10 +1,12 @@
 console.log("executing:", document.currentScript?.src);
 
-import { openEventModal, openProfileModal, openRoleRequestModal, openErrorModal, openSuccessModal } from "./modal.js";
+import { openEventModal, openProfileModal, openRoleRequestModal, openErrorModal, openSuccessModal, openUpdateRoleModal } from "./modal.js";
 
 /* === VARIABLES === */
 let user_profile = null;
 let MY_EVENTS = [];
+let PROFILES = [];
+let selected_profile = null;
 let PENDING_EVENTS = [];
 let OFFICIAL_REQUESTS = [];
 
@@ -12,6 +14,7 @@ const rstPwdContainer = document.getElementById("rstpwd-container");
 const signInContainer = document.getElementById("signin-container");
 const signupContainer = document.getElementById("signup-container");
 const accountContainer = document.getElementById("account-container");
+
 const noticeTip = document.getElementById("notice-tip");
 const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
@@ -23,7 +26,16 @@ const officialRequestModal = document.getElementById("official-request-modal");
 const permissionDetails = document.getElementById("detail-permission");
 const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
+
 const adminSection = document.getElementById("admin-section");
+const superAdminSection = document.getElementById("super-admin-section");
+const updateRoleSection = document.getElementById("update-role-section");
+const updateRoleForm = document.getElementById("update-role-form");
+const roleList = document.getElementById("roles");
+const updateRoleBtn = document.getElementById("update-role-button");
+const userSearchInput = document.getElementById("user-search");
+const userSearchSuggestions = document.getElementById("suggestions");
+
 const pendingEventsSection = document.getElementById("pending-events-section");
 const offReqSection = document.getElementById("official-req-section");
 const officialRequests = document.getElementById("official-requests");
@@ -93,6 +105,7 @@ async function showAccount(user, profile) {
     const details = document.getElementById("detail-section");
     const permissionOfficial = details.querySelector("#permission-official");
     const permissionAdmin = details.querySelector("#permission-admin");
+    const permissionSuperAdmin = details.querySelector("#permission-super-admin");
     const roleRequest = details.querySelector("#role-request");
 
     switch(user_profile.role) {
@@ -102,8 +115,10 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
             break;
         
         case 1: /* official */
@@ -111,20 +126,40 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
             break;
 
-        case 2: /* admin */
+        case 2,3: /* moderateur/admin */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.classList.remove("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.add("hidden");
             adminSection.classList.remove("hidden");
+            superAdminSection.classList.add("hidden");
 
             await getPendingEvents();
             await getOfficialRequests();
+
+            if (user_profile.role == 3)
+            {
+                permissionSuperAdmin.classList.remove("hidden");
+                superAdminSection.classList.remove("hidden");
+
+                await getProfiles();
+
+                /* configure role select list */
+                Object.keys(APP_CONFIG.ROLES).forEach(key => {
+                    const opt = document.createElement("option");
+                    opt.innerText = APP_CONFIG.ROLES[key]
+                    roleList.appendChild(opt);
+                });
+                roleList.value = APP_CONFIG.ROLES[0];
+            }
             break;
         
         default:
@@ -132,8 +167,10 @@ async function showAccount(user, profile) {
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.classList.add("hidden");
+            permissionSuperAdmin.classList.add("hidden");
             roleRequest.classList.remove("hidden");
             adminSection.classList.add("hidden");
+            superAdminSection.classList.add("hidden");
     }
 
     await getMyPublications();
@@ -224,6 +261,27 @@ function renderOfficialRequests(profile) {
         </div>
     `
     return html;
+}
+
+async function getProfiles() {
+    /* fetch data */
+    PROFILES = [];
+    selected_profile = null;
+    updateRoleForm.classList.add("hidden");
+    const { data, error } = await window.supabaseClient
+        .from("profiles") /* fetch also old events from my creation */
+        .select("*");
+
+    if (error) {
+        console.error(error)
+        updateRoleForm.classList.remove("hidden");
+        updateRoleForm.innerText = "Erreur survenue durant le chargement des utilisateurs";
+        return;
+    }
+    if (!data || data.length === 0) {
+        return;
+    }
+    PROFILES = data;
 }
 
 async function getMyPublications() {
@@ -370,6 +428,12 @@ document.getElementById("show-signin").addEventListener("click", (event) => {
     showLogin();
 });
 
+document.getElementById("show-signin-from-rst").addEventListener("click", (event) => {
+    event.preventDefault();
+    document.getElementById("signin-form").reset();
+    showLogin();
+});
+
 document.getElementById("reset-password").addEventListener("click", (event) => {
     event.preventDefault();
     showResetPassword();
@@ -477,10 +541,13 @@ document.getElementById("account-form").addEventListener("submit", async (event)
         console.error("sign-out failed:", err);
     }
     user_profile = null;
+    selected_profile = null;
+    PROFILES = [];
     MY_EVENTS = [];
     PENDING_EVENTS = [];
     OFFICIAL_REQUESTS = [];
     document.getElementById("signin-form").reset();
+    showLogin();
 });
 
 /* open official request modal */
@@ -508,7 +575,128 @@ document.addEventListener("keydown", (e) => {
   handleAction(el);
 });
 
-/* display admin requests list */
+myEventsSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (myEventsSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = myEventsSection.getAttribute("aria-expanded") === "true";
+
+    myEventsSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        myEvents.classList.add("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_more";
+    } else {
+        myEvents.classList.remove("hidden");
+        myEventsSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+/* display super admin actions */
+updateRoleSection.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (updateRoleSection.getAttribute("disabled") === "true") return;
+
+    const isOpen = updateRoleSection.getAttribute("aria-expanded") === "true";
+
+    updateRoleSection.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        updateRoleForm.classList.add("hidden");
+        updateRoleSection.querySelector(".chevron").innerText = "expand_more";
+
+        /* reset form */
+        selected_profile = null;
+        userSearchInput.value = "";
+        updateRoleForm.querySelector("#profile-email").innerText = "-";
+        updateRoleForm.querySelector("#profile-name").innerText = "-";
+        updateRoleForm.querySelector("#profile-role").innerText = "-";
+        roleList.value = APP_CONFIG.ROLES[0];
+        updateRoleBtn.disabled = true; 
+    } else {
+        updateRoleForm.classList.remove("hidden");
+        updateRoleSection.querySelector(".chevron").innerText = "expand_less";
+    }
+});
+
+userSearchInput.addEventListener("input", () => {
+    const value = userSearchInput.value.toLowerCase().trim();
+    userSearchSuggestions.innerHTML = "";
+    selected_profile = null;
+
+    if (value.length < 2) {
+        userSearchInput.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    const matches = PROFILES.filter(p =>
+        p.email.toLowerCase().includes(value)
+    ).slice(0, 5); // limit results
+
+    if (matches.length === 0) {
+        userSearchInput.classList.remove("looking");
+        userSearchSuggestions.classList.add("hidden");
+        return;
+    }
+
+    for (const profile of matches) {
+        const span = document.createElement("span");
+        span.textContent = profile.email;
+        span.dataset.id = profile.id;
+
+        span.addEventListener("click", () => {
+            selected_profile = profile;
+
+            userSearchInput.classList.remove("looking");
+            userSearchSuggestions.classList.add("hidden");
+
+            userSearchInput.value = "";
+            updateRoleForm.querySelector("#profile-email").innerText = profile.email;
+            updateRoleForm.querySelector("#profile-name").innerText = profile.name;
+            updateRoleForm.querySelector("#profile-role").innerText = APP_CONFIG.ROLES[profile.role];
+            roleList.value = APP_CONFIG.ROLES[profile.role];
+            updateRoleBtn.disabled = false;
+        });
+
+        userSearchSuggestions.appendChild(span);
+    }
+
+    userSearchInput.classList.add("looking");
+    userSearchSuggestions.classList.remove("hidden");
+});
+
+updateRoleForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    const new_role = getRoleId(roleList.value);
+
+    if (!selected_profile || (new_role == selected_profile.role)) {
+        return;
+    }
+
+    console.log("updating profile role:", selected_profile.id, new_role);
+    const { error } = await window.supabaseClient
+        .from("profiles")
+        .update({
+            role: new_role
+        })
+        .eq("id", selected_profile.id);
+
+    if (error) {
+        openErrorModal("Un problème est survenu");
+        return;
+    }
+
+    openSuccessModal("Profile mis à jour ! La page va se rafraichir automatiquement.");
+
+    setTimeout(function () {
+        window.location.reload();
+    }, 3000);
+});
+
+/* display admin request lists */
 offReqSection.addEventListener("click", (event) => {
     event.preventDefault();
     if (offReqSection.getAttribute("disabled") === "true") return;
@@ -543,22 +731,6 @@ pendingEventsSection.addEventListener("click", (event) => {
     }
 });
 
-myEventsSection.addEventListener("click", (event) => {
-    event.preventDefault();
-    if (myEventsSection.getAttribute("disabled") === "true") return;
-
-    const isOpen = myEventsSection.getAttribute("aria-expanded") === "true";
-
-    myEventsSection.setAttribute("aria-expanded", String(!isOpen));
-
-    if (isOpen) {
-        myEvents.classList.add("hidden");
-        myEventsSection.querySelector(".chevron").innerText = "expand_more";
-    } else {
-        myEvents.classList.remove("hidden");
-        myEventsSection.querySelector(".chevron").innerText = "expand_less";
-    }
-});
 
 /* === INITIAL LOAD === */
 initAccountPage().catch(console.error);

@@ -30,8 +30,20 @@ function getCategoryId(label) {
     return id;
 }
 
+function getRoleId(label) {
+    var id = 0;
+    Object.keys(APP_CONFIG.ROLES).forEach(key => {
+        if (label == APP_CONFIG.ROLES[key])
+        {
+            id = key;
+            return;
+        }
+    });
+    return id;
+}
+
 function getPgId(label) {
-    var id = 4;
+    var id = 0;
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         if (label == APP_CONFIG.PARENTAL_GUIDE[key])
         {
@@ -178,6 +190,12 @@ function renderAccountPermissionDetails() {
             <div class="permission granted">
                 <span id="icon" class="material-symbols-outlined">check</span>
                 Modération: supprimer n'importe quel évènement
+            </div>
+        </div>
+        <div id="permission-super-admin" class="detail-section-list hidden">
+            <div class="permission granted">
+                <span id="icon" class="material-symbols-outlined">check</span>
+                <span >Admin: Changer le role d'un contributeur</span>
             </div>
         </div>
     `
