@@ -1,7 +1,7 @@
 console.log("executing:", "events.js");
 
-import { openEventModal } from "./modal.js";
-import { tagInput, userTags, clearTags } from "./tags.js";
+import { openEventModal } from "../global/modal.js";
+import { tagInput, userTags, clearTags } from "../global/tags.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -14,6 +14,7 @@ const filterNoticeError = document.getElementById("filter-error");
 const filterNoticeErrorText = filterNoticeError.querySelector("#text");
 const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
+const filterForm = document.getElementById("filter-form");
 const filterCatChoices = filterPanel.querySelector("#filter-category");
 const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
 
@@ -21,7 +22,7 @@ let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
 
-/* === FUNCTIONS === */
+/* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
     const groups = {
         today: [],
@@ -135,7 +136,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile cat-${eventData.category}" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile cat-${eventData.category}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -229,90 +230,34 @@ async function loadEvents() {
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(addDays(nextSunday, 1)), grouped.future);
 }
 
-/* === LISTENERS === */
+/* === EXPORTED FUNCTIONS === */
+export function openEvent(eventId) {
+    const event = EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    openEventModal(event, "classic", user_profile);
+}
 
-/* FILTERS */
-filterToggle.addEventListener("click", (event) => {
-    event.preventDefault();
-    const isOpen = filterToggle.getAttribute("aria-expanded") === "true";
-
-    filterToggle.setAttribute("aria-expanded", String(!isOpen));
-
-    if (isOpen) {
-        filterPanel.setAttribute("hidden", "");
-    } else {
-        filterPanel.removeAttribute("hidden");
-    }
-});
-
-document.getElementById("reset-filters").addEventListener("click", (event) => {
-    event.preventDefault();
-    const form = event.target;
-
-    hideErrorMessages();
-    
-
-    /* remove all filters */
+export function resetFilter() {
     filters = APP_CONFIG.DEFAULT_FILTER;
     clearTags();
-    document.getElementById("filter-form").reset();
-
-    /* hide panel abd load events */
-    filterToggle.setAttribute("aria-expanded", "false");
-    filterPanel.setAttribute("hidden", "");
+    filterForm.reset();
+    filterToggle.click();
     loadEvents();
-});
+}
 
-document.addEventListener("click", (e) => {
-    const tab = e.target.closest(".events-tabs .tab");
-    if (!tab) return;
-
-    const wasActive = tab.classList.contains("active");
-
-    // reset everything
-    document.querySelectorAll(".events-tabs .tab")
-        .forEach(t => t.classList.remove("active"));
-
-    if (wasActive) {
-        // No tab active → show ALL sections
-        document.querySelectorAll(".section-tab.empty")
-        .forEach(section => section.classList.add("hidden"));
-        document.querySelectorAll(".section-tab.no-empty")
-        .forEach(section => section.classList.remove("hidden"));
-        return;
-    }
-
-    // Activate clicked tab
-    tab.classList.add("active");
- 
-    // Show only its section
-    document.querySelectorAll(".section-tab")
-        .forEach(section => section.classList.add("hidden"));
-
-    const target = tab.dataset.target;
-
-    document
-        .getElementById(`event-${target}`)
-        ?.classList.remove("hidden");
-
-});
-
-document.getElementById("filter-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const form = event.target;
-
+export function applyFilter() {
     hideErrorMessages();
 
     const selectedCategories = Array.from(
-        form.querySelectorAll('input[name="categories"]:checked')
+        filterForm.querySelectorAll('input[name="categories"]:checked')
     ).map(cb => getCategoryId(cb.value));
 
     const selectedPg = Array.from(
-        form.querySelectorAll('input[name="pg"]:checked')
+        filterForm.querySelectorAll('input[name="pg"]:checked')
     ).map(cb => getPgId(cb.value));
 
-    const from = form.from.value;
-    const to = form.to.value;
+    const from = filterForm.from.value;
+    const to = filterForm.to.value;
 
     // checks tags
     userTags.forEach(tag => {
@@ -348,26 +293,42 @@ document.getElementById("filter-form").addEventListener("submit", (event) => {
         from: from || null,
         to: to || null
     };
-
-    console.log("filter:", filters);
     
     /* hide panel abd load events */
-    filterToggle.setAttribute("aria-expanded", "false");
-    filterPanel.setAttribute("hidden", "");
+    filterToggle.click();
     loadEvents();
-});
+}
 
-/* open event modal */
-document.addEventListener("click", (e) => {
-    const tile = e.target.closest(".event-tile");
-    if (!tile) return;
+export function selectTab(tab) {
+    const wasActive = tab.classList.contains("active");
 
-    const id = tile.dataset.eventId;
-    const event = EVENTS.find(e => e.id === id);
-    if (!event) return;
+    // reset everything
+    document.querySelectorAll(".events-tabs .tab")
+        .forEach(t => t.classList.remove("active"));
 
-    openEventModal(event, "classic", user_profile);
-});
+    if (wasActive) {
+        // No tab active → show ALL sections
+        document.querySelectorAll(".section-tab.empty")
+        .forEach(section => section.classList.add("hidden"));
+        document.querySelectorAll(".section-tab.no-empty")
+        .forEach(section => section.classList.remove("hidden"));
+        return;
+    }
+
+    // Activate clicked tab
+    tab.classList.add("active");
+ 
+    // Show only its section
+    document.querySelectorAll(".section-tab")
+        .forEach(section => section.classList.add("hidden"));
+
+    const target = tab.dataset.target;
+
+    document
+        .getElementById(`event-${target}`)
+        ?.classList.remove("hidden");
+}
+
 
 /* === MAIN === */
 hideErrorMessages();

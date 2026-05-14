@@ -1,6 +1,6 @@
-<div id="official-request-modal" class="modal-overlay hidden">
+<div id="official-request-modal" class="modal-overlay hidden" data-action="close-modal">
     <div class="modal-card" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         
@@ -17,6 +17,7 @@
                     placeholder="Description de votre demande (minimum 100 charactères)"
                     minlength="100"
                     row="8"
+                    data-input-type="request-details"
                 ></textarea>
                 <div class="char-counter">
                     <span id="request-char-count">0</span>/100
@@ -26,7 +27,7 @@
         </div>
         
         <div id="modal-actions" class="modal-actions">
-            <button id="modal-official-request-btn" class="modal-btn info" disabled>
+            <button id="modal-official-request-btn" class="modal-btn info" disabled data-allow-action data-action="send-official-request">
                 Envoyer
                 <span class="material-symbols-outlined" aria-hidden="true">send</span>
             </button>

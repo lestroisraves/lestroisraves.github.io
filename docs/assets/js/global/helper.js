@@ -280,3 +280,32 @@ function renderEventData(event, details = false) {
     return eventData;
 }
 
+function handleAccordion(accordion, accordionId) {
+    if (accordion.getAttribute("disabled") === "true") return;
+    const isOpen = accordion.getAttribute("aria-expanded") === "true";
+    const hiddenSection = document.getElementById(accordionId);
+    const searchInput = hiddenSection.querySelector(".data-search");
+
+    accordion.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        hiddenSection.classList.add("hidden");
+        accordion.querySelector(".chevron").innerText = "expand_more";
+        if (searchInput) searchInput.value = "";
+
+        /* specific action */
+        if (accordionId == "update-role-form") {
+            selected_profile = null;
+            hiddenSection.querySelector("#profile-email").innerText = "-";
+            hiddenSection.querySelector("#profile-name").innerText = "-";
+            hiddenSection.querySelector("#profile-role").innerText = "-";
+            hiddenSection.querySelector("#roles").value = APP_CONFIG.ROLES[0];
+            hiddenSection.querySelector("#update-role-button").disabled = true; 
+        }
+    } else {
+        /* open this one */
+        hiddenSection.classList.remove("hidden");
+        accordion.querySelector(".chevron").innerText = "expand_less";
+    }
+}
+

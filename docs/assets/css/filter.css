@@ -47,6 +47,10 @@
     background: #fff;
 }
 
+.accordion-panel.hidden {
+    display: none;
+}
+
 /* Form layout helpers */
 .date-range {
     display: flex;
