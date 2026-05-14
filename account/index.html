@@ -382,9 +382,9 @@
 
   <h1>Mon compte</h1>
 
-<div id="official-request-modal" class="modal-overlay hidden">
+<div id="official-request-modal" class="modal-overlay hidden" data-action="close-modal">
     <div class="modal-card" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -401,6 +401,7 @@
                     placeholder="Description de votre demande (minimum 100 charactères)"
                     minlength="100"
                     row="8"
+                    data-input-type="request-details"
                 ></textarea>
                 <div class="char-counter">
                     <span id="request-char-count">0</span>/100
@@ -410,63 +411,63 @@
         </div>
 
         <div id="modal-actions" class="modal-actions">
-            <button id="modal-official-request-btn" class="modal-btn info" disabled>
+            <button id="modal-official-request-btn" class="modal-btn info" disabled data-allow-action data-action="send-official-request">
                 Envoyer
                 <span class="material-symbols-outlined" aria-hidden="true">send</span>
             </button>
         </div>
     </div>
 </div>
-<div id="profile-modal" class="modal-overlay hidden">
-    <div class="modal-card" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="profile-modal" class="modal-overlay hidden" data-action="close-modal">
+    <div class="modal-card" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
         <div id="profile-modal-content" class="modal-content"></div>
 
         <div id="modal-actions-profile" class="modal-actions">
-            <button id="modal-accept-profile-btn" class="modal-btn info">
+            <button id="modal-accept-profile-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="profile">
                 Accepter
                 <span class="material-symbols-outlined" aria-hidden="true">check</span>
             </button>
-            <button id="modal-reject-profile-btn" class="modal-btn delete">
+            <button id="modal-reject-profile-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="profile">
                 Rejeter
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
     </div>
 </div>
-<div id="event-modal" class="modal-overlay hidden">
-    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="event-modal" class="modal-overlay hidden" data-action="close-modal">
+    <div id="event-card" class="modal-card event" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
         <div id="event-modal-content" class="modal-content"></div>
 
         <div id="modal-actions-myevents" class="modal-actions event hidden">
-            <button id="modal-delete-event-btn" class="modal-btn delete">
+            <button id="modal-delete-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="delete", data-type="event">
                 Supprimer cet évènement
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
 
         <div id="modal-actions-pendingevents" class="modal-actions event hidden">
-            <button id="modal-accept-event-btn" class="modal-btn info">
+            <button id="modal-accept-event-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="event">
                 Accepter
                 <span class="material-symbols-outlined" aria-hidden="true">check</span>
             </button>
-            <button id="modal-reject-event-btn" class="modal-btn delete">
+            <button id="modal-reject-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="event">
                 Rejeter
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
     </div>
 </div>
-<div id="confirm-modal" class="modal-overlay delete hidden">
-    <div class="modal-card modal-small" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="confirm-modal" class="modal-overlay delete hidden" data-action="close-modal">
+    <div class="modal-card modal-small" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -480,19 +481,20 @@
                 inputmode="numeric"
                 maxlength="4"
                 autocomplete="off"
+                data-input-type="confirm-code"
             >
         </div>
 
         <div class="modal-actions">
-            <button id="confirm-btn" class="modal-btn delete" disabled>
+            <button id="confirm-btn" class="modal-btn delete" disabled data-allow-action data-action="confirm">
                 <span id="confirm-btn-icon" class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
     </div>
 </div>
-<div id="success-modal" class="modal-overlay success hidden">
+<div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
     <div class="modal-card success" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         <div id="modal-content" class="modal-content">
@@ -502,9 +504,9 @@
     </div>
 </div>
 
-<div id="error-modal" class="modal-overlay error hidden">
+<div id="error-modal" class="modal-overlay error hidden" data-action="close-modal">
     <div class="modal-card error" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -541,13 +543,13 @@
             </label>
 
             <div>
-                <button type="submit" id="button">Reinitialiser le mot de passe</button>
+                <button type="submit" id="button" data-action="send-reset-password-request">Reinitialiser le mot de passe</button>
             </div>
         </form>
 
         <p>
             La mémoire vous est revenue ?
-            <a href="#" id="show-signin-from-rst">Se connecter</a>
+            <a href="#" id="show-signin-from-rst" data-action="show-signin">Se connecter</a>
         </p>
     </article>
 </div>
@@ -575,17 +577,17 @@
             </label>
 
             <div>
-                <button type="submit" id="button">Se connecter</button>
+                <button type="submit" id="button" data-action="login">Se connecter</button>
             </div>
         </form>
 
         <p>
             Pas de compte ?
-            <a href="#" id="show-signup">Créer un compte</a>
+            <a href="#" id="show-signup" data-action="show-signup">Créer un compte</a>
         </p>
         <p>
             Mot de passe oublié ?
-            <a href="#" id="reset-password">Réinitialiser</a>
+            <a href="#" id="reset-password" data-action="show-reset-password">Réinitialiser</a>
         </p>
     </article>
 </div>
@@ -624,13 +626,13 @@
             </label>
 
             <div>
-                <button type="submit" id="button">Créer un compte</button>
+                <button type="submit" id="button" data-action="signup">Créer un compte</button>
             </div>
         </form>
 
         <p>
             Déjà un compte ?
-            <a href="#" id="show-signin">Se connecter</a>
+            <a href="#" id="show-signin" data-action="show-signin">Se connecter</a>
         </p>
     </article>
 </div>
@@ -663,38 +665,39 @@
                     <div id="role-request" class="role-request hidden">
                         <p class="role-request-text">
                             Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
-                            <a href="#" id="official-role-request">Demandez à être contributeur officiel</a>
+                            <a href="#" id="official-role-request" data-action="open-request-modal">Demandez à être contributeur officiel</a>
                         </p>
                     </div>
                 </div>
             </div>
 
             <div>
-                <button type="submit">Se déconnecter</button>
+                <button type="submit" data-action="logout">Se déconnecter</button>
             </div>
         </form>
     </article>
 
     <article id="super-admin-section" class="hidden">
         <div class="account-tile">
-            <div id="update-role-section" class="account-section-title details" aria-expanded="false">
+            <div id="update-role-section" class="account-section-title details" data-action="accordion" data-accordion-id="update-role-form" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
                     <span class="account-name">Config. contributeur</span>
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <form id="update-role-form" class="update-role-form hidden">
+            <form id="update-role-form" class="accordion-container hidden">
                 <div class="autocomplete">
                     <input
                         type="text"
                         id="user-search"
-                        class="user-search"
+                        class="data-search"
                         placeholder="Rechercher un utilisateur par email…"
                         autocomplete="off"
+                        data-input-type="data-search"
                     />
 
-                    <div id="suggestions" class="suggestions hidden"></div>
+                    <div class="suggestions hidden"></div>
                 </div>
 
                 <div class="detail-section">
@@ -724,7 +727,7 @@
                 </label>
 
                 <div class="pico">
-                    <button type="submit" id="update-role-button" disabled>Changer</button>
+                    <button type="submit" id="update-role-button" data-action="update-profile-role">Changer</button>
                 </div>
 
             </form>
@@ -733,7 +736,7 @@
 
     <article id="admin-section" class="hidden">
         <div class="account-tile">
-            <div id="official-req-section" class="account-section-title details" aria-expanded="false">
+            <div id="official-req-section" class="account-section-title details" data-action="accordion" data-accordion-id="official-requests" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">send</span>
                     <span class="account-name">Req. contrib. officiel</span>
@@ -743,11 +746,25 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="official-requests" class="request-list hidden"></div>
+            <div id="official-requests" class="accordion-container hidden">
+                <div class="autocomplete">
+                    <input
+                        type="text"
+                        id="user-search"
+                        class="data-search"
+                        placeholder="Rechercher un utilisateur par email…"
+                        autocomplete="off"
+                        data-input-type="data-search"
+                    />
+
+                    <div class="suggestions hidden"></div>
+                </div>
+                <div id="official-requests-list"></div>
+            </div>
         </div>
 
         <div class="account-tile">
-            <div id="pending-events-section" class="account-section-title details" aria-expanded="false">
+            <div id="pending-events-section" class="account-section-title details" data-action="accordion" data-accordion-id="pending-events" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
                     <span class="account-name">Publications en attente</span>
@@ -757,12 +774,26 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="pending-events" class="request-list hidden"></div>
+            <div id="pending-events" class="accordion-container hidden">
+                <div class="autocomplete">
+                    <input
+                        type="text"
+                        id="event-search"
+                        class="data-search"
+                        placeholder="Rechercher un évènement par titre..."
+                        autocomplete="off"
+                        data-input-type="data-search"
+                    />
+
+                    <div class="suggestions hidden"></div>
+                </div>
+                <div id="pending-events-list"></div>
+            </div>
         </div>
     </article>
 
     <div class="account-tile">
-        <div id="my-events-section" class="account-section-title details" aria-expanded="false">
+        <div id="my-events-section" class="account-section-title details" data-action="accordion" data-accordion-id="my-events" aria-expanded="false">
             <div class="header-left">
                 <span class="material-symbols-outlined" aria-hidden="true">event</span>
                 <span class="account-name">Mes publications</span>
@@ -776,12 +807,27 @@
             </div>
             <span class="material-symbols-outlined chevron">expand_more</span>
         </div>
-        <div id="my-events" class="request-list hidden"></div>
+        <div id="my-events" class="accordion-container hidden">
+            <div class="autocomplete">
+                <input
+                    type="text"
+                    id="event-search"
+                    class="data-search"
+                    placeholder="Rechercher un évènement par titre..."
+                    autocomplete="off"
+                    data-input-type="data-search"
+                />
+
+                <div class="suggestions hidden"></div>
+            </div>
+            <div id="my-events-list"></div>
+        </div>
     </div>
 
 </div>
 
-<script type="module" defer src="../assets/js/account.js"></script>
+<script type="module" defer src="../assets/js/account/account.js"></script>
+<script type="module" defer src="../assets/js/account/router.js"></script>
 <html data-theme="light">
 
 
@@ -857,13 +903,13 @@
       
         <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
       
-        <script src="../assets/js/config.js"></script>
+        <script src="../assets/js/global/config.js"></script>
       
-        <script src="../assets/js/helper.js"></script>
+        <script src="../assets/js/global/helper.js"></script>
       
-        <script src="../assets/js/user_profile.js"></script>
+        <script src="../assets/js/global/user_profile.js"></script>
       
-        <script src="../assets/js/supabase.js"></script>
+        <script src="../assets/js/global/supabase.js"></script>
       
     
   </body>

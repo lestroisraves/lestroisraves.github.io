@@ -1,7 +1,7 @@
 console.log("executing:", document.currentScript?.src);
 
-import { openErrorModal, openSuccessModal } from "./modal.js";
-import { tagInput, userTags, clearTags } from "./tags.js";
+import { openErrorModal, openSuccessModal } from "../global/modal.js";
+import { tagInput, userTags, clearTags } from "../global/tags.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -64,7 +64,8 @@ function showSubmit(user, profile) {
             permissionAdmin.classList.add("hidden");
             break;
 
-        case 2,3: /* moderateur/admin */
+        case 2:
+        case 3: /* moderateur/admin */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"

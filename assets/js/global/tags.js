@@ -3,22 +3,7 @@ const tagContainer = document.getElementById("tag-container");
 export const tagInput = document.getElementById("tag-input");
 export let userTags = [];
 
-export function clearTags() {
-    userTags = [];
-    renderTags();
-}
-
-function addTag(value) {
-    const tag = value.trim().toLowerCase();
-
-    if (!tag || userTags.includes(tag)) {
-        return;
-    }
-
-    userTags.push(tag);
-    renderTags();
-}
-
+/* === LOCAL FUNCTIONS === */
 function removeTag(tagToRemove) {
     userTags = userTags.filter(tag => tag !== tagToRemove);
     renderTags();
@@ -50,24 +35,32 @@ function renderTags() {
     tagInput.value = "";
 }
 
-/* Handle typing */
-tagInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault();
-        addTag(tagInput.value);
+
+/* === EXPORTED FUNCTIONS === */
+export function clearTags() {
+    userTags = [];
+    renderTags();
+}
+
+export function addTag() {
+    const tag = tagInput.value.trim().toLowerCase();
+
+    if (!tag || userTags.includes(tag)) {
+        return;
     }
 
-    if (e.key === "Backspace" && tagInput.value === "" && userTags.length) {
-        removeTag(userTags[userTags.length - 1]);
-    }
-});
+    userTags.push(tag);
+    renderTags();
+}
 
+export function removeLastTag() {
+    if (tagInput.value != "" || userTags.length > 0) return;
+    removeTag(userTags[userTags.length - 1]);
+}
+
+/* === LISTENER === */
 /* Handle blur (optional) */
 tagInput.addEventListener("blur", () => {
-    addTag(tagInput.value);
+    addTag();
 });
 
-/* Focus input when clicking container */
-tagContainer.addEventListener("click", () => {
-    tagInput.focus();
-});

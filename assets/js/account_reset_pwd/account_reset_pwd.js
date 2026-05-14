@@ -5,8 +5,9 @@ const noticeSuccess = document.getElementById("notice-success");
 const noticeSuccessText = noticeSuccess.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
+const resetPwdForm = document.getElementById("reset-pwd-form");
 
-/* === FUNCTIONS === */
+/* === LOCAL FUNCTIONS === */
 function showError(message) {
     noticeError.classList.remove("hidden");
     noticeErrorText.innerText = message;
@@ -24,16 +25,11 @@ function hideNoticeMessages() {
     noticeError.classList.add("hidden");
 }
 
-/* === LISTENERS === */
-
-/* RESET PASSWORD  */
-document.getElementById("reset-pwd-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const passwordValue = form.querySelector("#password").value;
-    const passwordConfirm = form.querySelector("#passwordConfirm");
+async function resetPassword() {
+    const passwordValue = resetPwdForm.querySelector("#password").value;
+    const passwordConfirm = resetPwdForm.querySelector("#passwordConfirm");
     const passwordConfirmValue = passwordConfirm.value;
-    const button = form.querySelector("#button");
+    const button = resetPwdForm.querySelector("#button");
 
     /* init UI */
     hideNoticeMessages();
@@ -62,11 +58,12 @@ document.getElementById("reset-pwd-form").addEventListener("submit", async (even
 
     showSuccess("Mot de passe réinitialisé ! Vous allez être redirigé automatiquement.");
 
-    form.reset();
+    resetPwdForm.reset();
 
     setTimeout(() => {
         window.location.href = "../account";
     }, 2000);
-});
+
+}
 
 

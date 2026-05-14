@@ -384,9 +384,9 @@
 
   <h1>Publier un évènement</h1>
 
-<div id="success-modal" class="modal-overlay success hidden">
+<div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
     <div class="modal-card success" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         <div id="modal-content" class="modal-content">
@@ -396,9 +396,9 @@
     </div>
 </div>
 
-<div id="error-modal" class="modal-overlay error hidden">
+<div id="error-modal" class="modal-overlay error hidden" data-action="close-modal">
     <div class="modal-card error" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -534,7 +534,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/submit.js"></script>
+<script type="module" defer src="../assets/js/submit/submit.js"></script>
 <html data-theme="light">
 
 
@@ -610,13 +610,13 @@
       
         <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
       
-        <script src="../assets/js/config.js"></script>
+        <script src="../assets/js/global/config.js"></script>
       
-        <script src="../assets/js/helper.js"></script>
+        <script src="../assets/js/global/helper.js"></script>
       
-        <script src="../assets/js/user_profile.js"></script>
+        <script src="../assets/js/global/user_profile.js"></script>
       
-        <script src="../assets/js/supabase.js"></script>
+        <script src="../assets/js/global/supabase.js"></script>
       
     
   </body>

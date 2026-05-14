@@ -1,17 +1,17 @@
-<div id="profile-modal" class="modal-overlay hidden">
-    <div class="modal-card" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="profile-modal" class="modal-overlay hidden" data-action="close-modal">
+    <div class="modal-card" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
         <div id="profile-modal-content" class="modal-content"></div>
         
         <div id="modal-actions-profile" class="modal-actions">
-            <button id="modal-accept-profile-btn" class="modal-btn info">
+            <button id="modal-accept-profile-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="profile">
                 Accepter
                 <span class="material-symbols-outlined" aria-hidden="true">check</span>
             </button>
-            <button id="modal-reject-profile-btn" class="modal-btn delete">
+            <button id="modal-reject-profile-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="profile">
                 Rejeter
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>

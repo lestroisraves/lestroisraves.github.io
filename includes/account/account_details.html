@@ -27,38 +27,39 @@
                     <div id="role-request" class="role-request hidden">
                         <p class="role-request-text">
                             Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
-                            <a href="#" id="official-role-request">Demandez à être contributeur officiel</a>
+                            <a href="#" id="official-role-request" data-action="open-request-modal">Demandez à être contributeur officiel</a>
                         </p>
                     </div>
                 </div>
             </div>
 
             <div>
-                <button type="submit">Se déconnecter</button>
+                <button type="submit" data-action="logout">Se déconnecter</button>
             </div>
         </form>
     </article>
 
     <article id="super-admin-section" class="hidden">
         <div class="account-tile">
-            <div id="update-role-section" class="account-section-title details" aria-expanded="false">
+            <div id="update-role-section" class="account-section-title details" data-action="accordion" data-accordion-id="update-role-form" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
                     <span class="account-name">Config. contributeur</span>
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <form id="update-role-form" class="update-role-form hidden">
+            <form id="update-role-form" class="accordion-container hidden">
                 <div class="autocomplete">
                     <input
                         type="text"
                         id="user-search"
-                        class="user-search"
+                        class="data-search"
                         placeholder="Rechercher un utilisateur par email…"
                         autocomplete="off"
+                        data-input-type="data-search"
                     />
 
-                    <div id="suggestions" class="suggestions hidden"></div>
+                    <div class="suggestions hidden"></div>
                 </div>
 
                 <div class="detail-section">
@@ -88,7 +89,7 @@
                 </label>
 
                 <div class="pico">
-                    <button type="submit" id="update-role-button" disabled>Changer</button>
+                    <button type="submit" id="update-role-button" data-action="update-profile-role">Changer</button>
                 </div>
             
             </form>
@@ -97,7 +98,7 @@
 
     <article id="admin-section" class="hidden">
         <div class="account-tile">
-            <div id="official-req-section" class="account-section-title details" aria-expanded="false">
+            <div id="official-req-section" class="account-section-title details" data-action="accordion" data-accordion-id="official-requests" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">send</span>
                     <span class="account-name">Req. contrib. officiel</span>
@@ -107,11 +108,25 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="official-requests" class="request-list hidden"></div>
+            <div id="official-requests" class="accordion-container hidden">
+                <div class="autocomplete">
+                    <input
+                        type="text"
+                        id="user-search"
+                        class="data-search"
+                        placeholder="Rechercher un utilisateur par email…"
+                        autocomplete="off"
+                        data-input-type="data-search"
+                    />
+
+                    <div class="suggestions hidden"></div>
+                </div>
+                <div id="official-requests-list"></div>
+            </div>
         </div>
 
         <div class="account-tile">
-            <div id="pending-events-section" class="account-section-title details" aria-expanded="false">
+            <div id="pending-events-section" class="account-section-title details" data-action="accordion" data-accordion-id="pending-events" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
                     <span class="account-name">Publications en attente</span>
@@ -121,12 +136,26 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="pending-events" class="request-list hidden"></div>
+            <div id="pending-events" class="accordion-container hidden">
+                <div class="autocomplete">
+                    <input
+                        type="text"
+                        id="event-search"
+                        class="data-search"
+                        placeholder="Rechercher un évènement par titre..."
+                        autocomplete="off"
+                        data-input-type="data-search"
+                    />
+
+                    <div class="suggestions hidden"></div>
+                </div>
+                <div id="pending-events-list"></div>
+            </div>
         </div>
     </article>
 
     <div class="account-tile">
-        <div id="my-events-section" class="account-section-title details" aria-expanded="false">
+        <div id="my-events-section" class="account-section-title details" data-action="accordion" data-accordion-id="my-events" aria-expanded="false">
             <div class="header-left">
                 <span class="material-symbols-outlined" aria-hidden="true">event</span>
                 <span class="account-name">Mes publications</span>
@@ -140,7 +169,21 @@
             </div>
             <span class="material-symbols-outlined chevron">expand_more</span>
         </div>
-        <div id="my-events" class="request-list hidden"></div>
+        <div id="my-events" class="accordion-container hidden">
+            <div class="autocomplete">
+                <input
+                    type="text"
+                    id="event-search"
+                    class="data-search"
+                    placeholder="Rechercher un évènement par titre..."
+                    autocomplete="off"
+                    data-input-type="data-search"
+                />
+
+                <div class="suggestions hidden"></div>
+            </div>
+            <div id="my-events-list"></div>
+        </div>
     </div>
 
 </div>

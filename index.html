@@ -382,36 +382,36 @@
 
   <h1>Évènements</h1>
 
-<div id="event-modal" class="modal-overlay hidden">
-    <div id="event-card" class="modal-card event" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="event-modal" class="modal-overlay hidden" data-action="close-modal">
+    <div id="event-card" class="modal-card event" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
         <div id="event-modal-content" class="modal-content"></div>
 
         <div id="modal-actions-myevents" class="modal-actions event hidden">
-            <button id="modal-delete-event-btn" class="modal-btn delete">
+            <button id="modal-delete-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="delete", data-type="event">
                 Supprimer cet évènement
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
 
         <div id="modal-actions-pendingevents" class="modal-actions event hidden">
-            <button id="modal-accept-event-btn" class="modal-btn info">
+            <button id="modal-accept-event-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="event">
                 Accepter
                 <span class="material-symbols-outlined" aria-hidden="true">check</span>
             </button>
-            <button id="modal-reject-event-btn" class="modal-btn delete">
+            <button id="modal-reject-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="event">
                 Rejeter
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
     </div>
 </div>
-<div id="confirm-modal" class="modal-overlay delete hidden">
-    <div class="modal-card modal-small" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+<div id="confirm-modal" class="modal-overlay delete hidden" data-action="close-modal">
+    <div class="modal-card modal-small" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -425,19 +425,20 @@
                 inputmode="numeric"
                 maxlength="4"
                 autocomplete="off"
+                data-input-type="confirm-code"
             >
         </div>
 
         <div class="modal-actions">
-            <button id="confirm-btn" class="modal-btn delete" disabled>
+            <button id="confirm-btn" class="modal-btn delete" disabled data-allow-action data-action="confirm">
                 <span id="confirm-btn-icon" class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
         </div>
     </div>
 </div>
-<div id="success-modal" class="modal-overlay success hidden">
+<div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
     <div class="modal-card success" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
         <div id="modal-content" class="modal-content">
@@ -447,9 +448,9 @@
     </div>
 </div>
 
-<div id="error-modal" class="modal-overlay error hidden">
+<div id="error-modal" class="modal-overlay error hidden" data-action="close-modal">
     <div class="modal-card error" role="dialog" aria-modal="true">
-        <button id="modal-close" class="modal-close" aria-label="Fermer">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
 
@@ -467,21 +468,21 @@
 </div>
 
 <div id="event-tabs" class="events-tabs hidden">
-  <button class="tab" data-target="today">Aujourd'hui</button>
-  <button class="tab" data-target="this-week">Cette semaine</button>
-  <button class="tab" data-target="next-week">Semaine prochaine</button>
-  <button class="tab" data-target="later">Prochainement</button>
+  <button class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
+  <button class="tab" data-action="select-tab" data-target="this-week">Cette semaine</button>
+  <button class="tab" data-action="select-tab" data-target="next-week">Semaine prochaine</button>
+  <button class="tab" data-action="select-tab" data-target="later">Prochainement</button>
 </div>
 <section id="event-filter" class="filter-accordion hidden">
 
-    <button id="filter-toggle" class="accordion-toggle" aria-expanded="false" aria-controls="filter-panel" >
+    <button id="filter-toggle" class="accordion-toggle" data-action="accordion" data-accordion-id="filter-panel" aria-expanded="false" aria-controls="filter-panel" >
         <span class="material-symbols-outlined">filter_list</span>
         Filtrer ma recherche
         <span class="material-symbols-outlined chevron">expand_more</span>
     </button>
 
 
-    <div id="filter-panel" class="accordion-panel" hidden>
+    <div id="filter-panel" class="accordion-panel hidden">
         <form id="filter-form">
             <label class="pico">
                 <fieldset id="filter-category">
@@ -495,7 +496,7 @@
 
             <label for="tag-input" class="pico">Tags</label>
             <div class="tag-input-container" id="tag-container">
-                <input type="text" id="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
+                <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
             </div>
 
             <div class="date-range pico">
@@ -520,15 +521,16 @@
 
             <!-- Actions -->
             <div class="filter-actions pico">
-                <button type="submit">Appliquer le filtre</button>
-                <button type="button" id="reset-filters" class="secondary">Enlever le filtre</button>
+                <button type="submit" data-action="apply-filter">Appliquer le filtre</button>
+                <button type="button" id="reset-filters" class="secondary" data-action="reset-filter">Enlever le filtre</button>
             </div>
         </form>
     </div>
 </section>
 
 <article id="events"></article>
-<script type="module" defer src="assets/js/events.js"></script>
+<script type="module" defer src="assets/js/events/events.js"></script>
+<script type="module" defer src="assets/js/events/router.js"></script>
 <html data-theme="light">
 
 
@@ -604,13 +606,13 @@
       
         <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
       
-        <script src="assets/js/config.js"></script>
+        <script src="assets/js/global/config.js"></script>
       
-        <script src="assets/js/helper.js"></script>
+        <script src="assets/js/global/helper.js"></script>
       
-        <script src="assets/js/user_profile.js"></script>
+        <script src="assets/js/global/user_profile.js"></script>
       
-        <script src="assets/js/supabase.js"></script>
+        <script src="assets/js/global/supabase.js"></script>
       
     
   </body>
