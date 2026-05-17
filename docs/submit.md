@@ -9,6 +9,7 @@ hide:
 
 {% block html %}
 <script type="module" defer src="../assets/js/submit/submit.js"></script>
+<script type="module" defer src="../assets/js/submit/router.js"></script>
 <html data-theme="light">
 {% endblock %}
 

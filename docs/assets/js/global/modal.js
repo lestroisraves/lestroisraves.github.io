@@ -266,16 +266,16 @@ export function openConfirmModal(type, action_type) {
             confirmBtnIcon.innerText = "delete";
             confirmBtn.classList.add("delete");
             confirmBtn.classList.remove("info");
-            confirmBtn.dataset.action = "delete-event";
+            confirmBtn.dataset.actionType = "delete-event";
             break;
 
         case "accept":
             if (type == "event") {
                 confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "accept-event";
+                confirmBtn.dataset.actionType = "accept-event";
             } else {
                 confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "accept-official-request";
+                confirmBtn.dataset.actionType = "accept-official-request";
             }
             confirmBtn.innerText = "Accepter";
             confirmBtn.classList.remove("delete");
@@ -286,10 +286,10 @@ export function openConfirmModal(type, action_type) {
         case "reject":
             if (type == "event") {
                 confirmTitle.innerHTML = "Pour <strong>rejeter la publication</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "reject-event";
+                confirmBtn.dataset.actionType = "reject-event";
             } else {
                 confirmTitle.innerHTML = "Pour <strong>rejeter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "reject-official-request";
+                confirmBtn.dataset.actionType = "reject-official-request";
             }
             confirmBtn.innerText = "Rejeter";
             confirmBtn.classList.add("delete");

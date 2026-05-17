@@ -13,7 +13,7 @@ import {
 } from "../global/tags.js"
 
 /* === LOCAL FUNCTIONS === */
-async function handleAction(el, e) {
+async function handleClick(el, e) {
     switch (el.dataset.action) {
         case "select-tab":
             selectTab(el);
@@ -50,7 +50,7 @@ async function handleAction(el, e) {
             break;
 
         case "confirm":
-            await confirm(el.dataset.action);
+            await confirm(el.dataset.actionType);
             break;
 
         case "close-modal":
@@ -62,14 +62,14 @@ async function handleAction(el, e) {
     }
 }
 
-async function handleInput(type, el) {
-    switch (type) {
+async function handleInput(el) {
+    switch (el.dataset.inputType) {
         case "confirm-code":
             setConfirmBtnState(el);
             break;
 
         default:
-            console.warn("unknown 'input' type:", type)
+            console.warn("unknown 'input' type:", el.dataset.inputType)
     }
 }
 
@@ -79,7 +79,7 @@ document.addEventListener("click", async (event) => {
     const el = event.target.closest("[data-action]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    await handleAction(el, event);
+    await handleClick(el, event);
 });
 
 document.addEventListener("keydown", async (event) => {
@@ -89,13 +89,13 @@ document.addEventListener("keydown", async (event) => {
     if (el.dataset.action != "tag-input") {
         event.preventDefault();
     }
-    await handleAction(el, event);
+    await handleClick(el, event);
 });
 
 document.addEventListener("input", (event) => {
     const el = event.target.closest("[data-input-type]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    handleInput(el.dataset.inputType, el);
+    handleInput(el);
 });
 
