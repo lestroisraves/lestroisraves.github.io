@@ -214,12 +214,10 @@ function renderEventData(event, details = false) {
             <span class="material-symbols-outlined">place</span>
             <span class="text"><strong>${eventData.location_name}</strong></span>
         </span>
-        `
+    `
 
     eventData.tagsHtml = eventData.tags && eventData.tags.length
-        ? `
-            <div class="event-tags">${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
-        `
+        ? `<div class="event-tags">${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>`
         : "";
 
     eventData.price = "Gratuit";
@@ -270,10 +268,8 @@ function renderEventData(event, details = false) {
             : "";
 
         eventData.descriptionHtml = eventData.long_description
-            ? `
-            <hr>
-            <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>
-            `
+            ? `<hr>
+               <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>`
             : "";
     }
 

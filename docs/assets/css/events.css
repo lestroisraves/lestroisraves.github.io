@@ -285,30 +285,8 @@
 }
 
 .event-tags {
-    margin: 0.4rem 0.3rem 0.4rem 0.8rem;
+    margin: 0.4rem 0.3rem 0.2rem 0.8rem;
 }
-
-.price-tag {
-    
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    
-    background: #417686;
-    color: #ffffff;
-    padding: 0.1rem 0.4rem;
-    border-radius: 7px;
-    font-size: 0.65rem;
-    /* margin-right: 0.3rem;
-    margin-bottom: 0.3rem; */
-}
-
-
-.price-tag .icon {
-  width: 16px;
-  height: 16px;
-}
-
 
 .tag {
     display: inline-block;
@@ -318,7 +296,7 @@
     border-radius: 10px;
     font-size: 0.62rem;
     margin-right: 0.3rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0rem;
 }
 
 .event-short-description {

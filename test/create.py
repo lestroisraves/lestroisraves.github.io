@@ -130,7 +130,7 @@ def generate_events(n: int):
             "is_free_price": is_free_price,
             "min_price": min_price,
             "max_price": max_price,
-            "long_description": f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com",
+            "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),
             "pending": random.choice([True, False, False, False]),
             "phone": random.choice([None, "06.01.12.13.14"]),
             "site_url": random.choice([None, "https://rcsculture.github.io"]),

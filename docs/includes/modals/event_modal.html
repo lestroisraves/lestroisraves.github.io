@@ -6,21 +6,21 @@
         
         <div id="event-modal-content" class="modal-content"></div>
         
-        <div id="modal-actions-myevents" class="modal-actions event hidden">
-            <button id="modal-delete-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="delete", data-type="event">
-                Supprimer cet évènement
+        <div class="modal-actions row">
+            <button id="modal-share-event-btn" class="modal-btn basic" aria-label="partager" data-allow-action data-action="share-event" data-id="">
+                <span class="material-symbols-outlined" aria-hidden="true">share</span>
+            </button>
+            <button id="modal-edit-event-btn" class="modal-btn info hidden" aria-label="editer" data-allow-action data-action="edit-event" data-id="">
+                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+            </button>
+            <button id="modal-delete-event-btn" class="modal-btn delete hidden" aria-label="supprimer" data-allow-action data-action="open-confirm-modal" data-action-type="delete" data-type="event">
                 <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
-        </div>
-
-        <div id="modal-actions-pendingevents" class="modal-actions event hidden">
-            <button id="modal-accept-event-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="event">
-                Accepter
-                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+            <button id="modal-accept-event-btn" class="modal-btn info hidden" aria-label="accepter" data-allow-action data-action="open-confirm-modal" data-action-type="accept" data-type="event">
+                <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
             </button>
-            <button id="modal-reject-event-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="event">
-                Rejeter
-                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            <button id="modal-reject-event-btn" class="modal-btn delete hidden" aria-label="rejeter" data-allow-action data-action="open-confirm-modal" data-action-type="reject" data-type="event">
+                <span class="material-symbols-outlined" aria-hidden="true">thumb_down</span>
             </button>
         </div>
     </div>

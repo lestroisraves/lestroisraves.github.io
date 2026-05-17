@@ -60,8 +60,17 @@ async function handleClick(el) {
             openProfile(el.dataset.showProfileId);
             break;
 
+        case "share-profile":
+            break;
+
         case "show-myevent":
             openMyEvent(el.dataset.showMyeventId);
+            break;
+
+        case "share-event":
+            break;
+
+        case "edit-event":
             break;
 
         case "send-official-request":
