@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <div class="account-tile detail-section">
+    <div id="account-detail" class="account-tile detail-section hidden">
         <div class="detail-row">
             <span class="label">Contributeur</span>
             <span id="account-role" class="value detail-user"></span>
@@ -113,12 +113,15 @@
 
             <label class="pico">
                 Image (maximum 5 Mo)
-                <input type="file" id="event-image" accept="image/*"/>
+                <div class="event-image-wrapper preview hidden"><img id="event-thumbnail" class="event-thumbnail" alt="image évènement"></div>
+                <input type="file" id="event-image" data-change-type="image-choice" accept="image/*" hidden/>
+                <button type="button" id="pick-file-btn" class="secondary" data-action="pick-file">Choisir</button>
+                <span id="file-name" class="file-name">aucun fichier choisi</span>
             </label>
 
-            <div class="pico">
+            <label class="pico">
                 <button type="submit" id="button" data-action="submit-event">Publier</button>
-            </div>
+            </label>
         </form>
 
     </article>

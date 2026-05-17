@@ -165,6 +165,15 @@
     margin-bottom: 0rem;
 }
 
+.event-image-wrapper.preview {
+    margin-bottom: 0.6rem;
+    border-radius: 0px;
+}
+
+.event-image-wrapper.hidden {
+    display: none;
+}
+
 .event-thumbnail {
     width: 240px;        /* fixed visual width */
     max-width: 240px;

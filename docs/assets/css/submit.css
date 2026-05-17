@@ -10,3 +10,8 @@
     border-radius: 10px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
+
+.file-name {
+    font-size: 0.55rem;
+    color: var(--primary-textarea);
+}

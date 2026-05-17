@@ -4,8 +4,12 @@ import {
 } from "../global/modal.js";
 
 import { 
-    submitEvent, priceChanged
+    submitEvent
 } from "./submit.js"
+
+import { 
+    priceChanged, showImagePreview
+} from "../global/eventform.js"
 
 import { 
     addTag, removeLastTag
@@ -24,8 +28,16 @@ async function handleClick(el, e) {
             }
             break;
 
+        case "pick-file":
+            document.getElementById("event-image").click()  // wrapper to input type="file"
+            break;
+
         case "submit-event":
             await submitEvent();
+            break;
+
+        case "edit-event":
+            await editEvent();
             break;
 
         case "close-modal":
@@ -41,6 +53,12 @@ async function handleChange(el) {
     switch (el.dataset.changeType) {
         case "price-choice":
             priceChanged(el);
+            break;
+
+        case "image-choice":
+            const file = el.files[0];
+            if (!file) return;
+            showImagePreview(file);
             break;
 
         default:

@@ -45,6 +45,13 @@ async function handleClick(el, e) {
             openEvent(el.dataset.eventId);
             break;
 
+        case "share-event":
+            break;
+
+        case "edit-event":
+            window.location.href = `../edit_event#id=${el.dataset.id}`;
+            break;
+
         case "open-confirm-modal":
             openConfirmModal(el.dataset.type, el.dataset.actionType);
             break;
