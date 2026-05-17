@@ -1,6 +1,6 @@
 console.log("executing:", document.currentScript?.src);
 
-import {openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js";
 
 /* === VARIABLES === */
 let user_profile = null;
@@ -502,6 +502,11 @@ export async function updateProfileRole() {
     setTimeout(function () {
         window.location.reload();
     }, 3000);
+}
+
+export function openRoleRequest() {
+    if (!user_profile) return;
+    openRoleRequestModal(user_profile);
 }
 
 export function openPendingEvent(eventId) {

@@ -6,6 +6,7 @@ import { tagInput, userTags, clearTags } from "../global/tags.js";
 /* === VARIABLES === */
 const today = startOfDay(new Date());
 
+const form = document.getElementById("event-form");
 const accountRole = document.getElementById("account-role");
 const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
@@ -20,18 +21,21 @@ const maxPrice = document.getElementById("max_price");
 
 let user_profile = null;
 
-/* === FUNCTIONS === */
-function initForTest() {
-    const form = document.getElementById("event-form");
-    form.querySelector("#title").value = "FIP – Festival International de Proximité";
-    form.querySelector("#location_name").value = "Rabastens";
-    form.querySelector("#location_address").value = null;
-    form.querySelector("#long_description").value = "Le Festival International de Proximité (FIP) vous invite à découvrir une programmation riche et variée pour sa 6ème édition, du 22 au 24 mai 2026.\n\nLe Festival International de Proximité (FIP) est un événement culturel unique qui célèbre les arts du cirque et la créativité à Rabastens et ses environs. Créé en 2021, il transforme la ville en une scène vivante chaque année, grâce à des performances artistiques in situ et une équipe de bénévoles passionnés. Le FIP valorise les talents locaux et crée des liens entre artistes, public et habitants. Venez vivre une expérience immersive et découvrir des spectacles captivants lors de ce week-end de mai.\n\nhttps://festival-le-fip.com/";
-    form.querySelector("#event_date").value = "2026-05-22";
-    form.querySelector("#event_start_time").value = null;
-    form.querySelector("#price-choice").value = "Payant";
-    form.querySelector("#max_price").value = 40;
-    form.querySelector("#min_price").value = 4;
+/* === LOCAL FUNCTIONS === */
+async function initSubmitPage() {
+    const session = await getSessionUserProfile();
+    if (session?.session?.user && session?.profile) {
+        showSubmit(session.session.user, session.profile);
+    } else {
+        showLoginWarning();
+    }
+}
+
+function showLoginWarning() {
+    user_profile = null;
+    noticeTip.classList.add("hidden");
+    submitContainer.classList.add("hidden");
+    window.location.href = "../account/";
 }
 
 function showSubmit(user, profile) {
@@ -97,24 +101,6 @@ function showSubmit(user, profile) {
 
     /* init userTags */
     clearTags();
-
-    // initForTest();
-}
-
-function showLoginWarning() {
-    user_profile = null;
-    noticeTip.classList.add("hidden");
-    submitContainer.classList.add("hidden");
-    window.location.href = "../account/";
-}
-
-async function initSubmitPage() {
-    const session = await getSessionUserProfile();
-    if (session?.session?.user && session?.profile) {
-        showSubmit(session.session.user, session.profile);
-    } else {
-        showLoginWarning();
-    }
 }
 
 function resizeImage(file, maxWidth = 1200, quality = 0.8) {
@@ -148,26 +134,8 @@ function resizeImage(file, maxWidth = 1200, quality = 0.8) {
     });
 }
 
-/* === LISTENERS === */
-document.getElementById('price-choice').addEventListener("change", (event) => {
-    console.log("Selected:", event.target);
-    if (event.target.value == "Payant") {
-        minPrice.disabled = false;
-        maxPrice.disabled = false;
-    }
-    else
-    {
-        minPrice.disabled = true;
-        minPrice.value = "0.00";
-        maxPrice.disabled = true;
-        maxPrice.value = "0.00";
-    }
-});
-
-
-document.getElementById("event-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
+/* === EXPORTED FUNCTIONS === */
+export async function submitEvent() {
     const eventDate = form.querySelector("#event_date")
     const endDate = form.querySelector("#end_date")
     const eventImage = form.querySelector("#event-image");
@@ -306,9 +274,25 @@ document.getElementById("event-form").addEventListener("submit", async (e) => {
     }
 
     button.setAttribute("aria-busy", "false");
+    window.scrollTo(0, 0);
+    form.reset();
     openSuccessModal("Évènement publié !")
-    e.target.reset();
-});
+    
+}
+
+export function priceChanged(target) {
+    if (target.value == "Payant") {
+        minPrice.disabled = false;
+        maxPrice.disabled = false;
+    }
+    else
+    {
+        minPrice.disabled = true;
+        minPrice.value = "0.00";
+        maxPrice.disabled = true;
+        maxPrice.value = "0.00";
+    }
+}
 
 /* === INITIAL LOAD === */
 initSubmitPage().catch(console.error);

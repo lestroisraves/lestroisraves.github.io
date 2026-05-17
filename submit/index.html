@@ -385,7 +385,7 @@
   <h1>Publier un évènement</h1>
 
 <div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
-    <div class="modal-card success" role="dialog" aria-modal="true">
+    <div class="modal-card success" data-no-action role="dialog" aria-modal="true">
         <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
             <span class="material-symbols-outlined">close</span>
         </button>
@@ -504,7 +504,7 @@
 
             <label class="pico">
                 Prix / participation *
-                <select name="select" id="price-choice" required>
+                <select name="select" id="price-choice" required data-change-type="price-choice">
                     <option>Gratuit</option>
                     <option>Participation libre</option>
                     <option>Payant</option>
@@ -527,7 +527,7 @@
             </label>
 
             <div class="pico">
-                <button type="submit" id="button">Publier</button>
+                <button type="submit" id="button" data-action="submit-event">Publier</button>
             </div>
         </form>
 
@@ -535,6 +535,7 @@
 </div>
 
 <script type="module" defer src="../assets/js/submit/submit.js"></script>
+<script type="module" defer src="../assets/js/submit/router.js"></script>
 <html data-theme="light">
 
 

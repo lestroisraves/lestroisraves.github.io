@@ -94,7 +94,7 @@
 
             <label class="pico">
                 Prix / participation *
-                <select name="select" id="price-choice" required>
+                <select name="select" id="price-choice" required data-change-type="price-choice">
                     <option>Gratuit</option>
                     <option>Participation libre</option>
                     <option>Payant</option>
@@ -117,7 +117,7 @@
             </label>
 
             <div class="pico">
-                <button type="submit" id="button">Publier</button>
+                <button type="submit" id="button" data-action="submit-event">Publier</button>
             </div>
         </form>
 

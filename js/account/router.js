@@ -1,17 +1,16 @@
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
-    sendResetPasswordRequest, updateProfileRole, openPendingEvent, openMyEvent, openProfile,
+    sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
     searchInput
 } from "./account.js";
 
 import { 
-    openRoleRequestModal, 
-    closeModal, openConfirmModal, confirm,
+    closeModal, openConfirmModal, confirm, sendOfficialRequest,
     setConfirmBtnState, setSendBtnState
 } from "../global/modal.js";
 
 
-async function handleAction(el) {
+async function handleClick(el) {
     switch (el.dataset.action) {
         case "show-signup":
             showSignup();
@@ -50,8 +49,7 @@ async function handleAction(el) {
             break;
 
         case "open-request-modal":
-            if (!user_profile) return;
-            openRoleRequestModal(user_profile);
+            openRoleRequest();
             break;
 
         case "show-pendingevent":
@@ -62,8 +60,17 @@ async function handleAction(el) {
             openProfile(el.dataset.showProfileId);
             break;
 
+        case "share-profile":
+            break;
+
         case "show-myevent":
             openMyEvent(el.dataset.showMyeventId);
+            break;
+
+        case "share-event":
+            break;
+
+        case "edit-event":
             break;
 
         case "send-official-request":
@@ -75,7 +82,7 @@ async function handleAction(el) {
             break;
 
         case "confirm":
-            await confirm(el.dataset.action);
+            await confirm(el.dataset.actionType);
             break;
 
         case "close-modal":
@@ -87,8 +94,8 @@ async function handleAction(el) {
     }
 }
 
-async function handleInput(type, el) {
-    switch (type) {
+async function handleInput(el) {
+    switch (el.dataset.inputType) {
         case "data-search":
             searchInput(el);
             break;
@@ -102,7 +109,7 @@ async function handleInput(type, el) {
             break;
 
         default:
-            console.warn("unknown 'input' type:", type)
+            console.warn("unknown 'input' type:", el.dataset.inputType)
     }
 }
 
@@ -112,21 +119,20 @@ document.addEventListener("click", async (event) => {
     const el = event.target.closest("[data-action]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    await handleAction(el);
+    await handleClick(el);
 });
-
 
 document.addEventListener("keydown", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
     const el = event.target.closest("[data-action]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    await handleAction(el);
+    await handleClick(el);
 });
 
 document.addEventListener("input", (event) => {
     const el = event.target.closest("[data-input-type]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    handleInput(el.dataset.inputType, el);
+    handleInput(el);
 });

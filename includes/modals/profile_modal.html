@@ -6,14 +6,15 @@
 
         <div id="profile-modal-content" class="modal-content"></div>
         
-        <div id="modal-actions-profile" class="modal-actions">
+        <div id="modal-actions-profile" class="modal-actions row">
+            <button id="modal-share-event-btn" class="modal-btn basic" aria-label="partager" data-allow-action data-action="share-profile" data-id="">
+                <span class="material-symbols-outlined" aria-hidden="true">share</span>
+            </button>
             <button id="modal-accept-profile-btn" class="modal-btn info" data-allow-action data-action="open-confirm-modal" data-action-type="accept", data-type="profile">
-                Accepter
-                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
             </button>
             <button id="modal-reject-profile-btn" class="modal-btn delete" data-allow-action data-action="open-confirm-modal" data-action-type="reject", data-type="profile">
-                Rejeter
-                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                <span class="material-symbols-outlined" aria-hidden="true">thumb_down</span>
             </button>
         </div>
     </div>

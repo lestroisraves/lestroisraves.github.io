@@ -2,7 +2,7 @@ import {
     resetPassword
 } from "./account_reset_pwd.js";
 
-async function handleAction(el) {
+async function handleClick(el) {
     switch (el.dataset.action) {
         case "reset-password":
             resetPassword();
@@ -19,5 +19,5 @@ document.addEventListener("click", async (event) => {
     const el = event.target.closest("[data-action]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
-    await handleAction(el);
+    await handleClick(el);
 });

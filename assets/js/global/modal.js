@@ -6,17 +6,11 @@ const errorModal = document.getElementById("error-modal");
 const eventModal = document.getElementById("event-modal");
 const eventModalCard = document.getElementById("event-card");
 const eventModalContent = document.getElementById("event-modal-content");
-const deleteEventBtn = document.getElementById("modal-delete-event-btn");
-const acceptEventBtn = document.getElementById("modal-accept-event-btn");
-const rejectEventBtn = document.getElementById("modal-reject-event-btn");
 
 const profileModal = document.getElementById("profile-modal");
 const profileModalContent = document.getElementById("profile-modal-content");
-const acceptProfileBtn = document.getElementById("modal-accept-profile-btn");
-const rejectProfileBtn = document.getElementById("modal-reject-profile-btn");
 
 const updateRoleModal = document.getElementById("update-role-modal");
-const updateRoleBtn = document.getElementById("modal-update-role-btn");
 
 const confirmModal = document.getElementById("confirm-modal");
 const confirmTitle = document.getElementById("confirm-title");
@@ -174,25 +168,32 @@ export function openEventModal(event, type, user_profile=null) {
 
     switch (type) {
         case "my-event":
-            eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
-            eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
+            eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
+            eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
+            eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
             break;
 
         case "pending-event":
-            eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
-            eventModal.querySelector("#modal-actions-pendingevents").classList.remove("hidden");
+            eventModal.querySelector("#modal-edit-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-delete-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-accept-event-btn").classList.remove("hidden");
+            eventModal.querySelector("#modal-reject-event-btn").classList.remove("hidden");
             break;
 
         default:  // classic event
-            eventModal.querySelector("#modal-actions-pendingevents").classList.add("hidden");
             if (user_profile && user_profile.id && ( (user_profile.id === eventData.created_by) || (user_profile.role >= 2)))
             {
-                eventModal.querySelector("#modal-actions-myevents").classList.remove("hidden");
+                eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
+                eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
             }
             else
             {
-                eventModal.querySelector("#modal-actions-myevents").classList.add("hidden");
+                eventModal.querySelector("#modal-edit-event-btn").classList.add("hidden");
+                eventModal.querySelector("#modal-delete-event-btn").classList.add("hidden");
             }
+            eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
+            eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
     }
 
     eventModalCard.classList.forEach(cls => {
@@ -266,16 +267,16 @@ export function openConfirmModal(type, action_type) {
             confirmBtnIcon.innerText = "delete";
             confirmBtn.classList.add("delete");
             confirmBtn.classList.remove("info");
-            confirmBtn.dataset.action = "delete-event";
+            confirmBtn.dataset.actionType = "delete-event";
             break;
 
         case "accept":
             if (type == "event") {
                 confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "accept-event";
+                confirmBtn.dataset.actionType = "accept-event";
             } else {
                 confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "accept-official-request";
+                confirmBtn.dataset.actionType = "accept-official-request";
             }
             confirmBtn.innerText = "Accepter";
             confirmBtn.classList.remove("delete");
@@ -286,10 +287,10 @@ export function openConfirmModal(type, action_type) {
         case "reject":
             if (type == "event") {
                 confirmTitle.innerHTML = "Pour <strong>rejeter la publication</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "reject-event";
+                confirmBtn.dataset.actionType = "reject-event";
             } else {
                 confirmTitle.innerHTML = "Pour <strong>rejeter la requête</strong>, tapez le code suivant :";
-                confirmBtn.dataset.action = "reject-official-request";
+                confirmBtn.dataset.actionType = "reject-official-request";
             }
             confirmBtn.innerText = "Rejeter";
             confirmBtn.classList.add("delete");
