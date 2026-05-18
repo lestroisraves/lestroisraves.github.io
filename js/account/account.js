@@ -6,7 +6,8 @@ import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
 const params = new URLSearchParams(hash);
-let eventId = params.get("id");
+let itemId = params.get("id");
+let itemType = params.get("type");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const signInContainer = document.getElementById("signin-container");
@@ -352,14 +353,31 @@ export async function showAccount(user, profile) {
 
     await getMyPublications();
 
-    if (eventId) {
-        const el = myEventsList.querySelector(`[data-show-myevent-id="${eventId}"]`);
-        if (!el) return;
-        myEventsSection.click();
+    if (itemId) {
+        var el = null;
+        switch (itemType) {
+            case "profile":
+                el = officialRequestsList.querySelector(`[data-show-profile-id="${itemId}"]`);
+                if (!el) return;
+                offReqSection.click();
+                break;
+
+            case "pendingevent":
+                el = pendingEventsList.querySelector(`[data-show-pendingevent-id="${itemId}"]`);
+                if (!el) return;
+                pendingEventsSection.click();
+                break;
+            
+            case "myevent":
+                el = myEventsList.querySelector(`[data-show-myevent-id="${itemId}"]`);
+                if (!el) return;
+                myEventsSection.click();
+                break;
+        }
         el.scrollIntoView();
         el.focus();
         el.click();
-        eventId = null;
+        itemId = null;
     }
 }
 

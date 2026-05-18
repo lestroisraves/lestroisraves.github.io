@@ -69,7 +69,7 @@ function showEdit(user, profile, event) {
 
 /* === EXPORTED FUNCTIONS === */
 export function goBack(){
-    window.location.href = `${previousPage}#id=${eventId}`;
+    window.location.href = `${previousPage}#id=${eventId}&type=myevent`;
 }
 
 export async function editEvent() {

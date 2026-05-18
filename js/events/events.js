@@ -235,6 +235,7 @@ async function loadEvents() {
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(addDays(nextSunday, 1)), grouped.future);
 
     if (eventId) {
+        console.log("show event id:", eventId);
         const el = container.querySelector(`[data-event-id="${eventId}"]`);
         if (!el) return;
         el.scrollIntoView();
