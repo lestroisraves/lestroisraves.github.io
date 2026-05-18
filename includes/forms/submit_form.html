@@ -1,13 +1,5 @@
-<div id="submit-container" class="submit-section hidden">
-    <div id="notice-tip" class="notice event notice-tip">
-        <span class="notice-icon">💡</span>
-        <div class="notice-content">
-            <strong id="title">Publiez ici un évènement</strong>
-            <p id="text">Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours</p>
-        </div>
-    </div>
-
-    <div class="account-tile detail-section">
+<div id="submit-container" class="submit-section" hidden>
+    <div id="account-detail" class="account-tile detail-section" hidden>
         <div class="detail-row">
             <span class="label">Contributeur</span>
             <span id="account-role" class="value detail-user"></span>
@@ -58,7 +50,7 @@
                 <input type="date" id="event_date" required>
             </label>
 
-            <label class="pico">
+            <label id="end_date_container" class="pico" hidden>
                 Date de fin (si plusieurs jours)
                 <input type="date" id="end_date">
             </label>
@@ -113,12 +105,19 @@
 
             <label class="pico">
                 Image (maximum 5 Mo)
-                <input type="file" id="event-image" accept="image/*"/>
+                <div class="event-image-wrapper preview" hidden><img id="event-thumbnail" class="event-thumbnail" alt="image évènement"></div>
+                <input type="file" id="event-image" data-change-type="image-choice" accept="image/*" hidden/>
+                <button type="button" id="pick-file-btn" class="secondary" data-action="pick-file">Choisir</button>
+                <span id="file-name" class="file-name">aucun fichier choisi</span>
             </label>
 
-            <div class="pico">
+            <label id="cancel-btn" class="pico" hidden>
+                <button type="submit" class="secondary" id="cancel-button" data-action="cancel-edit">Annuler</button>
+            </label>
+
+            <label class="pico">
                 <button type="submit" id="button" data-action="submit-event">Publier</button>
-            </div>
+            </label>
         </form>
 
     </article>

@@ -1,7 +1,3 @@
-.modal-meta.hidden {
-    display: none;
-}
-
 /* === EVENT CARD ===*/
 .modal-overlay {
     position: fixed;
@@ -16,6 +12,10 @@
     z-index: 1000;
 }
 
+.modal-overlay.hidden {
+    display: none;
+}
+
 .modal-overlay.delete {
     z-index: 2000;
 }
@@ -26,10 +26,6 @@
 
 .modal-overlay.error {
     z-index: 2000;
-}
-
-.modal-overlay.hidden {
-    display: none;
 }
 
 .modal-card {
@@ -196,6 +192,10 @@
         transform 0.1s ease;
 }
 
+.modal-btn.hidden {
+    display: none;
+}
+
 .modal-btn.confirm {
     padding: 0.5rem;
     font-size: 0.8rem;
@@ -230,10 +230,6 @@
 
 .modal-btn:active {
     transform: scale(0.97);
-}
-
-.modal-btn.hidden {
-    display: none;
 }
 
 .modal-btn:disabled {

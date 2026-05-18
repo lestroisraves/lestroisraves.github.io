@@ -4,13 +4,13 @@ import {
 } from "../global/modal.js";
 
 import { 
+    addTag, removeLastTag
+} from "../global/tags.js"
+
+import { 
     openEvent, resetFilter, applyFilter,
     selectTab
 } from "./events.js"
-
-import { 
-    addTag, removeLastTag
-} from "../global/tags.js"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -43,6 +43,13 @@ async function handleClick(el, e) {
 
         case "show-event":
             openEvent(el.dataset.eventId);
+            break;
+
+        case "share-event":
+            break;
+
+        case "edit-event":
+            window.location.href = `../edit_event#id=${el.dataset.id}`;
             break;
 
         case "open-confirm-modal":

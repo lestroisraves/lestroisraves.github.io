@@ -520,6 +520,7 @@
 <div id="notice-tip" class="notice notice-tip hidden">
     <span class="notice-icon">💡</span>
     <div class="notice-content">
+        <strong id="title" id="notice-title hidden"></strong>
         <p id="text"></p>
     </div>
 </div>
@@ -530,7 +531,7 @@
         <span id="text"></span>
     </div>
 </div>
-<div id="rstpwd-container" class="account-section hidden">
+<div id="rstpwd-container" class="account-section" hidden>
     <article class="formtile-tile pico">
         <form id="rstpwd-form">
             <label>
@@ -554,7 +555,7 @@
         </p>
     </article>
 </div>
-<div id="signin-container" class="account-section hidden">
+<div id="signin-container" class="account-section" hidden>
     <article class="formtile-tile pico">
         <form id="signin-form">
             <label>
@@ -592,7 +593,7 @@
         </p>
     </article>
 </div>
-<div id="signup-container" class="account-section hidden">
+<div id="signup-container" class="account-section" hidden>
     <article class="formtile-tile pico">
         <form id="signup-form">
             <label>
@@ -637,7 +638,7 @@
         </p>
     </article>
 </div>
-<div id="account-container" class="account-section hidden">
+<div id="account-container" class="account-section" hidden>
     <article class="account-tile pico">
         <form id="account-form">
 
@@ -663,7 +664,7 @@
 
                     <div id="detail-permission"></div>
 
-                    <div id="role-request" class="role-request hidden">
+                    <div id="role-request" class="role-request" hidden>
                         <p class="role-request-text">
                             Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
                             <a href="#" id="official-role-request" data-action="open-request-modal">Demandez à être contributeur officiel</a>
@@ -687,7 +688,7 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <form id="update-role-form" class="accordion-container hidden">
+            <form id="update-role-form" class="accordion-container" hidden>
                 <div class="autocomplete">
                     <input
                         type="text"
@@ -698,7 +699,7 @@
                         data-input-type="data-search"
                     />
 
-                    <div class="suggestions hidden"></div>
+                    <div class="suggestions" hidden></div>
                 </div>
 
                 <div class="detail-section">
@@ -747,7 +748,7 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="official-requests" class="accordion-container hidden">
+            <div id="official-requests" class="accordion-container" hidden>
                 <div class="autocomplete">
                     <input
                         type="text"
@@ -758,7 +759,7 @@
                         data-input-type="data-search"
                     />
 
-                    <div class="suggestions hidden"></div>
+                    <div class="suggestions" hidden></div>
                 </div>
                 <div id="official-requests-list"></div>
             </div>
@@ -775,7 +776,7 @@
                 </div>
                 <span class="material-symbols-outlined chevron">expand_more</span>
             </div>
-            <div id="pending-events" class="accordion-container hidden">
+            <div id="pending-events" class="accordion-container" hidden>
                 <div class="autocomplete">
                     <input
                         type="text"
@@ -786,7 +787,7 @@
                         data-input-type="data-search"
                     />
 
-                    <div class="suggestions hidden"></div>
+                    <div class="suggestions" hidden></div>
                 </div>
                 <div id="pending-events-list"></div>
             </div>
@@ -800,7 +801,7 @@
                 <span class="account-name">Mes publications</span>
                 <div class="notification">
                     <span class="badge none">0</span>
-                    <span class="badge pending hidden">
+                    <span class="badge pending" hidden>
                         <span class="material-symbols-outlined">hourglass_top</span>
                         <span class="text">0</span>
                     </span>
@@ -808,7 +809,7 @@
             </div>
             <span class="material-symbols-outlined chevron">expand_more</span>
         </div>
-        <div id="my-events" class="accordion-container hidden">
+        <div id="my-events" class="accordion-container" hidden>
             <div class="autocomplete">
                 <input
                     type="text"
@@ -819,7 +820,7 @@
                     data-input-type="data-search"
                 />
 
-                <div class="suggestions hidden"></div>
+                <div class="suggestions" hidden></div>
             </div>
             <div id="my-events-list"></div>
         </div>
@@ -827,7 +828,6 @@
 
 </div>
 
-<script type="module" defer src="../assets/js/account/account.js"></script>
 <script type="module" defer src="../assets/js/account/router.js"></script>
 <html data-theme="light">
 

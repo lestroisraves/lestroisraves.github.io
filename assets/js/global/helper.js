@@ -1,3 +1,5 @@
+console.log("executing:", "helper.js");
+
 /* === ERRORS/MESSAGES === */
 function localizeAuthError(error) {
   // error is typically an object with { name, message, code, status, ... }
@@ -46,6 +48,18 @@ function getPgId(label) {
     var id = 0;
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         if (label == APP_CONFIG.PARENTAL_GUIDE[key])
+        {
+            id = key;
+            return;
+        }
+    });
+    return id;
+}
+
+function getPriceId(label) {
+    var id = 0;
+    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
+        if (label == APP_CONFIG.PRICE_CHOICES[key])
         {
             id = key;
             return;
@@ -285,7 +299,7 @@ function handleAccordion(accordion, accordionId) {
     accordion.setAttribute("aria-expanded", String(!isOpen));
 
     if (isOpen) {
-        hiddenSection.classList.add("hidden");
+        hiddenSection.hidden = true;
         accordion.querySelector(".chevron").innerText = "expand_more";
         if (searchInput) searchInput.value = "";
 
@@ -300,7 +314,7 @@ function handleAccordion(accordion, accordionId) {
         }
     } else {
         /* open this one */
-        hiddenSection.classList.remove("hidden");
+        hiddenSection.hidden = false;
         accordion.querySelector(".chevron").innerText = "expand_less";
     }
 }

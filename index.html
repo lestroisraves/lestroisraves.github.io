@@ -460,20 +460,20 @@
         </div>
     </div>
 </div>
-<div id="event-list-header" class="event-list-header hidden">
+<div id="event-list-header" class="event-list-header" hidden>
     <a href="./submit/" class="btn-outline">
         <span class="material-symbols-outlined" aria-hidden="true">add</span>
         Publier un évènement
     </a>
 </div>
 
-<div id="event-tabs" class="events-tabs hidden">
+<div id="event-tabs" class="events-tabs" hidden>
   <button class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
   <button class="tab" data-action="select-tab" data-target="this-week">Cette semaine</button>
   <button class="tab" data-action="select-tab" data-target="next-week">Semaine prochaine</button>
   <button class="tab" data-action="select-tab" data-target="later">Prochainement</button>
 </div>
-<section id="event-filter" class="filter-accordion hidden">
+<section id="event-filter" class="filter-accordion" hidden>
 
     <button id="filter-toggle" class="accordion-toggle" data-action="accordion" data-accordion-id="filter-panel" aria-expanded="false" aria-controls="filter-panel" >
         <span class="material-symbols-outlined">filter_list</span>
@@ -482,7 +482,7 @@
     </button>
 
 
-    <div id="filter-panel" class="accordion-panel hidden">
+    <div id="filter-panel" class="accordion-panel" hidden>
         <form id="filter-form">
             <label class="pico">
                 <fieldset id="filter-category">
@@ -511,7 +511,7 @@
                 </label>
             </div>
 
-            <div id="filter-error" class="notice notice-error hidden">
+            <div id="filter-error" class="notice notice-error" hidden>
                 <span class="notice-icon">❌</span>
                 <div class="notice-content">
                     <strong id="title">Erreur</strong>
@@ -529,7 +529,6 @@
 </section>
 
 <article id="events"></article>
-<script type="module" defer src="assets/js/events/events.js"></script>
 <script type="module" defer src="assets/js/events/router.js"></script>
 <html data-theme="light">
 

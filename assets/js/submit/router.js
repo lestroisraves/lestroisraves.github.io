@@ -4,12 +4,16 @@ import {
 } from "../global/modal.js";
 
 import { 
-    submitEvent, priceChanged
-} from "./submit.js"
+    priceChanged, showImagePreview
+} from "../global/eventform.js"
 
 import { 
     addTag, removeLastTag
 } from "../global/tags.js"
+
+import { 
+    submitEvent
+} from "./submit.js"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -22,6 +26,10 @@ async function handleClick(el, e) {
             if (e.key === "Backspace") {
                 removeLastTag();
             }
+            break;
+
+        case "pick-file":
+            document.getElementById("event-image").click()  // wrapper to input type="file"
             break;
 
         case "submit-event":
@@ -41,6 +49,12 @@ async function handleChange(el) {
     switch (el.dataset.changeType) {
         case "price-choice":
             priceChanged(el);
+            break;
+
+        case "image-choice":
+            const file = el.files[0];
+            if (!file) return;
+            showImagePreview(file);
             break;
 
         default:

@@ -12,8 +12,8 @@ import {
 } from "../global/tags.js"
 
 import { 
-    submitEvent
-} from "./submit.js"
+    editEvent, goBack
+} from "./edit_event.js"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -28,12 +28,17 @@ async function handleClick(el, e) {
             }
             break;
 
+        case "go-back":
+        case "cancel-edit":
+            goBack();
+            break;
+
         case "pick-file":
             document.getElementById("event-image").click()  // wrapper to input type="file"
             break;
 
-        case "submit-event":
-            await submitEvent();
+        case "edit-event":
+            await editEvent();
             break;
 
         case "close-modal":

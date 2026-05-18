@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://rcsculture.github.io/account_reset_pwd/">
+        <link rel="canonical" href="https://rcsculture.github.io/edit_event/">
       
       
       
@@ -21,7 +21,7 @@
     
     
       
-        <title>Account reset pwd - Culture Project</title>
+        <title>Edit event - Culture Project</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Account reset pwd
+              Edit event
             
           </span>
         </div>
@@ -368,8 +368,33 @@
 
 
 
-  <h1>Account reset pwd</h1>
+  <h1>Edit event</h1>
 
+<p><button class="back-btn" data-action="go-back">←</button></p>
+<div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
+    <div class="modal-card success" data-no-action role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div id="modal-content" class="modal-content">
+            <span class="notice-icon">✔️</span>
+            <span id="text"></span>
+        </div>
+    </div>
+</div>
+
+<div id="error-modal" class="modal-overlay error hidden" data-action="close-modal">
+    <div class="modal-card error" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div id="modal-content" class="modal-content">
+            <span class="notice-icon">❌</span>
+            <span id="text"></span>
+        </div>
+    </div>
+</div>
 <div id="notice-tip" class="notice notice-tip hidden">
     <span class="notice-icon">💡</span>
     <div class="notice-content">
@@ -384,36 +409,132 @@
         <span id="text"></span>
     </div>
 </div>
-<!-- RESET PASSWORD -->
-<div id="reset-pwd-container" class="account-section">
-    <article class="formtile-tile pico">
-        <form id="reset-pwd-form">
-            <label>
-                Nouveau mot de passe
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Minimum 8 caractères"
-                    minlength="8"
-                    required
-                >
-                <input
-                    type="password"
-                    id="passwordConfirm"
-                    placeholder="Confirmez votre mot de passe"
-                    minlength="8"
-                    required
-                >
+<div id="submit-container" class="submit-section" hidden>
+    <div id="account-detail" class="account-tile detail-section" hidden>
+        <div class="detail-row">
+            <span class="label">Contributeur</span>
+            <span id="account-role" class="value detail-user"></span>
+        </div>
+
+        <div id="detail-permission"></div>
+
+        <p>
+            Plus d'infos sur
+            <a href="../account/" >Mon compte</a>
+        </p>
+    </div>
+
+    <article class="submit-tile">
+        <form id="event-form">
+            <label class="pico">
+                Titre de l'évènement *
+                <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
             </label>
 
-            <div>
-                <button type="submit" id="button" data-action="reset-password">Réinitialiser</button>
+            <label class="pico">
+                Nom du lieu *
+                <input type="text" id="location_name" placeholder="" required>
+            </label class="pico">
+
+            <label class="pico">
+                Adresse du lieu
+                <input type="text" id="location_address" placeholder="">
+            </label>
+
+            <label class="pico">
+                Description de l'évènement
+                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
+            </label>
+
+            <label class="pico">
+                Catégorie *
+                <select name="select" id="category" required></select>
+            </label>
+
+            <label class="pico">
+                Guide parental *
+                <select name="select" id="parental_guide" required></select>
+            </label>
+
+            <label class="pico">
+                Date *
+                <input type="date" id="event_date" required>
+            </label>
+
+            <label id="end_date_container" class="pico" hidden>
+                Date de fin (si plusieurs jours)
+                <input type="date" id="end_date">
+            </label>
+
+            <label class="pico">
+                Heure de début
+                <input type="time" id="event_start_time">
+            </label>
+
+            <label for="tag-input" class="pico">Tags (mots-clefs pour décrire l'évènement, 4 maximum)</label>
+            <div class="tag-input-container" id="tag-container">
+                <input type="text" id="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
             </div>
+
+            <label class="pico">
+                Téléphone
+                <input type="text" id="phone" placeholder="">
+            </label>
+
+            <label class="pico">
+                Site internet
+                <input type="text" id="site_url" placeholder="">
+            </label>
+
+            <label class="pico">
+                <fieldset>
+                    <label>
+                        <input name="to_eat" type="checkbox" role="switch" />
+                        À manger sur place
+                    </label>
+                </fieldset>
+            </label>
+
+            <label class="pico">
+                Prix / participation *
+                <select name="select" id="price-choice" required data-change-type="price-choice">
+                    <option>Gratuit</option>
+                    <option>Participation libre</option>
+                    <option>Payant</option>
+                </select>
+            </label>
+
+            <label class="pico">
+                Prix
+                <input type="number" id="max_price" placeholder="0.00" step=0.01 min=0 disabled>
+            </label>
+
+            <label class="pico">
+                Prix réduit
+                <input type="number" id="min_price" placeholder="0.00" step=0.01 min=0 disabled>
+            </label>
+
+            <label class="pico">
+                Image (maximum 5 Mo)
+                <div class="event-image-wrapper preview" hidden><img id="event-thumbnail" class="event-thumbnail" alt="image évènement"></div>
+                <input type="file" id="event-image" data-change-type="image-choice" accept="image/*" hidden/>
+                <button type="button" id="pick-file-btn" class="secondary" data-action="pick-file">Choisir</button>
+                <span id="file-name" class="file-name">aucun fichier choisi</span>
+            </label>
+
+            <label id="cancel-btn" class="pico" hidden>
+                <button type="submit" class="secondary" id="cancel-button" data-action="cancel-edit">Annuler</button>
+            </label>
+
+            <label class="pico">
+                <button type="submit" id="button" data-action="submit-event">Publier</button>
+            </label>
         </form>
+
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/account_reset_pwd/router.js"></script>
+<script type="module" defer src="../assets/js/edit_event/router.js"></script>
 <html data-theme="light">
 
 

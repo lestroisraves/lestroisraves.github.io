@@ -166,6 +166,9 @@ export function openEventModal(event, type, user_profile=null) {
 
     const eventData = renderEventData(event, true);
 
+    eventModal.querySelector("#modal-share-event-btn").dataset.id = currentEvent.id;
+    eventModal.querySelector("#modal-edit-event-btn").dataset.id = currentEvent.id;
+
     switch (type) {
         case "my-event":
             eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");

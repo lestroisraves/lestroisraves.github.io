@@ -1,28 +1,14 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "account_reset_pwd.js");
+
+import { openSuccessModal } from "../global/modal.js"
+import { showNoticeTip, showNoticeError, hideNoticeError } from "../global/notices.js";
 
 /* === VARIABLES === */
-const noticeSuccess = document.getElementById("notice-success");
-const noticeSuccessText = noticeSuccess.querySelector("#text");
-const noticeError = document.getElementById("notice-error");
-const noticeErrorText = noticeError.querySelector("#text");
 const resetPwdForm = document.getElementById("reset-pwd-form");
 
 /* === LOCAL FUNCTIONS === */
-function showError(message) {
-    noticeError.classList.remove("hidden");
-    noticeErrorText.innerText = message;
-    noticeError.focus();
-}
-
-function showSuccess(message) {
-    noticeSuccess.classList.remove("hidden");
-    noticeSuccessText.innerText = message;
-    noticeSuccess.focus();
-}
-
-function hideNoticeMessages() {
-    noticeSuccess.classList.add("hidden");
-    noticeError.classList.add("hidden");
+function initRstPwdPage(){
+    showNoticeTip("ous avez demander à réinitialiser votre mot de passe", "Reinitialisation du mot de passe");
 }
 
 async function resetPassword() {
@@ -32,14 +18,14 @@ async function resetPassword() {
     const button = resetPwdForm.querySelector("#button");
 
     /* init UI */
-    hideNoticeMessages();
+    hideNoticeError();
     passwordConfirm.setAttribute("aria-invalid", null);
     button.setAttribute("aria-busy", "true");
 
     if (passwordValue !== passwordConfirmValue) {
         passwordConfirm.setAttribute("aria-invalid", "true");
         button.setAttribute("aria-busy", "false");
-        showError("Mots de passes non identiques")
+        showNoticeError("Mots de passes non identiques")
         passwordConfirm.focus();
         return;
     }
@@ -51,19 +37,18 @@ async function resetPassword() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError(localizeAuthError(error));
+        showNoticeError(localizeAuthError(error));
         console.error("reset password failed:", error);
         return;
     }
 
-    showSuccess("Mot de passe réinitialisé ! Vous allez être redirigé automatiquement.");
-
     resetPwdForm.reset();
-
+    openSuccessModal("Mot de passe réinitialisé ! Vous allez être redirigé automatiquement.");
+    
     setTimeout(() => {
         window.location.href = "../account";
-    }, 2000);
-
+    }, 3000);
 }
 
-
+/* === INITIAL LOAD === */
+initRstPwdPage().catch(console.error);

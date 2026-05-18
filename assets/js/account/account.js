@@ -1,14 +1,13 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "account.js");
 
 import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js";
+import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
 
 /* === VARIABLES === */
-let user_profile = null;
-export let selected_profile = null;
-export let MY_EVENTS = [];
-export let PROFILES = [];
-export let PENDING_EVENTS = [];
-export let OFFICIAL_REQUESTS = [];
+const hash = window.location.hash.substring(1);
+const params = new URLSearchParams(hash);
+let eventId = params.get("id");
+history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const signInContainer = document.getElementById("signin-container");
 const signInForm = document.getElementById("signin-form");
@@ -17,11 +16,6 @@ const signUpForm = document.getElementById("signup-form");
 const rstPwdContainer = document.getElementById("rstpwd-container");
 const rstPwdForm = document.getElementById("rstpwd-form");
 const accountContainer = document.getElementById("account-container");
-
-const noticeTip = document.getElementById("notice-tip");
-const noticeTipText = noticeTip.querySelector("#text");
-const noticeError = document.getElementById("notice-error");
-const noticeErrorText = noticeError.querySelector("#text");
 
 const permissionDetails = document.getElementById("detail-permission");
 const adminSection = document.getElementById("admin-section");
@@ -42,23 +36,14 @@ const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
 const myEventsList = document.getElementById("my-events-list");
 
+let user_profile = null;
+export let selected_profile = null;
+export let MY_EVENTS = [];
+export let PROFILES = [];
+export let PENDING_EVENTS = [];
+export let OFFICIAL_REQUESTS = [];
+
 /* === FUNCTIONS === */
-function showNoticeTip(message) {
-    noticeTip.classList.remove("hidden");
-    noticeTipText.innerText = message;
-    noticeTip.focus();
-}
-
-function showError(message) {
-    noticeError.classList.remove("hidden");
-    noticeErrorText.innerText = message;
-    noticeError.focus();
-}
-
-function hideErrorNotice() {
-    noticeError.classList.add("hidden");
-}
-
 function searchMatches(item, value, container) {
     switch(container) {
         case "official-requests":
@@ -76,14 +61,14 @@ async function getProfiles() {
     /* fetch data */
     PROFILES = [];
     selected_profile = null;
-    updateRoleForm.classList.add("hidden");
+    updateRoleForm.hidden = true;
     const { data, error } = await window.supabaseClient
         .from("profiles") /* fetch also old events from my creation */
         .select("*");
 
     if (error) {
         console.error(error)
-        updateRoleForm.classList.remove("hidden");
+        updateRoleForm.hidden = false;
         updateRoleForm.innerText = "Erreur survenue durant le chargement des utilisateurs";
         return;
     }
@@ -96,9 +81,9 @@ async function getProfiles() {
 async function getMyPublications() {
     /* fetch data */
     MY_EVENTS = [];
-    myEvents.classList.add("hidden");
+    myEvents.hidden = true;
     myEventsSection.querySelector(".badge").classList.add("none");
-    myEventsSection.querySelector(".badge.pending").classList.add("hidden");
+    myEventsSection.querySelector(".badge.pending").hidden = true;
     myEventsSection.setAttribute("Disabled", true);
     myEventsSection.querySelector(".badge").innerText = 0;
 
@@ -111,7 +96,7 @@ async function getMyPublications() {
     if (error) {
         console.error(error)
         myEventsSection.querySelector(".badge").innerText = "?";
-        myEvents.classList.remove("hidden");
+        myEvents.hidden = false;
         myEventsList.innerText = "Erreur survenue durant le chargement des évènements";
         return;
     }
@@ -121,7 +106,7 @@ async function getMyPublications() {
     MY_EVENTS = data;
     const pending_events = data.filter(e => e.pending === true);
     if (pending_events.length > 0) {
-        myEventsSection.querySelector(".badge.pending").classList.remove("hidden");
+        myEventsSection.querySelector(".badge.pending").hidden = false;
         myEventsSection.querySelector(".badge.pending .text").innerText = pending_events.length;
     }
     myEventsSection.setAttribute("Disabled", false);
@@ -133,7 +118,7 @@ async function getMyPublications() {
 async function getPendingEvents() {
     /* fetch data */
     PENDING_EVENTS = [];
-    pendingEvents.classList.add("hidden");
+    pendingEvents.hidden = true;
     pendingEventsSection.querySelector(".badge").classList.add("none");
     pendingEventsSection.setAttribute("Disabled", true);
     pendingEventsSection.querySelector(".badge").innerText = 0;
@@ -146,7 +131,7 @@ async function getPendingEvents() {
 
     if (error) {
         console.error(error)
-        pendingEvents.classList.remove("hidden");
+        pendingEvents.hidden = false;
         pendingEventsSection.querySelector(".badge").innerText = "?";
         pendingEventsList.innerText = "Erreur survenue durant le chargement des évènements";
         return;
@@ -164,7 +149,7 @@ async function getPendingEvents() {
 async function getOfficialRequests() {
     /* fetch data */
     OFFICIAL_REQUESTS = [];
-    officialRequests.classList.add("hidden");
+    officialRequests.hidden = true;
     offReqSection.querySelector(".badge").classList.add("none");
     offReqSection.setAttribute("Disabled", true);
     offReqSection.querySelector(".badge").innerText = 0;
@@ -176,7 +161,7 @@ async function getOfficialRequests() {
 
     if (error) {
         console.error(error)
-        officialRequests.classList.remove("hidden");
+        officialRequests.hidden = false;
         offReqSection.querySelector(".badge").innerText = "?";
         officialRequestsList.innerText = "Erreur survenue durant le chargement des requêtes";
         return;
@@ -257,22 +242,22 @@ async function initAccountPage() {
 
 /* === EXPORTED FUNCTION === */
 export function showLogin() {
-    signInContainer.classList.remove("hidden");
-    rstPwdContainer.classList.add("hidden");
-    signupContainer.classList.add("hidden");
-    accountContainer.classList.add("hidden");
+    signInContainer.hidden = false;
+    rstPwdContainer.hidden = true;
+    signupContainer.hidden = true;
+    accountContainer.hidden = true;
     signInContainer.querySelector("#signin-form").reset();
-    hideErrorNotice();
+    hideNoticeError();
     showNoticeTip("Connectez vous pour publier vos événements et contribuer à l'agenda culturel.");
 }
 
 export function showSignup() {
-    signInContainer.classList.add("hidden");
-    rstPwdContainer.classList.add("hidden");
-    signupContainer.classList.remove("hidden");
-    accountContainer.classList.add("hidden");
+    signInContainer.hidden = true;
+    rstPwdContainer.hidden = true;
+    signupContainer.hidden = false;
+    accountContainer.hidden = true;
     signupContainer.querySelector("#signup-form").reset();
-    hideErrorNotice();
+    hideNoticeError();
     showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
 }
 
@@ -280,12 +265,12 @@ export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
 
-    signInContainer.classList.add("hidden");
-    rstPwdContainer.classList.add("hidden");
-    signupContainer.classList.add("hidden");
-    accountContainer.classList.remove("hidden");
-    noticeTip.classList.add("hidden");
-    hideErrorNotice();
+    signInContainer.hidden = true;
+    rstPwdContainer.hidden = true;
+    signupContainer.hidden = true;
+    accountContainer.hidden = false;
+    hideNoticeTip();
+    hideNoticeError();
 
     permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
@@ -305,22 +290,22 @@ export async function showAccount(user, profile) {
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.classList.add("hidden");
-            permissionSuperAdmin.classList.add("hidden");
-            roleRequest.classList.remove("hidden");
-            adminSection.classList.add("hidden");
-            superAdminSection.classList.add("hidden");
+            permissionAdmin.hidden = true;
+            permissionSuperAdmin.hidden = true;
+            roleRequest.hidden = false;
+            adminSection.hidden = true;
+            superAdminSection.hidden = true;
             break;
         
         case 1: /* official */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.classList.add("hidden");
-            permissionSuperAdmin.classList.add("hidden");
-            roleRequest.classList.add("hidden");
-            adminSection.classList.add("hidden");
-            superAdminSection.classList.add("hidden");
+            permissionAdmin.hidden = true;
+            permissionSuperAdmin.hidden = true;
+            roleRequest.hidden = true;
+            adminSection.hidden = true;
+            superAdminSection.hidden = true;
             break;
 
         case 2:
@@ -328,19 +313,19 @@ export async function showAccount(user, profile) {
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.classList.remove("hidden");
-            permissionSuperAdmin.classList.add("hidden");
-            roleRequest.classList.add("hidden");
-            adminSection.classList.remove("hidden");
-            superAdminSection.classList.add("hidden");
+            permissionAdmin.hidden = false;
+            permissionSuperAdmin.hidden = true;
+            roleRequest.hidden = true;
+            adminSection.hidden = false;
+            superAdminSection.hidden = true;
 
             await getPendingEvents();
             await getOfficialRequests();
 
             if (user_profile.role == 3)
             {
-                permissionSuperAdmin.classList.remove("hidden");
-                superAdminSection.classList.remove("hidden");
+                permissionSuperAdmin.hidden = false;
+                superAdminSection.hidden = false;
 
                 await getProfiles();
 
@@ -358,23 +343,33 @@ export async function showAccount(user, profile) {
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.classList.add("hidden");
-            permissionSuperAdmin.classList.add("hidden");
-            roleRequest.classList.remove("hidden");
-            adminSection.classList.add("hidden");
-            superAdminSection.classList.add("hidden");
+            permissionAdmin.hidden = true;
+            permissionSuperAdmin.hidden = true;
+            roleRequest.hidden = false;
+            adminSection.hidden = true;
+            superAdminSection.hidden = true;
     }
 
     await getMyPublications();
+
+    if (eventId) {
+        const el = myEventsList.querySelector(`[data-show-myevent-id="${eventId}"]`);
+        if (!el) return;
+        myEventsSection.click();
+        el.scrollIntoView();
+        el.focus();
+        el.click();
+        eventId = null;
+    }
 }
 
 export function showResetPassword() {
-    signInContainer.classList.add("hidden");
-    rstPwdContainer.classList.remove("hidden");
-    signupContainer.classList.add("hidden");
-    accountContainer.classList.add("hidden");
+    signInContainer.hidden = true;
+    rstPwdContainer.hidden = false;
+    signupContainer.hidden = true;
+    accountContainer.hidden = true;
     rstPwdContainer.querySelector("#rstpwd-form").reset();
-    hideErrorNotice();
+    hideNoticeError();
     showNoticeTip("Demandez la réinitialisation de votre mot de passe et vous recevrer un email de:\n" + APP_CONFIG.EMAIL_ADDRESS);
 }
 
@@ -385,7 +380,7 @@ export async function signup() {
     const button = signUpForm.querySelector("#button");
 
     /* init UI */
-    hideErrorNotice();
+    hideNoticeError();
     button.setAttribute("aria-busy", "true");
 
     const { data, error } = await window.supabaseClient.auth.signUp({
@@ -402,7 +397,7 @@ export async function signup() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError(localizeAuthError(error));
+        showNoticeError(localizeAuthError(error));
         console.error("sign-up failed:", error);
         return;
     }
@@ -414,7 +409,7 @@ export async function login() {
     const button = signInForm.querySelector("#button");
 
     /* init UI */
-    hideErrorNotice();
+    hideNoticeError();
     button.setAttribute("aria-busy", "true");
 
     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
@@ -425,7 +420,7 @@ export async function login() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError(localizeAuthError(error));
+        showNoticeError(localizeAuthError(error));
         console.error("sign-in failed:", error);
         return;
     }
@@ -435,7 +430,7 @@ export async function logout() {
     console.log("loggin out");
 
     /* init UI */
-    hideErrorNotice();
+    hideNoticeError();
 
     try {
         const { error } = await window.supabaseClient.auth.signOut();
@@ -458,7 +453,7 @@ export async function sendResetPasswordRequest() {
     const button = rstPwdForm.querySelector("#button");
 
     /* init UI */
-    hideErrorNotice();
+    hideNoticeError();
     button.setAttribute("aria-busy", "true");
     
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(
@@ -471,7 +466,7 @@ export async function sendResetPasswordRequest() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showError(localizeAuthError(error));
+        showNoticeError(localizeAuthError(error));
         console.error("reset password request failed:", error);
         return;
     }
@@ -556,7 +551,7 @@ export function searchInput(input) {
 
     if (value.length < 2) {
         input.classList.remove("looking");
-        suggestions.classList.add("hidden");
+        suggestions.hidden = true;
         return;
     }
 
@@ -566,7 +561,7 @@ export function searchInput(input) {
 
     if (matches.length === 0) {
         input.classList.remove("looking");
-        suggestions.classList.add("hidden");
+        suggestions.hidden = true;
         return;
     }
 
@@ -589,7 +584,7 @@ export function searchInput(input) {
         
         span.addEventListener("click", () => {
             input.classList.remove("looking");
-            suggestions.classList.add("hidden");
+            suggestions.hidden = true;
             input.value = "";
             var el = null;
 
@@ -599,6 +594,7 @@ export function searchInput(input) {
                     if (!el) return;
                     el.scrollIntoView();
                     el.focus();
+                    el.click();
                     break;
 
                 case "update-role-form":
@@ -615,6 +611,7 @@ export function searchInput(input) {
                     if (!el) return;
                     el.scrollIntoView();
                     el.focus();
+                    el.click();
                     break;
 
                 case "my-events":
@@ -622,6 +619,7 @@ export function searchInput(input) {
                     if (!el) return;
                     el.scrollIntoView();
                     el.focus();
+                    el.click();
                     break;
             }
           
@@ -631,7 +629,7 @@ export function searchInput(input) {
     }
 
     input.classList.add("looking");
-    suggestions.classList.remove("hidden");
+    suggestions.hidden = false;
 }
 
 
