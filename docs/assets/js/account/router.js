@@ -1,14 +1,13 @@
-import {
-    showSignup, showLogin, showResetPassword, signup, login, logout,
-    sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
-    searchInput
-} from "./account.js";
-
 import { 
     closeModal, openConfirmModal, confirm, sendOfficialRequest,
     setConfirmBtnState, setSendBtnState
 } from "../global/modal.js";
 
+import {
+    showSignup, showLogin, showResetPassword, signup, login, logout,
+    sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
+    searchInput
+} from "./account.js";
 
 async function handleClick(el) {
     switch (el.dataset.action) {

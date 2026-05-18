@@ -1,3 +1,5 @@
+console.log("executing:", "user_profile.js");
+
 async function getSessionUserProfile() {
     const { data:{ session } } = await window.supabaseClient.auth.getSession();
     console.log("session:", session);

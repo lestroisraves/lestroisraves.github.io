@@ -1,7 +1,7 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "eventform.js");
 
 import { openErrorModal } from "./modal.js";
-import { tagInput, userTags, clearTags } from "./tags.js";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js";
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -9,7 +9,7 @@ const today = startOfDay(new Date());
 const form = document.getElementById("event-form");
 const categoryList = document.getElementById("category");
 const parentalGuideList = document.getElementById("parental_guide");
-const priceChoice = document.getElementById("free-choice");
+const priceChoiceList = document.getElementById("price-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
 const eventImage = document.getElementById("event-image");
@@ -50,6 +50,8 @@ async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
 
 /* === EXPORTED FUNCTIONS === */
 export function initEventForm(eventData=null) {
+    form.reset()
+
     /* Configure categories  */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
         const opt = document.createElement("option");
@@ -66,6 +68,14 @@ export function initEventForm(eventData=null) {
     });
     parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0];
 
+    /* Configure price choice */
+    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
+        const opt = document.createElement("option");
+        opt.innerText = APP_CONFIG.PRICE_CHOICES[key]
+        priceChoiceList.appendChild(opt);
+    });
+    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0];
+
     /* init userTags */
     clearTags();
 
@@ -73,7 +83,28 @@ export function initEventForm(eventData=null) {
 
     /* init form with data */
     form.querySelector("#title").value = eventData.title;
-
+    form.querySelector("#location_name").value = eventData.location_name;
+    if (eventData.location_address) form.querySelector("#location_name").value = eventData.location_name;
+    if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
+    form.querySelector("#category").value = APP_CONFIG.CATEGORIES[eventData.category]["label"];
+    form.querySelector("#parental_guide").value = APP_CONFIG.PARENTAL_GUIDE[eventData.parental_guide];
+    form.querySelector("#event_date").value = eventData.event_date;
+    if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
+    if (eventData.tags) eventData.tags.forEach(t => addTag(t));
+    if (eventData.phone) form.querySelector("#phone").value = eventData.phone;
+    if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
+    if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
+    if (eventData.max_price && (eventData.max_price > 0)) {
+        priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[2];
+        form.querySelector('#max_price').value = eventData.max_price;
+        if (eventData.min_price && (eventData.min_price > 0)) form.querySelector('#min_price').value = eventData.min_price;
+    } else {
+        if (eventData.is_free_price) {
+            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[1];
+        } else {
+            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0];
+        }
+    }
     if (eventData.image_url) {
         form.querySelector(".event-image-wrapper").classList.remove("hidden");
         form.querySelector("#event-thumbnail").src = eventData.image_url;
@@ -114,7 +145,7 @@ export function showImagePreview(file) {
 export async function uploadImageFile() {
     /* get image */
     const file = eventImage.files[0];
-    if (!file) return null
+    if (!file) return {data: null, error: null}
         
     const resizedBlob = await resizeImage(file);
     const fileName = `event-${crypto.randomUUID()}.jpg`;
@@ -124,14 +155,12 @@ export async function uploadImageFile() {
             cacheControl: "3600",
             upsert: false
         });
+
     if (error) {
-        button.setAttribute("aria-busy", "false");
-        openErrorModal("Problème pendant le téléchargement de l'image");
-        console.error(error);
-        return null;
+        return {data: null, error: error};
     }
 
-    return window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl;
+    return {data: window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl, error: null};
 
 }
 
@@ -184,12 +213,11 @@ export function getEventFormPayload() {
     }
 
     /* set price */
-    const priceChoice = form.querySelector('#price-choice').value.trim().toLowerCase();
-    console.log("priceChoice:", priceChoice)
+    const priceChoiceId = getPriceId(priceChoiceList.value);
     var is_free_price = false;
     var min_price = null;
     var max_price = null;
-    if (priceChoice == "payant") {
+    if (priceChoiceId == 2) {
         min_price = minPrice.value.trim() === "" ? null: Number(minPrice.value);
         max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
         if (min_price && max_price && (min_price > max_price))
@@ -200,7 +228,7 @@ export function getEventFormPayload() {
             openErrorModal("Le prix réduit doit être inférieur au prix normal");
             return;
         }
-    } else if (priceChoice == "participation libre") {
+    } else if (priceChoiceId == 1) {
         is_free_price = true;
     }
 

@@ -17,7 +17,6 @@ hide:
 {% include 'includes/account/account_details.html' %}
 
 {% block html %}
-<script type="module" defer src="../assets/js/account/account.js"></script>
 <script type="module" defer src="../assets/js/account/router.js"></script>
 <html data-theme="light">
 {% endblock %}

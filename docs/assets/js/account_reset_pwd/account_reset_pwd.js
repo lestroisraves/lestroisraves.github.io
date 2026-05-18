@@ -1,4 +1,4 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "account_reset_pwd.js");
 
 /* === VARIABLES === */
 const noticeSuccess = document.getElementById("notice-success");

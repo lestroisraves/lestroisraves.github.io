@@ -1,4 +1,4 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "config.js");
 
 SITE_URL = "https://rcsculture.github.io"
 
@@ -40,6 +40,11 @@ APP_CONFIG = {
         0: "Tout public",
         1: "Pour les enfants",
         2: "Déconseillé aux enfants"
+    },
+    PRICE_CHOICES: {
+        0: "Gratuit",
+        1: "Participation libre",
+        2: "Payant"
     },
     DEFAULT_FILTER: {
         categories: null,

@@ -57,6 +57,9 @@
     --md-footer-fg-color:               var(--pico-primary-hover);
 }
 
+.hidden {
+    display: none;
+}
 
 .md-tabs {
     background: rgba(0, 0, 0, 0.25);
@@ -134,24 +137,6 @@ table tr th:last-child {
     height: 1em;
 }
 
-
-
-/* make/set variables that react to the theme */
-@media screen {
-    [data-md-color-scheme=slate] {
-        --my-default-font-weight: 400;  /* light font weight for dark theme, for easier readability */
-    }
-    [data-md-color-scheme=default] {
-        --my-default-font-weight: 400; /* standard font weight, good for white background */
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        color-scheme: light;
-    }
-}
-
 .md-typeset h1, h2, h3, h4, h5, h6 {
     font-weight: bold !important;
     color: var(--md-default--fg-color) !important;
@@ -191,3 +176,18 @@ table tr th:last-child {
     font-size: 1em;
 }
 
+/* make/set variables that react to the theme */
+@media screen {
+    [data-md-color-scheme=slate] {
+        --my-default-font-weight: 400;  /* light font weight for dark theme, for easier readability */
+    }
+    [data-md-color-scheme=default] {
+        --my-default-font-weight: 400; /* standard font weight, good for white background */
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: light;
+    }
+}

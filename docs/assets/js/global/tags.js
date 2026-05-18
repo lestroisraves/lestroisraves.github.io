@@ -1,3 +1,5 @@
+console.log("executing:", "tags.js");
+
 const tagContainer = document.getElementById("tag-container");
 
 export const tagInput = document.getElementById("tag-input");
@@ -42,8 +44,13 @@ export function clearTags() {
     renderTags();
 }
 
-export function addTag() {
-    const tag = tagInput.value.trim().toLowerCase();
+export function addTag(tag=null) {
+    var newTag = null;
+    if (tag) {
+        newTag = tag;
+    } else {
+        tag = tagInput.value.trim().toLowerCase();
+    }
 
     if (!tag || userTags.includes(tag)) {
         return;

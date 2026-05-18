@@ -8,6 +8,6 @@ hide:
 
 
 {% block html %}
-<script type="module" defer src="../assets/js/account_reset_pwd/account_reset_pwd.js"></script>
+<script type="module" defer src="../assets/js/account_reset_pwd/router.js"></script>
 <html data-theme="light">
 {% endblock %}

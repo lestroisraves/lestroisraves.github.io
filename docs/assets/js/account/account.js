@@ -1,4 +1,4 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "account.js");
 
 import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js";
 

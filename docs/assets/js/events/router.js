@@ -4,13 +4,13 @@ import {
 } from "../global/modal.js";
 
 import { 
+    addTag, removeLastTag
+} from "../global/tags.js"
+
+import { 
     openEvent, resetFilter, applyFilter,
     selectTab
 } from "./events.js"
-
-import { 
-    addTag, removeLastTag
-} from "../global/tags.js"
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {

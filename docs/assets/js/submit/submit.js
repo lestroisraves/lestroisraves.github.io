@@ -1,4 +1,4 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "submit.js");
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js";
@@ -17,6 +17,7 @@ let user_profile = null;
 
 /* === LOCAL FUNCTIONS === */
 async function initSubmitPage() {
+    console.log("init /submit/ page");
     const session = await getSessionUserProfile();
     if (session?.session?.user && session?.profile) {
         showSubmit(session.session.user, session.profile);
@@ -28,15 +29,13 @@ async function initSubmitPage() {
 function showLoginWarning() {
     user_profile = null;
     noticeTip.classList.add("hidden");
-    accountDetail.classList.remove("hidden");
+    accountDetail.classList.add("hidden");
     submitContainer.classList.add("hidden");
     window.location.href = "../account/";
 }
 
 function showSubmit(user, profile) {
     user_profile = profile;
-    noticeTip.classList.remove("hidden");
-    submitContainer.classList.remove("hidden");
     accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure tip */ 
@@ -81,12 +80,25 @@ function showSubmit(user, profile) {
 
     /* initialize form */
     initEventForm();
+    form.querySelector("#end_date_container").hidden = false;
+
+    /* show page */
+    noticeTip.classList.remove("hidden");
+    accountDetail.classList.remove("hidden");
+    submitContainer.classList.remove("hidden");
 }
 
 /* === EXPORTED FUNCTIONS === */
 export async function submitEvent() {
     const new_event = getEventFormPayload();
-    const imageUrl = await uploadImageFile();
+    const {imageUrl, error} = await uploadImageFile();
+
+    if (error) {
+        button.setAttribute("aria-busy", "false");
+        openErrorModal("Problème pendant le téléchargement de l'image");
+        console.error(error);
+        return;
+    }
 
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;

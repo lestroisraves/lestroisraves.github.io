@@ -12,7 +12,6 @@ hide:
 
 {% block html %}
 <article id="events"></article>
-<script type="module" defer src="assets/js/events/events.js"></script>
 <script type="module" defer src="assets/js/events/router.js"></script>
 <html data-theme="light">
 {% endblock %}

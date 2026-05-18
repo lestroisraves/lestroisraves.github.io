@@ -1,8 +1,8 @@
-console.log("executing:", document.currentScript?.src);
+console.log("executing:", "edit_event.js");
+
 const hash = window.location.hash.substring(1);
 const params = new URLSearchParams(hash);
 const eventId = params.get("id");
-console.log("eventId:", eventId);
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js";
 import { initEventForm, getEventFormPayload } from "../global/eventform.js";
@@ -21,6 +21,9 @@ let user_profile = null;
 
 /* === LOCAL FUNCTIONS === */
 async function initEditEventPage() {
+    console.log("init /edit_event/ page");
+    console.log("eventId:", eventId);
+
     submitContainer.classList.add("hidden");
     const session = await getSessionUserProfile();
     if (session?.session?.user && session?.profile) {
@@ -46,27 +49,39 @@ function showLoginWarning() {
     user_profile = null;
     noticeTip.classList.add("hidden");
     submitContainer.classList.add("hidden");
+    accountDetail.classList.add("hidden");
     window.location.href = "../account/";
 }
 
 function showEdit(user, profile, event) {
     user_profile = profile;
-    noticeTip.classList.remove("hidden");
-    accountDetail.classList.add("hidden");
-    submitContainer.classList.remove("hidden");
-
+    
     /* configure tip */ 
     noticeTipTitle.innerText = "Editer votre évènement";
     noticeTipText.innerText = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
 
     /* initialize form */
     initEventForm(event);
+    form.querySelector("#end_date_container").hidden = true;
+
+    /* show page */
+    noticeTip.classList.remove("hidden");
+    accountDetail.classList.add("hidden");
+    submitContainer.classList.remove("hidden");
 }
 
 
 /* === EXPORTED FUNCTIONS === */
 export async function editEvent() {
     const new_event = await getEventFormPayload();
+    const {imageUrl, error} = await uploadImageFile();
+    
+    if (error) {
+        button.setAttribute("aria-busy", "false");
+        openErrorModal("Problème pendant le téléchargement de l'image");
+        console.error(error);
+        return;
+    }
 
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
@@ -91,7 +106,7 @@ export async function editEvent() {
     button.setAttribute("aria-busy", "false");
     window.scrollTo(0, 0);
     form.reset();
-    openSuccessModal("Évènement édité !")
+    openSuccessModal("Évènement mis à jour !")
     
 }
 
