@@ -4,6 +4,11 @@ import { openEventModal } from "../global/modal.js";
 import { tagInput, userTags, clearTags } from "../global/tags.js";
 
 /* === VARIABLES === */
+const hash = window.location.hash.substring(1);
+const params = new URLSearchParams(hash);
+let eventId = params.get("id");
+history.replaceState(null, "", window.location.pathname + window.location.search);
+
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
 const thisSunday = getSunday(today);
@@ -52,11 +57,11 @@ function groupEvents(events) {
 }
 
 function hideErrorMessages() {
-    filterNoticeError.classList.add("hidden");
+    filterNoticeError.hidden = true;
 }
 
 function showFilterError(message) {
-    filterNoticeError.classList.remove("hidden");
+    filterNoticeError.hidden = false;
     filterNoticeErrorText.innerText = message;
     filterNoticeError.focus();
 }
@@ -219,15 +224,24 @@ async function loadEvents() {
     grouped.nextWeek = sortByDate(grouped.nextWeek);
     grouped.future = sortByDate(grouped.future);
 
-    header.classList.remove("hidden");
-    tabs.classList.remove("hidden");
-    filter.classList.remove("hidden");
+    header.hidden = false;
+    tabs.hidden = false;
+    filter.hidden = false;
     
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("this-week", "Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
         renderSection("next-week", "Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(addDays(nextSunday, 1)), grouped.future);
+
+    if (eventId) {
+        const el = container.querySelector(`[data-event-id="${eventId}"]`);
+        if (!el) return;
+        el.scrollIntoView();
+        el.focus();
+        el.click();
+        eventId = null;
+    }
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -309,9 +323,9 @@ export function selectTab(tab) {
     if (wasActive) {
         // No tab active → show ALL sections
         document.querySelectorAll(".section-tab.empty")
-        .forEach(section => section.classList.add("hidden"));
+        .forEach(section => section.hidden = true);
         document.querySelectorAll(".section-tab.no-empty")
-        .forEach(section => section.classList.remove("hidden"));
+        .forEach(section => section.hidden = false);
         return;
     }
 
@@ -320,13 +334,10 @@ export function selectTab(tab) {
  
     // Show only its section
     document.querySelectorAll(".section-tab")
-        .forEach(section => section.classList.add("hidden"));
+        .forEach(section => section.hidden = true);
 
-    const target = tab.dataset.target;
-
-    document
-        .getElementById(`event-${target}`)
-        ?.classList.remove("hidden");
+    const eventSection = document.getElementById(`event-${tab.dataset.target}`);
+    if(eventSection) eventSection.hidden = false;
 }
 
 

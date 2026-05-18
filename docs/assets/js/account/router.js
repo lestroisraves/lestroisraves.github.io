@@ -70,6 +70,7 @@ async function handleClick(el) {
             break;
 
         case "edit-event":
+            window.location.href = `../edit_event#id=${el.dataset.id}`;
             break;
 
         case "send-official-request":

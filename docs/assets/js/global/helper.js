@@ -299,7 +299,7 @@ function handleAccordion(accordion, accordionId) {
     accordion.setAttribute("aria-expanded", String(!isOpen));
 
     if (isOpen) {
-        hiddenSection.classList.add("hidden");
+        hiddenSection.hidden = true;
         accordion.querySelector(".chevron").innerText = "expand_more";
         if (searchInput) searchInput.value = "";
 
@@ -314,7 +314,7 @@ function handleAccordion(accordion, accordionId) {
         }
     } else {
         /* open this one */
-        hiddenSection.classList.remove("hidden");
+        hiddenSection.hidden = false;
         accordion.querySelector(".chevron").innerText = "expand_less";
     }
 }

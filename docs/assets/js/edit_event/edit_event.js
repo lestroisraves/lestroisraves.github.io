@@ -1,21 +1,20 @@
 console.log("executing:", "edit_event.js");
 
+import { openErrorModal, openSuccessModal } from "../global/modal.js";
+import { initEventForm, getEventFormPayload } from "../global/eventform.js";
+import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
+
+/* === VARIABLES === */
 const hash = window.location.hash.substring(1);
+const previousPage = document.referrer;
 const params = new URLSearchParams(hash);
 const eventId = params.get("id");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js";
-import { initEventForm, getEventFormPayload } from "../global/eventform.js";
-
-/* === VARIABLES === */
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");
 const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
-const noticeTip = document.getElementById("notice-tip");
-const noticeTipTitle = noticeTip.querySelector("#title");
-const noticeTipText = noticeTip.querySelector("#text");
 
 let user_profile = null;
 
@@ -24,7 +23,7 @@ async function initEditEventPage() {
     console.log("init /edit_event/ page");
     console.log("eventId:", eventId);
 
-    submitContainer.classList.add("hidden");
+    submitContainer.hidden = true;
     const session = await getSessionUserProfile();
     if (session?.session?.user && session?.profile) {
         // get event
@@ -47,31 +46,32 @@ async function initEditEventPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    noticeTip.classList.add("hidden");
-    submitContainer.classList.add("hidden");
-    accountDetail.classList.add("hidden");
+    hideNoticeTip();
+    submitContainer.hidden = true;
+    accountDetail.hidden = true;
     window.location.href = "../account/";
 }
 
 function showEdit(user, profile, event) {
     user_profile = profile;
     
-    /* configure tip */ 
-    noticeTipTitle.innerText = "Editer votre évènement";
-    noticeTipText.innerText = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
+    showNoticeTip(`Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`, "Editer votre évènement");
 
     /* initialize form */
     initEventForm(event);
     form.querySelector("#end_date_container").hidden = true;
+    form.querySelector("#cancel-btn").hidden = false;
 
     /* show page */
-    noticeTip.classList.remove("hidden");
-    accountDetail.classList.add("hidden");
-    submitContainer.classList.remove("hidden");
+    accountDetail.hidden = true;
+    submitContainer.hidden = false;
 }
 
-
 /* === EXPORTED FUNCTIONS === */
+export function goBack(){
+    window.location.href = `${previousPage}#id=${eventId}`;
+}
+
 export async function editEvent() {
     const new_event = await getEventFormPayload();
     const {imageUrl, error} = await uploadImageFile();

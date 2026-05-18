@@ -106,7 +106,7 @@ export function initEventForm(eventData=null) {
         }
     }
     if (eventData.image_url) {
-        form.querySelector(".event-image-wrapper").classList.remove("hidden");
+        form.querySelector(".event-image-wrapper").hidden = false;
         form.querySelector("#event-thumbnail").src = eventData.image_url;
     }
 }
@@ -135,7 +135,7 @@ export function showImagePreview(file) {
     currentImage = file;
     const reader = new FileReader();
     reader.onload = (e) => {
-        form.querySelector(".event-image-wrapper").classList.remove("hidden");
+        form.querySelector(".event-image-wrapper").hidden = false;
         form.querySelector("#event-thumbnail").src = e.target.result;
         form.querySelector("#file-name").textContent = file.name;
     };

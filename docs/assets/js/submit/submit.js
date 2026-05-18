@@ -2,6 +2,7 @@ console.log("executing:", "submit.js");
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js";
+import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
 
 /* === VARIABLES === */
 const form = document.getElementById("event-form");
@@ -9,9 +10,6 @@ const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");
 const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
-const noticeTip = document.getElementById("notice-tip");
-const noticeTipTitle = noticeTip.querySelector("#title");
-const noticeTipText = noticeTip.querySelector("#text");
 
 let user_profile = null;
 
@@ -28,9 +26,9 @@ async function initSubmitPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    noticeTip.classList.add("hidden");
-    accountDetail.classList.add("hidden");
-    submitContainer.classList.add("hidden");
+    hideNoticeTip();
+    accountDetail.hidden = true;
+    submitContainer.hidden = true;
     window.location.href = "../account/";
 }
 
@@ -38,12 +36,10 @@ function showSubmit(user, profile) {
     user_profile = profile;
     accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
 
-    /* configure tip */ 
-    noticeTipTitle.innerText = "Publiez ici un évènement";
-    noticeTipText.innerText = "Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours";
+    showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
 
-    /* configure roles */
-    accountDetail.classList.remove("hidden");
+       /* configure roles */
+    accountDetail.hidden = false;
     permissionDetails.innerHTML = renderAccountPermissionDetails();
     const permissionOfficial = permissionDetails.querySelector("#permission-official");
     const permissionAdmin = permissionDetails.querySelector("#permission-admin");
@@ -53,14 +49,14 @@ function showSubmit(user, profile) {
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.classList.add("hidden");
+            permissionAdmin.hidden = true;
             break;
         
         case 1: /* official */
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.classList.add("hidden");
+            permissionAdmin.hidden = true;
             break;
 
         case 2:
@@ -68,24 +64,24 @@ function showSubmit(user, profile) {
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
-            permissionAdmin.classList.remove("hidden");
+            permissionAdmin.hidden = false;
             break;
         
         default:
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
-            permissionAdmin.classList.add("hidden");
+            permissionAdmin.hidden = true;
     }
 
     /* initialize form */
     initEventForm();
     form.querySelector("#end_date_container").hidden = false;
+    form.querySelector("#cancel-btn").hidden = true;
 
     /* show page */
-    noticeTip.classList.remove("hidden");
-    accountDetail.classList.remove("hidden");
-    submitContainer.classList.remove("hidden");
+    accountDetail.hidden = false;
+    submitContainer.hidden = false;
 }
 
 /* === EXPORTED FUNCTIONS === */

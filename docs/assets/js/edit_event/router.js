@@ -12,7 +12,7 @@ import {
 } from "../global/tags.js"
 
 import { 
-    editEvent
+    editEvent, goBack
 } from "./edit_event.js"
 
 /* === LOCAL FUNCTIONS === */
@@ -26,6 +26,11 @@ async function handleClick(el, e) {
             if (e.key === "Backspace") {
                 removeLastTag();
             }
+            break;
+
+        case "go-back":
+        case "cancel-edit":
+            goBack();
             break;
 
         case "pick-file":

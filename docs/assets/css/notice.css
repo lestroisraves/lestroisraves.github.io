@@ -33,6 +33,10 @@
     margin: 0;
 }
 
+.notice-title.hidden {
+    display: none;
+}
+
 .notice-tip {
     background-color: var(--primary-success--lighter);
     border-left: 4px solid var(--primary-success);
