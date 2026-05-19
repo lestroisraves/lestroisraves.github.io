@@ -8,7 +8,6 @@ hide:
 {% include 'includes/modals/confirm_modal.html' %}
 {% include 'includes/modals/popup.html' %}
 {% include 'includes/nav/events_header.html' %}
-{% include 'includes/forms/events_filter_form.html' %}
 
 {% block html %}
 <article id="events"></article>
