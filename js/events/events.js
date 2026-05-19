@@ -11,6 +11,7 @@ history.replaceState(null, "", window.location.pathname + window.location.search
 
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
+const afterTomorrow = addDays(today, 2);
 const thisSunday = getSunday(today);
 const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
@@ -29,8 +30,7 @@ let filters = APP_CONFIG.DEFAULT_FILTER;
 function groupEvents(events) {
     const groups = {
         today: [],
-        thisWeek: [],
-        nextWeek: [],
+        tomorrow: [],
         future: []
     };
 
@@ -40,13 +40,10 @@ function groupEvents(events) {
         if (eventDate.getTime() === today.getTime()) {
             groups.today.push(event);
         }
-        else if (eventDate > today && eventDate <= thisSunday) {
-            groups.thisWeek.push(event);
+        else if (eventDate == tomorrow) {
+            groups.tomorrow.push(event);
         }
-        else if (eventDate >= nextMonday && eventDate <= nextSunday) {
-            groups.nextWeek.push(event);
-        }
-        else if (eventDate > nextSunday) {
+        else if (eventDate > tomorrow) {
             groups.future.push(event);
         }
     });
@@ -208,8 +205,7 @@ async function loadEvents() {
     const grouped = groupEvents(EVENTS);
 
     grouped.today = sortByDate(grouped.today);
-    grouped.thisWeek = sortByDate(grouped.thisWeek);
-    grouped.nextWeek = sortByDate(grouped.nextWeek);
+    grouped.tomorrow = sortByDate(grouped.tomorrow);
     grouped.future = sortByDate(grouped.future);
 
     header.hidden = false;
@@ -218,9 +214,8 @@ async function loadEvents() {
     
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
-        renderSection("this-week", "Cette semaine", formatDateRange(tomorrow, thisSunday), grouped.thisWeek) +
-        renderSection("next-week", "Semaine prochaine", formatDateRange(nextMonday, nextSunday), grouped.nextWeek) +
-        renderSection("later", "Prochainement", "Dès le " + formatEventDate(addDays(nextSunday, 1)), grouped.future);
+        renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
+        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.future);
 
     if (eventId) {
         console.log("show event id:", eventId);

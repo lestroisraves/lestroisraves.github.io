@@ -7,7 +7,48 @@
 
 <div id="event-tabs" class="events-tabs" hidden>
   <button class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
-  <button class="tab" data-action="select-tab" data-target="this-week">Cette semaine</button>
-  <button class="tab" data-action="select-tab" data-target="next-week">Semaine prochaine</button>
+  <button class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
   <button class="tab" data-action="select-tab" data-target="later">Prochainement</button>
 </div>
+
+<section id="event-filter" class="filter-accordion" hidden>
+    <button id="filter-toggle" class="accordion-toggle" data-action="accordion" data-accordion-id="filter-panel" aria-expanded="false" aria-controls="filter-panel" >
+        <span class="material-symbols-outlined">filter_list</span>
+        Filtrer ma recherche
+        <span class="material-symbols-outlined chevron">expand_more</span>
+    </button>
+
+    <div id="filter-panel" class="accordion-panel" hidden>
+        <form id="filter-form">
+            <label class="pico">
+                <fieldset id="filter-category">
+                <legend>Catégories</legend></fieldset>
+            </label>
+
+            <label class="pico">
+                <fieldset id="filter-parental-guide">
+                <legend>Guide Parental</legend></fieldset>
+            </label>
+
+            <label for="tag-input" class="pico">Tags</label>
+            <div class="tag-input-container" id="tag-container">
+                <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
+            </div>
+
+            <label class="pico">
+                Du
+                <input type="date" name="from">
+            </label>
+
+            <label class="pico">
+                au
+                <input type="date" name="to">
+            </label>
+
+            <div class="filter-actions pico">
+                <button type="submit" data-action="apply-filter">Appliquer le filtre</button>
+                <button type="submit" id="reset-filters" class="secondary" data-action="reset-filter">Enlever le filtre</button>
+            </div>
+        </form>
+    </div>
+</section>
