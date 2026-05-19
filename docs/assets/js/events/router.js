@@ -106,3 +106,6 @@ document.addEventListener("input", (event) => {
     handleInput(el);
 });
 
+document.addEventListener("submit", (event) => {
+  event.preventDefault();
+});

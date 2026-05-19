@@ -46,7 +46,7 @@
 /* Form layout helpers */
 .date-range {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.4rem;
 }
 
 .filter-actions {
@@ -62,7 +62,7 @@
     gap: 0.4rem;
     margin-top: 0.4rem;
     margin-bottom: 1.2rem;
-    padding: 0.4rem;
+    padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     min-height: 38px;

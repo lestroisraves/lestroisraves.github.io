@@ -4,12 +4,23 @@ const noticeTipText = noticeTip.querySelector("#text");
 const noticeError = document.getElementById("notice-error");
 const noticeErrorText = noticeError.querySelector("#text");
 
+
+export function configNoticeTip(type) {
+    noticeTip.classList.forEach(cls => {
+        if (cls.startsWith("type-")) {
+            noticeTip.classList.remove(cls);
+        }
+    });
+    noticeTip.classList.add(`type-${type}`);
+}
+
 export function showNoticeTip(message, title=null) {
     noticeTipText.innerText = message;
     if (title) {
-        noticeTipText.classList.remove("hidden");
+        noticeTipTitle.innerText = title;
+        noticeTipTitle.classList.remove("hidden");
     } else {
-        noticeTipText.classList.add("hidden");
+        noticeTipTitle.classList.add("hidden");
     }
     noticeTip.classList.remove("hidden");
     noticeTip.focus();

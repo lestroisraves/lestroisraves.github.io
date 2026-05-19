@@ -1,8 +1,8 @@
 console.log("executing:", "edit_event.js");
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js";
-import { initEventForm, getEventFormPayload } from "../global/eventform.js";
-import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -55,12 +55,14 @@ function showLoginWarning() {
 function showEdit(user, profile, event) {
     user_profile = profile;
     
+    configNoticeTip("wide");
     showNoticeTip(`Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`, "Editer votre évènement");
 
     /* initialize form */
     initEventForm(event);
     form.querySelector("#end_date_container").hidden = true;
     form.querySelector("#cancel-btn").hidden = false;
+    form.querySelector("#cancel-btn").disabled = false;
 
     /* show page */
     accountDetail.hidden = true;
@@ -74,40 +76,42 @@ export function goBack(){
 
 export async function editEvent() {
     const new_event = await getEventFormPayload();
-    const {imageUrl, error} = await uploadImageFile();
+    const {image_url, error: upload_error} = await uploadImageFile();
     
-    if (error) {
+    if (upload_error) {
         button.setAttribute("aria-busy", "false");
         openErrorModal("Problème pendant le téléchargement de l'image");
         console.error(error);
         return;
     }
 
-    for (let day = 0; day < new_event.nb_days; day++) {
-        var payload = new_event.payload;
-        payload.event_date = addDays(eventDate.value, day).toLocaleDateString("fr-CA")
-        payload.pending = user_profile.role == 0
-        payload.created_by = user_profile?.id ?? null
-        console.log("submit event payload (for edit):", payload)
+    var payload = new_event.payload;
+    payload.event_date = form.querySelector("#event_date").value;
+    payload.pending = user_profile.role == 0;
+    payload.created_by = user_profile?.id ?? null;
+    payload.image_url = image_url;
+    console.log("submit event payload (for edit):", payload);
 
-        // const { data: event, error } = await window.supabaseClient.from("events").update(payload);
-        // if (error) {
-        //     button.setAttribute("aria-busy", "false");
-        //     if ((nb_days > 1) && (day > 0)) {
-        //         openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`);
-        //     } else {
-        //         openErrorModal("Problème de publication");
-        //     }
-        //     console.error(error);
-        //     return;
-        // }
+    const { error } = await window.supabaseClient
+        .from("events")
+        .update(payload)
+        .eq("id", eventId);
+
+    if (error) {
+        button.setAttribute("aria-busy", "false");
+        openErrorModal("Problème de mise à jour");
+        console.error(error);
+        return;
     }
 
     button.setAttribute("aria-busy", "false");
     window.scrollTo(0, 0);
     form.reset();
-    openSuccessModal("Évènement mis à jour !")
-    
+    openSuccessModal("Évènement mis à jour ! Retour à la liste des évènements automatiquement.");
+
+    setTimeout(function () {
+        window.location.href = "..";
+    }, 3000);
 }
 
 /* === INITIAL LOAD === */

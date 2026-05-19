@@ -2,7 +2,7 @@ console.log("executing:", "submit.js");
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js";
-import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
 
 /* === VARIABLES === */
 const form = document.getElementById("event-form");
@@ -36,6 +36,7 @@ function showSubmit(user, profile) {
     user_profile = profile;
     accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
 
+    configNoticeTip("wide");
     showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
 
        /* configure roles */
@@ -78,6 +79,7 @@ function showSubmit(user, profile) {
     initEventForm();
     form.querySelector("#end_date_container").hidden = false;
     form.querySelector("#cancel-btn").hidden = true;
+    form.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
     accountDetail.hidden = false;
@@ -120,7 +122,11 @@ export async function submitEvent() {
     button.setAttribute("aria-busy", "false");
     window.scrollTo(0, 0);
     form.reset();
-    openSuccessModal("Évènement publié !")
+    openSuccessModal("Évènement publié ! Retour à la liste des évènements automatiquement.")
+
+    setTimeout(function () {
+        window.location.href = "..";
+    }, 3000);
     
 }
 
