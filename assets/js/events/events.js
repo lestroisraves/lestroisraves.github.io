@@ -1,6 +1,6 @@
 console.log("executing:", "events.js");
 
-import { openEventModal } from "../global/modal.js";
+import { openErrorModal, openEventModal } from "../global/modal.js";
 import { tagInput, userTags, clearTags } from "../global/tags.js";
 
 /* === VARIABLES === */
@@ -15,8 +15,6 @@ const thisSunday = getSunday(today);
 const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
 
-const filterNoticeError = document.getElementById("filter-error");
-const filterNoticeErrorText = filterNoticeError.querySelector("#text");
 const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
 const filterForm = document.getElementById("filter-form");
@@ -54,16 +52,6 @@ function groupEvents(events) {
     });
 
     return groups;
-}
-
-function hideErrorMessages() {
-    filterNoticeError.hidden = true;
-}
-
-function showFilterError(message) {
-    filterNoticeError.hidden = false;
-    filterNoticeErrorText.innerText = message;
-    filterNoticeError.focus();
 }
 
 function initFilters() {
@@ -261,8 +249,6 @@ export function resetFilter() {
 }
 
 export function applyFilter() {
-    hideErrorMessages();
-
     const selectedCategories = Array.from(
         filterForm.querySelectorAll('input[name="categories"]:checked')
     ).map(cb => getCategoryId(cb.value));
@@ -285,18 +271,18 @@ export function applyFilter() {
     // check dates
     if (from) {
         if (new Date(from) < today) {
-            showFilterError("La date de début doit être supérieure aujourd'hui");
+            openErrorModal("La date de début doit être supérieure aujourd'hui");
             return;
         }
     }if (to) {
         if (new Date(from) < today) {
-            showFilterError("La date de fin doit être supérieure aujourd'hui");
+            openErrorModal("La date de fin doit être supérieure aujourd'hui");
             return;
         }
     }
     if (from && to) {
         if (new Date(to) < new Date(from)) {
-            showFilterError("La date de fin doit être supérieure ou égale à la date de début");
+            openErrorModal("La date de fin doit être supérieure ou égale à la date de début");
             return;
         }
     }
@@ -343,6 +329,5 @@ export function selectTab(tab) {
 
 
 /* === MAIN === */
-hideErrorMessages();
 initFilters();
 loadEvents();

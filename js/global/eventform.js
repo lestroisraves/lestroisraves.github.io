@@ -13,8 +13,10 @@ const priceChoiceList = document.getElementById("price-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
 const eventImage = document.getElementById("event-image");
+const deleteImageBtn = document.getElementById("remove-image-btn");
 
-let currentImage = null;
+let currentImageUrl = null;
+let imageToUpload = null;
 
 /* === LOCAL FUNCTIONS === */
 async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
@@ -24,6 +26,7 @@ async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
 
         reader.onload = () => {
             img.src = reader.result;
+            showImagePreview(file.name, img.src);
         };
 
         img.onload = () => {
@@ -48,9 +51,18 @@ async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
     });
 }
 
+function showImagePreview(image_name, image_src) {
+    deleteImageBtn.hidden = false;
+    form.querySelector(".event-image-wrapper").hidden = false;
+    form.querySelector("#event-thumbnail").src = image_src;
+    form.querySelector("#file-name").textContent = image_name;
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function initEventForm(eventData=null) {
     form.reset()
+    currentImageUrl = null;
+    imageToUpload = null;
 
     /* Configure categories  */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
@@ -105,9 +117,12 @@ export function initEventForm(eventData=null) {
             priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0];
         }
     }
+    priceChoiceList.dispatchEvent(new Event("change", { bubbles: true }));
+
     if (eventData.image_url) {
-        form.querySelector(".event-image-wrapper").hidden = false;
-        form.querySelector("#event-thumbnail").src = eventData.image_url;
+        currentImageUrl = eventData.image_url;
+        const fileName = currentImageUrl.split("/").pop();
+        showImagePreview(fileName, currentImageUrl);
     }
 }
 
@@ -125,43 +140,45 @@ export function priceChanged(target) {
     }
 }
 
-export function showImagePreview(file) {
+export async function handleImageChoice(file) {
     if (file.size > 5_000_000) {
         button.setAttribute("aria-busy", "false");
         openErrorModal("Image trop lourde (5Mo maximum");
         eventImage.value = "";
         return;
     }
-    currentImage = file;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        form.querySelector(".event-image-wrapper").hidden = false;
-        form.querySelector("#event-thumbnail").src = e.target.result;
-        form.querySelector("#file-name").textContent = file.name;
-    };
-    reader.readAsDataURL(currentImage);
+    imageToUpload = await resizeImage(file);
 }
 
 export async function uploadImageFile() {
-    /* get image */
-    const file = eventImage.files[0];
-    if (!file) return {data: null, error: null}
-        
-    const resizedBlob = await resizeImage(file);
-    const fileName = `event-${crypto.randomUUID()}.jpg`;
-    const { data, error } = await window.supabaseClient.storage.from("event-images")
-        .upload(fileName, resizedBlob, {
-            contentType: "image/jpeg",
-            cacheControl: "3600",
-            upsert: false
-        });
-
-    if (error) {
-        return {data: null, error: error};
+    /* check image has changed */
+    if (imageToUpload) {
+        console.log("upload image");
+        const fileName = `event-${crypto.randomUUID()}.jpg`;
+        const { data, error } = await window.supabaseClient.storage.from("event-images")
+            .upload(fileName, imageToUpload, {
+                contentType: "image/jpeg",
+                cacheControl: "3600",
+                upsert: false
+            });
+        if (error) {
+            return {image_url: null, error: error};
+        }
+        imageToUpload = null;
+        return {image_url: window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl, error: null};
+    } else {
+        return {image_url: currentImageUrl, error: null};
     }
+}
 
-    return {data: window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl, error: null};
-
+export function removeImage() {
+    imageToUpload = null;
+    currentImageUrl = null;
+    eventImage.value = "";
+    deleteImageBtn.hidden = true;
+    form.querySelector(".event-image-wrapper").hidden = true;
+    form.querySelector("#event-thumbnail").src = "";
+    form.querySelector("#file-name").textContent = "aucun fichier choisi";
 }
 
 export function getEventFormPayload() {

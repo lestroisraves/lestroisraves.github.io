@@ -4,7 +4,7 @@ import {
 } from "../global/modal.js";
 
 import { 
-    priceChanged, showImagePreview
+    priceChanged, handleImageChoice, removeImage
 } from "../global/eventform.js"
 
 import { 
@@ -36,8 +36,12 @@ async function handleClick(el, e) {
         case "pick-file":
             document.getElementById("event-image").click()  // wrapper to input type="file"
             break;
+        
+        case "remove-image":
+            removeImage();
+            break;
 
-        case "edit-event":
+        case "submit-event":
             await editEvent();
             break;
 
@@ -59,7 +63,7 @@ async function handleChange(el) {
         case "image-choice":
             const file = el.files[0];
             if (!file) return;
-            showImagePreview(file);
+            await handleImageChoice(file);
             break;
 
         default:
@@ -76,10 +80,25 @@ document.addEventListener("click", async (event) => {
     await handleClick(el, event);
 });
 
+document.addEventListener("keydown", async (event) => {
+    if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
+    const el = event.target.closest("[data-action]");
+    if (!el) return;
+    if (el.dataset.action != "tag-input") {
+        event.preventDefault();
+    }
+    await handleClick(el, event);
+});
+
 document.addEventListener("change", (event) => {
     const el = event.target.closest("[data-change-type]");
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleChange(el);
 });
+
+document.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
 
