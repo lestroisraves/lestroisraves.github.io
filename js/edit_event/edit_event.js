@@ -10,6 +10,7 @@ const previousPage = document.referrer;
 const params = new URLSearchParams(hash);
 const eventId = params.get("id");
 
+const backBtn = document.getElementById("back-btn");
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");
@@ -55,16 +56,16 @@ function showLoginWarning() {
 function showEdit(user, profile, event) {
     user_profile = profile;
     
-    configNoticeTip("wide");
-    showNoticeTip(`Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`, "Editer votre évènement");
-
     /* initialize form */
+    configNoticeTip("wide");
     initEventForm(event);
     form.querySelector("#end_date_container").hidden = true;
     form.querySelector("#cancel-btn").hidden = false;
     form.querySelector("#cancel-btn").disabled = false;
 
     /* show page */
+    showNoticeTip(`Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`, "Editer votre évènement");
+    backBtn.hidden = false;
     accountDetail.hidden = true;
     submitContainer.hidden = false;
 }

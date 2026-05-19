@@ -55,6 +55,8 @@
     
       <link rel="stylesheet" href="assets/css/theme.css">
     
+      <link rel="stylesheet" href="assets/css/nav.css">
+    
       <link rel="stylesheet" href="assets/css/events.css">
     
       <link rel="stylesheet" href="assets/css/filter.css">
@@ -460,18 +462,18 @@
         </div>
     </div>
 </div>
-<div id="event-list-header" class="event-list-header" hidden>
+<section id="event-list-header" class="event-list-header hidden">
     <a href="./submit/" class="btn-outline">
         <span class="material-symbols-outlined" aria-hidden="true">add</span>
         Publier un évènement
     </a>
-</div>
+</section>
 
-<div id="event-tabs" class="events-tabs" hidden>
-  <button class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
-  <button class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
-  <button class="tab" data-action="select-tab" data-target="later">Prochainement</button>
-</div>
+<section id="event-tabs" class="events-tabs hidden">
+    <button class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
+    <button class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
+    <button class="tab" data-action="select-tab" data-target="later">Prochainement</button>
+</section>
 
 <section id="event-filter" class="filter-accordion" hidden>
     <button id="filter-toggle" class="accordion-toggle" data-action="accordion" data-accordion-id="filter-panel" aria-expanded="false" aria-controls="filter-panel" >
@@ -515,7 +517,14 @@
     </div>
 </section>
 
-<article id="events"></article>
+<div id="loading-screen">
+    <div class="spinner">
+        <!-- <span class="material-symbols-outlined">music_note</span> -->
+    </div>
+    <!-- <img src="loading.gif" alt="Loading..." /> -->
+</div>
+
+<article id="events" hidden></article>
 <script type="module" defer src="assets/js/events/router.js"></script>
 <html data-theme="light">
 

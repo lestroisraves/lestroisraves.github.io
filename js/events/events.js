@@ -9,6 +9,11 @@ const params = new URLSearchParams(hash);
 let eventId = params.get("id");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
+const container = document.getElementById("events");
+const header = document.getElementById("event-list-header");
+const tabs = document.getElementById("event-tabs");
+const filter = document.getElementById("event-filter");
+
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
 const afterTomorrow = addDays(today, 2);
@@ -95,7 +100,7 @@ function initFilters() {
 function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return `
-        <div id="event-${sectionId}" class="section-tab empty hidden">
+        <div id="event-${sectionId}" class="section-tab empty" hidden>
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -156,11 +161,6 @@ async function loadEvents() {
         user_profile = session.profile;
     }
 
-    const container = document.getElementById("events");
-    const header = document.getElementById("event-list-header");
-    const tabs = document.getElementById("event-tabs");
-    const filter = document.getElementById("event-filter");
-
     EVENTS = [];
 
     let query = window.supabaseClient
@@ -207,15 +207,17 @@ async function loadEvents() {
     grouped.today = sortByDate(grouped.today);
     grouped.tomorrow = sortByDate(grouped.tomorrow);
     grouped.future = sortByDate(grouped.future);
-
-    header.hidden = false;
-    tabs.hidden = false;
-    filter.hidden = false;
     
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.future);
+
+    header.classList.remove("hidden");
+    tabs.classList.remove("hidden");
+    filter.hidden = false;
+    container.hidden = false;
+    document.getElementById("loading-screen").style.display = "none";
 
     if (eventId) {
         console.log("show event id:", eventId);
@@ -226,6 +228,7 @@ async function loadEvents() {
         el.click();
         eventId = null;
     }
+
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -321,7 +324,6 @@ export function selectTab(tab) {
     const eventSection = document.getElementById(`event-${tab.dataset.target}`);
     if(eventSection) eventSection.hidden = false;
 }
-
 
 /* === MAIN === */
 initFilters();

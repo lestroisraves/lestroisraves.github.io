@@ -34,13 +34,9 @@ function showLoginWarning() {
 
 function showSubmit(user, profile) {
     user_profile = profile;
+    
+    /* configure roles */
     accountRole.innerText = APP_CONFIG.ROLES[user_profile.role];
-
-    configNoticeTip("wide");
-    showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
-
-       /* configure roles */
-    accountDetail.hidden = false;
     permissionDetails.innerHTML = renderAccountPermissionDetails();
     const permissionOfficial = permissionDetails.querySelector("#permission-official");
     const permissionAdmin = permissionDetails.querySelector("#permission-admin");
@@ -76,12 +72,14 @@ function showSubmit(user, profile) {
     }
 
     /* initialize form */
+    configNoticeTip("wide");
     initEventForm();
     form.querySelector("#end_date_container").hidden = false;
     form.querySelector("#cancel-btn").hidden = true;
     form.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
+    showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
     accountDetail.hidden = false;
     submitContainer.hidden = false;
 }
