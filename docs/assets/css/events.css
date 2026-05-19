@@ -5,6 +5,10 @@
     margin-bottom: 1rem;
 }
 
+.event-list-header.hidden {
+    display: none;
+}
+
 .btn-outline {
     display: inline-flex;
     align-items: center;
@@ -70,6 +74,10 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 0.3rem;
     margin-bottom: 1rem;
+}
+
+.events-tabs.hidden {
+    display: none;
 }
 
 .events-tabs .tab {

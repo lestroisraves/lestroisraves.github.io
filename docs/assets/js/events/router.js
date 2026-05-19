@@ -12,6 +12,11 @@ import {
     selectTab
 } from "./events.js"
 
+const container = document.getElementById("events");
+const header = document.getElementById("event-list-header");
+const tabs = document.getElementById("event-tabs");
+const filter = document.getElementById("event-filter");
+
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
     switch (el.dataset.action) {
@@ -106,6 +111,11 @@ document.addEventListener("input", (event) => {
     handleInput(el);
 });
 
+// window.addEventListener("load", () => {
+//     document.getElementById("loading-screen").style.display = "none";
+// });
+
+
 document.addEventListener("submit", (event) => {
-  event.preventDefault();
+    event.preventDefault();
 });

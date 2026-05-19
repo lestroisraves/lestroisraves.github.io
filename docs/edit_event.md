@@ -5,7 +5,7 @@ hide:
 ---
 
 {% block back %}
-<button class="back-btn" data-action="go-back">←</button>
+<button id="back-btn" class="back-btn" data-action="go-back" hidden>←</button>
 {% endblock %}
 {% include 'includes/modals/popup.html' %}
 {% include 'includes/modals/notices.html' %}
