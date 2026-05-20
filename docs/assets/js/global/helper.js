@@ -215,11 +215,40 @@ function renderAccountPermissionDetails() {
     `
 }
 
+function setEventImage(container, url) {
+    const img = container.querySelector(".event-thumbnail");
+    const placeholder = container.querySelector(".image-placeholder");
+
+    // Reset state BEFORE changing src
+    img.classList.remove("loaded");
+    placeholder.style.display = "flex";  // show loading
+
+    // Set new image
+    img.src = url;
+
+    // When image is loaded
+    img.onload = () => {
+        const ratio = img.naturalWidth / img.naturalHeight;
+
+        const container = img.parentElement;
+        container.style.aspectRatio = ratio;
+
+        img.classList.add("loaded");
+        placeholder.style.display = "none";
+    };
+
+    // Handle error
+    // img.onerror = () => {
+    //     placeholder.textContent = "image";
+    // };
+}
+
+
 function renderEventData(event, details = false) {
     const eventData = event;
 
     eventData.categoryHtml = `
-        <div class="event-meta category cat-${eventData.category}">
+        <div class="event-meta category cat-${eventData.category}" style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
             ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
         </div>
     `
@@ -282,7 +311,7 @@ function renderEventData(event, details = false) {
             : "";
 
         eventData.descriptionHtml = eventData.long_description
-            ? `<hr>
+            ? `<hr style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}; background-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
                <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>`
             : "";
     }

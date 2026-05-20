@@ -114,6 +114,9 @@ def generate_events(n: int):
         elif category == 3:
             image = "peinture.webp"
             location_name = random.choice(["Musé Des Arts", "Au Cercle", "Café du bord du monde", "Chez Jeanine"])
+        elif category == 4:
+            image = "books.jpg"
+            location_name = random.choice(["Musé Des Livres", "La confiserie", "Chez Julien", "Au livre enchainé"])
         else:
             image = "misc.webp"
             location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])

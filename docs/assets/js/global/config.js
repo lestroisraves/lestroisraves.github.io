@@ -17,23 +17,39 @@ APP_CONFIG = {
     CATEGORIES: {
         0: {
             "label": "Concert",
-            "icon": "music_note_2"
+            "icon": "music_note_2",
+            "color": "#3838AB",
+            "color_light": "#eef2ff"
         },
         1: {
             "label": "Spectacle vivant",
-            "icon": "festival"
+            "icon": "festival",
+            "color": "#15803d",
+            "color_light": "#f0fdf4"
         },
         2: {
             "label": "Projection",
-            "icon": "theater_comedy"
+            "icon": "theater_comedy",
+            "color": "#d97706",
+            "color_light": "#fffbeb"
         },
         3: {
             "label": "Art visuel",
-            "icon": "palette"
+            "icon": "palette",
+            "color": "#ec4899",
+            "color_light": "#fdf2f8"
         },
         4: {
+            "label": "Litérature",
+            "icon": "auto_stories",
+            "color": "#02659A",
+            "color_light": "#D1E5FB"
+        },
+        5: {
             "label": "Autres",
-            "icon": "stadium"
+            "icon": "stadium",
+            "color": "#5C6370",
+            "color_light": "#F0F1F3"
         }
     },
     PARENTAL_GUIDE: {
@@ -55,4 +71,12 @@ APP_CONFIG = {
     },
     API_TIMEOUT_MS: 5000
 };
+
+/* create color variables for CSS */
+document.documentElement.style.setProperty("--category0", APP_CONFIG.CATEGORIES[0]["color"]);
+document.documentElement.style.setProperty("--category1", APP_CONFIG.CATEGORIES[1]["color"]);
+document.documentElement.style.setProperty("--category2", APP_CONFIG.CATEGORIES[2]["color"]);
+document.documentElement.style.setProperty("--category3", APP_CONFIG.CATEGORIES[3]["color"]);
+document.documentElement.style.setProperty("--category4", APP_CONFIG.CATEGORIES[4]["color"]);
+document.documentElement.style.setProperty("--category5", APP_CONFIG.CATEGORIES[5]["color"]);
 

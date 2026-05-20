@@ -101,7 +101,9 @@
 
             <label class="pico">
                 Image (maximum 5 Mo)
-                <div class="event-image-wrapper preview" hidden><img id="event-thumbnail" class="event-thumbnail" alt="image évènement"></div>
+                <div class="event-image-wrapper preview" hidden>
+                    <img id="event-thumbnail" class="event-thumbnail loaded" alt="image évènement">
+                </div>
                 <div class="image-choice">
                     <input type="file" id="event-image" data-change-type="image-choice" accept="image/*" hidden/>
                     <button type="button" id="pick-file-btn" class="secondary" data-action="pick-file">Choisir</button>
