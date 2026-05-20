@@ -21,7 +21,7 @@ const filter = document.getElementById("event-filter");
 async function handleClick(el, e) {
     switch (el.dataset.action) {
         case "select-tab":
-            selectTab(el);
+            selectTab(el, el.dataset.target);
             break;
 
         case "select-cat-tab":

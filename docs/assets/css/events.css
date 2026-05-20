@@ -47,12 +47,14 @@
     font-size: 1rem;
 }
 
-
 .section-header {
     /* border-bottom: 1px solid #eee; */
     padding-bottom: 0.4rem;
 }
 
+.section-tab.empty {
+    display: none;
+}
 
 .section-title {
     /* margin: 0rem; */
@@ -61,7 +63,6 @@
     text-transform: uppercase;
     color: #333;
 }
-
 
 .section-subtitle {
     margin: 0 0 0.15rem 0;
@@ -73,20 +74,22 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.3rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
     margin-top: 0.4;
 }
 
 .events-tabs.category {
     grid-template-columns: repeat(6, 1fr);
+    margin-bottom: 1.2rem;
 }
 
 .events-tabs.hidden {
     display: none;
 }
 
+
 .tab {
-    padding: 0.2rem 0.7rem;
+    padding: 0.4rem 0.7rem;
     border-radius: 999px;
     border: none;
     background: #f1f5f9;
@@ -97,12 +100,6 @@
     transition: background 0.2s ease, color 0.2s ease;
 }
 
-.tab.category {
-    padding: 0.2rem 0.2rem;
-    font-family: "Material Symbols Outlined";
-    font-size: 1rem;
-}
-
 .tab:hover {
     filter: brightness(0.95);
 }
@@ -110,6 +107,72 @@
 .tab.active {
     background: #4f46e5;
     color: white;
+}
+
+.catTab {
+    /* padding: 0.2rem 0.2rem; */
+    padding: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.7rem;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.catTab.active:after {
+    content: attr(data-subtitle);
+    display: block;
+
+    position: absolute;
+    top: 100%;                 /* below button */
+
+    white-space: nowrap;      /* no wrapping */
+    width: max-content;       /* expand to full text */
+    max-width: none;          /* no restriction */
+
+    font-size: 0.65rem;
+    /* margin-top: 0.2rem; */
+    text-align: center;
+}
+
+.catTab.cat-0.active:after {
+    color: var(--category0);
+    text-align: left;
+}
+
+.catTab.cat-1.active:after {
+    color: var(--category1);
+}
+
+.catTab.cat-2.active:after {
+    color: var(--category2);
+}
+
+.catTab.cat-3.active:after {
+    color: var(--category3);
+}
+
+.catTab.cat-4.active:after {
+    color: var(--category4);
+}
+
+.catTab.cat-5.active:after {
+    color: var(--category5);
+    text-align: right;
+}
+
+.tab.category {
+    width: 100%;
+    padding: 0.2rem 0.2rem;
+    font-family: "Material Symbols Outlined";
+    font-size: 1rem;
 }
 
 .tab.cat-0 {
@@ -385,6 +448,36 @@
     max-width: 160px;
     border-radius: 6px;
     object-fit: cover;
+}
+
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.15rem;
+    margin-top: 2rem;
+    color: #666;
+    font-style: italic;
+    white-space: normal;
+}
+
+.empty-state.hidden{
+    display: none;
+}
+
+.empty-state .material-symbols-outlined {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.empty-state .text {
+    font-size: 0.8rem;
+    display: block;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 

@@ -29,7 +29,7 @@ APP_CONFIG = {
         },
         2: {
             "label": "Projection",
-            "icon": "movie",
+            "icon": "video_camera_back",
             "color": "#d97706",
             "color_light": "#fffbeb"
         },
