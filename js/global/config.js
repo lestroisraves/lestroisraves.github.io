@@ -23,13 +23,13 @@ APP_CONFIG = {
         },
         1: {
             "label": "Spectacle vivant",
-            "icon": "festival",
+            "icon": "theater_comedy",
             "color": "#15803d",
             "color_light": "#f0fdf4"
         },
         2: {
             "label": "Projection",
-            "icon": "theater_comedy",
+            "icon": "movie",
             "color": "#d97706",
             "color_light": "#fffbeb"
         },
