@@ -9,6 +9,7 @@ const params = new URLSearchParams(hash);
 let eventId = params.get("id");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
+const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
 const header = document.getElementById("event-list-header");
 const tabs = document.getElementById("event-tabs");
@@ -217,7 +218,7 @@ async function loadEvents() {
     tabs.classList.remove("hidden");
     filter.hidden = false;
     container.hidden = false;
-    document.getElementById("loading-screen").style.display = "none";
+    loading.style.display = "none";
 
     if (eventId) {
         console.log("show event id:", eventId);

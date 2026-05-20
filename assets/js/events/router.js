@@ -111,11 +111,7 @@ document.addEventListener("input", (event) => {
     handleInput(el);
 });
 
-// window.addEventListener("load", () => {
-//     document.getElementById("loading-screen").style.display = "none";
-// });
-
-
 document.addEventListener("submit", (event) => {
     event.preventDefault();
 });
+
