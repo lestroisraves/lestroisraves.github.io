@@ -207,7 +207,10 @@ export function openEventModal(event, type, user_profile=null) {
     eventModalCard.classList.add("cat-" + eventData.category);
 
     eventData.imageHtml = eventData.image_url
-        ? ` <div class="event-image-wrapper"><img src="${eventData.image_url}" class="event-thumbnail" alt="image évènement"></div>`
+        ? ` <div class="event-image-wrapper">
+                <div class="image-placeholder"><span class="material-symbols-outlined">image</span></div>
+                <img class="event-thumbnail" alt="image évènement">
+            </div>`
         : "";
 
     eventData.pendingHtml = eventData.pending
@@ -241,9 +244,44 @@ export function openEventModal(event, type, user_profile=null) {
         ${eventData.descriptionHtml}
     `;
 
+    if (eventData.image_url) {
+        const img = eventModalContent.querySelector(".event-thumbnail");
+        const placeholder = eventModalContent.querySelector(".image-placeholder");
+        setEventImage(img, placeholder, event.image_url);
+    }
+
     eventModal.classList.remove("hidden");
+    eventModal.scrollTop = 0;
     document.body.style.overflow = "hidden";
 }
+
+
+function setEventImage(img, placeholder, url) {
+    // Reset state BEFORE changing src
+    img.classList.remove("loaded");
+    placeholder.style.display = "flex";  // show loading
+
+    // Set new image
+    img.src = url;
+
+    // When image is loaded
+    img.onload = () => {
+        const ratio = img.naturalWidth / img.naturalHeight;
+
+        const container = img.parentElement;
+        container.style.aspectRatio = ratio;
+
+        img.classList.add("loaded");
+        placeholder.style.display = "none";
+        eventModal.scrollTop = 0;
+    };
+
+    // Handle error
+    // img.onerror = () => {
+    //     placeholder.textContent = "image";
+    // };
+}
+
 
 export function openRoleRequestModal(profile) {
     currentProfile = profile;

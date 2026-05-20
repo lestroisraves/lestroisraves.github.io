@@ -9,6 +9,7 @@ hide:
 {% endblock %}
 {% include 'includes/modals/popup.html' %}
 {% include 'includes/modals/notices.html' %}
+{% include 'includes/nav/loading.html' %}
 {% include 'includes/forms/submit_form.html' %}
 
 {% block html %}

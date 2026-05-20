@@ -10,6 +10,7 @@ let itemId = params.get("id");
 let itemType = params.get("type");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
+const loading = document.getElementById("loading-screen");
 const signInContainer = document.getElementById("signin-container");
 const signInForm = document.getElementById("signin-form");
 const signupContainer = document.getElementById("signup-container");
@@ -243,33 +244,31 @@ async function initAccountPage() {
 
 /* === EXPORTED FUNCTION === */
 export function showLogin() {
-    signInContainer.hidden = false;
-    rstPwdContainer.hidden = true;
-    signupContainer.hidden = true;
-    accountContainer.hidden = true;
     signInContainer.querySelector("#signin-form").reset();
     hideNoticeError();
     showNoticeTip("Connectez vous pour publier vos événements et contribuer à l'agenda culturel.");
+    rstPwdContainer.hidden = true;
+    signupContainer.hidden = true;
+    accountContainer.hidden = true;
+    signInContainer.hidden = false;
+    loading.style.display = "none";
 }
 
 export function showSignup() {
+    signupContainer.querySelector("#signup-form").reset();
+    hideNoticeError();
+    showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
     signInContainer.hidden = true;
     rstPwdContainer.hidden = true;
     signupContainer.hidden = false;
     accountContainer.hidden = true;
-    signupContainer.querySelector("#signup-form").reset();
-    hideNoticeError();
-    showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
+    loading.style.display = "none";
 }
 
 export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
 
-    signInContainer.hidden = true;
-    rstPwdContainer.hidden = true;
-    signupContainer.hidden = true;
-    accountContainer.hidden = false;
     hideNoticeTip();
     hideNoticeError();
 
@@ -353,6 +352,12 @@ export async function showAccount(user, profile) {
 
     await getMyPublications();
 
+    signInContainer.hidden = true;
+    rstPwdContainer.hidden = true;
+    signupContainer.hidden = true;
+    accountContainer.hidden = false;
+    loading.style.display = "none";
+
     if (itemId) {
         var el = null;
         switch (itemType) {
@@ -382,13 +387,14 @@ export async function showAccount(user, profile) {
 }
 
 export function showResetPassword() {
+    rstPwdContainer.querySelector("#rstpwd-form").reset();
+    hideNoticeError();
+    showNoticeTip("Demandez la réinitialisation de votre mot de passe et vous recevrer un email de:\n" + APP_CONFIG.EMAIL_ADDRESS);
     signInContainer.hidden = true;
     rstPwdContainer.hidden = false;
     signupContainer.hidden = true;
     accountContainer.hidden = true;
-    rstPwdContainer.querySelector("#rstpwd-form").reset();
-    hideNoticeError();
-    showNoticeTip("Demandez la réinitialisation de votre mot de passe et vous recevrer un email de:\n" + APP_CONFIG.EMAIL_ADDRESS);
+    loading.style.display = "none";
 }
 
 export async function signup() {

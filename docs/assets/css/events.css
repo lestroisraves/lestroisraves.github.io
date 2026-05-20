@@ -153,9 +153,13 @@
 }
 
 .event-image-wrapper {
+    position: relative;
+    width: 100%;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 0rem;
+
+    transition: all 0.3s ease;
 }
 
 .event-image-wrapper.preview {
@@ -163,13 +167,70 @@
     border-radius: 0px;
 }
 
+.image-placeholder {
+    /* position: absolute;
+    inset: 0; */
+    content: "image";
+    font-family: "Material Symbols Outlined";
+    font-size: 48px;
+    min-height: 200px;
+    background: #f5f6f7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-placeholder .material-symbols-outlined {
+    font-size: 48px;
+}
+
+
+/* .image-placeholder::after {
+    content: "image";
+    font-family: "Material Symbols Outlined";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.8),
+        transparent
+    );
+
+    animation: shimmer 1.2s infinite;
+} 
+
+@keyframes shimmer {
+    to {
+        transform: translateX(100%);
+    }
+} */
+
 .event-thumbnail {
-    width: 240px;        /* fixed visual width */
-    max-width: 240px;
-    height: auto;        /* fill tile height */
+    width: 100%;
+    max-width: 400px;
+    height: auto;
     min-height: 100%;
     margin-bottom: 0rem;
+    filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
+
+/* When loaded */
+.event-thumbnail.loaded {
+    filter: blur(0);
+    opacity: 1;
+}
+
+/* Hide placeholder when loaded */
+.event-thumbnail.loaded + .image-placeholder,
+.event-image-wrapper.loaded .image-placeholder {
+    display: none;
+}
+
 
 .event-title {
     color: var(--pico-h2-color);

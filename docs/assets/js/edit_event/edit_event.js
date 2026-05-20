@@ -10,6 +10,7 @@ const previousPage = document.referrer;
 const params = new URLSearchParams(hash);
 const eventId = params.get("id");
 
+const loading = document.getElementById("loading-screen");
 const backBtn = document.getElementById("back-btn");
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
@@ -68,6 +69,7 @@ function showEdit(user, profile, event) {
     backBtn.hidden = false;
     accountDetail.hidden = true;
     submitContainer.hidden = false;
+    loading.style.display = "none";
 }
 
 /* === EXPORTED FUNCTIONS === */

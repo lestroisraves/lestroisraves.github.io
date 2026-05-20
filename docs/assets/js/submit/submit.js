@@ -5,6 +5,7 @@ import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/e
 import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js";
 
 /* === VARIABLES === */
+const loading = document.getElementById("loading-screen");
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");
@@ -82,6 +83,7 @@ function showSubmit(user, profile) {
     showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
     accountDetail.hidden = false;
     submitContainer.hidden = false;
+    loading.style.display = "none";
 }
 
 /* === EXPORTED FUNCTIONS === */
