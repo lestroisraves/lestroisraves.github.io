@@ -463,6 +463,13 @@
     </div>
 </div>
 
+<div id="loading-screen">
+    <div class="spinner">
+        <!-- <span class="material-symbols-outlined">music_note</span> -->
+    </div>
+    <!-- <img src="loading.gif" alt="Loading..." /> -->
+</div>
+
 <section id="event-list-header" class="event-list-header hidden">
     <a href="./submit/" class="btn-outline">
         <span class="material-symbols-outlined" aria-hidden="true">add</span>
@@ -520,14 +527,13 @@
 
 <section id="category-tabs" class="events-tabs category hidden"></section>
 
-<div id="loading-screen">
-    <div class="spinner">
-        <!-- <span class="material-symbols-outlined">music_note</span> -->
-    </div>
-    <!-- <img src="loading.gif" alt="Loading..." /> -->
+<div id="events"></div>
+
+<div id="empty-state" class="empty-state hidden">
+    <span class="material-symbols-outlined">visibility_off</span>
+    <span class="text">Aucun évènement à afficher</span>
 </div>
 
-<article id="events" hidden></article>
 <script type="module" defer src="assets/js/events/router.js"></script>
 <html data-theme="light">
 

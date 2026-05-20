@@ -15,6 +15,7 @@ const header = document.getElementById("event-list-header");
 const tabs = document.getElementById("event-tabs");
 const catTabs = document.getElementById("category-tabs");
 const filter = document.getElementById("event-filter");
+const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
@@ -32,7 +33,6 @@ const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-g
 let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
-let visibleSections = [];
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -62,14 +62,17 @@ function groupEvents(events) {
 function initHeader() {
     /* init category tabs */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const catTab = document.createElement("div");
+        catTab.className = `catTab cat-${key}`;
+        catTab.setAttribute("data-subtitle", APP_CONFIG.CATEGORIES[key]["label"])
         const btn = document.createElement("button");
         btn.id = "cat-tab";
         btn.className = `tab category cat-${key}`;
         btn.setAttribute("data-action", "select-cat-tab");
         btn.setAttribute("data-target", key);
-        btn.ariaLabel = APP_CONFIG.CATEGORIES[key]["label"];
         btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
-        catTabs.appendChild(btn); 
+        catTab.appendChild(btn); 
+        catTabs.appendChild(catTab); 
     });
 
     /* init Filter */
@@ -114,40 +117,43 @@ function initHeader() {
 
 }
 
-function updateSectionsVisibility(show_all=false) {
-    ["today", "tomorrow", "later"].forEach(sectionId => {
-        const section = document.getElementById(`event-${sectionId}`);
-        if (!show_all) {
-            const events = section.querySelectorAll(".event-tile");
-            const anyVisible = [...events].some(e => {
-                return e.offsetParent !== null; // visible check
-            });
-            section.hidden = (anyVisible && visibleSections.includes(sectionId)) ? false : true;
-        } else if (visibleSections.includes(sectionId)){
-            section.hidden = false;
-        }
+function updateEmptyState() {
+    document.querySelectorAll(".section-tab.no-empty.selected").forEach( section => {
+        const sectionHasVisibleTile = [...section.querySelectorAll(".event-tile")]
+            .some(tile => !tile.classList.contains("hidden"))
+        section.hidden = !sectionHasVisibleTile;
     });
+
+    const hasAnyVisibleTile = [...document.querySelectorAll(".section-tab.no-empty")]
+        .filter(section => !section.hidden)
+        .some(section => 
+            [...section.querySelectorAll(".event-tile")]
+                .some(tile => !tile.classList.contains("hidden"))
+        );
+    if (hasAnyVisibleTile) {
+        emptyState.classList.add("hidden");
+    } else {
+        emptyState.classList.remove("hidden");
+    }
+    // document.getElementById("empty-state").hidden = hasAnyVisibleTile;
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return `
-        <div id="event-${sectionId}" class="section-tab empty" data-id="${sectionId}" hidden>
+        <div class="section-tab empty selected" data-id="${sectionId}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
                 <span class="section-subtitle">${subtitle}</span>
             </div>
-            <div class="event-list">
-                <p>Pas d'évènements</p>
-            </div>
+            <div class="event-list"></div>
         </div>
         `;
     }
 
-    visibleSections.push(sectionId);
     return `
-        <div id="event-${sectionId}" class="section-tab no-empty" data-id="${sectionId}">
+        <div class="section-tab section-${sectionId} no-empty selected" data-id="${sectionId}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -241,12 +247,12 @@ async function loadEvents() {
     grouped.tomorrow = sortByDate(grouped.tomorrow);
     grouped.later = sortByDate(grouped.later);
     
-    visibleSections = [];
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
+    updateEmptyState();
     header.classList.remove("hidden");
     tabs.classList.remove("hidden");
     catTabs.classList.remove("hidden");
@@ -333,8 +339,7 @@ export function applyFilter() {
     loadEvents();
 }
 
-export function selectTab(tab) {
-    visibleSections = []
+export function selectTab(tab, sectionId) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
@@ -343,54 +348,61 @@ export function selectTab(tab) {
 
     if (wasActive) {
         // No tab active → show ALL sections
-        document.querySelectorAll(".section-tab.empty")
-            .forEach(section => section.hidden = true);
         document.querySelectorAll(".section-tab.no-empty")
             .forEach(section => {
                 section.hidden = false;
-                visibleSections.push(section.dataset.id);
-        });
+                section.classList.add("selected");
+            });
+        updateEmptyState();
         return;
     }
 
     // Activate clicked tab
     tab.classList.add("active");
     
+    
     // Show only its section
-    document.querySelectorAll(".section-tab")
-        .forEach(section => section.hidden = true);
-
-    const eventSection = document.getElementById(`event-${tab.dataset.target}`);
-    if(eventSection) eventSection.hidden = false;
-    visibleSections.push(eventSection.dataset.id);
+    document.querySelectorAll(".section-tab.no-empty")
+        .forEach(section => {
+            section.hidden = true;
+            section.classList.remove("selected");
+        });
+    document.querySelectorAll(".section-${sectionId}.no-empty")
+        .forEach(section => {
+            section.hidden = false;
+            section.classList.add("selected");
+        });
+    updateEmptyState();
 }
 
 export function selectCategory(tab, categoryId) {
+    console.log("click", categoryId);
     const wasActive = tab.classList.contains("active");
 
     // reset everything
     document.querySelectorAll("#cat-tab")
+        .forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".catTab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
         // No tab active → show ALL categories
         document.querySelectorAll(`.event-tile`)
             .forEach(tile => tile.classList.remove("hidden"));
-        updateSectionsVisibility(true);
+        updateEmptyState();
         return;
     }
 
     // Activate clicked tab
     tab.classList.add("active");
+    document.querySelector(`.catTab.cat-${categoryId}`)?.classList.add("active");
  
     // Show only its section
     document.querySelectorAll(`.event-tile`)
         .forEach(tile => tile.classList.add("hidden"));
     document.querySelectorAll(`.category-${categoryId}`)
         .forEach(tile => tile.classList.remove("hidden"));
-
-    /* update sections visibility */
-    updateSectionsVisibility();
+    updateEmptyState();
 }
 
 /* === MAIN === */
