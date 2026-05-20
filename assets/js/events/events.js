@@ -26,11 +26,13 @@ const nextSunday = getSunday(nextMonday);
 const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
 const filterForm = document.getElementById("filter-form");
+const filterCatChoices = filterPanel.querySelector("#filter-category");
 const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
 
 let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
+let visibleSections = "all";
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -73,6 +75,24 @@ function initHeader() {
     /* init Filter */
     clearTags();
 
+    /* Configure categories */
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const category = APP_CONFIG.CATEGORIES[key]["label"];
+
+        const label = document.createElement("label");
+        label.className = "category-item";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = category;
+        checkbox.name = "categories";
+
+        label.appendChild(checkbox);
+        label.append(" " + category);
+
+        filterCatChoices.appendChild(label); 
+    });
+
     /* Configure parental guide */
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         const pg = APP_CONFIG.PARENTAL_GUIDE[key];
@@ -91,17 +111,21 @@ function initHeader() {
         filterParentalGuideChoices.appendChild(label); 
     });
 
+
 }
 
-function updateSectionsVisibility() {
+function updateSectionsVisibility(show_all=false) {
     ["today", "tomorrow", "later"].forEach(sectionId => {
         const section = document.getElementById(`event-${sectionId}`);
-        const events = section.querySelectorAll(".event-tile");
-        const anyVisible = [...events].some(e => {
-            return e.offsetParent !== null; // visible check
-        });
-        console.log("section", section.id, "anyVisible ?", anyVisible)
-        section.hidden = anyVisible ? false : true;
+        if (!show_all) {
+            const events = section.querySelectorAll(".event-tile");
+            const anyVisible = [...events].some(e => {
+                return e.offsetParent !== null; // visible check
+            });
+            section.hidden = anyVisible && section.classList.contains("no-empty") ? false : true;
+        } else if ((visibleSections == "all") || (visibleSections == sectionId) && section.classList.contains("no-empty")){
+            section.hidden = false;
+        }
     });
 }
 
@@ -115,7 +139,7 @@ function renderSection(sectionId, sectionTitle, subtitle, events) {
                 <span class="section-subtitle">${subtitle}</span>
             </div>
             <div class="event-list">
-                <h6>Pas d'évènements</h6>
+                <p>Pas d'évènements</p>
             </div>
         </div>
         `;
@@ -320,18 +344,20 @@ export function selectTab(tab) {
         .forEach(section => section.hidden = true);
         document.querySelectorAll(".section-tab.no-empty")
         .forEach(section => section.hidden = false);
+        visibleSections = "all"
         return;
     }
 
     // Activate clicked tab
     tab.classList.add("active");
- 
+    
     // Show only its section
     document.querySelectorAll(".section-tab")
         .forEach(section => section.hidden = true);
 
     const eventSection = document.getElementById(`event-${tab.dataset.target}`);
     if(eventSection) eventSection.hidden = false;
+    visibleSections = "tab.dataset.target"
 }
 
 export function selectCategory(tab, categoryId) {
@@ -345,7 +371,7 @@ export function selectCategory(tab, categoryId) {
         // No tab active → show ALL categories
         document.querySelectorAll(`.event-tile`)
             .forEach(tile => tile.classList.remove("hidden"));
-        updateSectionsVisibility();
+        updateSectionsVisibility(true);
         return;
     }
 

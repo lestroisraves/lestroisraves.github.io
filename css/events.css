@@ -2,7 +2,7 @@
 .event-list-header {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
 }
 
 .event-list-header.hidden {
