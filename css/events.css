@@ -74,7 +74,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.3rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
     margin-top: 0.4;
 }
 
@@ -89,7 +89,7 @@
 
 
 .tab {
-    padding: 0.2rem 0.7rem;
+    padding: 0.4rem 0.7rem;
     border-radius: 999px;
     border: none;
     background: #f1f5f9;
@@ -169,22 +169,11 @@
 }
 
 .tab.category {
-    /* position: relative;
-    padding: 0.2rem 0.2rem; */
     width: 100%;
     padding: 0.2rem 0.2rem;
     font-family: "Material Symbols Outlined";
     font-size: 1rem;
 }
-
-/* .tab.active::after {
-    content: attr(data-subtitle);
-    display: block;
-    font-size: 0.5rem;
-    color: #666;
-    margin-top: 0.2rem;
-} */
-
 
 .tab.cat-0 {
     background: var(--category0--light);
