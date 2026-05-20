@@ -132,7 +132,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile category-${eventData.category}" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -324,6 +324,30 @@ export function selectTab(tab) {
 
     const eventSection = document.getElementById(`event-${tab.dataset.target}`);
     if(eventSection) eventSection.hidden = false;
+}
+
+export function selectCategory(tab, categoryId) {
+    const wasActive = tab.classList.contains("active");
+
+    // reset everything
+    document.querySelectorAll(".category-tabs .cat-tab")
+        .forEach(t => t.classList.remove("active"));
+
+    if (wasActive) {
+        // No tab active → show ALL categories
+        document.querySelectorAll(`.event-tile`)
+            .forEach(tile => tile.hidden = false);
+        return;
+    }
+
+    // Activate clicked tab
+    tab.classList.add("active");
+ 
+    // Show only its section
+    document.querySelectorAll(`.event-tile`)
+        .forEach(tile => tile.hidden = true);
+    document.querySelectorAll(`.category-${categoryId}`)
+        .forEach(tile => tile.hidden = false);
 }
 
 /* === MAIN === */
