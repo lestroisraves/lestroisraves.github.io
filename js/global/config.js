@@ -22,7 +22,7 @@ APP_CONFIG = {
             "color_light": "#eef2ff"
         },
         1: {
-            "label": "Spectacle",
+            "label": "Spectacle vivant",
             "icon": "festival",
             "color": "#15803d",
             "color_light": "#f0fdf4"
