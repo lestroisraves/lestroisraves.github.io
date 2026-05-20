@@ -367,7 +367,7 @@ export function selectTab(tab, sectionId) {
             section.hidden = true;
             section.classList.remove("selected");
         });
-    document.querySelectorAll(".section-${sectionId}.no-empty")
+    document.querySelectorAll(`.section-${sectionId}.no-empty`)
         .forEach(section => {
             section.hidden = false;
             section.classList.add("selected");
