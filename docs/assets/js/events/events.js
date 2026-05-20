@@ -13,6 +13,7 @@ const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
 const header = document.getElementById("event-list-header");
 const tabs = document.getElementById("event-tabs");
+const catTabs = document.getElementById("category-tabs");
 const filter = document.getElementById("event-filter");
 
 const today = startOfDay(new Date());
@@ -31,13 +32,14 @@ const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-g
 let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
+let visibleSections = [];
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
     const groups = {
         today: [],
         tomorrow: [],
-        future: []
+        later: []
     };
 
     events.forEach(event => {
@@ -50,14 +52,27 @@ function groupEvents(events) {
             groups.tomorrow.push(event);
         }
         else if (eventDate > tomorrow) {
-            groups.future.push(event);
+            groups.later.push(event);
         }
     });
 
     return groups;
 }
 
-function initFilters() {
+function initHeader() {
+    /* init category tabs */
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const btn = document.createElement("button");
+        btn.id = "cat-tab";
+        btn.className = `tab category cat-${key}`;
+        btn.setAttribute("data-action", "select-cat-tab");
+        btn.setAttribute("data-target", key);
+        btn.ariaLabel = APP_CONFIG.CATEGORIES[key]["label"];
+        btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
+        catTabs.appendChild(btn); 
+    });
+
+    /* init Filter */
     clearTags();
 
     /* Configure categories */
@@ -96,26 +111,43 @@ function initFilters() {
         filterParentalGuideChoices.appendChild(label); 
     });
 
+
+}
+
+function updateSectionsVisibility(show_all=false) {
+    ["today", "tomorrow", "later"].forEach(sectionId => {
+        const section = document.getElementById(`event-${sectionId}`);
+        if (!show_all) {
+            const events = section.querySelectorAll(".event-tile");
+            const anyVisible = [...events].some(e => {
+                return e.offsetParent !== null; // visible check
+            });
+            section.hidden = (anyVisible && visibleSections.includes(sectionId)) ? false : true;
+        } else if (visibleSections.includes(sectionId)){
+            section.hidden = false;
+        }
+    });
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return `
-        <div id="event-${sectionId}" class="section-tab empty" hidden>
+        <div id="event-${sectionId}" class="section-tab empty" data-id="${sectionId}" hidden>
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
                 <span class="section-subtitle">${subtitle}</span>
             </div>
             <div class="event-list">
-                <h6>Pas d'évènements</h6>
+                <p>Pas d'évènements</p>
             </div>
         </div>
         `;
     }
 
+    visibleSections.push(sectionId);
     return `
-        <div id="event-${sectionId}" class="section-tab no-empty">
+        <div id="event-${sectionId}" class="section-tab no-empty" data-id="${sectionId}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -207,15 +239,17 @@ async function loadEvents() {
 
     grouped.today = sortByDate(grouped.today);
     grouped.tomorrow = sortByDate(grouped.tomorrow);
-    grouped.future = sortByDate(grouped.future);
+    grouped.later = sortByDate(grouped.later);
     
+    visibleSections = [];
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.future);
+        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
     header.classList.remove("hidden");
     tabs.classList.remove("hidden");
+    catTabs.classList.remove("hidden");
     filter.hidden = false;
     container.hidden = false;
     loading.style.display = "none";
@@ -300,43 +334,49 @@ export function applyFilter() {
 }
 
 export function selectTab(tab) {
+    visibleSections = []
     const wasActive = tab.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll(".events-tabs .tab")
+    document.querySelectorAll("#group-tab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
         // No tab active → show ALL sections
         document.querySelectorAll(".section-tab.empty")
-        .forEach(section => section.hidden = true);
+            .forEach(section => section.hidden = true);
         document.querySelectorAll(".section-tab.no-empty")
-        .forEach(section => section.hidden = false);
+            .forEach(section => {
+                section.hidden = false;
+                visibleSections.push(section.dataset.id);
+        });
         return;
     }
 
     // Activate clicked tab
     tab.classList.add("active");
- 
+    
     // Show only its section
     document.querySelectorAll(".section-tab")
         .forEach(section => section.hidden = true);
 
     const eventSection = document.getElementById(`event-${tab.dataset.target}`);
     if(eventSection) eventSection.hidden = false;
+    visibleSections.push(eventSection.dataset.id);
 }
 
 export function selectCategory(tab, categoryId) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll(".category-tabs .cat-tab")
+    document.querySelectorAll("#cat-tab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
         // No tab active → show ALL categories
         document.querySelectorAll(`.event-tile`)
-            .forEach(tile => tile.hidden = false);
+            .forEach(tile => tile.classList.remove("hidden"));
+        updateSectionsVisibility(true);
         return;
     }
 
@@ -345,11 +385,14 @@ export function selectCategory(tab, categoryId) {
  
     // Show only its section
     document.querySelectorAll(`.event-tile`)
-        .forEach(tile => tile.hidden = true);
+        .forEach(tile => tile.classList.add("hidden"));
     document.querySelectorAll(`.category-${categoryId}`)
-        .forEach(tile => tile.hidden = false);
+        .forEach(tile => tile.classList.remove("hidden"));
+
+    /* update sections visibility */
+    updateSectionsVisibility();
 }
 
 /* === MAIN === */
-initFilters();
+initHeader();
 loadEvents();

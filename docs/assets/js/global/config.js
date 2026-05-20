@@ -23,13 +23,13 @@ APP_CONFIG = {
         },
         1: {
             "label": "Spectacle vivant",
-            "icon": "festival",
+            "icon": "theater_comedy",
             "color": "#15803d",
             "color_light": "#f0fdf4"
         },
         2: {
             "label": "Projection",
-            "icon": "theater_comedy",
+            "icon": "movie",
             "color": "#d97706",
             "color_light": "#fffbeb"
         },
@@ -47,7 +47,7 @@ APP_CONFIG = {
         },
         5: {
             "label": "Autres",
-            "icon": "stadium",
+            "icon": "star",
             "color": "#5C6370",
             "color_light": "#F0F1F3"
         }
@@ -79,4 +79,10 @@ document.documentElement.style.setProperty("--category2", APP_CONFIG.CATEGORIES[
 document.documentElement.style.setProperty("--category3", APP_CONFIG.CATEGORIES[3]["color"]);
 document.documentElement.style.setProperty("--category4", APP_CONFIG.CATEGORIES[4]["color"]);
 document.documentElement.style.setProperty("--category5", APP_CONFIG.CATEGORIES[5]["color"]);
+document.documentElement.style.setProperty("--category0--light", APP_CONFIG.CATEGORIES[0]["color_light"]);
+document.documentElement.style.setProperty("--category1--light", APP_CONFIG.CATEGORIES[1]["color_light"]);
+document.documentElement.style.setProperty("--category2--light", APP_CONFIG.CATEGORIES[2]["color_light"]);
+document.documentElement.style.setProperty("--category3--light", APP_CONFIG.CATEGORIES[3]["color_light"]);
+document.documentElement.style.setProperty("--category4--light", APP_CONFIG.CATEGORIES[4]["color_light"]);
+document.documentElement.style.setProperty("--category5--light", APP_CONFIG.CATEGORIES[5]["color_light"]);
 

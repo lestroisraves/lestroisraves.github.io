@@ -9,7 +9,7 @@ import {
 
 import { 
     openEvent, resetFilter, applyFilter,
-    selectTab
+    selectTab, selectCategory
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -22,6 +22,10 @@ async function handleClick(el, e) {
     switch (el.dataset.action) {
         case "select-tab":
             selectTab(el);
+            break;
+
+        case "select-cat-tab":
+            selectCategory(el, el.dataset.target);
             break;
 
         case "reset-filter":
