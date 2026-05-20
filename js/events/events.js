@@ -32,14 +32,14 @@ const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-g
 let user_profile = null;
 let EVENTS = [];
 let filters = APP_CONFIG.DEFAULT_FILTER;
-let visibleSections = "all";
+let visibleSections = [];
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
     const groups = {
         today: [],
         tomorrow: [],
-        future: []
+        later: []
     };
 
     events.forEach(event => {
@@ -52,7 +52,7 @@ function groupEvents(events) {
             groups.tomorrow.push(event);
         }
         else if (eventDate > tomorrow) {
-            groups.future.push(event);
+            groups.later.push(event);
         }
     });
 
@@ -122,8 +122,8 @@ function updateSectionsVisibility(show_all=false) {
             const anyVisible = [...events].some(e => {
                 return e.offsetParent !== null; // visible check
             });
-            section.hidden = anyVisible && section.classList.contains("no-empty") ? false : true;
-        } else if ((visibleSections == "all") || (visibleSections == sectionId) && section.classList.contains("no-empty")){
+            section.hidden = (anyVisible && visibleSections.includes(sectionId)) ? false : true;
+        } else if (visibleSections.includes(sectionId)){
             section.hidden = false;
         }
     });
@@ -132,7 +132,7 @@ function updateSectionsVisibility(show_all=false) {
 function renderSection(sectionId, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return `
-        <div id="event-${sectionId}" class="section-tab empty" hidden>
+        <div id="event-${sectionId}" class="section-tab empty" data-id="${sectionId}" hidden>
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -145,8 +145,9 @@ function renderSection(sectionId, sectionTitle, subtitle, events) {
         `;
     }
 
+    visibleSections.push(sectionId);
     return `
-        <div id="event-${sectionId}" class="section-tab no-empty">
+        <div id="event-${sectionId}" class="section-tab no-empty" data-id="${sectionId}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -238,12 +239,13 @@ async function loadEvents() {
 
     grouped.today = sortByDate(grouped.today);
     grouped.tomorrow = sortByDate(grouped.tomorrow);
-    grouped.future = sortByDate(grouped.future);
+    grouped.later = sortByDate(grouped.later);
     
+    visibleSections = [];
     container.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.future);
+        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
     header.classList.remove("hidden");
     tabs.classList.remove("hidden");
@@ -332,6 +334,7 @@ export function applyFilter() {
 }
 
 export function selectTab(tab) {
+    visibleSections = []
     const wasActive = tab.classList.contains("active");
 
     // reset everything
@@ -341,10 +344,12 @@ export function selectTab(tab) {
     if (wasActive) {
         // No tab active → show ALL sections
         document.querySelectorAll(".section-tab.empty")
-        .forEach(section => section.hidden = true);
+            .forEach(section => section.hidden = true);
         document.querySelectorAll(".section-tab.no-empty")
-        .forEach(section => section.hidden = false);
-        visibleSections = "all"
+            .forEach(section => {
+                section.hidden = false;
+                visibleSections.push(section.dataset.id);
+        });
         return;
     }
 
@@ -357,7 +362,7 @@ export function selectTab(tab) {
 
     const eventSection = document.getElementById(`event-${tab.dataset.target}`);
     if(eventSection) eventSection.hidden = false;
-    visibleSections = "tab.dataset.target"
+    visibleSections.push(eventSection.dataset.id);
 }
 
 export function selectCategory(tab, categoryId) {
