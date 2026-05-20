@@ -199,19 +199,14 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
     }
 
-    eventModalCard.classList.forEach(cls => {
-        if (cls.startsWith("cat-")) {
-            eventModalCard.classList.remove(cls);
-        }
-    });
-    eventModalCard.classList.add("cat-" + eventData.category);
-
     eventData.imageHtml = eventData.image_url
         ? ` <div class="event-image-wrapper">
-                <div class="image-placeholder"><span class="material-symbols-outlined">image</span></div>
+                <div class="image-placeholder"><span id="img-ico" class="material-symbols-outlined">image</span></div>
                 <img class="event-thumbnail" alt="image évènement">
             </div>`
-        : "";
+        : ` <div class="event-image-wrapper">
+                <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${APP_CONFIG.CATEGORIES[eventData.category]["icon"]}</span></div>
+            </div>`;
 
     eventData.pendingHtml = eventData.pending
         ? ` <div class="event-meta pending">
@@ -244,44 +239,20 @@ export function openEventModal(event, type, user_profile=null) {
         ${eventData.descriptionHtml}
     `;
 
+    /* apply category style */
+    eventModalCard.style.borderColor = APP_CONFIG.CATEGORIES[eventData.category]["color"];
+    eventModalContent.querySelector(".image-placeholder").style.background = APP_CONFIG.CATEGORIES[eventData.category]["color_light"];
+    eventModalContent.querySelector("#img-ico").style.color = APP_CONFIG.CATEGORIES[eventData.category]["color"];
+
+
     if (eventData.image_url) {
-        const img = eventModalContent.querySelector(".event-thumbnail");
-        const placeholder = eventModalContent.querySelector(".image-placeholder");
-        setEventImage(img, placeholder, event.image_url);
+        setEventImage(eventModalContent, event.image_url);
     }
 
+    document.body.style.overflow = "hidden";
     eventModal.classList.remove("hidden");
     eventModal.scrollTop = 0;
-    document.body.style.overflow = "hidden";
 }
-
-
-function setEventImage(img, placeholder, url) {
-    // Reset state BEFORE changing src
-    img.classList.remove("loaded");
-    placeholder.style.display = "flex";  // show loading
-
-    // Set new image
-    img.src = url;
-
-    // When image is loaded
-    img.onload = () => {
-        const ratio = img.naturalWidth / img.naturalHeight;
-
-        const container = img.parentElement;
-        container.style.aspectRatio = ratio;
-
-        img.classList.add("loaded");
-        placeholder.style.display = "none";
-        eventModal.scrollTop = 0;
-    };
-
-    // Handle error
-    // img.onerror = () => {
-    //     placeholder.textContent = "image";
-    // };
-}
-
 
 export function openRoleRequestModal(profile) {
     currentProfile = profile;

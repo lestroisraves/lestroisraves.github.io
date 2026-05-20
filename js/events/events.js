@@ -132,7 +132,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile cat-${eventData.category}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}

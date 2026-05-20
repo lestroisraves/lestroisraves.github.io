@@ -22,6 +22,15 @@
     color: #3f51b5;
 }
 
+.accordion-toggle.filter {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+}
+
+.accordion-toggle.filter .material-symbols-outlined {
+    font-size: 0.7rem;
+}
+
 .accordion-toggle:hover {
     background: #eef0fb;
 }

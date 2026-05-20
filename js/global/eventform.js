@@ -258,7 +258,7 @@ export function getEventFormPayload() {
         location_address: form.querySelector('#location_address').value,
         tags,
         // pending: done later
-        is_test: "is_test" in userTags,
+        is_test: userTags.includes("is_test"),
         // created_by: done later
         is_free_price: is_free_price,
         min_price: min_price,
