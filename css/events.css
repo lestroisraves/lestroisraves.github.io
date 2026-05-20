@@ -73,16 +73,19 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.3rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-    
+    margin-bottom: 0.8rem;
+    margin-top: 0.4;
+}
+
+.events-tabs.category {
+    grid-template-columns: repeat(6, 1fr);
 }
 
 .events-tabs.hidden {
     display: none;
 }
 
-.events-tabs .tab {
+.tab {
     padding: 0.2rem 0.7rem;
     border-radius: 999px;
     border: none;
@@ -94,12 +97,78 @@
     transition: background 0.2s ease, color 0.2s ease;
 }
 
-.events-tabs .tab:hover {
-    background: #e2e8f0;
+.tab.category {
+    padding: 0.2rem 0.2rem;
+    font-family: "Material Symbols Outlined";
+    font-size: 1rem;
 }
 
-.events-tabs .tab.active {
+.tab:hover {
+    filter: brightness(0.95);
+}
+
+.tab.active {
     background: #4f46e5;
+    color: white;
+}
+
+.tab.cat-0 {
+    background: var(--category0--light);
+    color: var(--category0);
+}
+
+.tab.cat-1 {
+    background: var(--category1--light);
+    color: var(--category1);
+}
+
+.tab.cat-2 {
+    background: var(--category2--light);
+    color: var(--category2);
+}
+
+.tab.cat-3 {
+    background: var(--category3--light);
+    color: var(--category3);
+}
+
+.tab.cat-4 {
+    background: var(--category4--light);
+    color: var(--category4);
+}
+
+.tab.cat-5 {
+    background: var(--category5--light);
+    color: var(--category5);
+}
+
+.tab.cat-0.active {
+    background: var(--category0);
+    color: white;
+}
+
+.tab.cat-1.active {
+    background: var(--category1);
+    color: white;
+}
+
+.tab.cat-2.active {
+    background: var(--category2);
+    color: white;
+}
+
+.tab.cat-3.active {
+    background: var(--category3);
+    color: white;
+}
+
+.tab.cat-4.active {
+    background: var(--category4);
+    color: white;
+}
+
+.tab.cat-5.active {
+    background: var(--category5);
     color: white;
 }
 
@@ -115,6 +184,10 @@
     border-left: 6px solid var(--pico-primary);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.event-tile.hidden {
+    display: none;
 }
 
 .small-event-tile:hover,

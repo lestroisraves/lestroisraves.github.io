@@ -13,6 +13,7 @@ const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
 const header = document.getElementById("event-list-header");
 const tabs = document.getElementById("event-tabs");
+const catTabs = document.getElementById("category-tabs");
 const filter = document.getElementById("event-filter");
 
 const today = startOfDay(new Date());
@@ -25,7 +26,6 @@ const nextSunday = getSunday(nextMonday);
 const filterToggle = document.getElementById("filter-toggle");
 const filterPanel = document.getElementById("filter-panel");
 const filterForm = document.getElementById("filter-form");
-const filterCatChoices = filterPanel.querySelector("#filter-category");
 const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
 
 let user_profile = null;
@@ -57,26 +57,21 @@ function groupEvents(events) {
     return groups;
 }
 
-function initFilters() {
-    clearTags();
-
-    /* Configure categories */
+function initHeader() {
+    /* init category tabs */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const category = APP_CONFIG.CATEGORIES[key]["label"];
-
-        const label = document.createElement("label");
-        label.className = "category-item";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = category;
-        checkbox.name = "categories";
-
-        label.appendChild(checkbox);
-        label.append(" " + category);
-
-        filterCatChoices.appendChild(label); 
+        const btn = document.createElement("button");
+        btn.id = "cat-tab";
+        btn.className = `tab category cat-${key}`;
+        btn.setAttribute("data-action", "select-cat-tab");
+        btn.setAttribute("data-target", key);
+        btn.ariaLabel = APP_CONFIG.CATEGORIES[key]["label"];
+        btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
+        catTabs.appendChild(btn); 
     });
+
+    /* init Filter */
+    clearTags();
 
     /* Configure parental guide */
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
@@ -96,6 +91,18 @@ function initFilters() {
         filterParentalGuideChoices.appendChild(label); 
     });
 
+}
+
+function updateSectionsVisibility() {
+    ["today", "tomorrow", "later"].forEach(sectionId => {
+        const section = document.getElementById(`event-${sectionId}`);
+        const events = section.querySelectorAll(".event-tile");
+        const anyVisible = [...events].some(e => {
+            return e.offsetParent !== null; // visible check
+        });
+        console.log("section", section.id, "anyVisible ?", anyVisible)
+        section.hidden = anyVisible ? false : true;
+    });
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
@@ -216,6 +223,7 @@ async function loadEvents() {
 
     header.classList.remove("hidden");
     tabs.classList.remove("hidden");
+    catTabs.classList.remove("hidden");
     filter.hidden = false;
     container.hidden = false;
     loading.style.display = "none";
@@ -303,7 +311,7 @@ export function selectTab(tab) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll(".events-tabs .tab")
+    document.querySelectorAll("#group-tab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
@@ -330,13 +338,14 @@ export function selectCategory(tab, categoryId) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll(".category-tabs .cat-tab")
+    document.querySelectorAll("#cat-tab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
         // No tab active → show ALL categories
         document.querySelectorAll(`.event-tile`)
-            .forEach(tile => tile.hidden = false);
+            .forEach(tile => tile.classList.remove("hidden"));
+        updateSectionsVisibility();
         return;
     }
 
@@ -345,11 +354,14 @@ export function selectCategory(tab, categoryId) {
  
     // Show only its section
     document.querySelectorAll(`.event-tile`)
-        .forEach(tile => tile.hidden = true);
+        .forEach(tile => tile.classList.add("hidden"));
     document.querySelectorAll(`.category-${categoryId}`)
-        .forEach(tile => tile.hidden = false);
+        .forEach(tile => tile.classList.remove("hidden"));
+
+    /* update sections visibility */
+    updateSectionsVisibility();
 }
 
 /* === MAIN === */
-initFilters();
+initHeader();
 loadEvents();
