@@ -121,6 +121,10 @@ table tr th:last-child {
     height: 1em;
 }
 
+.md-main__inner {
+    margin-top: 0.4rem;
+}
+
 .md-typeset h1, h2, h3, h4, h5, h6 {
     font-weight: bold !important;
     color: var(--md-default--fg-color) !important;

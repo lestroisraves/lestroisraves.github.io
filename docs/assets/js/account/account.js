@@ -191,7 +191,7 @@ function renderEventSmallTile(event, type) {
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${event.title}</span>
                 <span class="event-small-meta non-wrap">
-                    <span class="event-small-category" style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};"><strong>${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</strong></span>
+                    <span style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};"><strong>${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</strong></span>
                     .
                     <span>${formatEventDateTime(eventData.event_date)}</span>
                     .
@@ -575,7 +575,7 @@ export function searchInput(input) {
 
     if (value.length < 2) {
         input.classList.remove("looking");
-        suggestions.hidden = true;
+        suggestions.classList.add("hidden");
         return;
     }
 
@@ -585,7 +585,7 @@ export function searchInput(input) {
 
     if (matches.length === 0) {
         input.classList.remove("looking");
-        suggestions.hidden = true;
+        suggestions.classList.add("hidden");
         return;
     }
 
@@ -608,7 +608,7 @@ export function searchInput(input) {
         
         span.addEventListener("click", () => {
             input.classList.remove("looking");
-            suggestions.hidden = true;
+            suggestions.classList.add("hidden");
             input.value = "";
             var el = null;
 
@@ -653,7 +653,7 @@ export function searchInput(input) {
     }
 
     input.classList.add("looking");
-    suggestions.hidden = false;
+    suggestions.classList.remove("hidden");
 }
 
 

@@ -8,7 +8,7 @@ import {
 } from "../global/tags.js"
 
 import { 
-    openEvent, resetFilter, applyFilter,
+    openEvent, searchInput, resetFilter, applyFilter,
     selectTab, selectCategory
 } from "./events.js"
 
@@ -80,6 +80,10 @@ async function handleClick(el, e) {
 
 async function handleInput(el) {
     switch (el.dataset.inputType) {
+        case "event-search":
+            searchInput(el);
+            break;
+
         case "confirm-code":
             setConfirmBtnState(el);
             break;
