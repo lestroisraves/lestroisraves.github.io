@@ -11,7 +11,7 @@ history.replaceState(null, "", window.location.pathname + window.location.search
 
 const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
-const header = document.getElementById("event-list-header");
+const search = document.getElementById("event-search");
 const tabs = document.getElementById("event-tabs");
 const catTabs = document.getElementById("category-tabs");
 const filter = document.getElementById("event-filter");
@@ -253,10 +253,11 @@ async function loadEvents() {
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
     updateEmptyState();
-    header.classList.remove("hidden");
+    
     tabs.classList.remove("hidden");
     catTabs.classList.remove("hidden");
-    filter.hidden = false;
+    search.hidden = false;
+    // filter.hidden = false;
     container.hidden = false;
     loading.style.display = "none";
 
@@ -272,11 +273,89 @@ async function loadEvents() {
 
 }
 
+function renderEventSuggestion(event) {
+    const eventData = renderEventData(event);
+    const html = `
+        <div class="event-suggestion-title non-wrap">${event.title}</div>
+        <div class="event-suggestion-meta non-wrap">
+            <div style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+            .
+            <div>${formatEventDateTime(eventData.event_date)}</div>
+            .
+            <div class>${eventData.location_name}</div>
+        </div>
+    `
+    return html;
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function openEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
     openEventModal(event, "classic", user_profile);
+}
+
+export function searchInput(input) {
+    const container = input.closest(".autocomplete");
+    const suggestions = container.querySelector(".suggestions");
+    const searchValue = input.value.toLowerCase().trim();
+    suggestions.innerHTML = "";
+
+    if (searchValue.length < 2) {
+        input.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    /* serach matches */
+    const matches = EVENTS.filter(event => {
+            const v = searchValue.toLowerCase();
+            const found =  (
+                !event.pending &&
+                (event.title.toLowerCase().includes(v) ||
+                event.location_name.toLowerCase().includes(v) ||
+                event.tags.some(tag => tag.toLowerCase().includes(v))))
+            
+            if (found) {
+                const el = document.querySelector(`[data-event-id="${event.id}"]`);
+                if (!el) return false;
+                return !el.classList.contains("hidden");
+            }
+            return false;
+
+        }
+    ).slice(0, 5); // limit results
+
+    if (matches.length === 0) {
+        input.classList.remove("looking");
+        suggestions.classList.add("hidden");
+        return;
+    }
+
+    for (const item of matches) {
+        const div = document.createElement("div");
+        div.className = "event-suggestion"
+        div.dataset.id = item.id;
+        div.innerHTML = renderEventSuggestion(item)
+
+        div.addEventListener("click", () => {
+            input.classList.remove("looking");
+            suggestions.classList.add("hidden");
+            input.value = "";
+            console.log("select event", item.title, item.event_date);
+            const el = document.querySelector(`[data-event-id="${item.id}"]`);
+            if (!el) return;
+            el.scrollIntoView();
+            el.focus();
+            el.click();
+            return;
+        });
+
+        suggestions.appendChild(div);
+    }
+
+    input.classList.add("looking");
+    suggestions.classList.remove("hidden");
 }
 
 export function resetFilter() {

@@ -59,6 +59,8 @@
     
       <link rel="stylesheet" href="assets/css/events.css">
     
+      <link rel="stylesheet" href="assets/css/toolbar.css">
+    
       <link rel="stylesheet" href="assets/css/filter.css">
     
       <link rel="stylesheet" href="assets/css/submit.css">
@@ -470,12 +472,12 @@
     <!-- <img src="loading.gif" alt="Loading..." /> -->
 </div>
 
-<section id="event-list-header" class="event-list-header hidden">
+<!-- <section id="event-list-header" class="event-list-header hidden">
     <a href="./submit/" class="btn-outline">
         <span class="material-symbols-outlined" aria-hidden="true">add</span>
         Publier un évènement
     </a>
-</section>
+</section> -->
 
 <section id="event-filter" class="filter-accordion" hidden>
     <button id="filter-toggle" class="accordion-toggle filter" data-action="accordion" data-accordion-id="filter-panel" aria-expanded="false" aria-controls="filter-panel" >
@@ -526,6 +528,18 @@
 </section>
 
 <section id="category-tabs" class="events-tabs category hidden"></section>
+
+<section id="event-search" class="autocomplete" hidden>
+    <input
+        type="text"
+        id="data-search"
+        class="data-search round"
+        placeholder="Rechercher..."
+        autocomplete="off"
+        data-input-type="event-search"
+    />
+    <div class="suggestions round hidden"></div>
+</section>
 
 <div id="events"></div>
 
