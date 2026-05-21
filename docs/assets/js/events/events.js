@@ -235,6 +235,11 @@ async function loadEvents() {
 
 }
 
+function getFilterData(filter) {
+    const f = filter.split(":");
+    return {type: f[0], value: f[1]};
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function openEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
@@ -342,39 +347,50 @@ export function selectTab(tab, sectionId) {
 }
 
 export function selectFilterOption(optionBtn) {
-    const filter = {"type": optionBtn.dataset.targetType, "value": optionBtn.dataset.targetValue};
-    const optionTab = document.querySelector(`.option-tab.${filter.type}-${filter.value}`);
+    const filter = `${optionBtn.dataset.targetType}:${optionBtn.dataset.targetValue}`
+    const optionTab = document.querySelector(`.option-tab.${optionBtn.dataset.targetType}-${optionBtn.dataset.targetValue}`);
     const wasActive = optionBtn.classList.contains("active");
 
-    // reset everything
-    document.querySelectorAll(`#${filter.type}-option`)
-        .forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(`.option-tab.${filter.type}`)
-        .forEach(t => t.classList.remove("active"));
+    if (activeFilters.has(filter)) {
+        // console.log("deactivate", filter.type, filter.value);
+        activeFilters.delete(filter);
+        optionBtn.classList.remove("active");
+        optionTab?.classList.remove("active");
+    } else {
+        // console.log("activate", filter.type, filter.value);
+        activeFilters.add(filter);
+        document.querySelectorAll(`.option-tab.${optionBtn.dataset.targetType}`)
+            .forEach(t => t.classList.remove("active"));
+        optionBtn.classList.add("active");
+        optionTab?.classList.add("active");
+    }
 
-    if (wasActive) {
-        // /No tab active → show ALL categories
+    setTimeout(() => {
+        optionTab?.classList.remove("active");
+    }, 2000);
+
+    // Rule 1: no filters → show all
+    if (activeFilters.size === 0) {
         document.querySelectorAll(`.event-tile`)
             .forEach(tile => tile.classList.remove("hidden"));
         updateEmptyState();
         return;
     }
 
-    // Activate clicked tab
-    optionBtn.classList.add("active");
-    optionTab?.classList.add("active");
- 
-    // Show only its section
-    document.querySelectorAll(`.event-tile`)
-        .forEach(tile => tile.classList.add("hidden"));
-    document.querySelectorAll(`.${filter.type}-${filter.value}`)
-        .forEach(tile => tile.classList.remove("hidden"));
+    // Rule 2: show only matching
+    document.querySelectorAll(`.event-tile`).forEach(tile => {
+        const hasAttr = [...activeFilters].some(filter => {
+                const f = filter.split(":");
+                return tile.classList.contains(`${f[0]}-${f[1]}`);
+            }
+        );
+        if (hasAttr) {
+            tile.classList.remove("hidden");
+        } else {
+            tile.classList.add("hidden");
+        }
+    });
     updateEmptyState();
-
-    // setTimeout(() => {
-    //     optionTab?.classList.remove("active");
-    // }, 2000);
-
 }
 
 export function toggleAdditionalFilter(filterBtn) {
