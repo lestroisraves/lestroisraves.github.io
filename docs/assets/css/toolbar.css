@@ -80,6 +80,10 @@
     width: 100%;
 }
 
+.add-filter-btn.hidden {
+    display: none;
+}
+
 .add-filter-btn .chevron {
     font-size: 1rem;
 }

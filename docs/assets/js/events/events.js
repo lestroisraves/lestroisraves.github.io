@@ -11,6 +11,7 @@ history.replaceState(null, "", window.location.pathname + window.location.search
 const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
 const search = document.getElementById("event-search");
+const addFiltersBtn = document.getElementById("add-filter-btn");
 const addFilters = document.getElementById("add-filters");
 const tabs = document.getElementById("event-tabs");
 const pgTabs = document.getElementById("pg-tabs");
@@ -26,6 +27,7 @@ const nextSunday = getSunday(nextMonday);
 
 let user_profile = null;
 let EVENTS = [];
+let activeFilters = new Set();
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -57,9 +59,10 @@ function initHeader() {
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         const btn = document.createElement("button");
         btn.id = "pg-tab";
-        btn.className = `tab pg pg-${key}`;
-        btn.setAttribute("data-action", "select-pg-tab");
-        btn.setAttribute("data-target", key);
+        btn.className = `event-option pg pg-${key}`;
+        btn.setAttribute("data-action", "select-option");
+        btn.setAttribute("data-target-type", "pg");
+        btn.setAttribute("data-target-value", key);
         btn.innerText = APP_CONFIG.PARENTAL_GUIDE[key];
         pgTabs.appendChild(btn); 
     });
@@ -67,13 +70,14 @@ function initHeader() {
     /* init category tabs */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
         const tab = document.createElement("div");
-        tab.className = `catTab cat-${key}`;
+        tab.className = `option-tab category category-${key}`;
         tab.setAttribute("data-subtitle", APP_CONFIG.CATEGORIES[key]["label"])
         const btn = document.createElement("button");
-        btn.id = "cat-tab";
-        btn.className = `tab category cat-${key}`;
-        btn.setAttribute("data-action", "select-cat-tab");
-        btn.setAttribute("data-target", key);
+        btn.id = "category-option";
+        btn.className = `option-btn category-${key}`;
+        btn.setAttribute("data-action", "select-option");
+        btn.setAttribute("data-target-type", "category");
+        btn.setAttribute("data-target-value", key);
         btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
         tab.appendChild(btn); 
         catTabs.appendChild(tab); 
@@ -213,6 +217,7 @@ async function loadEvents() {
     
     tabs.classList.remove("hidden");
     catTabs.classList.remove("hidden");
+    addFiltersBtn.classList.remove("hidden");
     // pgTabs.classList.remove("hidden");
     search.hidden = false;
     container.hidden = false;
@@ -336,18 +341,19 @@ export function selectTab(tab, sectionId) {
     updateEmptyState();
 }
 
-export function selectCategory(tab, categoryId) {
-    console.log("click", categoryId);
-    const wasActive = tab.classList.contains("active");
+export function selectFilterOption(optionBtn) {
+    const filter = {"type": optionBtn.dataset.targetType, "value": optionBtn.dataset.targetValue};
+    const optionTab = document.querySelector(`.option-tab.${filter.type}-${filter.value}`);
+    const wasActive = optionBtn.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll("#cat-tab")
+    document.querySelectorAll(`#${filter.type}-option`)
         .forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".catTab")
+    document.querySelectorAll(`.option-tab.${filter.type}`)
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
-        // No tab active → show ALL categories
+        // /No tab active → show ALL categories
         document.querySelectorAll(`.event-tile`)
             .forEach(tile => tile.classList.remove("hidden"));
         updateEmptyState();
@@ -355,15 +361,20 @@ export function selectCategory(tab, categoryId) {
     }
 
     // Activate clicked tab
-    tab.classList.add("active");
-    document.querySelector(`.catTab.cat-${categoryId}`)?.classList.add("active");
+    optionBtn.classList.add("active");
+    optionTab?.classList.add("active");
  
     // Show only its section
     document.querySelectorAll(`.event-tile`)
         .forEach(tile => tile.classList.add("hidden"));
-    document.querySelectorAll(`.category-${categoryId}`)
+    document.querySelectorAll(`.${filter.type}-${filter.value}`)
         .forEach(tile => tile.classList.remove("hidden"));
     updateEmptyState();
+
+    // setTimeout(() => {
+    //     optionTab?.classList.remove("active");
+    // }, 2000);
+
 }
 
 export function toggleAdditionalFilter(filterBtn) {

@@ -5,7 +5,7 @@ import {
 
 import { 
     openEvent, searchInput,
-    selectTab, selectCategory, toggleAdditionalFilter
+    selectTab, selectFilterOption, toggleAdditionalFilter
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -19,8 +19,8 @@ async function handleClick(el, e) {
             selectTab(el, el.dataset.target);
             break;
 
-        case "select-cat-tab":
-            selectCategory(el, el.dataset.target);
+        case "select-option":
+            selectFilterOption(el);
             break;
 
         case "filter-toggle":
