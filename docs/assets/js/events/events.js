@@ -1,7 +1,6 @@
 console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal } from "../global/modal.js";
-import { tagInput, userTags, clearTags } from "../global/tags.js";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -12,9 +11,10 @@ history.replaceState(null, "", window.location.pathname + window.location.search
 const loading = document.getElementById("loading-screen");
 const container = document.getElementById("events");
 const search = document.getElementById("event-search");
+const addFilters = document.getElementById("add-filters");
 const tabs = document.getElementById("event-tabs");
+const pgTabs = document.getElementById("pg-tabs");
 const catTabs = document.getElementById("category-tabs");
-const filter = document.getElementById("event-filter");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
@@ -24,15 +24,8 @@ const thisSunday = getSunday(today);
 const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
 
-const filterToggle = document.getElementById("filter-toggle");
-const filterPanel = document.getElementById("filter-panel");
-const filterForm = document.getElementById("filter-form");
-const filterCatChoices = filterPanel.querySelector("#filter-category");
-const filterParentalGuideChoices = filterPanel.querySelector("#filter-parental-guide");
-
 let user_profile = null;
 let EVENTS = [];
-let filters = APP_CONFIG.DEFAULT_FILTER;
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -60,61 +53,31 @@ function groupEvents(events) {
 }
 
 function initHeader() {
+    /* init pg tabs */
+    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+        const btn = document.createElement("button");
+        btn.id = "pg-tab";
+        btn.className = `tab pg pg-${key}`;
+        btn.setAttribute("data-action", "select-pg-tab");
+        btn.setAttribute("data-target", key);
+        btn.innerText = APP_CONFIG.PARENTAL_GUIDE[key];
+        pgTabs.appendChild(btn); 
+    });
+
     /* init category tabs */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const catTab = document.createElement("div");
-        catTab.className = `catTab cat-${key}`;
-        catTab.setAttribute("data-subtitle", APP_CONFIG.CATEGORIES[key]["label"])
+        const tab = document.createElement("div");
+        tab.className = `catTab cat-${key}`;
+        tab.setAttribute("data-subtitle", APP_CONFIG.CATEGORIES[key]["label"])
         const btn = document.createElement("button");
         btn.id = "cat-tab";
         btn.className = `tab category cat-${key}`;
         btn.setAttribute("data-action", "select-cat-tab");
         btn.setAttribute("data-target", key);
         btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
-        catTab.appendChild(btn); 
-        catTabs.appendChild(catTab); 
+        tab.appendChild(btn); 
+        catTabs.appendChild(tab); 
     });
-
-    /* init Filter */
-    clearTags();
-
-    /* Configure categories */
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const category = APP_CONFIG.CATEGORIES[key]["label"];
-
-        const label = document.createElement("label");
-        label.className = "category-item";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = category;
-        checkbox.name = "categories";
-
-        label.appendChild(checkbox);
-        label.append(" " + category);
-
-        filterCatChoices.appendChild(label); 
-    });
-
-    /* Configure parental guide */
-    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        const pg = APP_CONFIG.PARENTAL_GUIDE[key];
-
-        const label = document.createElement("label");
-        label.className = "pg-item";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = pg;
-        checkbox.name = "pg";
-
-        label.appendChild(checkbox);
-        label.append(" " + pg);
-
-        filterParentalGuideChoices.appendChild(label); 
-    });
-
-
 }
 
 function updateEmptyState() {
@@ -135,7 +98,6 @@ function updateEmptyState() {
     } else {
         emptyState.classList.remove("hidden");
     }
-    // document.getElementById("empty-state").hidden = hasAnyVisibleTile;
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
@@ -188,6 +150,21 @@ function renderEventTile(event) {
     `;
 }
 
+function renderEventSuggestion(event) {
+    const eventData = renderEventData(event);
+    const html = `
+        <div class="event-suggestion-title non-wrap">${event.title}</div>
+        <div class="event-suggestion-meta non-wrap">
+            <div style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+            .
+            <div>${formatEventDateTime(eventData.event_date)}</div>
+            .
+            <div class>${eventData.location_name}</div>
+        </div>
+    `
+    return html;
+}
+
 async function loadEvents() {
     if (!window.supabaseClient) {
         console.error("Supabase not initialized");
@@ -206,26 +183,6 @@ async function loadEvents() {
         .from("future_events")
         .select("*")
         .eq("pending", false)
-
-    if (filters.from) {
-        query = query.gte("event_date", filters.from);
-    }
-
-    if (filters.to) {
-        query = query.lte("event_date", filters.to);
-    }
-
-    if (filters.categories) {
-        query = query.in("category", filters.categories);
-    }
-
-    if (filters.pg) {
-        query = query.in("parental_guide", filters.pg);
-    }
-
-    if (filters.tags) {
-        query = query.overlaps("tags", filters.tags);
-    }
 
     const { data, error } = await query.order("event_date", { ascending: true });
 
@@ -256,8 +213,8 @@ async function loadEvents() {
     
     tabs.classList.remove("hidden");
     catTabs.classList.remove("hidden");
+    // pgTabs.classList.remove("hidden");
     search.hidden = false;
-    // filter.hidden = false;
     container.hidden = false;
     loading.style.display = "none";
 
@@ -271,21 +228,6 @@ async function loadEvents() {
         eventId = null;
     }
 
-}
-
-function renderEventSuggestion(event) {
-    const eventData = renderEventData(event);
-    const html = `
-        <div class="event-suggestion-title non-wrap">${event.title}</div>
-        <div class="event-suggestion-meta non-wrap">
-            <div style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
-            .
-            <div>${formatEventDateTime(eventData.event_date)}</div>
-            .
-            <div class>${eventData.location_name}</div>
-        </div>
-    `
-    return html;
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -358,66 +300,6 @@ export function searchInput(input) {
     suggestions.classList.remove("hidden");
 }
 
-export function resetFilter() {
-    filters = APP_CONFIG.DEFAULT_FILTER;
-    clearTags();
-    filterForm.reset();
-    filterToggle.click();
-    loadEvents();
-}
-
-export function applyFilter() {
-    const selectedCategories = Array.from(
-        filterForm.querySelectorAll('input[name="categories"]:checked')
-    ).map(cb => getCategoryId(cb.value));
-
-    const selectedPg = Array.from(
-        filterForm.querySelectorAll('input[name="pg"]:checked')
-    ).map(cb => getPgId(cb.value));
-
-    const from = filterForm.from.value;
-    const to = filterForm.to.value;
-
-    // checks tags
-    userTags.forEach(tag => {
-        // if (!/^[a-z0-9-_]+$/.test(tag)) {
-        //     showFilterError("Mauvais format pour les tags")
-        // }
-        // return;
-    });
-
-    // check dates
-    if (from) {
-        if (new Date(from) < today) {
-            openErrorModal("La date de début doit être supérieure aujourd'hui");
-            return;
-        }
-    }if (to) {
-        if (new Date(from) < today) {
-            openErrorModal("La date de fin doit être supérieure aujourd'hui");
-            return;
-        }
-    }
-    if (from && to) {
-        if (new Date(to) < new Date(from)) {
-            openErrorModal("La date de fin doit être supérieure ou égale à la date de début");
-            return;
-        }
-    }
-
-    filters = {
-        categories: selectedCategories.length ? selectedCategories : null,
-        pg: selectedPg.length ? selectedPg : null,
-        tags: userTags.length ? userTags : null,
-        from: from || null,
-        to: to || null
-    };
-    
-    /* hide panel abd load events */
-    filterToggle.click();
-    loadEvents();
-}
-
 export function selectTab(tab, sectionId) {
     const wasActive = tab.classList.contains("active");
 
@@ -482,6 +364,22 @@ export function selectCategory(tab, categoryId) {
     document.querySelectorAll(`.category-${categoryId}`)
         .forEach(tile => tile.classList.remove("hidden"));
     updateEmptyState();
+}
+
+export function toggleAdditionalFilter(filterBtn) {
+    const isOpen = filterBtn.getAttribute("aria-expanded") === "true";
+    filterBtn.setAttribute("aria-expanded", String(!isOpen));
+
+    if (isOpen) {
+        addFilters.classList.add("hidden");
+        filterBtn.querySelector(".text").innerText = "Autres filtres";
+        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_right";
+    } else {
+        /* open this one */
+        addFilters.classList.remove("hidden");
+        filterBtn.querySelector(".text").innerText = "Fermer les filtres";
+        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
+    }
 }
 
 /* === MAIN === */

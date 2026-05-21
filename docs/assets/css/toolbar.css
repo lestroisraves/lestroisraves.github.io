@@ -14,7 +14,7 @@
     padding: 0.9rem 0.9rem;
     
     font-size: 0.75rem;
-    color: #777;
+    color: var(--primary-textarea);
     border-radius: 10px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
@@ -60,7 +60,7 @@
 
 .suggestions span {
     font-size: 0.65rem;
-    color: #808080;
+    color: #ccc;
     padding: 0.5rem 0.7rem;
     cursor: pointer;
 }
@@ -68,4 +68,47 @@
 .suggestions span:hover,
 .suggestions div:hover  {
     background-color: var(--primary-success--lighter);
+}
+
+.add-filter-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    background: transparent;
+    align-items: center;
+    padding: 0 0.4rem;
+    width: 100%;
+}
+
+.add-filter-btn .chevron {
+    font-size: 1rem;
+}
+.add-filter-btn .text {
+    font-size: 0.70rem;
+}
+
+.add-filter-btn:hover {
+    color: var(--primary-fg);
+}
+
+.add-filter-btn[aria-expanded="true"] {
+    /* border-radius: 0 0 20px 20px;
+    background: #768cb9; */
+    /* color: white; */
+    /* box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); */
+    justify-content: center;
+    /* padding: 0.4rem 0.4rem; */
+    margin-top: 0;
+}
+
+.add-filters {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-filters.hidden {
+    display: none;
 }

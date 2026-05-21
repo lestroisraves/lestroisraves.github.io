@@ -67,7 +67,7 @@
 .section-subtitle {
     margin: 0 0 0.15rem 0;
     font-size: 0.7rem;
-    color: #777;
+    color: var(--primary-textarea);
 }
 
 .events-tabs {
@@ -80,13 +80,12 @@
 
 .events-tabs.category {
     grid-template-columns: repeat(6, 1fr);
-    margin-bottom: 1.2rem;
+    margin-top: 1.2rem;
 }
 
 .events-tabs.hidden {
     display: none;
 }
-
 
 .tab {
     margin-top: 0;
@@ -134,7 +133,7 @@
     display: block;
 
     position: absolute;
-    top: 100%;                 /* below button */
+    bottom: 100%;                 /* below button */
 
     white-space: nowrap;      /* no wrapping */
     width: max-content;       /* expand to full text */

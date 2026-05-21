@@ -275,13 +275,13 @@ function renderEventData(event, details = false) {
     switch (eventData.parental_guide)
     {
         case 1:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_friendly", APP_CONFIG.PARENTAL_GUIDE[1]);
+            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[1]);
             break;
         case 2:
-            eventData.parentalGuideHtml = renderMaterialIconText("no_stroller", APP_CONFIG.PARENTAL_GUIDE[2]);
+            eventData.parentalGuideHtml = renderMaterialIconText("18_up_rating", APP_CONFIG.PARENTAL_GUIDE[2]);
             break;
         default:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[0]);
+            eventData.parentalGuideHtml = renderMaterialIconText("check_circle", APP_CONFIG.PARENTAL_GUIDE[0]);
     }
 
     if (details) {
