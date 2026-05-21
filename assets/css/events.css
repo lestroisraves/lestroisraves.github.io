@@ -93,6 +93,7 @@
     border-radius: 999px;
     border: none;
     background: #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     color: #334155;
     cursor: pointer;
     font-weight: 500;
@@ -120,6 +121,7 @@
     border-radius: 999px;
     border: none;
     background: transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     cursor: pointer;
     font-weight: 500;
     font-size: 0.7rem;
