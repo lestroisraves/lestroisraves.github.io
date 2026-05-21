@@ -75,7 +75,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 0.3rem;
     margin-bottom: 0.4rem;
-    margin-top: 0.4;
+    margin-top: 0;
 }
 
 .events-tabs.category {
@@ -89,6 +89,7 @@
 
 
 .tab {
+    margin-top: 0;
     padding: 0.4rem 0.7rem;
     border-radius: 999px;
     border: none;

@@ -46,7 +46,7 @@ APP_CONFIG = {
             "color_light": "#D1E5FB"
         },
         5: {
-            "label": "Autres",
+            "label": "Autre",
             "icon": "star",
             "color": "#5C6370",
             "color_light": "#F0F1F3"
