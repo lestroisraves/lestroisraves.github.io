@@ -4,18 +4,13 @@ import {
 } from "../global/modal.js";
 
 import { 
-    addTag, removeLastTag
-} from "../global/tags.js"
-
-import { 
-    openEvent, searchInput, resetFilter, applyFilter,
-    selectTab, selectCategory
+    openEvent, searchInput,
+    selectTab, selectFilterOption, toggleAdditionalFilter
 } from "./events.js"
 
 const container = document.getElementById("events");
 const header = document.getElementById("event-list-header");
 const tabs = document.getElementById("event-tabs");
-const filter = document.getElementById("event-filter");
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -24,30 +19,12 @@ async function handleClick(el, e) {
             selectTab(el, el.dataset.target);
             break;
 
-        case "select-cat-tab":
-            selectCategory(el, el.dataset.target);
+        case "select-option":
+            selectFilterOption(el);
             break;
 
-        case "reset-filter":
-            resetFilter();
-            break;
-
-        case "apply-filter":
-            applyFilter();
-            break;
-
-        case "tag-input":
-            if (event.key === "Enter" || event.key === ",") {
-                event.preventDefault(); // prevent page scroll on Space
-                addTag();
-            } 
-            if (e.key === "Backspace") {
-                removeLastTag();
-            }
-            break;
-
-        case "accordion":
-            handleAccordion(el, el.dataset.accordionId);
+        case "filter-toggle":
+            toggleAdditionalFilter(el);
             break;
 
         case "show-event":
