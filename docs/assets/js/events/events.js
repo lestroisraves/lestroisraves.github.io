@@ -14,8 +14,9 @@ const search = document.getElementById("event-search");
 const addFiltersBtn = document.getElementById("more-filter-btn");
 const addFilters = document.getElementById("more-filters");
 const tabs = document.getElementById("event-tabs");
-const pgTabs = document.getElementById("pg-tabs");
 const catTabs = document.getElementById("category-tabs");
+const pgTabs = document.getElementById("pg-tabs");
+const priceTabs = document.getElementById("price-tabs");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
@@ -29,7 +30,8 @@ let user_profile = null;
 let EVENTS = [];
 let activeFilters = {
     category: new Set(),
-    pg: new Set()
+    pg: new Set(),
+    price: new Set()
 };
 
 /* === LOCAL FUNCTIONS === */
@@ -68,6 +70,12 @@ function initHeader() {
     pgTabs.innerHTML = ""
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         pgTabs.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
+    });
+
+    /* init pg tabs */
+    priceTabs.innerHTML = ""
+    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
+        priceTabs.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
     });
 }
 
@@ -132,7 +140,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}">
+        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}" data-price="${eventData.price}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -141,7 +149,7 @@ function renderEventTile(event) {
                     ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
                 </div>
                 <div class="event-meta">
-                    ${renderMaterialIconText("sell", eventData.price)}
+                    ${renderMaterialIconText("sell", eventData.priceLabel)}
                     ${eventData.parentalGuideHtml}
                 </div>
                 ${eventData.tagsHtml}
@@ -244,6 +252,14 @@ function matchesFilters(tile) {
     if (
         activeFilters.pg.size > 0 &&
         !activeFilters.pg.has(tile.dataset.pg)
+    ) {
+        return false;
+    }
+
+    //  Price filter
+    if (
+        activeFilters.price.size > 0 &&
+        !activeFilters.price.has(tile.dataset.price)
     ) {
         return false;
     }
@@ -362,9 +378,6 @@ export function selectFilterOption(optionBtn) {
     const type = optionBtn.dataset.filterType;
     const key = optionBtn.dataset.filterKey;
 
-    console.log("filter", type, key);
-    console.log("activeFilters", activeFilters);
-
     if (activeFilters[type].has(key)) {
         activeFilters[type].delete(key);
         optionBtn.classList.remove("active");
@@ -375,7 +388,8 @@ export function selectFilterOption(optionBtn) {
 
     const hasAnyFilter =
         activeFilters.category.size > 0 ||
-        activeFilters.pg.size > 0;
+        activeFilters.pg.size > 0 || 
+        activeFilters.price.size > 0;
 
     document.querySelectorAll(`.event-tile`).forEach(tile => {
         if (!hasAnyFilter) {

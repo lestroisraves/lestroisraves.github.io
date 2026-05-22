@@ -83,10 +83,10 @@ export function initEventForm(eventData=null) {
     /* Configure price choice */
     Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
         const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.PRICE_CHOICES[key]
+        opt.innerText = APP_CONFIG.PRICE_CHOICES[key]["label"]
         priceChoiceList.appendChild(opt);
     });
-    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0];
+    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0]["label"];
 
     /* init userTags */
     clearTags();
@@ -107,14 +107,14 @@ export function initEventForm(eventData=null) {
     if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
     if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
     if (eventData.max_price && (eventData.max_price > 0)) {
-        priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[2];
+        priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[2]["label"];
         form.querySelector('#max_price').value = eventData.max_price;
         if (eventData.min_price && (eventData.min_price > 0)) form.querySelector('#min_price').value = eventData.min_price;
     } else {
         if (eventData.is_free_price) {
-            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[1];
+            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[1]["label"];
         } else {
-            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0];
+            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0]["label"];
         }
     }
     priceChoiceList.dispatchEvent(new Event("change", { bubbles: true }));

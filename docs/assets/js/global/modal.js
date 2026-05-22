@@ -225,7 +225,7 @@ export function openEventModal(event, type, user_profile=null) {
             ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
         </div>
         <div class="event-meta place">
-            ${renderMaterialIconText("sell", eventData.price)}
+            ${renderMaterialIconText("sell", eventData.priceLabel)}
         </div>
         <div class="event-meta place">
             ${eventData.parentalGuideHtml}
