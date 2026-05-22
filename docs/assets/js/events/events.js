@@ -98,7 +98,6 @@ function renderOptionBtn(type, key, config) {
                 <span class="material-symbols-outlined">${icon}</span>
                 <span class="text">${label}</span>
             </button>`
-    
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
@@ -283,7 +282,8 @@ export function searchInput(input) {
             if (found) {
                 const el = document.querySelector(`[data-event-id="${event.id}"]`);
                 if (!el) return false;
-                return !el.classList.contains("hidden");
+                const section = el.closest(".section-tab.no-empty");
+                return (!el.classList.contains("hidden") && !section.hidden);
             }
             return false;
 
@@ -395,7 +395,7 @@ export function toggleAdditionalFilter(filterBtn) {
 
     if (isOpen) {
         addFilters.classList.add("hidden");
-        filterBtn.querySelector(".text").innerText = "PLus de filtres";
+        filterBtn.querySelector(".text").innerText = "Plus de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
     } else {
         /* open this one */

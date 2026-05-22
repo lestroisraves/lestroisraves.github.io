@@ -70,13 +70,6 @@
     color: var(--primary-textarea);
 }
 
-.events-tabs {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.3rem;
-    margin-bottom: 0.4rem;
-    margin-top: 0;
-}
 
 .event-tile {
     display: flex;
@@ -446,13 +439,5 @@
 
     .event-list-header .btn-outline {
         width: 100%;
-    }
-}
-
-@media (max-width: 340px) {
-    .events-tabs .tab {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 }
