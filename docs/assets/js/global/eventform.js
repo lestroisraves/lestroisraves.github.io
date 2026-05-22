@@ -7,6 +7,7 @@ import { tagInput, userTags, clearTags, addTag } from "./tags.js";
 const today = startOfDay(new Date());
 
 const form = document.getElementById("event-form");
+const areaList = document.getElementById("area");
 const categoryList = document.getElementById("category");
 const parentalGuideList = document.getElementById("pg");
 const priceChoiceList = document.getElementById("price-choice");
@@ -64,6 +65,14 @@ export function initEventForm(eventData=null) {
     currentImageUrl = null;
     imageToUpload = null;
 
+    /* Configure area  */
+    Object.keys(APP_CONFIG.AREAS).forEach(key => {
+        const opt = document.createElement("option");
+        opt.innerText = APP_CONFIG.AREAS[key]["label"]
+        areaList.appendChild(opt);
+    });
+    areaList.value = APP_CONFIG.AREAS[0]["label"];
+
     /* Configure categories  */
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
         const opt = document.createElement("option");
@@ -96,6 +105,7 @@ export function initEventForm(eventData=null) {
     /* init form with data */
     form.querySelector("#title").value = eventData.title;
     form.querySelector("#location_name").value = eventData.location_name;
+    form.querySelector("#area").value = APP_CONFIG.AREAS[eventData.area]["label"];
     if (eventData.location_address) form.querySelector("#location_name").value = eventData.location_name;
     if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
     form.querySelector("#category").value = APP_CONFIG.CATEGORIES[eventData.category]["label"];
@@ -255,6 +265,7 @@ export function getEventFormPayload() {
         // event_date: done later
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
+        area: getAreaId(areaList.value),
         location_address: form.querySelector('#location_address').value,
         tags,
         // pending: done later

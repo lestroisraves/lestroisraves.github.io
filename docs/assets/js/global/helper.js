@@ -32,6 +32,18 @@ function getCategoryId(label) {
     return id;
 }
 
+function getAreaId(label) {
+    var id = 0;
+    Object.keys(APP_CONFIG.AREAS).forEach(key => {
+        if (label == APP_CONFIG.AREAS[key]["label"])
+        {
+            id = key;
+            return;
+        }
+    });
+    return id;
+}
+
 function getRoleId(label) {
     var id = 0;
     Object.keys(APP_CONFIG.ROLES).forEach(key => {

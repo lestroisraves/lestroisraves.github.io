@@ -245,63 +245,18 @@
     color: white;
 }
 
-.option-btn.pg-0 {
-    background: var(--pg0--light);
-    color: var(--pg0);
-}
-
-.option-btn.pg-1 {
-    background: var(--pg1--light);
-    color: var(--pg1);
-}
-
-.option-btn.pg-2 {
-    background: var(--pg2--light);
-    color: var(--pg2);
-}
-
-.option-btn.pg-0.active {
-    background: var(--pg0);
+.option-btn.pg.active {
+    background: var(--primary-pg);
     color: white;
 }
 
-.option-btn.pg-1.active {
-    background: var(--pg1);
+.option-btn.price.active {
+    background: var(--primary-price);
     color: white;
 }
 
-.option-btn.pg-2.active {
-    background: var(--pg2);
-    color: white;
-}
-
-.option-btn.price-0 {
-    background: var(--price0--light);
-    color: var(--price0);
-}
-
-.option-btn.price-1 {
-    background: var(--price1--light);
-    color: var(--price1);
-}
-
-.option-btn.price-2 {
-    background: var(--price2--light);
-    color: var(--price2);
-}
-
-.option-btn.price-0.active {
-    background: var(--price0);
-    color: white;
-}
-
-.option-btn.price-1.active {
-    background: var(--price1);
-    color: white;
-}
-
-.option-btn.price-2.active {
-    background: var(--price2);
+.option-btn.area.active {
+    background: var(--primary-area);
     color: white;
 }
 

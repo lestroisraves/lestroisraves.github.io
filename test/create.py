@@ -129,6 +129,7 @@ def generate_events(n: int):
             "event_date": (today + timedelta(days=i)).isoformat(),
             "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
             "location_name": location_name,
+            "area": random.randrange(3),
             "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
             "is_free_price": is_free_price,
             "min_price": min_price,

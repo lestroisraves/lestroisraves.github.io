@@ -25,6 +25,10 @@
     --primary-tag-color:                #085066;
     --primary-textarea:                 #837e7e;
 
+    --primary-pg:                       #9b2076;
+    --primary-price:                    #20619e;
+    --primary-area:                     #a78519;
+
     /* currently used colors */
     --primary-fg:                       var(--pico-primary);
     --md-primary-color:                 var(--primary-fg);
