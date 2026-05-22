@@ -32,6 +32,18 @@ function getCategoryId(label) {
     return id;
 }
 
+function getAreaId(label) {
+    var id = 0;
+    Object.keys(APP_CONFIG.AREAS).forEach(key => {
+        if (label == APP_CONFIG.AREAS[key]["label"])
+        {
+            id = key;
+            return;
+        }
+    });
+    return id;
+}
+
 function getRoleId(label) {
     var id = 0;
     Object.keys(APP_CONFIG.ROLES).forEach(key => {
@@ -262,20 +274,14 @@ function renderEventData(event, details = false) {
     eventData.tagsHtml = eventData.tags && eventData.tags.length
         ? `<div class="event-tags">${eventData.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>`
         : "";
-   
-    if (eventData.is_free_price) {
-        eventData.price = 1;
-        eventData.priceLabel = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
-    } else if (eventData.max_price) {
-        eventData.price = 2;
+
+    eventData.priceLabel = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
+    if (eventData.price == 2) {
         if (eventData.min_price) {
             eventData.priceLabel = eventData.min_price + " à " + eventData.max_price + " €";
         } else  {
             eventData.priceLabel = eventData.max_price + " €";
         }
-    } else {
-        eventData.price = 0;
-        eventData.priceLabel = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
     }
     
     switch (eventData.pg)

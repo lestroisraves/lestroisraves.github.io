@@ -17,6 +17,7 @@ const tabs = document.getElementById("event-tabs");
 const catTabs = document.getElementById("category-tabs");
 const pgTabs = document.getElementById("pg-tabs");
 const priceTabs = document.getElementById("price-tabs");
+const areaTabs = document.getElementById("area-tabs");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
@@ -31,7 +32,8 @@ let EVENTS = [];
 let activeFilters = {
     category: new Set(),
     pg: new Set(),
-    price: new Set()
+    price: new Set(),
+    area: new Set()
 };
 
 /* === LOCAL FUNCTIONS === */
@@ -76,6 +78,12 @@ function initHeader() {
     priceTabs.innerHTML = ""
     Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
         priceTabs.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
+    });
+
+     /* init pg tabs */
+    areaTabs.innerHTML = ""
+    Object.keys(APP_CONFIG.AREAS).forEach(key => {
+        areaTabs.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
     });
 }
 
@@ -140,7 +148,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}" data-price="${eventData.price}">
+        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}" data-price="${eventData.price}" data-area="${eventData.area}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -260,6 +268,14 @@ function matchesFilters(tile) {
     if (
         activeFilters.price.size > 0 &&
         !activeFilters.price.has(tile.dataset.price)
+    ) {
+        return false;
+    }
+
+    //  Area filter
+    if (
+        activeFilters.area.size > 0 &&
+        !activeFilters.area.has(tile.dataset.area)
     ) {
         return false;
     }
@@ -389,7 +405,8 @@ export function selectFilterOption(optionBtn) {
     const hasAnyFilter =
         activeFilters.category.size > 0 ||
         activeFilters.pg.size > 0 || 
-        activeFilters.price.size > 0;
+        activeFilters.price.size > 0 ||
+        activeFilters.area.size > 0;
 
     document.querySelectorAll(`.event-tile`).forEach(tile => {
         if (!hasAnyFilter) {
