@@ -90,16 +90,11 @@ def generate_events(n: int):
     print("generate events...")
     for i in range(n):
         price = random.randrange(3)
-        if price == 0:
-            min_price = max_price = 0
-            is_free_price = 0
-        elif price == 1:
-            min_price = max_price = 0
-            is_free_price = 1
-        else:
+        if price == 2:
             min_price = round(random.choice([0, random.uniform(0.0, 4.0)]), 2)
             max_price = round(random.uniform(5.0, 40.0), 2)
-            is_free_price = 0
+        else:
+            min_price = max_price = 0
 
         category = random.randrange(5)
         if category == 0:
@@ -131,7 +126,7 @@ def generate_events(n: int):
             "location_name": location_name,
             "area": random.randrange(3),
             "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
-            "is_free_price": is_free_price,
+            "price": price,
             "min_price": min_price,
             "max_price": max_price,
             "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),

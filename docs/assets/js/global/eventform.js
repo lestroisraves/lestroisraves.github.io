@@ -116,15 +116,11 @@ export function initEventForm(eventData=null) {
     if (eventData.phone) form.querySelector("#phone").value = eventData.phone;
     if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
     if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
-    if (eventData.max_price && (eventData.max_price > 0)) {
-        priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[2]["label"];
-        form.querySelector('#max_price').value = eventData.max_price;
-        if (eventData.min_price && (eventData.min_price > 0)) form.querySelector('#min_price').value = eventData.min_price;
-    } else {
-        if (eventData.is_free_price) {
-            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[1]["label"];
-        } else {
-            priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0]["label"];
+    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
+    if (eventData.price == 2) {
+        if (eventData.max_price && (eventData.max_price > 0)) {
+            form.querySelector('#max_price').value = eventData.max_price;
+            if (eventData.min_price && (eventData.min_price > 0)) form.querySelector('#min_price').value = eventData.min_price;
         }
     }
     priceChoiceList.dispatchEvent(new Event("change", { bubbles: true }));
@@ -241,7 +237,6 @@ export function getEventFormPayload() {
 
     /* set price */
     const priceChoiceId = getPriceId(priceChoiceList.value);
-    var is_free_price = false;
     var min_price = null;
     var max_price = null;
     if (priceChoiceId == 2) {
@@ -255,8 +250,6 @@ export function getEventFormPayload() {
             openErrorModal("Le prix réduit doit être inférieur au prix normal");
             return;
         }
-    } else if (priceChoiceId == 1) {
-        is_free_price = true;
     }
 
     const payload = {
@@ -271,7 +264,7 @@ export function getEventFormPayload() {
         // pending: done later
         is_test: userTags.includes("is_test"),
         // created_by: done later
-        is_free_price: is_free_price,
+        price: priceChoiceId,
         min_price: min_price,
         max_price: max_price,
         category: getCategoryId(categoryList.value),
