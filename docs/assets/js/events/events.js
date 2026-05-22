@@ -9,10 +9,10 @@ let eventId = params.get("id");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const loading = document.getElementById("loading-screen");
-const container = document.getElementById("events");
+const eventsContainer = document.getElementById("events");
 const search = document.getElementById("event-search");
-const addFiltersBtn = document.getElementById("add-filter-btn");
-const addFilters = document.getElementById("add-filters");
+const addFiltersBtn = document.getElementById("more-filter-btn");
+const addFilters = document.getElementById("more-filters");
 const tabs = document.getElementById("event-tabs");
 const pgTabs = document.getElementById("pg-tabs");
 const catTabs = document.getElementById("category-tabs");
@@ -27,7 +27,10 @@ const nextSunday = getSunday(nextMonday);
 
 let user_profile = null;
 let EVENTS = [];
-let activeFilters = new Set();
+let activeFilters = {
+    category: new Set(),
+    pg: new Set()
+};
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -55,32 +58,16 @@ function groupEvents(events) {
 }
 
 function initHeader() {
-    /* init pg tabs */
-    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        const btn = document.createElement("button");
-        btn.id = "pg-tab";
-        btn.className = `event-option pg pg-${key}`;
-        btn.setAttribute("data-action", "select-option");
-        btn.setAttribute("data-target-type", "pg");
-        btn.setAttribute("data-target-value", key);
-        btn.innerText = APP_CONFIG.PARENTAL_GUIDE[key];
-        pgTabs.appendChild(btn); 
+    /* init category tabs */
+    catTabs.innerHTML = ""
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        catTabs.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
     });
 
-    /* init category tabs */
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const tab = document.createElement("div");
-        tab.className = `option-tab category category-${key}`;
-        tab.setAttribute("data-subtitle", APP_CONFIG.CATEGORIES[key]["label"])
-        const btn = document.createElement("button");
-        btn.id = "category-option";
-        btn.className = `option-btn category-${key}`;
-        btn.setAttribute("data-action", "select-option");
-        btn.setAttribute("data-target-type", "category");
-        btn.setAttribute("data-target-value", key);
-        btn.innerText = APP_CONFIG.CATEGORIES[key]["icon"];
-        tab.appendChild(btn); 
-        catTabs.appendChild(tab); 
+    /* init pg tabs */
+    pgTabs.innerHTML = ""
+    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+        pgTabs.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
     });
 }
 
@@ -102,6 +89,16 @@ function updateEmptyState() {
     } else {
         emptyState.classList.remove("hidden");
     }
+}
+
+function renderOptionBtn(type, key, config) {
+    const label = config["label_short"] ? config["label_short"] : config["label"];
+    const icon = config["icon"];
+    return `<button id="${type}-${key}-option" class="option-btn ${type} ${type}-${key}" data-action="select-option" data-filter-type="${type}" data-filter-key="${key}">
+                <span class="material-symbols-outlined">${icon}</span>
+                <span class="text">${label}</span>
+            </button>`
+    
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
@@ -136,7 +133,7 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile category-${eventData.category}" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}">
+        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -192,11 +189,11 @@ async function loadEvents() {
 
     if (error) {
         console.log("Error:", error);
-        container.innerText = "ERREUR survenue durant le chargement des évènements";
+        eventsContainer.innerText = "ERREUR survenue durant le chargement des évènements";
         return;
     }
     if (!events || events.length === 0) {
-        container.innerText = "Pas d'évènements prévus";
+        eventsContainer.innerText = "Pas d'évènements prévus";
         return;
     }
 
@@ -208,7 +205,7 @@ async function loadEvents() {
     grouped.tomorrow = sortByDate(grouped.tomorrow);
     grouped.later = sortByDate(grouped.later);
     
-    container.innerHTML =
+    eventsContainer.innerHTML =
         renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
         renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
         renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
@@ -220,12 +217,12 @@ async function loadEvents() {
     addFiltersBtn.classList.remove("hidden");
     // pgTabs.classList.remove("hidden");
     search.hidden = false;
-    container.hidden = false;
+    eventsContainer.hidden = false;
     loading.style.display = "none";
 
     if (eventId) {
         console.log("show event id:", eventId);
-        const el = container.querySelector(`[data-event-id="${eventId}"]`);
+        const el = eventsContainer.querySelector(`[data-event-id="${eventId}"]`);
         if (!el) return;
         el.scrollIntoView();
         el.focus();
@@ -235,9 +232,24 @@ async function loadEvents() {
 
 }
 
-function getFilterData(filter) {
-    const f = filter.split(":");
-    return {type: f[0], value: f[1]};
+function matchesFilters(tile) {
+    // category filter
+    if (
+        activeFilters.category.size > 0 &&
+        !activeFilters.category.has(tile.dataset.category)
+    ) {
+        return false;
+    }
+
+    //  Parental Guidance filter
+    if (
+        activeFilters.pg.size > 0 &&
+        !activeFilters.pg.has(tile.dataset.pg)
+    ) {
+        return false;
+    }
+
+    return true;
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -347,49 +359,33 @@ export function selectTab(tab, sectionId) {
 }
 
 export function selectFilterOption(optionBtn) {
-    const filter = `${optionBtn.dataset.targetType}:${optionBtn.dataset.targetValue}`
-    const optionTab = document.querySelector(`.option-tab.${optionBtn.dataset.targetType}-${optionBtn.dataset.targetValue}`);
-    const wasActive = optionBtn.classList.contains("active");
+    const type = optionBtn.dataset.filterType;
+    const key = optionBtn.dataset.filterKey;
 
-    if (activeFilters.has(filter)) {
-        // console.log("deactivate", filter.type, filter.value);
-        activeFilters.delete(filter);
+    console.log("filter", type, key);
+    console.log("activeFilters", activeFilters);
+
+    if (activeFilters[type].has(key)) {
+        activeFilters[type].delete(key);
         optionBtn.classList.remove("active");
-        optionTab?.classList.remove("active");
     } else {
-        // console.log("activate", filter.type, filter.value);
-        activeFilters.add(filter);
-        document.querySelectorAll(`.option-tab.${optionBtn.dataset.targetType}`)
-            .forEach(t => t.classList.remove("active"));
+        activeFilters[type].add(key);
         optionBtn.classList.add("active");
-        optionTab?.classList.add("active");
     }
 
-    setTimeout(() => {
-        optionTab?.classList.remove("active");
-    }, 2000);
+    const hasAnyFilter =
+        activeFilters.category.size > 0 ||
+        activeFilters.pg.size > 0;
 
-    // Rule 1: no filters → show all
-    if (activeFilters.size === 0) {
-        document.querySelectorAll(`.event-tile`)
-            .forEach(tile => tile.classList.remove("hidden"));
-        updateEmptyState();
-        return;
-    }
-
-    // Rule 2: show only matching
     document.querySelectorAll(`.event-tile`).forEach(tile => {
-        const hasAttr = [...activeFilters].some(filter => {
-                const f = filter.split(":");
-                return tile.classList.contains(`${f[0]}-${f[1]}`);
-            }
-        );
-        if (hasAttr) {
+        if (!hasAnyFilter) {
             tile.classList.remove("hidden");
-        } else {
-            tile.classList.add("hidden");
+            return;
         }
+
+        tile.classList.toggle("hidden", !matchesFilters(tile));
     });
+
     updateEmptyState();
 }
 
@@ -399,12 +395,12 @@ export function toggleAdditionalFilter(filterBtn) {
 
     if (isOpen) {
         addFilters.classList.add("hidden");
-        filterBtn.querySelector(".text").innerText = "Autres filtres";
-        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_right";
+        filterBtn.querySelector(".text").innerText = "PLus de filtres";
+        filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
     } else {
         /* open this one */
         addFilters.classList.remove("hidden");
-        filterBtn.querySelector(".text").innerText = "Fermer les filtres";
+        filterBtn.querySelector(".text").innerText = "Moins de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
     }
 }

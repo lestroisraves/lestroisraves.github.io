@@ -138,7 +138,7 @@ def generate_events(n: int):
             "phone": random.choice([None, "06.01.12.13.14"]),
             "site_url": random.choice([None, "https://rcsculture.github.io"]),
             "to_eat": random.choice([True, False]),
-            "parental_guide": random.randrange(3),
+            "pg": random.randrange(3),
             "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],
             "image_url": SUPABASE_IMAGE_STORAGE + image
         }

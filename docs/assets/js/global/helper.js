@@ -47,7 +47,7 @@ function getRoleId(label) {
 function getPgId(label) {
     var id = 0;
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        if (label == APP_CONFIG.PARENTAL_GUIDE[key])
+        if (label == APP_CONFIG.PARENTAL_GUIDE[key]["label"])
         {
             id = key;
             return;
@@ -272,16 +272,19 @@ function renderEventData(event, details = false) {
         eventData.price = eventData.max_price + " €";
     }
 
-    switch (eventData.parental_guide)
+    switch (eventData.pg)
     {
+        case 0:
+            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[0]["icon"], APP_CONFIG.PARENTAL_GUIDE[0]["label"]);
+            break;
+
         case 1:
-            eventData.parentalGuideHtml = renderMaterialIconText("child_hat", APP_CONFIG.PARENTAL_GUIDE[1]);
+            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[1]["icon"], APP_CONFIG.PARENTAL_GUIDE[1]["label"]);
             break;
+
         case 2:
-            eventData.parentalGuideHtml = renderMaterialIconText("18_up_rating", APP_CONFIG.PARENTAL_GUIDE[2]);
+            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[2]["icon"], APP_CONFIG.PARENTAL_GUIDE[2]["label"]);
             break;
-        default:
-            eventData.parentalGuideHtml = renderMaterialIconText("check_circle", APP_CONFIG.PARENTAL_GUIDE[0]);
     }
 
     if (details) {

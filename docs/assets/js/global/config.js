@@ -23,6 +23,7 @@ APP_CONFIG = {
         },
         1: {
             "label": "Spectacle vivant",
+            "label_short": "Spectacle",
             "icon": "theater_comedy",
             "color": "#15803d",
             "color_light": "#f0fdf4"
@@ -48,14 +49,31 @@ APP_CONFIG = {
         5: {
             "label": "Autre",
             "icon": "star",
-            "color": "#5C6370",
-            "color_light": "#F0F1F3"
+            "color": "#48536B",
+            "color_light": "#DFE3EB"
         }
     },
     PARENTAL_GUIDE: {
-        0: "Tout public",
-        1: "Pour les enfants",
-        2: "Déconseillé aux enfants"
+        0: {
+            "label": "Tout public",
+            "icon": "check_circle",
+            "color": "#265E09",
+            "color_light": "#e3ffea"
+        },
+        1: {
+            "label": "Pour les enfants",
+            "label_short": "Enfants",
+            "icon": "child_hat",
+            "color": "#685F00",
+            "color_light": "#FDF1B4"
+        },
+        2: {
+            "label": "Déconseillé aux enfants",
+            "label_short": "Adultes",
+            "icon": "18_up_rating",
+            "color": "#9B2318",
+            "color_light": "#FAEEEB"
+        }
     },
     PRICE_CHOICES: {
         0: "Gratuit",
@@ -85,4 +103,10 @@ document.documentElement.style.setProperty("--category2--light", APP_CONFIG.CATE
 document.documentElement.style.setProperty("--category3--light", APP_CONFIG.CATEGORIES[3]["color_light"]);
 document.documentElement.style.setProperty("--category4--light", APP_CONFIG.CATEGORIES[4]["color_light"]);
 document.documentElement.style.setProperty("--category5--light", APP_CONFIG.CATEGORIES[5]["color_light"]);
+document.documentElement.style.setProperty("--pg0", APP_CONFIG.PARENTAL_GUIDE[0]["color"]);
+document.documentElement.style.setProperty("--pg1", APP_CONFIG.PARENTAL_GUIDE[1]["color"]);
+document.documentElement.style.setProperty("--pg2", APP_CONFIG.PARENTAL_GUIDE[2]["color"]);
+document.documentElement.style.setProperty("--pg0--light", APP_CONFIG.PARENTAL_GUIDE[0]["color_light"]);
+document.documentElement.style.setProperty("--pg1--light", APP_CONFIG.PARENTAL_GUIDE[1]["color_light"]);
+document.documentElement.style.setProperty("--pg2--light", APP_CONFIG.PARENTAL_GUIDE[2]["color_light"]);
 
