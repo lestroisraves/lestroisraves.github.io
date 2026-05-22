@@ -8,7 +8,7 @@ const today = startOfDay(new Date());
 
 const form = document.getElementById("event-form");
 const categoryList = document.getElementById("category");
-const parentalGuideList = document.getElementById("parental_guide");
+const parentalGuideList = document.getElementById("pg");
 const priceChoiceList = document.getElementById("price-choice");
 const minPrice = document.getElementById("min_price");
 const maxPrice = document.getElementById("max_price");
@@ -75,10 +75,10 @@ export function initEventForm(eventData=null) {
     /* Configure parental guide */
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
         const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.PARENTAL_GUIDE[key]
+        opt.innerText = APP_CONFIG.PARENTAL_GUIDE[key]["label"]
         parentalGuideList.appendChild(opt);
     });
-    parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0];
+    parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0]["label"];
 
     /* Configure price choice */
     Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
@@ -99,7 +99,7 @@ export function initEventForm(eventData=null) {
     if (eventData.location_address) form.querySelector("#location_name").value = eventData.location_name;
     if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
     form.querySelector("#category").value = APP_CONFIG.CATEGORIES[eventData.category]["label"];
-    form.querySelector("#parental_guide").value = APP_CONFIG.PARENTAL_GUIDE[eventData.parental_guide];
+    form.querySelector("#pg").value = APP_CONFIG.PARENTAL_GUIDE[eventData.pg]["label"];
     form.querySelector("#event_date").value = eventData.event_date;
     if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));
@@ -267,7 +267,7 @@ export function getEventFormPayload() {
         // image_url: done later
         phone: form.querySelector('#phone').value,
         site_url: form.querySelector('#site_url').value,
-        parental_guide: getPgId(parentalGuideList.value),
+        pg: getPgId(parentalGuideList.value),
         to_eat: toEat
     }
 

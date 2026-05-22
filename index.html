@@ -57,19 +57,19 @@
     
       <link rel="stylesheet" href="assets/css/nav.css">
     
-      <link rel="stylesheet" href="assets/css/events.css">
-    
       <link rel="stylesheet" href="assets/css/toolbar.css">
     
-      <link rel="stylesheet" href="assets/css/filter.css">
-    
-      <link rel="stylesheet" href="assets/css/submit.css">
-    
-      <link rel="stylesheet" href="assets/css/account.css">
+      <link rel="stylesheet" href="assets/css/tags.css">
     
       <link rel="stylesheet" href="assets/css/notice.css">
     
       <link rel="stylesheet" href="assets/css/modal.css">
+    
+      <link rel="stylesheet" href="assets/css/events.css">
+    
+      <link rel="stylesheet" href="assets/css/submit.css">
+    
+      <link rel="stylesheet" href="assets/css/account.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -480,14 +480,17 @@
 
 <section id="category-tabs" class="events-tabs category hidden"></section>
 
-<section id="add-filters" class="add-filters hidden">
-    <section id="pg-tabs" class="events-tabs hidden"></section>
+<section id="more-filters" class="more-filters hidden">
+    <section id="pg-tabs" class="events-tabs pg"></section>
 </section>
 
-<p><button id="add-filter-btn" class="add-filter-btn hidden" data-action="filter-toggle" aria-expanded="false">
-    <span class="text">Autres filtres</span>
-    <span class="material-symbols-outlined chevron">keyboard_arrow_right</span>
-</button></p>
+<div>
+    <button id="more-filter-btn" class="more-filter-btn hidden" data-action="filter-toggle" aria-expanded="false">
+        <span class="text">Plus de filtres</span>
+        <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
+    </button>
+</div>
+
 <section id="event-search" class="autocomplete" hidden>
     <input
         type="text"
