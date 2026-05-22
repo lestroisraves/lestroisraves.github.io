@@ -98,7 +98,6 @@ function renderOptionBtn(type, key, config) {
                 <span class="material-symbols-outlined">${icon}</span>
                 <span class="text">${label}</span>
             </button>`
-    
 }
 
 function renderSection(sectionId, sectionTitle, subtitle, events) {
