@@ -76,9 +76,24 @@ APP_CONFIG = {
         }
     },
     PRICE_CHOICES: {
-        0: "Gratuit",
-        1: "Participation libre",
-        2: "Payant"
+        0: {
+            "label": "Gratuit",
+            "icon": "cruelty_free",
+            "color": "#265E09",
+            "color_light": "#e3ffea"
+        },
+        1: {
+            "label": "Prix libre",
+            "icon": "volunteer_activism",
+            "color": "#685F00",
+            "color_light": "#FDF1B4"
+        },
+        2: {
+            "label": "Payant",
+            "icon": "euro",
+            "color": "#9B2318",
+            "color_light": "#FAEEEB"
+        }
     },
     DEFAULT_FILTER: {
         categories: null,
@@ -109,4 +124,10 @@ document.documentElement.style.setProperty("--pg2", APP_CONFIG.PARENTAL_GUIDE[2]
 document.documentElement.style.setProperty("--pg0--light", APP_CONFIG.PARENTAL_GUIDE[0]["color_light"]);
 document.documentElement.style.setProperty("--pg1--light", APP_CONFIG.PARENTAL_GUIDE[1]["color_light"]);
 document.documentElement.style.setProperty("--pg2--light", APP_CONFIG.PARENTAL_GUIDE[2]["color_light"]);
+document.documentElement.style.setProperty("--price0", APP_CONFIG.PRICE_CHOICES[0]["color"]);
+document.documentElement.style.setProperty("--price1", APP_CONFIG.PRICE_CHOICES[1]["color"]);
+document.documentElement.style.setProperty("--price2", APP_CONFIG.PRICE_CHOICES[2]["color"]);
+document.documentElement.style.setProperty("--price0--light", APP_CONFIG.PRICE_CHOICES[0]["color_light"]);
+document.documentElement.style.setProperty("--price1--light", APP_CONFIG.PRICE_CHOICES[1]["color_light"]);
+document.documentElement.style.setProperty("--price2--light", APP_CONFIG.PRICE_CHOICES[2]["color_light"]);
 
