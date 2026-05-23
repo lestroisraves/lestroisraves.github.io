@@ -67,6 +67,8 @@
     
       <link rel="stylesheet" href="assets/css/events.css">
     
+      <link rel="stylesheet" href="assets/css/calendar.css">
+    
       <link rel="stylesheet" href="assets/css/submit.css">
     
       <link rel="stylesheet" href="assets/css/account.css">
@@ -505,7 +507,23 @@
     <div class="suggestions round hidden"></div>
 </section>
 
-<div id="events"></div>
+<div id="switch-view-btn" class="view-switch hidden">
+    <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
+    <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+</div>
+
+<div id="tiles-view" hidden></div>
+
+<div id="agenda-view" hidden>
+    <!-- <div class="calendar-header">
+        <button id="prev-month">←</button>
+
+        <span id="calendar-title"></span>
+
+        <button id="next-month">→</button>
+    </div> -->
+    <div class="calendar"></div>
+</div>
 
 <div id="empty-state" class="empty-state hidden">
     <span class="material-symbols-outlined">visibility_off</span>

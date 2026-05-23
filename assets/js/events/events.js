@@ -9,10 +9,12 @@ let eventId = params.get("id");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const loading = document.getElementById("loading-screen");
-const eventsContainer = document.getElementById("events");
+const tilesView = document.getElementById("tiles-view");
+const agendaView = document.getElementById("agenda-view");
 const search = document.getElementById("event-search");
 const addFiltersBtn = document.getElementById("more-filter-btn");
 const addFilters = document.getElementById("more-filters");
+const switchViewBtn = document.getElementById("switch-view-btn");
 const tabs = document.getElementById("event-tabs");
 const catTabs = document.getElementById("category-tabs");
 const pgTabs = document.getElementById("pg-tabs");
@@ -21,6 +23,8 @@ const areaTabs = document.getElementById("area-tabs");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
+const year = today.getFullYear();
+const month = today.getMonth();
 const tomorrow = addDays(today, 1);
 const afterTomorrow = addDays(today, 2);
 const thisSunday = getSunday(today);
@@ -61,6 +65,57 @@ function groupEvents(events) {
     return groups;
 }
 
+function groupByDate(events) {
+    const map = {};
+
+    events.forEach(event => {
+        const date = event.event_date; // "YYYY-MM-DD"
+
+        if (!map[date]) map[date] = [];
+        map[date].push(event);
+    });
+
+    return map;
+}
+
+function groupByDateWithCategories(events) {
+    const map = {};
+
+    events.forEach(event => {
+        const date = event.event_date;
+
+        if (!map[date]) {
+            map[date] = new Set(); // ✅ unique types
+        }
+
+        map[date].add(event.category); // integer or string
+    });
+
+    return map;
+}
+
+function groupByDateWithCounts(events) {
+    const map = {};
+
+    events.forEach(event => {
+        const date = event.event_date;
+
+        if (!map[date]) {
+            map[date] = {};
+        }
+
+        const type = event.category;
+
+        if (!map[date][type]) {
+            map[date][type] = 0;
+        }
+
+        map[date][type]++;
+    });
+
+    return map;
+}
+
 function initHeader() {
     /* init category tabs */
     catTabs.innerHTML = ""
@@ -85,6 +140,46 @@ function initHeader() {
     Object.keys(APP_CONFIG.AREAS).forEach(key => {
         areaTabs.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
     });
+}
+
+function showHeader() {
+    tabs.classList.remove("hidden");
+    catTabs.classList.remove("hidden");
+    addFiltersBtn.classList.remove("hidden");
+    search.hidden = false;
+    switchViewBtn.classList.remove("hidden");
+}
+
+function applyFilter() {
+    const hasAnyFilter =
+    activeFilters.category.size > 0 ||
+    activeFilters.pg.size > 0 || 
+    activeFilters.price.size > 0 ||
+    activeFilters.area.size > 0;
+
+    if (!tilesView.hidden) {
+        /* apply filters on tiles */
+        document.querySelectorAll(`.event-tile`).forEach(tile => {
+            if (!hasAnyFilter) {
+                tile.classList.remove("hidden");
+                return;
+            }
+
+            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area));
+        });
+        updateEmptyState();
+
+    } else  {
+        /* apply filters on agenda */
+        var filteredEvents;
+        if (!hasAnyFilter) {
+            filteredEvents = EVENTS;
+        } else {
+            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area)));
+        }
+        renderCalendar(filteredEvents);
+    }
+
 }
 
 function updateEmptyState() {
@@ -148,7 +243,13 @@ function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}" data-action="show-event" role="link" tabindex="0" data-event-id="${eventData.id}" data-category="${eventData.category}" data-pg="${eventData.pg}" data-price="${eventData.price}" data-area="${eventData.area}">
+        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}"
+                data-action="show-event" role="link" tabindex="0"
+                data-event-id="${eventData.id}"
+                data-category="${eventData.category}"
+                data-pg="${eventData.pg}"
+                data-price="${eventData.price}"
+                data-area="${eventData.area}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -166,6 +267,25 @@ function renderEventTile(event) {
     `;
 }
 
+function renderDots(dayMap) {
+    if (!dayMap) return "";
+
+    return Object.entries(dayMap).map(([category, count]) => {
+        const color = APP_CONFIG.CATEGORIES[category]["color"] || "#999";
+
+        const label = count > 1 ? count : "";
+
+        return `
+            <span
+                class="calendar-dot"
+                style="background:${color}"
+            >
+                ${label}
+            </span>
+        `;
+    }).join("");
+}
+
 function renderEventSuggestion(event) {
     const eventData = renderEventData(event);
     const html = `
@@ -179,6 +299,68 @@ function renderEventSuggestion(event) {
         </div>
     `
     return html;
+}
+
+function renderTiles() {
+    const grouped = groupEvents(EVENTS);
+
+    grouped.today = sortByDate(grouped.today);
+    grouped.tomorrow = sortByDate(grouped.tomorrow);
+    grouped.later = sortByDate(grouped.later);
+
+    tilesView.innerHTML =
+        renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
+        renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
+        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
+
+    tilesView.hidden = false;
+    agendaView.hidden = true;
+    switchViewBtn.querySelector('[data-view="tiles"]').classList.add("active");
+    switchViewBtn.querySelector('[data-view="agenda"]').classList.remove("active");
+    loading.style.display = "none";
+
+    if (eventId) {
+        console.log("show event id:", eventId);
+        const el = tilesView.querySelector(`[data-event-id="${eventId}"]`);
+        if (!el) return;
+        el.scrollIntoView();
+        el.focus();
+        el.click();
+        eventId = null;
+    }
+}
+
+function renderCalendar(events=EVENTS) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDay = (firstDay.getDay() + 6) % 7; 
+    // converts Sunday=0 → Sunday=6 (Monday-first calendar)
+    const totalDays = lastDay.getDate();
+    const monthStr = String(month + 1).padStart(2, "0");
+    const grouped = groupByDateWithCounts(events);
+
+    var html = '';
+    for (var day = 1; day <= totalDays; day++) {
+        const dayStr = String(day).padStart(2, "0");
+        const dateStr = `${year}-${monthStr}-${dayStr}`;
+        const dayMap = grouped[dateStr];
+        html += `
+            <div class="calendar-day" data-date="${dateStr}">
+                <div class="calendar-date">${day}</div>
+
+                <div class="calendar-dots">
+                    ${renderDots(dayMap)}
+                </div>
+            </div>
+        `;
+    }
+    agendaView.querySelector(".calendar").innerHTML = html;
+
+    tilesView.hidden = true;
+    agendaView.hidden = false;
+    switchViewBtn.querySelector('[data-view="tiles"]').classList.remove("active");
+    switchViewBtn.querySelector('[data-view="agenda"]').classList.add("active");
+    loading.style.display = "none";
 }
 
 async function loadEvents() {
@@ -204,86 +386,56 @@ async function loadEvents() {
 
     if (error) {
         console.log("Error:", error);
-        eventsContainer.innerText = "ERREUR survenue durant le chargement des évènements";
+        tilesView.innerText = "ERREUR survenue durant le chargement des évènements";
         return;
     }
-    if (!events || events.length === 0) {
-        eventsContainer.innerText = "Pas d'évènements prévus";
+    if (!data || data.length === 0) {
         return;
     }
 
     EVENTS = data;
 
-    const grouped = groupEvents(EVENTS);
-
-    grouped.today = sortByDate(grouped.today);
-    grouped.tomorrow = sortByDate(grouped.tomorrow);
-    grouped.later = sortByDate(grouped.later);
-    
-    eventsContainer.innerHTML =
-        renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
-        renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
-
-    updateEmptyState();
-    
-    tabs.classList.remove("hidden");
-    catTabs.classList.remove("hidden");
-    addFiltersBtn.classList.remove("hidden");
-    // pgTabs.classList.remove("hidden");
-    search.hidden = false;
-    eventsContainer.hidden = false;
-    loading.style.display = "none";
-
-    if (eventId) {
-        console.log("show event id:", eventId);
-        const el = eventsContainer.querySelector(`[data-event-id="${eventId}"]`);
-        if (!el) return;
-        el.scrollIntoView();
-        el.focus();
-        el.click();
-        eventId = null;
-    }
-
+    renderTiles();
+    showHeader();
 }
 
-function matchesFilters(tile) {
-    // category filter
+function matchesFilters(category, pg, price, area) {
     if (
         activeFilters.category.size > 0 &&
-        !activeFilters.category.has(tile.dataset.category)
-    ) {
-        return false;
-    }
+        !activeFilters.category.has(category)
+    ) return false;
 
-    //  Parental Guidance filter
     if (
         activeFilters.pg.size > 0 &&
-        !activeFilters.pg.has(tile.dataset.pg)
-    ) {
-        return false;
-    }
+        !activeFilters.pg.has(pg)
+    ) return false;
 
-    //  Price filter
     if (
         activeFilters.price.size > 0 &&
-        !activeFilters.price.has(tile.dataset.price)
-    ) {
-        return false;
-    }
+        !activeFilters.price.has(price)
+    ) return false;
 
-    //  Area filter
     if (
         activeFilters.area.size > 0 &&
-        !activeFilters.area.has(tile.dataset.area)
-    ) {
-        return false;
-    }
+        !activeFilters.area.has(area)
+    ) return false;
 
     return true;
 }
 
+
 /* === EXPORTED FUNCTIONS === */
+export function switchView(view) {
+    if (view === "tiles") {
+        tilesView.hidden = false;
+        renderTiles();
+    } else {
+        tilesView.hidden = true;
+        applyFilter();  // for calendar view, applyFilter function allways renderCalendar
+    }
+    
+}
+
 export function openEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
@@ -402,22 +554,7 @@ export function selectFilterOption(optionBtn) {
         optionBtn.classList.add("active");
     }
 
-    const hasAnyFilter =
-        activeFilters.category.size > 0 ||
-        activeFilters.pg.size > 0 || 
-        activeFilters.price.size > 0 ||
-        activeFilters.area.size > 0;
-
-    document.querySelectorAll(`.event-tile`).forEach(tile => {
-        if (!hasAnyFilter) {
-            tile.classList.remove("hidden");
-            return;
-        }
-
-        tile.classList.toggle("hidden", !matchesFilters(tile));
-    });
-
-    updateEmptyState();
+    applyFilter();
 }
 
 export function toggleAdditionalFilter(filterBtn) {

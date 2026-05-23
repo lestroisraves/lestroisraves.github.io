@@ -5,7 +5,8 @@ import {
 
 import { 
     openEvent, searchInput,
-    selectTab, selectFilterOption, toggleAdditionalFilter
+    selectTab, selectFilterOption, toggleAdditionalFilter,
+    switchView
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -25,6 +26,10 @@ async function handleClick(el, e) {
 
         case "filter-toggle":
             toggleAdditionalFilter(el);
+            break;
+
+        case "switch-view":
+            switchView(el.dataset.view);
             break;
 
         case "show-event":
