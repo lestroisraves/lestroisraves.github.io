@@ -1,3 +1,7 @@
+#tiles-view,
+#agenda-view {
+    transition: opacity 0.2s ease;
+}
 
 .event-list-header {
     display: flex;

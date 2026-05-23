@@ -260,6 +260,35 @@
     color: white;
 }
 
+.view-switch {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    gap: 0.2;
+}
+
+.view-switch.hidden {
+    display: none;
+}
+
+.view-switch .material-symbols-outlined {
+    color: var(--primary-textarea);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.view-switch .material-symbols-outlined:hover {
+    color: var(--primary-fg);
+}
+
+.view-switch .material-symbols-outlined.active {
+    color: var(--primary-fg);
+    font-size: 1.5rem;
+}
+
 @media (max-width: 340px) {
     .tab,
     .option-btn .text {
