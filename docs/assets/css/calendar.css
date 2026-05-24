@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .calendar-header-bar {
