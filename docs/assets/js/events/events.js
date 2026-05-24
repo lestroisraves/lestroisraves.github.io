@@ -39,6 +39,7 @@ let activeFilters = {
     price: new Set(),
     area: new Set()
 };
+const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
 /* === LOCAL FUNCTIONS === */
 function groupEvents(events) {
@@ -340,13 +341,42 @@ function renderCalendar(events=EVENTS) {
     const grouped = groupByDateWithCounts(events);
 
     var html = '';
-    for (var day = 1; day <= totalDays; day++) {
-        const dayStr = String(day).padStart(2, "0");
-        const dateStr = `${year}-${monthStr}-${dayStr}`;
+
+    // Loop 35 cells (5 weeks)
+    for (let i = 0; i < 35; i++) {
+        const dayNumber = i - startDay + 1;
+
+        let date;
+        let isOtherMonth = false;
+
+        if (dayNumber < 1) {
+            // previous month
+            date = new Date(year, month, dayNumber);
+            isOtherMonth = true;
+        } else if (dayNumber > totalDays) {
+            // next month
+            date = new Date(year, month, dayNumber);
+            isOtherMonth = true;
+        } else {
+            // current month
+            date = new Date(year, month, dayNumber);
+        }
+
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+
+        const dateStr = `${y}-${m}-${d}`;
         const dayMap = grouped[dateStr];
+
+        const weekdayLetter = WEEKDAYS[i % 7];
+
         html += `
-            <div class="calendar-day" data-date="${dateStr}">
-                <div class="calendar-date">${day}</div>
+            <div class="calendar-day ${isOtherMonth ? "other-month" : ""}" data-date="${dateStr}">
+                <div class="calendar-header">
+                    <span class="day-number">${date.getDate()}</span>
+                    <span class="day-letter">${weekdayLetter}</span>
+                </div>
 
                 <div class="calendar-dots">
                     ${renderDots(dayMap)}
@@ -354,6 +384,21 @@ function renderCalendar(events=EVENTS) {
             </div>
         `;
     }
+
+    // for (var day = 1; day <= totalDays; day++) {
+    //     const dayStr = String(day).padStart(2, "0");
+    //     const dateStr = `${year}-${monthStr}-${dayStr}`;
+    //     const dayMap = grouped[dateStr];
+    //     html += `
+    //         <div class="calendar-day" data-date="${dateStr}">
+    //             <div class="calendar-date">${day}</div>
+
+    //             <div class="calendar-dots">
+    //                 ${renderDots(dayMap)}
+    //             </div>
+    //         </div>
+    //     `;
+    // }
     agendaView.querySelector(".calendar").innerHTML = html;
 
     tilesView.hidden = true;
