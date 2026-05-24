@@ -23,13 +23,15 @@ const areaTabs = document.getElementById("area-tabs");
 const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
-const year = today.getFullYear();
-const month = today.getMonth();
 const tomorrow = addDays(today, 1);
 const afterTomorrow = addDays(today, 2);
 const thisSunday = getSunday(today);
 const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
+let year = today.getFullYear();
+let month = today.getMonth();
+
+const calendarTitle = document.getElementById("calendar-title");
 
 let user_profile = null;
 let EVENTS = [];
@@ -250,7 +252,8 @@ function renderEventTile(event) {
                 data-category="${eventData.category}"
                 data-pg="${eventData.pg}"
                 data-price="${eventData.price}"
-                data-area="${eventData.area}">
+                data-area="${eventData.area}"
+                data-date="${eventData.event_date}">
             <div class="event-content" >
                 <div class="event-title">${event.title}</div>
                 ${eventData.categoryHtml}
@@ -331,7 +334,19 @@ function renderTiles() {
     }
 }
 
+function updateCalendarTitle() {
+    const date = new Date(year, month);
+    const formatted = date.toLocaleString('fr-FR', {
+        month: "long",
+        year: "numeric"
+    });
+    calendarTitle.textContent = formatted;
+}
+
+
 function renderCalendar(events=EVENTS) {
+    updateCalendarTitle();
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDay = (firstDay.getDay() + 6) % 7; 
@@ -372,7 +387,7 @@ function renderCalendar(events=EVENTS) {
         const weekdayLetter = WEEKDAYS[i % 7];
 
         html += `
-            <div class="calendar-day ${isOtherMonth ? "other-month" : ""}" data-date="${dateStr}">
+            <div class="calendar-day ${isOtherMonth ? "other-month" : ""}" data-action="calendar-select-day" data-date="${dateStr}">
                 <div class="calendar-header">
                     <span class="day-number">${date.getDate()}</span>
                     <span class="day-letter">${weekdayLetter}</span>
@@ -385,20 +400,6 @@ function renderCalendar(events=EVENTS) {
         `;
     }
 
-    // for (var day = 1; day <= totalDays; day++) {
-    //     const dayStr = String(day).padStart(2, "0");
-    //     const dateStr = `${year}-${monthStr}-${dayStr}`;
-    //     const dayMap = grouped[dateStr];
-    //     html += `
-    //         <div class="calendar-day" data-date="${dateStr}">
-    //             <div class="calendar-date">${day}</div>
-
-    //             <div class="calendar-dots">
-    //                 ${renderDots(dayMap)}
-    //             </div>
-    //         </div>
-    //     `;
-    // }
     agendaView.querySelector(".calendar").innerHTML = html;
 
     tilesView.hidden = true;
@@ -616,6 +617,49 @@ export function toggleAdditionalFilter(filterBtn) {
         filterBtn.querySelector(".text").innerText = "Moins de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
     }
+}
+
+export function navPrevMonth() {
+    month--;
+    if (month < 0) {
+        month = 11;
+        year--;
+    }
+    updateCalendarTitle();
+    applyFilter(); // will render calendar
+}
+
+export function navNextMonth() {
+    month++;
+    if (month > 11) {
+        month = 0;
+        year++;
+    }
+    updateCalendarTitle();
+    applyFilter(); // will render calendar
+}
+
+export function navToday() {
+    year = today.getFullYear();
+    month = today.getMonth();
+    updateCalendarTitle();
+    applyFilter(); // will render calendar
+}
+
+export function calendarSelectDay(dateStr) {
+    switchView("tiles");
+
+    // Wait for DOM update (important)
+    requestAnimationFrame(() => {
+        // scrool to first event with date
+        const selector = `.event-tile[data-date="${dateStr}"]:not(.hidden)`;
+        const firstTile = document.querySelector(selector);
+        if (!firstTile) return;
+        firstTile.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    });
 }
 
 /* === MAIN === */
