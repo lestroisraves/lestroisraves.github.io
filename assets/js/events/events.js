@@ -11,6 +11,7 @@ history.replaceState(null, "", window.location.pathname + window.location.search
 const loading = document.getElementById("loading-screen");
 const tilesView = document.getElementById("tiles-view");
 const agendaView = document.getElementById("agenda-view");
+const calendarEl = document.getElementById("calendar");
 const search = document.getElementById("event-search");
 const addFiltersBtn = document.getElementById("more-filter-btn");
 const addFilters = document.getElementById("more-filters");
@@ -31,6 +32,9 @@ const nextSunday = getSunday(nextMonday);
 let year = today.getFullYear();
 let month = today.getMonth();
 const calendarTitle = document.getElementById("calendar-title");
+
+let touchStartX = 0;
+let touchEndX = 0;
 
 let user_profile = null;
 let EVENTS = [];
@@ -399,7 +403,7 @@ function renderCalendar(events=EVENTS) {
         `;
     }
 
-    agendaView.querySelector(".calendar").innerHTML = html;
+    calendarEl.innerHTML = html;
 
     tilesView.hidden = true;
     agendaView.hidden = false;
@@ -660,6 +664,42 @@ export function calendarSelectDay(dateStr) {
         });
     });
 }
+
+export function handleSwipe() {
+    const deltaX = touchEndX - touchStartX;
+    const MIN_SWIPE_DISTANCE = 50; // threshold
+
+    if (Math.abs(deltaX) < MIN_SWIPE_DISTANCE) return;
+
+    if (deltaX < 0) {
+        // Swipe left → next month
+        navNextMonth();
+    } else {
+        // Swipe right → previous month
+        navPrevMonth();
+    }
+
+}
+
+/* === LISTENER === */
+calendarEl?.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+calendarEl?.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+
+calendarEl?.addEventListener("touchmove", (e) => {
+    const deltaX = e.touches[0].clientX - touchStartX;
+
+    if (Math.abs(deltaX) > 10) {
+        e.preventDefault(); // prevent vertical scroll while swiping
+    }
+}, { passive: false });
+
 
 /* === MAIN === */
 initHeader();

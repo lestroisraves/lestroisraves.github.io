@@ -4,9 +4,10 @@ import {
 } from "../global/modal.js";
 
 import { 
-    openEvent, searchInput,
+    openEvent, searchInput, 
     selectTab, selectFilterOption, toggleAdditionalFilter,
-    switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay
+    switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
+    handleSwipe
 } from "./events.js"
 
 const container = document.getElementById("events");
