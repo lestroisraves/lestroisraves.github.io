@@ -17,7 +17,7 @@ const tabs = document.getElementById("event-tabs");
 async function handleClick(el, e) {
     switch (el.dataset.action) {
         case "select-tab":
-            selectTab(el, el.dataset.target);
+            selectTab(el);
             break;
 
         case "select-option":

@@ -30,7 +30,6 @@ const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
 let year = today.getFullYear();
 let month = today.getMonth();
-
 const calendarTitle = document.getElementById("calendar-title");
 
 let user_profile = null;
@@ -51,13 +50,13 @@ function groupEvents(events) {
         later: []
     };
 
+
     events.forEach(event => {
         const eventDate = startOfDay(new Date(event.event_date));
-
         if (eventDate.getTime() === today.getTime()) {
             groups.today.push(event);
         }
-        else if (eventDate == tomorrow) {
+        else if (eventDate.toDateString() == tomorrow.toDateString()) { 
             groups.tomorrow.push(event);
         }
         else if (eventDate > tomorrow) {
@@ -469,14 +468,15 @@ function matchesFilters(category, pg, price, area) {
     return true;
 }
 
-
 /* === EXPORTED FUNCTIONS === */
 export function switchView(view) {
     if (view === "tiles") {
         tilesView.hidden = false;
+        document.querySelectorAll("#group-tab").forEach(t => t.disabled = false);
         renderTiles();
     } else {
         tilesView.hidden = true;
+        document.querySelectorAll("#group-tab").forEach(t => t.disabled = true);
         // for calendar view, applyFilter function will call renderCalendar
     }
     applyFilter();
@@ -552,7 +552,7 @@ export function searchInput(input) {
     suggestions.classList.remove("hidden");
 }
 
-export function selectTab(tab, sectionId) {
+export function selectTab(tab) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
@@ -573,14 +573,13 @@ export function selectTab(tab, sectionId) {
     // Activate clicked tab
     tab.classList.add("active");
     
-    
     // Show only its section
     document.querySelectorAll(".section-tab.no-empty")
         .forEach(section => {
             section.hidden = true;
             section.classList.remove("selected");
         });
-    document.querySelectorAll(`.section-${sectionId}.no-empty`)
+    document.querySelectorAll(`.section-${tab.dataset.target}.no-empty`)
         .forEach(section => {
             section.hidden = false;
             section.classList.add("selected");
