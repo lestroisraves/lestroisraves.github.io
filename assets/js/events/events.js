@@ -431,9 +431,9 @@ export function switchView(view) {
         renderTiles();
     } else {
         tilesView.hidden = true;
-        applyFilter();  // for calendar view, applyFilter function allways renderCalendar
+        // for calendar view, applyFilter function will call renderCalendar
     }
-    
+    applyFilter();
 }
 
 export function openEvent(eventId) {
