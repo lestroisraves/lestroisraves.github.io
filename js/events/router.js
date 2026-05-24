@@ -6,7 +6,7 @@ import {
 import { 
     openEvent, searchInput,
     selectTab, selectFilterOption, toggleAdditionalFilter,
-    switchView
+    switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -17,7 +17,7 @@ const tabs = document.getElementById("event-tabs");
 async function handleClick(el, e) {
     switch (el.dataset.action) {
         case "select-tab":
-            selectTab(el, el.dataset.target);
+            selectTab(el);
             break;
 
         case "select-option":
@@ -30,6 +30,22 @@ async function handleClick(el, e) {
 
         case "switch-view":
             switchView(el.dataset.view);
+            break;
+
+        case "nav-prev-month":
+            navPrevMonth();
+            break;
+
+        case "nav-next-month":
+            navNextMonth();
+            break;
+
+        case "nav-today":
+            navToday();
+            break;
+
+        case "calendar-select-day":
+            calendarSelectDay(el.dataset.date);
             break;
 
         case "show-event":
