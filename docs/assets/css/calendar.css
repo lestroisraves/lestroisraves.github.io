@@ -9,7 +9,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     margin-bottom: 0.5rem;
 }
 
@@ -17,21 +16,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 #calendar-title {
     font-weight: 600;
     font-size: 0.8rem;
-    color: var(--primary-basic--text);
-    min-width: 140px;
+    color: var(--primary-textarea);
+    min-width: 100px;
     text-align: center;
 }
 
 #today-btn,
 .calendar-header-nav button {
     font-size: 0.8rem;
-    color: var(--primary-basic--text);
+    color: var(--primary-textarea);
     border: none;
     background: transparent;
     cursor: pointer;

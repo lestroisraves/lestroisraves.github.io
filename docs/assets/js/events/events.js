@@ -412,6 +412,16 @@ function renderCalendar(events=EVENTS) {
     loading.style.display = "none";
 }
 
+function animateSwipe(direction) {
+    calendarEl.style.transform = `translateX(${direction * 30}px)`;
+    calendarEl.style.opacity = 0;
+
+    setTimeout(() => {
+        calendarEl.style.transform = "translateX(0)";
+        calendarEl.style.opacity = 1;
+    }, 150);
+}
+
 async function loadEvents() {
     if (!window.supabaseClient) {
         console.error("Supabase not initialized");
@@ -673,9 +683,11 @@ export function handleSwipe() {
 
     if (deltaX < 0) {
         // Swipe left → next month
+        animateSwipe(-1);
         navNextMonth();
     } else {
         // Swipe right → previous month
+        animateSwipe(1);
         navPrevMonth();
     }
 
