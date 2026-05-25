@@ -103,9 +103,15 @@ function linkify(text) {
 }
 
 /* === DATE & TIME === */
+function formatDateStr(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+
 function formatDateForUI(dateString) {
     const date = new Date(dateString);
-
     return date.toLocaleDateString("fr-FR", {
         day: "2-digit",
         month: "2-digit",
@@ -117,18 +123,13 @@ function formatTimeForUI(timeString) {
     return timeString.slice(0, 5);  // "18:30:45" => "18:30"
 }
 
-
 function formatEventDate(dateStr) {
     const date = new Date(dateStr);
-
-    // French date parts
-    const options = {
+    var formattedDate = date.toLocaleDateString("fr-FR", {
         weekday: "short",
         day: "numeric",
         month: "short"
-    };
-
-    var formattedDate = date.toLocaleDateString("fr-FR", options);
+    });
 
     // Capitalize first letter (Vendredi…)
     return `<strong>${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</strong>`;

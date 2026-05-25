@@ -33,6 +33,7 @@ let year = today.getFullYear();
 let month = today.getMonth();
 const thisMonthStr = String(today.getMonth() + 1).padStart(2, "0");
 const calendarTitle = document.getElementById("calendar-title");
+const prevMonthBtn = document.getElementById("prev-month");
 
 let touchStartX = 0;
 let touchEndX = 0;
@@ -379,19 +380,20 @@ function renderCalendar(events=EVENTS) {
             // current month
             date = new Date(year, month, dayNumber);
         }
+        const dateStr = formatDateStr(date);
 
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-
-        const dateStr = `${y}-${m}-${d}`;
         const dayMap = grouped[dateStr];
 
         const weekdayLetter = WEEKDAYS[i % 7];
 
+        const clickable = (!dayMap || (dayMap.length == 0) || (startOfDay(date) < today)) ? false : true;
+
         html += `
-            <div class="calendar-day ${isOtherMonth ? "other-month" : ""} ${(startOfDay(date).toDateString() === today.toDateString()) ? "today" : ""} " 
-                 data-action="calendar-select-day" data-date="${dateStr}">
+            <div class="calendar-day ${isOtherMonth ? "other-month" : ""}
+                        ${dateStr === formatDateStr(today) ? "today" : ""}
+                        ${startOfDay(date) < today ? "past-day" : ""} 
+                        ${clickable ? "clickable" : ""}" 
+                 ${clickable ? 'data-action="calendar-select-day"' : ""} data-date="${dateStr}">
                 <div class="calendar-header">
                     <span class="day-number">${date.getDate()}</span>
                     <span class="day-letter">${weekdayLetter}</span>
@@ -406,8 +408,12 @@ function renderCalendar(events=EVENTS) {
 
     calendarEl.innerHTML = html;
 
-    if (thisMonthStr === monthStr) {
-        
+    if (thisMonthStr == monthStr) {
+        prevMonthBtn.style.opacity = 0;
+        prevMonthBtn.style.cursor = "auto";
+    } else {
+        prevMonthBtn.style.opacity = 1;
+        prevMonthBtn.style.cursor = "pointer";
     }
 
     tilesView.hidden = true;
@@ -638,6 +644,8 @@ export function toggleAdditionalFilter(filterBtn) {
 }
 
 export function navPrevMonth() {
+    const monthStr = String(month + 1).padStart(2, "0");
+    if (monthStr == thisMonthStr) return;
     month--;
     if (month < 0) {
         month = 11;
