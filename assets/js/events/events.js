@@ -31,6 +31,7 @@ const nextMonday = addDays(thisSunday, 1);
 const nextSunday = getSunday(nextMonday);
 let year = today.getFullYear();
 let month = today.getMonth();
+const thisMonthStr = String(today.getMonth() + 1).padStart(2, "0");
 const calendarTitle = document.getElementById("calendar-title");
 
 let touchStartX = 0;
@@ -357,7 +358,6 @@ function renderCalendar(events=EVENTS) {
     const totalDays = lastDay.getDate();
     const monthStr = String(month + 1).padStart(2, "0");
     const grouped = groupByDateWithCounts(events);
-
     var html = '';
 
     // Loop 35 cells (5 weeks)
@@ -390,7 +390,8 @@ function renderCalendar(events=EVENTS) {
         const weekdayLetter = WEEKDAYS[i % 7];
 
         html += `
-            <div class="calendar-day ${isOtherMonth ? "other-month" : ""}" data-action="calendar-select-day" data-date="${dateStr}">
+            <div class="calendar-day ${isOtherMonth ? "other-month" : ""} ${(startOfDay(date).toDateString() === today.toDateString()) ? "today" : ""} " 
+                 data-action="calendar-select-day" data-date="${dateStr}">
                 <div class="calendar-header">
                     <span class="day-number">${date.getDate()}</span>
                     <span class="day-letter">${weekdayLetter}</span>
@@ -404,6 +405,10 @@ function renderCalendar(events=EVENTS) {
     }
 
     calendarEl.innerHTML = html;
+
+    if (thisMonthStr === monthStr) {
+        
+    }
 
     tilesView.hidden = true;
     agendaView.hidden = false;
