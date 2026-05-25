@@ -83,6 +83,12 @@
     color: #aaa;
 }
 
+.calendar-day.today {
+    background: #fdeaea;
+    border-color: #d67a7a;
+    color: #d67a7a;
+}
+
 .calendar-date {
     font-weight: 600;
     margin-bottom: 4px;
@@ -97,7 +103,8 @@
 }
 
 .calendar-dots {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 4px;
     margin-top: 4px;
 }
