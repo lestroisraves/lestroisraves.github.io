@@ -7,7 +7,7 @@ import {
     openEvent, searchInput, 
     selectTab, selectFilterOption, toggleAdditionalFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe
+    handleSwipe, shareEvent
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -54,6 +54,7 @@ async function handleClick(el, e) {
             break;
 
         case "share-event":
+            shareEvent(el.dataset.id);
             break;
 
         case "edit-event":
@@ -117,6 +118,12 @@ document.addEventListener("input", (event) => {
     event.preventDefault(); // prevent page scroll on Space
     handleInput(el);
 });
+
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("app-ready");
+});
+
 
 document.addEventListener("submit", (event) => {
     event.preventDefault();

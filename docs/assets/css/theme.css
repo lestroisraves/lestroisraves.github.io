@@ -78,6 +78,18 @@
     display: none;
 }
 
+.md-main,
+.md-content {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+html.app-ready .md-main,
+html.app-ready .md-content {
+    opacity: 1;
+    visibility: visible;
+}
+
 .md-grid {
     max-width: initial;
 }
