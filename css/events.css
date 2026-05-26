@@ -263,6 +263,20 @@
     max-width: 100%;
     overflow-wrap: break-word;
 }
+.event-icon-text .text.creator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 999px;
+    background: #e8f0fe;
+    color: #1a3fb4;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+}
+
+.event-icon-text .text.creator .material-symbols-outlined {
+    color: #1a3fb4;
+}
 
 .event-tags {
     margin: 0.4rem 0.3rem 0.2rem 0.8rem;

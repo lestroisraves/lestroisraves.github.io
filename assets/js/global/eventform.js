@@ -264,6 +264,7 @@ export function getEventFormPayload() {
         // pending: done later
         is_test: userTags.includes("is_test"),
         // created_by: done later
+        // creator: done later
         price: priceChoiceId,
         min_price: min_price,
         max_price: max_price,

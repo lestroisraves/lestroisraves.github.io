@@ -8,8 +8,10 @@
       
       
       
-        <link rel="canonical" href="https://rcsculture.github.io/edit_event/">
+        <link rel="canonical" href="https://rcsculture.github.io/contacts/">
       
+      
+        <link rel="prev" href="../account/">
       
       
       
@@ -21,7 +23,7 @@
     
     
       
-        <title>Edit event - Culture Project</title>
+        <title>L'Équipe - Culture Project</title>
       
     
     
@@ -126,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Edit event
+              L'Équipe
             
           </span>
         </div>
@@ -220,9 +222,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../contacts/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -360,10 +364,17 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../contacts/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -379,6 +390,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -420,9 +432,8 @@
 
 
 
-  <h1>Edit event</h1>
+  <h1>L'Équipe</h1>
 
-<p><button id="back-btn" class="back-btn" data-action="go-back" hidden>←</button></p>
 <div id="success-modal" class="modal-overlay success hidden" data-action="close-modal">
     <div class="modal-card success" data-no-action role="dialog" aria-modal="true">
         <button id="modal-close" class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
@@ -468,148 +479,11 @@
     </div>
     <!-- <img src="loading.gif" alt="Loading..." /> -->
 </div>
-<div id="submit-container" class="submit-section" hidden>
-    <div id="account-detail" class="account-tile detail-section" hidden>
-        <div class="detail-row">
-            <span class="label">Contributeur</span>
-            <span id="account-role" class="value detail-user"></span>
-        </div>
+<div id="contacts-container" class="contacts-section" hidden>
 
-        <div id="detail-permission"></div>
-
-        <p>
-            Plus d'infos sur
-            <a href="../account/" >Mon compte</a>
-        </p>
-    </div>
-
-    <article class="submit-tile" data-allow-action>
-        <form id="event-form">
-            <label class="pico">
-                Titre de l'évènement *
-                <input type="text" id="title" placeholder="60 charactères maximum" maxlength="60" required>
-            </label>
-
-            <label class="pico">
-                Nom du lieu *
-                <input type="text" id="location_name" placeholder="" required>
-            </label class="pico">
-
-            <label class="pico">
-                Zone géographique *
-                <select name="select" id="area" required></select>
-            </label>
-
-            <label class="pico">
-                Adresse du lieu
-                <input type="text" id="location_address" placeholder="">
-            </label>
-
-            <label class="pico">
-                Description de l'évènement
-                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
-            </label>
-
-            <label class="pico">
-                Catégorie *
-                <select name="select" id="category" required></select>
-            </label>
-
-            <label class="pico">
-                Guide parental *
-                <select name="select" id="pg" required></select>
-            </label>
-
-            <label class="pico">
-                Date *
-                <input type="date" id="event_date" required>
-            </label>
-
-            <label id="end_date_container" class="pico" hidden>
-                Date de fin (si plusieurs jours)
-                <input type="date" id="end_date">
-            </label>
-
-            <label class="pico">
-                Heure de début
-                <input type="time" id="event_start_time">
-            </label>
-
-            <label for="tag-input" class="pico">Tags (mots-clefs pour décrire l'évènement, 4 maximum)</label>
-            <div class="tag-input-container" id="tag-container">
-                <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
-            </div>
-
-            <label class="pico">
-                Téléphone
-                <input type="text" id="phone" placeholder="">
-            </label>
-
-            <label class="pico">
-                Site internet
-                <input type="text" id="site_url" placeholder="">
-            </label>
-
-            <label class="pico">
-                <fieldset>
-                    <label>
-                        <input name="to_eat" type="checkbox" role="switch" />
-                        À manger sur place
-                    </label>
-                </fieldset>
-            </label>
-
-            <label class="pico">
-                Prix / participation *
-                <select name="select" id="price-choice" required data-change-type="price-choice"></select>
-            </label>
-
-            <label class="pico">
-                Prix
-                <input type="number" id="max_price" placeholder="0.00" step=0.01 min=0 disabled>
-            </label>
-
-            <label class="pico">
-                Prix réduit
-                <input type="number" id="min_price" placeholder="0.00" step=0.01 min=0 disabled>
-            </label>
-
-            <label class="pico">
-                Image (maximum 5 Mo)
-                <div class="event-image-wrapper preview" hidden>
-                    <img id="event-thumbnail" class="event-thumbnail loaded" alt="image évènement">
-                </div>
-                <div class="image-choice">
-                    <input type="file" id="event-image" data-change-type="image-choice" accept="image/*" hidden/>
-                    <button type="button" id="pick-file-btn" class="secondary" data-action="pick-file">Choisir</button>
-                    <span id="file-name" class="file-name">aucun fichier choisi</span>
-                    <span id="remove-image-btn" class="material-symbols-outlined delete-image-btn" data-action="remove-image" aria-hidden="true" hidden>delete</span>
-                </div>
-
-            </label>
-
-            <label class="pico">
-                <fieldset>
-                    <label>
-                        <input name="show_email" type="checkbox" role="switch" />
-                        Accepter de montrer mon addresse email dans la publication de l'évènement
-                    </label>
-                </fieldset>
-            </label>
-
-            <label id="cancel-btn" class="pico" hidden>
-                <button type="submit" class="secondary" data-action="cancel-edit">Annuler</button>
-            </label>
-
-            <label class="pico">
-                <button type="submit" id="button" data-action="submit-event">Publier</button>
-            </label>
-        </form>
-
-    </article>
 </div>
 
-<script type="module" defer src="../assets/js/edit_event/router.js"></script>
+<script type="module" defer src="../assets/js/contacts/router.js"></script>
 <html data-theme="light">
 
 

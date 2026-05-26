@@ -214,6 +214,24 @@ export function openEventModal(event, type, user_profile=null) {
             </div>`
         : "";
 
+    /* set creator info */
+    var creator = eventData.creator?.name ?  `${eventData.creator.name}` : "";
+    creator += eventData.creator?.email ? `<a href="mailto:${eventData.creator.email}" class="material-symbols-outlined">mail</a>` : "";
+
+    if (creator != "") {
+
+    }
+    eventData.creatorHtml = (creator != "")
+    
+        ? ` <div class="event-meta">
+                <span class="event-icon-text">
+                    <span class="material-symbols-outlined">person_book</span>
+                    <span class="text">Créé par</span>
+                    <span class="text creator">${creator}</span>
+                </span>
+            </div>`
+        : "";
+
     eventModalContent.innerHTML = `
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
@@ -235,9 +253,12 @@ export function openEventModal(event, type, user_profile=null) {
         ${eventData.siteUrlHtml}
         ${eventData.phoneHtml}
         ${eventData.pendingHtml}
+        ${eventData.creatorHtml}
         ${eventData.tagsHtml}
         ${eventData.descriptionHtml}
     `;
+
+    console.log("event modal data:", eventData);
 
     /* apply category style */
     eventModalCard.style.borderColor = APP_CONFIG.CATEGORIES[eventData.category]["color"];
