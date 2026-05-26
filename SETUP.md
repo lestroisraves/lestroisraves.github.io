@@ -16,6 +16,7 @@ DELETE FROM public.events
 Create a public SQL view
 
 ```sql
+drop view public.future_events;
 create view public.future_events
 with
   (security_invoker = on) as

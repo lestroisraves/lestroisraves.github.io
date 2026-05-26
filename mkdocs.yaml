@@ -53,6 +53,7 @@ nav:
   - Évènements: index.md
   - Publier un évènement: submit.md
   - Mon compte: account.md
+  - L'Équipe: contacts.md
 
 extra_javascript:
   - https://unpkg.com/@supabase/supabase-js@2

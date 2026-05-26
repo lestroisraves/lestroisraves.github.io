@@ -98,11 +98,19 @@ export async function submitEvent() {
         return;
     }
 
+    /* set creator */
+    var creator = {
+        name: user_profile?.name ?? null,
+        email: null
+    }
+    if (form.querySelector('input[name="show_email"]').checked) creator.email = user_profile?.email ?? null
+
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
         payload.event_date = addDays(form.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
+        payload.creator = creator
         payload.image_url = imageUrl
         console.log("submit event payload:", payload)
 

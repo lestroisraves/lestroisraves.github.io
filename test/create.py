@@ -84,61 +84,72 @@ def delete_users():
         page += 1
 
 
+def format_event_payload(day_delta, category):
+    price = random.randrange(3)
+    if price == 2:
+        min_price = round(random.choice([0, random.uniform(0.0, 4.0)]), 2)
+        max_price = round(random.uniform(5.0, 40.0), 2)
+    else:
+        min_price = max_price = 0
+
+    if category == 0:
+        image = "celine.webp"
+        location_name = random.choice(["Bikini", "Le Rex", "Café des Sports", "Métronum"])
+    elif category == 1:
+        image = "cirque.webp"
+        location_name = random.choice(["Colo N Co", "Le pré vert", "La briqueterie"])
+    elif category == 2:
+        image = "projection.webp"
+        location_name = random.choice(["La Halle Rabastens", "Cinéma Albi", "Chez Vincent", "Promenade des Lices"])
+    elif category == 3:
+        image = "peinture.webp"
+        location_name = random.choice(["Musé Des Arts", "Au Cercle", "Café du bord du monde", "Chez Jeanine"])
+    elif category == 4:
+        image = "books.jpg"
+        location_name = random.choice(["Musé Des Livres", "La confiserie", "Chez Julien", "Au livre enchainé"])
+    else:
+        image = "misc.webp"
+        location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])
+
+    return {
+        "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
+        "creator": {"name": "Olivier Gohier", "email": random.choice([None, "olivier.gohier@protonmail.com"])},
+        "title": f"Test Event #{day_delta + 1}",
+        "is_test": True,
+        "category": category,
+        "event_date": (date.today() + timedelta(days=day_delta)).isoformat(),
+        "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
+        "location_name": location_name,
+        "area": random.randrange(3),
+        "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
+        "price": price,
+        "min_price": min_price,
+        "max_price": max_price,
+        "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),
+        "pending": random.choice([True, False, False, False]),
+        "phone": random.choice([None, "06.01.12.13.14"]),
+        "site_url": random.choice([None, "https://rcsculture.github.io"]),
+        "to_eat": random.choice([True, False]),
+        "pg": random.randrange(3),
+        "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],
+        "image_url": SUPABASE_IMAGE_STORAGE + image
+    }
+
+
 def generate_events(n: int):
-    today = date.today()
     events = []
     print("generate events...")
+    events.append(format_event_payload(day_delta=0, category=0))
+    events.append(format_event_payload(day_delta=0, category=0))
+    events.append(format_event_payload(day_delta=0, category=1))
+    events.append(format_event_payload(day_delta=0, category=1))
+    events.append(format_event_payload(day_delta=0, category=2))
+    events.append(format_event_payload(day_delta=0, category=3))
+    events.append(format_event_payload(day_delta=0, category=3))
+    events.append(format_event_payload(day_delta=0, category=4))
+    events.append(format_event_payload(day_delta=0, category=5))
     for i in range(n):
-        price = random.randrange(3)
-        if price == 2:
-            min_price = round(random.choice([0, random.uniform(0.0, 4.0)]), 2)
-            max_price = round(random.uniform(5.0, 40.0), 2)
-        else:
-            min_price = max_price = 0
-
-        category = random.randrange(5)
-        if category == 0:
-            image = "celine.webp"
-            location_name = random.choice(["Bikini", "Le Rex", "Café des Sports", "Métronum"])
-        elif category == 1:
-            image = "cirque.webp"
-            location_name = random.choice(["Colo N Co", "Le pré vert", "La briqueterie"])
-        elif category == 2:
-            image = "projection.webp"
-            location_name = random.choice(["La Halle Rabastens", "Cinéma Albi", "Chez Vincent", "Promenade des Lices"])
-        elif category == 3:
-            image = "peinture.webp"
-            location_name = random.choice(["Musé Des Arts", "Au Cercle", "Café du bord du monde", "Chez Jeanine"])
-        elif category == 4:
-            image = "books.jpg"
-            location_name = random.choice(["Musé Des Livres", "La confiserie", "Chez Julien", "Au livre enchainé"])
-        else:
-            image = "misc.webp"
-            location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])
-
-        event = {
-            "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
-            "title": f"Test Event #{i + 1}",
-            "is_test": True,
-            "category": category,
-            "event_date": (today + timedelta(days=i)).isoformat(),
-            "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
-            "location_name": location_name,
-            "area": random.randrange(3),
-            "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
-            "price": price,
-            "min_price": min_price,
-            "max_price": max_price,
-            "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),
-            "pending": random.choice([True, False, False, False]),
-            "phone": random.choice([None, "06.01.12.13.14"]),
-            "site_url": random.choice([None, "https://rcsculture.github.io"]),
-            "to_eat": random.choice([True, False]),
-            "pg": random.randrange(3),
-            "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],
-            "image_url": SUPABASE_IMAGE_STORAGE + image
-        }
-        events.append(event)
+        events.append(format_event_payload(day_delta=i, category=random.randrange(5)))
     return events
 
 
@@ -212,7 +223,6 @@ def main():
         if not args.delete:
             events = generate_events(args.nb)
             write_event_file(events)
-            
             update_supabase_events(events)
 
     elif args.subcommand == "user":
