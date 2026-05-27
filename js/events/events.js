@@ -1,6 +1,6 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal } from "../global/modal.js";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -495,7 +495,7 @@ function matchesFilters(category, pg, price, area) {
 
 function copyToClipboard(url) {
     navigator.clipboard.writeText(url);
-    alert("Lien vers l'évènement copié!");
+    openSuccessModal("Lien vers l'évènement copié!");
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -524,7 +524,6 @@ export async function shareEvent(eventId) {
     const event_url = `${window.location.href}#id=${eventId}&type=myevent`
     if (navigator.share) {
         try {
-            alert("share");
             await navigator.share({
                 title: event.title,
                 text: "Regarde cet évènement !\n",
