@@ -493,6 +493,11 @@ function matchesFilters(category, pg, price, area) {
     return true;
 }
 
+function copyToClipboard(url) {
+    navigator.clipboard.writeText(url);
+    alert("Lien vers l'évènement copié!");
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function switchView(view) {
     if (view === "tiles") {
@@ -516,19 +521,26 @@ export function openEvent(eventId) {
 export async function shareEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
+    const event_url = `${window.location.href}#id=${eventId}&type=myevent`
     if (navigator.share) {
         try {
+            alert("share");
             await navigator.share({
                 title: event.title,
-                text: "Regarde cet évènement !",
-                url: `${window.location.href}#id=${eventId}&type=myevent`
+                text: "Regarde cet évènement !\n",
+                url: event_url
             });
         } catch (err) {
+            if (err.name === "AbortError") {
+                // user closed share → do nothing
+                return;
+            }
             console.error("Share failed:", err);
-            openErrorModal("Problème durant le partage de cet évènement");
+            copyToClipboard(event_url);
         }
     } else {
-        alert("Partager n'est pas supporter sur cet appareil");
+        console.error("Share failed:", err);
+        copyToClipboard(event_url);
     }
 }
 
