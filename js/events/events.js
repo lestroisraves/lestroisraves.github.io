@@ -524,20 +524,23 @@ export async function shareEvent(eventId) {
     const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
     const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
     const event_desc = `Titre: ${event.title}
-Type: ${event_url}
+Type: ${event_title}
 Lieu: ${event.location_name}
-Data: ${formatDateForUI(event.event_date)}
+Date: ${formatDateForUI(event.event_date)}
 `;
     if (navigator.share) {
         try {
-            const response = await fetch(event.image_url);
-            const blob = await response.blob();
+            var file = null;
+            if (event.image_url) {
+                const response = await fetch(event.image_url);
+                const blob = await response.blob();
 
-            const file = new File([blob], "event-image.jpg", {
-                type: blob.type
-            });
-
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                file = new File([blob], "event-image.jpg", {
+                    type: blob.type
+                });
+            }
+            
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     title: event_title,
                     text: event_desc,
@@ -547,9 +550,9 @@ Data: ${formatDateForUI(event.event_date)}
             } else {
                 // fallback: share link
                 await navigator.share({
-                    title: event.title,
-                    text: "Regarde cet évènement !\n",
-                    url: event_url
+                    title: event_title,
+                    text: event_desc,
+                    url: event_url,
                 });
             }
 
