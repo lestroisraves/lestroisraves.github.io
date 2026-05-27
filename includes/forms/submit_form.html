@@ -72,12 +72,17 @@
 
             <label class="pico">
                 Téléphone
-                <input type="text" id="phone" placeholder="">
+                <input type="tel" inputmode="tel" id="phone" placeholder="+33 6 12 34 56 78" data-input-type="phone" data-action="phone-input">
+            </label>
+
+            <label class="pico">
+                Email
+                <input type="email" id="email" placeholder="votre@email.com">
             </label>
 
             <label class="pico">
                 Site internet
-                <input type="text" id="site_url" placeholder="">
+                <input type="text" id="site_url" placeholder="https://votresite.com">
             </label>
 
             <label class="pico">
@@ -116,15 +121,6 @@
                     <span id="remove-image-btn" class="material-symbols-outlined delete-image-btn" data-action="remove-image" aria-hidden="true" hidden>delete</span>
                 </div>
                 
-            </label>
-
-            <label class="pico">
-                <fieldset>
-                    <label>
-                        <input name="show_email" type="checkbox" role="switch" />
-                        Accepter de montrer mon addresse email dans la publication de l'évènement
-                    </label>
-                </fieldset>
             </label>
 
             <label id="cancel-btn" class="pico" hidden>

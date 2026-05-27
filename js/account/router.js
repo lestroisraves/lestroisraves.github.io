@@ -136,3 +136,7 @@ document.addEventListener("input", (event) => {
     event.preventDefault(); // prevent page scroll on Space
     handleInput(el);
 });
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("app-ready");
+});

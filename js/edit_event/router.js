@@ -4,7 +4,7 @@ import {
 } from "../global/modal.js";
 
 import { 
-    priceChanged, handleImageChoice, removeImage
+    priceChanged, handleImageChoice, removeImage, formatPhoneInput
 } from "../global/eventform.js"
 
 import { 
@@ -54,6 +54,18 @@ async function handleClick(el, e) {
     }
 }
 
+async function handleInput(el) {
+    switch (el.dataset.inputType) {
+        case "phone":
+            formatPhoneInput(el);
+            break;
+
+        default:
+            console.warn("unknown 'input' type:", el.dataset.inputType)
+    }
+}
+
+
 async function handleChange(el) {
     switch (el.dataset.changeType) {
         case "price-choice":
@@ -84,11 +96,28 @@ document.addEventListener("keydown", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
     const el = event.target.closest("[data-action]");
     if (!el) return;
-    if (el.dataset.action != "tag-input") {
+    if (el.dataset.action == "phone-input") {
+        if (
+            !/[0-9+]/.test(event.key) &&
+            event.key.length === 1
+        ) {
+            event.preventDefault();
+        }
+        return;
+    } else 
+        if (el.dataset.action != "tag-input") {
         event.preventDefault();
     }
     await handleClick(el, event);
 });
+
+document.addEventListener("input", (event) => {
+    const el = event.target.closest("[data-input-type]");
+    if (!el) return;
+    event.preventDefault(); // prevent page scroll on Space
+    handleInput(el);
+});
+
 
 document.addEventListener("change", (event) => {
     const el = event.target.closest("[data-change-type]");
@@ -96,6 +125,11 @@ document.addEventListener("change", (event) => {
     event.preventDefault(); // prevent page scroll on Space
     handleChange(el);
 });
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("app-ready");
+});
+
 
 document.addEventListener("submit", (event) => {
   event.preventDefault();

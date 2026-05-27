@@ -513,6 +513,25 @@ export function openEvent(eventId) {
     openEventModal(event, "classic", user_profile);
 }
 
+export async function shareEvent(eventId) {
+    const event = EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: event.title,
+                text: "Regarde cet évènement !",
+                url: `${window.location.href}#id=${eventId}&type=myevent`
+            });
+        } catch (err) {
+            console.error("Share failed:", err);
+            openErrorModal("Problème durant le partage de cet évènement");
+        }
+    } else {
+        alert("Partager n'est pas supporter sur cet appareil");
+    }
+}
+
 export function searchInput(input) {
     const container = input.closest(".autocomplete");
     const suggestions = container.querySelector(".suggestions");

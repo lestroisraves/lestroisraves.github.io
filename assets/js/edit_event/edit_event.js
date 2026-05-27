@@ -78,28 +78,29 @@ export function goBack(){
 }
 
 export async function editEvent() {
-    const new_event = await getEventFormPayload();
-    const {image_url, error: upload_error} = await uploadImageFile();
-    
-    if (upload_error) {
+    button.setAttribute("aria-busy", "true");
+
+    /* get form payload */
+    const new_event = getEventFormPayload();
+    if (!new_event) {
+        button.setAttribute("aria-busy", "false");
+        return;
+    };
+
+    /* upload image if needed */
+    const {imageUrl, error: uploadError} = await uploadImageFile();
+    if (uploadError) {
         button.setAttribute("aria-busy", "false");
         openErrorModal("Problème pendant le téléchargement de l'image");
-        console.error(error);
+        console.error(uploadError);
         return;
     }
-
-    /* set creator */
-    var creator = {
-        name: user_profile?.name ?? null,
-        email: null
-    }
-    if (form.querySelector('input[name="show_email"]').checked) creator.email = user_profile?.email ?? null
 
     var payload = new_event.payload;
     payload.event_date = form.querySelector("#event_date").value;
     payload.pending = user_profile.role == 0;
     payload.created_by = user_profile?.id ?? null;
-    payload.creator = creator
+    payload.creator_name = user_profile?.name ?? null;
     payload.image_url = image_url;
     console.log("submit event payload (for edit):", payload);
 

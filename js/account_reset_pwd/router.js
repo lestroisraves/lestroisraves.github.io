@@ -21,3 +21,8 @@ document.addEventListener("click", async (event) => {
     event.preventDefault(); // prevent page scroll on Space
     await handleClick(el);
 });
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("app-ready");
+});
+
