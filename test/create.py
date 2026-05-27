@@ -84,7 +84,7 @@ def delete_users():
         page += 1
 
 
-def format_event_payload(day_delta, category):
+def format_event_payload(day_delta, category, title, pending):
     price = random.randrange(3)
     if price == 2:
         min_price = round(random.choice([0, random.uniform(0.0, 4.0)]), 2)
@@ -113,8 +113,9 @@ def format_event_payload(day_delta, category):
 
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
-        "creator": {"name": "Olivier Gohier", "email": random.choice([None, "olivier.gohier@protonmail.com"])},
-        "title": f"Test Event #{day_delta + 1}",
+        "creator_name": "Olivier Gohier",
+        "email": random.choice([None, "olivier.gohier@protonmail.com"]),
+        "title": title,
         "is_test": True,
         "category": category,
         "event_date": (date.today() + timedelta(days=day_delta)).isoformat(),
@@ -126,8 +127,8 @@ def format_event_payload(day_delta, category):
         "min_price": min_price,
         "max_price": max_price,
         "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),
-        "pending": random.choice([True, False, False, False]),
-        "phone": random.choice([None, "06.01.12.13.14"]),
+        "pending": pending,
+        "phone": random.choice([None, "+33 6 01 12 13 14"]),
         "site_url": random.choice([None, "https://rcsculture.github.io"]),
         "to_eat": random.choice([True, False]),
         "pg": random.randrange(3),
@@ -139,17 +140,17 @@ def format_event_payload(day_delta, category):
 def generate_events(n: int):
     events = []
     print("generate events...")
-    events.append(format_event_payload(day_delta=0, category=0))
-    events.append(format_event_payload(day_delta=0, category=0))
-    events.append(format_event_payload(day_delta=0, category=1))
-    events.append(format_event_payload(day_delta=0, category=1))
-    events.append(format_event_payload(day_delta=0, category=2))
-    events.append(format_event_payload(day_delta=0, category=3))
-    events.append(format_event_payload(day_delta=0, category=3))
-    events.append(format_event_payload(day_delta=0, category=4))
-    events.append(format_event_payload(day_delta=0, category=5))
+    events.append(format_event_payload(day_delta=0, category=0, title=f"Test Event #1.a", pending=False))
+    events.append(format_event_payload(day_delta=0, category=0, title=f"Test Event #1.b", pending=False))
+    events.append(format_event_payload(day_delta=0, category=1, title=f"Test Event #1.c", pending=False))
+    events.append(format_event_payload(day_delta=0, category=1, title=f"Test Event #1.d", pending=False))
+    events.append(format_event_payload(day_delta=0, category=2, title=f"Test Event #1.e", pending=False))
+    events.append(format_event_payload(day_delta=0, category=3, title=f"Test Event #1.f", pending=False))
+    events.append(format_event_payload(day_delta=0, category=3, title=f"Test Event #1.g", pending=False))
+    events.append(format_event_payload(day_delta=0, category=4, title=f"Test Event #1.a", pending=False))
+    events.append(format_event_payload(day_delta=0, category=5, title=f"Test Event #1.i", pending=False))
     for i in range(n):
-        events.append(format_event_payload(day_delta=i, category=random.randrange(5)))
+        events.append(format_event_payload(day_delta=i, category=random.randrange(5), title=f"Test Event #{i + 1}", pending=random.choice([True, False, False, False])))
     return events
 
 

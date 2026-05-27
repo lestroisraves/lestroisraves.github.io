@@ -98,7 +98,7 @@ function linkify(text) {
             ? url
             : `https://${url}`;
 
-        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        return `<a class="website" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
     });
 }
 
@@ -302,6 +302,15 @@ function renderEventData(event, details = false) {
 
     if (details) {
         // render extra information for event modal
+        eventData.imageHtml = eventData.image_url
+            ? ` <div class="event-image-wrapper">
+                    <div class="image-placeholder"><span id="img-ico" class="material-symbols-outlined">image</span></div>
+                    <img class="event-thumbnail" alt="image évènement">
+                </div>`
+            : ` <div class="event-image-wrapper">
+                    <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${APP_CONFIG.CATEGORIES[eventData.category]["icon"]}</span></div>
+                </div>`;
+
         eventData.addressHtml = eventData.location_address
             ? `<div class="event-meta">
                     ${renderMaterialIconText("distance", eventData.location_address)}
@@ -309,14 +318,29 @@ function renderEventData(event, details = false) {
             : "";
 
         eventData.phoneHtml = eventData.phone
-            ? `<div class="event-meta">
-                    ${renderMaterialIconText("call", eventData.phone)}
-               </div>`
+            ? ` <div class="event-meta">
+                    <span class="event-icon-text">
+                        <span class="material-symbols-outlined">call</span>
+                        <span class="text contact"><a class="tel" href="tel:${eventData.phone}">${eventData.phone}</a></span>
+                    </span>
+                </div>`
+            : "";
+
+        eventData.emailHtml = eventData.email
+            ? ` <div class="event-meta">
+                    <span class="event-icon-text">
+                        <span class="material-symbols-outlined">mail</span>
+                        <span class="text contact"><a class="mail" href="mailto:${eventData.email}">${eventData.email}</a></span>
+                    </span>
+                </div>`
             : "";
 
         eventData.siteUrlHtml = eventData.site_url
             ? `<div class="event-meta">
-                    ${renderMaterialIconText("language", linkify(eventData.site_url))}
+                    <span class="event-icon-text">
+                        <span class="material-symbols-outlined">language</span>
+                        <span class="text contact">${linkify(eventData.site_url)}</span>
+                    </span>
                </div>`
             : "";
 
@@ -324,6 +348,22 @@ function renderEventData(event, details = false) {
             ? `<div class="event-meta">
                     ${renderMaterialIconText("fork_spoon", "À manger sur place")}
                </div>`
+            : "";
+
+        eventData.pendingHtml = eventData.pending
+            ? ` <div class="event-meta pending">
+                    ${renderMaterialIconText("hourglass_top", "En attente de publication")}
+                </div>`
+            : "";
+
+        eventData.creatorHtml = eventData.creator_name
+            ? ` <div class="event-meta">
+                    <span class="event-icon-text">
+                        <span class="material-symbols-outlined">person_book</span>
+                        <span class="text">Créé par</span>
+                        <span class="text creator">${eventData.creator_name}</span>
+                    </span>
+                </div>`
             : "";
 
         eventData.descriptionHtml = eventData.long_description

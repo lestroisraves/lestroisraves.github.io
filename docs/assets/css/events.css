@@ -279,6 +279,7 @@ html:not(.app-ready) .md-content {
     max-width: 100%;
     overflow-wrap: break-word;
 }
+
 .event-icon-text .text.creator {
     display: inline-flex;
     align-items: center;
@@ -288,6 +289,47 @@ html:not(.app-ready) .md-content {
     color: #1a3fb4;
     padding-right: 0.4rem;
     padding-left: 0.4rem;
+}
+
+.event-icon-text .text.contact a {
+    border-radius: 999px;
+    background: rgba(76, 175, 80, 0.08); /* soft green */
+    color: #2e7d32;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.1s ease;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+}
+
+.event-icon-text .text.contact a:active {
+    transform: scale(0.98);
+}
+
+.event-icon-text .text.contact a.tel {
+    background: rgba(76, 175, 80, 0.08);
+    color: #2e7d32;
+}
+
+.event-icon-text .text.contact a.tel:hover {
+    background: rgba(76, 175, 80, 0.15);
+}
+
+.event-icon-text .text.contact a.mail {
+    background: rgba(33, 150, 243, 0.08);
+    color: #1565c0;
+}
+
+.event-icon-text .text.contact a.mail:hover {
+    background: rgba(33, 150, 243, 0.15);
+}
+
+.event-icon-text .text.contact a.website {
+    background: rgba(103, 58, 183, 0.08);
+    color: #4527a0;
+}
+
+.event-icon-text .text.contact a.website:hover {
+    background: rgba(103, 58, 183, 0.15);
 }
 
 .event-icon-text .text.creator .material-symbols-outlined {

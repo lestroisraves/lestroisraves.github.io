@@ -199,39 +199,6 @@ export function openEventModal(event, type, user_profile=null) {
             eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
     }
 
-    eventData.imageHtml = eventData.image_url
-        ? ` <div class="event-image-wrapper">
-                <div class="image-placeholder"><span id="img-ico" class="material-symbols-outlined">image</span></div>
-                <img class="event-thumbnail" alt="image évènement">
-            </div>`
-        : ` <div class="event-image-wrapper">
-                <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${APP_CONFIG.CATEGORIES[eventData.category]["icon"]}</span></div>
-            </div>`;
-
-    eventData.pendingHtml = eventData.pending
-        ? ` <div class="event-meta pending">
-                ${renderMaterialIconText("hourglass_top", "En attente de publication")}
-            </div>`
-        : "";
-
-    /* set creator info */
-    var creator = eventData.creator?.name ?  `${eventData.creator.name}` : "";
-    creator += eventData.creator?.email ? `<a href="mailto:${eventData.creator.email}" class="material-symbols-outlined">mail</a>` : "";
-
-    if (creator != "") {
-
-    }
-    eventData.creatorHtml = (creator != "")
-    
-        ? ` <div class="event-meta">
-                <span class="event-icon-text">
-                    <span class="material-symbols-outlined">person_book</span>
-                    <span class="text">Créé par</span>
-                    <span class="text creator">${creator}</span>
-                </span>
-            </div>`
-        : "";
-
     eventModalContent.innerHTML = `
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
@@ -252,6 +219,7 @@ export function openEventModal(event, type, user_profile=null) {
         ${eventData.eatHtml}
         ${eventData.siteUrlHtml}
         ${eventData.phoneHtml}
+        ${eventData.emailHtml}
         ${eventData.pendingHtml}
         ${eventData.creatorHtml}
         ${eventData.tagsHtml}

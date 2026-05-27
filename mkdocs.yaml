@@ -57,6 +57,7 @@ nav:
 
 extra_javascript:
   - https://unpkg.com/@supabase/supabase-js@2
+  - https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js
   - assets/js/global/config.js
   - assets/js/global/helper.js
   - assets/js/global/user_profile.js

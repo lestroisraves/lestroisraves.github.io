@@ -2,6 +2,7 @@ console.log("executing:", "eventform.js");
 
 import { openErrorModal } from "./modal.js";
 import { tagInput, userTags, clearTags, addTag } from "./tags.js";
+// import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
@@ -114,6 +115,7 @@ export function initEventForm(eventData=null) {
     if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));
     if (eventData.phone) form.querySelector("#phone").value = eventData.phone;
+    if (eventData.email) form.querySelector("#email").value = eventData.email;
     if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
     if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
     priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
@@ -187,52 +189,56 @@ export function removeImage() {
     form.querySelector("#file-name").textContent = "aucun fichier choisi";
 }
 
+export function formatPhoneInput(input) {
+    const phoneFormatter = new libphonenumber.AsYouType();
+    input.value = phoneFormatter.input(input.value.replace(/[^\d+]/g, ""));
+}
+
 export function getEventFormPayload() {
-    const eventDate = form.querySelector("#event_date")
-    const endDate = form.querySelector("#end_date")
-    
-    const button = form.querySelector("#button");
+    const eventDate = form.querySelector("#event_date");
+    const endDate = form.querySelector("#end_date");
+    const phoneInput = form.querySelector("#phone");
     const long_description = form.querySelector('#long_description').value
     const start_time = form.querySelector('#event_start_time').value;
     const toEat = form.querySelector('input[name="to_eat"]').checked;
 
-    /* init UI */
-    eventDate.setAttribute("aria-invalid", null);
-    endDate.setAttribute("aria-invalid", null);
-    minPrice.setAttribute("aria-invalid", null);
-    button.setAttribute("aria-busy", "true");
+    var phoneNumber = null;
 
-    /* get userTags */
-    if (userTags.length > 4) {
-        button.setAttribute("aria-busy", "false");
-        tagInput.focus();
-        openErrorModal("Maximum 4 tags");
-        userTags
-        return;
+    /* reset form custom validity */
+    phoneInput.setCustomValidity("");
+    tagInput.setCustomValidity("");
+    eventDate.setCustomValidity("");
+    endDate.setCustomValidity("");
+    minPrice.setCustomValidity("");
+
+    /* check phone number */
+    if (phoneInput.value && (phoneInput.value != "")) {
+        try {
+            phoneNumber = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
+            if (!phoneNumber.isValid()) phoneInput.setCustomValidity("Numéro invalide");
+        } catch {
+            phoneInput.setCustomValidity("Numéro invalide");
+        }
     }
-    const tags = userTags.map((t) => t.trim().toLowerCase())
-        .filter(Boolean);
-    
+
+    /* check userTags */
+    if (userTags.length > 4) {
+        tagInput.setCustomValidity("Maximum 4 tags");
+    }
+
     // check dates
     var nb_days = 1;
     if (new Date(eventDate.value) < today) {
-        button.setAttribute("aria-busy", "false");
-        eventDate.setAttribute("aria-invalid", true);
-        eventDate.focus();
-        openErrorModal("La date doit être à partir de aujourd'hui");
-        return;
+        eventDate.setCustomValidity("La date doit être à partir de aujourd'hui");
     }
 
-    if (endDate.value) {
+    if (endDate.value && (endDate.value != "")) {
         if (new Date(endDate.value) <= new Date(eventDate.value)) {
-            button.setAttribute("aria-busy", "false");
-            endDate.setAttribute("aria-invalid", true);
-            endDate.focus();
-            openErrorModal("La date de fin doit être à strictement supérieure à la date de début");
-            return;
+            endDate.setCustomValidity("La date de fin doit être à strictement supérieure à la date de début");
+        } else {
+            nb_days = Math.round((new Date(endDate.value + "T00:00:00") - new Date(eventDate.value + "T00:00:00")) / 86400000) + 1;  // 86400000ms per day
+   
         }
-
-        nb_days = Math.round((new Date(endDate.value + "T00:00:00") - new Date(eventDate.value + "T00:00:00")) / 86400000) + 1;  // 86400000ms per day
     }
 
     /* set price */
@@ -244,14 +250,19 @@ export function getEventFormPayload() {
         max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
         if (min_price && max_price && (min_price > max_price))
         {
-            button.setAttribute("aria-busy", "false");
-            minPrice.setAttribute("aria-invalid", true);
-            minPrice.focus();
-            openErrorModal("Le prix réduit doit être inférieur au prix normal");
-            return;
+            minPrice.setCustomValidity("Le prix réduit doit être inférieur au prix normal");
         }
     }
 
+    /* report form validity */
+    if (!form.checkValidity()) {
+        form.reportValidity(); // shows native errors
+        return;
+    };
+        
+    const tags = userTags.map((t) => t.trim().toLowerCase())
+        .filter(Boolean);
+    
     const payload = {
         title: form.querySelector('#title').value,
         long_description: long_description === "" ? null : long_description,
@@ -270,7 +281,8 @@ export function getEventFormPayload() {
         max_price: max_price,
         category: getCategoryId(categoryList.value),
         // image_url: done later
-        phone: form.querySelector('#phone').value,
+        phone: phoneNumber,
+        email: form.querySelector("#email").value,
         site_url: form.querySelector('#site_url').value,
         pg: getPgId(parentalGuideList.value),
         to_eat: toEat

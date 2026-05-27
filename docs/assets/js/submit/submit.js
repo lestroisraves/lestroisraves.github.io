@@ -88,9 +88,17 @@ function showSubmit(user, profile) {
 
 /* === EXPORTED FUNCTIONS === */
 export async function submitEvent() {
-    const new_event = getEventFormPayload();
-    const {imageUrl, error} = await uploadImageFile();
+    button.setAttribute("aria-busy", "true");
 
+    /* get form payload */
+    const new_event = getEventFormPayload();
+    if (!new_event) {
+        button.setAttribute("aria-busy", "false");
+        return;
+    };
+
+    /* upload image if needed */
+    const {imageUrl, error} = await uploadImageFile();
     if (error) {
         button.setAttribute("aria-busy", "false");
         openErrorModal("Problème pendant le téléchargement de l'image");
@@ -98,26 +106,20 @@ export async function submitEvent() {
         return;
     }
 
-    /* set creator */
-    var creator = {
-        name: user_profile?.name ?? null,
-        email: null
-    }
-    if (form.querySelector('input[name="show_email"]').checked) creator.email = user_profile?.email ?? null
-
+    /* push events on database */
     for (let day = 0; day < new_event.nb_days; day++) {
         var payload = new_event.payload;
         payload.event_date = addDays(form.querySelector("#event_date").value, day).toLocaleDateString("fr-CA")
         payload.pending = user_profile.role == 0
         payload.created_by = user_profile?.id ?? null
-        payload.creator = creator
+        payload.creator_name = user_profile?.name ?? null;
         payload.image_url = imageUrl
         console.log("submit event payload:", payload)
 
         const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
         if (error) {
             button.setAttribute("aria-busy", "false");
-            if ((nb_days > 1) && (day > 0)) {
+            if ((new_event.nb_days > 1) && (day > 0)) {
                 openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`);
             } else {
                 openErrorModal("Problème de publication");
