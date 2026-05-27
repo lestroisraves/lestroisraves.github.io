@@ -493,8 +493,9 @@ function matchesFilters(category, pg, price, area) {
     return true;
 }
 
-function copyToClipboard(url) {
-    navigator.clipboard.writeText(url);
+function copyToClipboard(event_desc, event_url) {
+    const txt = `${event_desc}\n${event_url}`;
+    navigator.clipboard.writeText(txt);
     openSuccessModal("Lien vers l'évènement copié!");
 }
 
@@ -523,11 +524,17 @@ export async function shareEvent(eventId) {
     if (!event) return;
     const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
     const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
-    const event_desc = `Titre: ${event.title}
+    const event_desc = `Regarde cet évènement !
+
+Titre: ${event.title}
 Type: ${event_title}
 Lieu: ${event.location_name}
 Date: ${formatDateForUI(event.event_date)}
 `;
+    
+    const clipBoardText = `${event_desc}\n${event_url}`;
+    navigator.clipboard.writeText(clipBoardText);
+
     if (navigator.share) {
         try {
             var file = null;
@@ -562,11 +569,11 @@ Date: ${formatDateForUI(event.event_date)}
                 return;
             }
             console.error("Share failed:", err);
-            copyToClipboard(event_url);
+            openSuccessModal("Lien vers l'évènement copié!");
         }
     } else {
         console.error("Share failed:", err);
-        copyToClipboard(event_url);
+        openSuccessModal("Lien vers l'évènement copié!");
     }
 }
 
