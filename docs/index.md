@@ -12,6 +12,6 @@ hide:
 {% include 'includes/events/events.html' %}
 
 {% block html %}
-<script type="module" defer src="assets/js/events/router.js"></script>
+<script type="module" defer src="assets/js/events/router.js?v=dev"></script>
 <html data-theme="light">
 {% endblock %}

@@ -13,7 +13,7 @@ hide:
 {% include 'includes/forms/submit_form.html' %}
 
 {% block html %}
-<script type="module" defer src="../assets/js/edit_event/router.js"></script>
+<script type="module" defer src="../assets/js/edit_event/router.js?v=dev"></script>
 <html data-theme="light">
 {% endblock %}
 

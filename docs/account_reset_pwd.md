@@ -9,6 +9,6 @@ hide:
 
 
 {% block html %}
-<script type="module" defer src="../assets/js/account_reset_pwd/router.js"></script>
+<script type="module" defer src="../assets/js/account_reset_pwd/router.js?v=dev"></script>
 <html data-theme="light">
 {% endblock %}
