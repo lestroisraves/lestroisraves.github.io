@@ -522,58 +522,11 @@ export function openEvent(eventId) {
 export async function shareEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
     const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
-    const event_desc = `Regarde cet évènement !
-
-Titre: ${event.title}
-Type: ${event_title}
-Lieu: ${event.location_name}
-Date: ${formatDateForUI(event.event_date)}
-`;
-    
-    const clipBoardText = `${event_desc}\n${event_url}`;
-    navigator.clipboard.writeText(clipBoardText);
-
-    if (navigator.share) {
-        try {
-            var file = null;
-            if (event.image_url) {
-                const response = await fetch(event.image_url);
-                const blob = await response.blob();
-
-                file = new File([blob], "event-image.jpg", {
-                    type: blob.type
-                });
-            }
-            
-            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    title: event_title,
-                    text: event_desc,
-                    url: event_url,
-                    files: [file]
-                });
-            } else {
-                // fallback: share link
-                await navigator.share({
-                    title: event_title,
-                    text: event_desc,
-                    url: event_url,
-                });
-            }
-
-        } catch (err) {
-            if (err.name === "AbortError") {
-                // user closed share → do nothing
-                return;
-            }
-            console.error("Share failed:", err);
-            openSuccessModal("Lien vers l'évènement copié!");
-        }
-    } else {
-        console.error("Share failed:", err);
-        openSuccessModal("Lien vers l'évènement copié!");
+    const error = await navigatorShareEvent(event, event_url);
+    if (error) {
+        console.error("Share failed:", error);
+        openSuccessModal("Lien vers l'évènement copié !");
     }
 }
 

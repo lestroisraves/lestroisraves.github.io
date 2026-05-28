@@ -150,6 +150,7 @@ export function openProfileModal(profile) {
         <blockquote class="user-quote">${linkify(profile.official_request_details)}</blockquote>
     `;
 
+    profileModal.querySelector("#modal-share-btn").dataset.id = currentProfile.id;
     profileModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -166,11 +167,13 @@ export function openEventModal(event, type, user_profile=null) {
 
     const eventData = renderEventData(event, true);
 
-    eventModal.querySelector("#modal-share-event-btn").dataset.id = currentEvent.id;
+    eventModal.querySelector("#modal-share-btn").dataset.id = currentEvent.id;
+    eventModal.querySelector("#modal-share-btn").dataset.action = "share-event";
     eventModal.querySelector("#modal-edit-event-btn").dataset.id = currentEvent.id;
 
     switch (type) {
         case "my-event":
+            
             eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
@@ -178,6 +181,7 @@ export function openEventModal(event, type, user_profile=null) {
             break;
 
         case "pending-event":
+            eventModal.querySelector("#modal-share-btn").dataset.action = "share-pending-event";
             eventModal.querySelector("#modal-edit-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.remove("hidden");
