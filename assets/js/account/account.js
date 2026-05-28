@@ -227,7 +227,11 @@ async function initAccountPage() {
     Object.keys(APP_CONFIG.USER_TYPES).forEach(key => {
         const opt = document.createElement("option");
         opt.setAttribute("value", key);
-        opt.innerText = APP_CONFIG.USER_TYPES[key]["label"] + " (" + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...)";
+        if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
+            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"] + "\n > " + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...";
+        } else {
+            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"];
+        }
         userTypeChoice.appendChild(opt);
 
         // if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
