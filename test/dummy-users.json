@@ -1,0 +1,242 @@
+[
+    {
+        "email": "testuser0@rcs.tst",
+        "name": "Test User 0",
+        "pwd": "testuser0",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser1@rcs.tst",
+        "name": "Test User 1",
+        "pwd": "testuser1",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser2@rcs.tst",
+        "name": "Test User 2",
+        "pwd": "testuser2",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser3@rcs.tst",
+        "name": "Test User 3",
+        "pwd": "testuser3",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser4@rcs.tst",
+        "name": "Test User 4",
+        "pwd": "testuser4",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser5@rcs.tst",
+        "name": "Test User 5",
+        "pwd": "testuser5",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser6@rcs.tst",
+        "name": "Test User 6",
+        "pwd": "testuser6",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser7@rcs.tst",
+        "name": "Test User 7",
+        "pwd": "testuser7",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser8@rcs.tst",
+        "name": "Test User 8",
+        "pwd": "testuser8",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser9@rcs.tst",
+        "name": "Test User 9",
+        "pwd": "testuser9",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser10@rcs.tst",
+        "name": "Test User 10",
+        "pwd": "testuser10",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser11@rcs.tst",
+        "name": "Test User 11",
+        "pwd": "testuser11",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser12@rcs.tst",
+        "name": "Test User 12",
+        "pwd": "testuser12",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser13@rcs.tst",
+        "name": "Test User 13",
+        "pwd": "testuser13",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser14@rcs.tst",
+        "name": "Test User 14",
+        "pwd": "testuser14",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser15@rcs.tst",
+        "name": "Test User 15",
+        "pwd": "testuser15",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser16@rcs.tst",
+        "name": "Test User 16",
+        "pwd": "testuser16",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser17@rcs.tst",
+        "name": "Test User 17",
+        "pwd": "testuser17",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser18@rcs.tst",
+        "name": "Test User 18",
+        "pwd": "testuser18",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser19@rcs.tst",
+        "name": "Test User 19",
+        "pwd": "testuser19",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser20@rcs.tst",
+        "name": "Test User 20",
+        "pwd": "testuser20",
+        "role": 0,
+        "official_request": true,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser21@rcs.tst",
+        "name": "Test User 21",
+        "pwd": "testuser21",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser22@rcs.tst",
+        "name": "Test User 22",
+        "pwd": "testuser22",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser23@rcs.tst",
+        "name": "Test User 23",
+        "pwd": "testuser23",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser24@rcs.tst",
+        "name": "Test User 24",
+        "pwd": "testuser24",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser25@rcs.tst",
+        "name": "Test User 25",
+        "pwd": "testuser25",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser26@rcs.tst",
+        "name": "Test User 26",
+        "pwd": "testuser26",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser27@rcs.tst",
+        "name": "Test User 27",
+        "pwd": "testuser27",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    },
+    {
+        "email": "testuser28@rcs.tst",
+        "name": "Test User 28",
+        "pwd": "testuser28",
+        "role": 1,
+        "official_request": false,
+        "official_request_details": ""
+    },
+    {
+        "email": "testuser29@rcs.tst",
+        "name": "Test User 29",
+        "pwd": "testuser29",
+        "role": 0,
+        "official_request": false,
+        "official_request_details": "Bonjour je suis une association qui organise des GROS concerts partout ici et ailleurs.\n\n Je veux publier vite vite vite s'il vous plait.\n\nMon numéro: 06.01.02.03.04\n\nMon site: https://heeeeeeeey.com/"
+    }
+]

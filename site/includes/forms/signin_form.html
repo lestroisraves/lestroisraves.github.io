@@ -1,0 +1,38 @@
+<div id="signin-container" class="account-section" hidden>
+    <article class="formtile-tile pico">
+        <form id="signin-form">
+            <label>
+                Email
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="email@exemple.fr"
+                    required
+                >
+            </label>
+
+            <label>
+                Mot de passe
+                <input
+                    type="password"
+                    id="password"
+                    placeholder=""
+                    required
+                >
+            </label>
+
+            <div>
+                <button type="submit" id="button" data-action="login">Se connecter</button>
+            </div>
+        </form>
+
+        <p>
+            Pas de compte ?
+            <a href="#" id="show-signup" data-action="show-signup">Créer un compte</a>
+        </p>
+        <p>
+            Mot de passe oublié ?
+            <a href="#" id="reset-password" data-action="show-reset-password">Réinitialiser</a>
+        </p>
+    </article>
+</div>

@@ -1,0 +1,57 @@
+<section id="event-tabs" class="events-tabs hidden">
+    <button id="group-tab" class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
+    <button id="group-tab" class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
+    <button id="group-tab" class="tab" data-action="select-tab" data-target="later">Prochainement</button>
+</section>
+
+<section id="category-tabs" class="events-tabs category hidden"></section>
+
+<section id="more-filters" class="more-filters hidden">
+    <section id="area-tabs" class="events-tabs area"></section>
+    <section id="pg-tabs" class="events-tabs pg"></section>
+    <section id="price-tabs" class="events-tabs price"></section>
+</section>
+
+<div>
+    <button id="more-filter-btn" class="more-filter-btn hidden" data-action="filter-toggle" aria-expanded="false">
+        <span class="text">Plus de filtres</span>
+        <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
+    </button>
+</div>
+
+<section id="event-search" class="autocomplete" hidden>
+    <input
+        type="text"
+        id="data-search"
+        class="data-search round"
+        placeholder="Rechercher par titre, lieu ou tag..."
+        autocomplete="off"
+        data-input-type="event-search"
+    />
+    <div class="suggestions round hidden"></div>
+</section>
+
+<div id="switch-view-btn" class="view-switch hidden">
+    <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
+    <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+</div>
+
+<div id="tiles-view" hidden></div>
+
+<div id="agenda-view" hidden>
+    <div class="calendar-header-bar">
+        <span id="today-btn" class="material-symbols-outlined" data-action="nav-today">restart_alt</span>
+        <div class="calendar-header-nav">
+            <button id="prev-month" data-action="nav-prev-month"><</button>
+            <span id="calendar-title"></span>
+            <button id="next-month" data-action="nav-next-month">></button>
+        </div>
+        <span></span>
+    </div>
+    <div id="calendar" class="calendar"></div>
+</div>
+
+<div id="empty-state" class="empty-state hidden">
+    <span class="material-symbols-outlined">visibility_off</span>
+    <span class="text">Aucun évènement à afficher</span>
+</div>
