@@ -228,7 +228,7 @@ async function initAccountPage() {
         const opt = document.createElement("option");
         opt.setAttribute("value", key);
         if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
-            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"] + "\n > " + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...";
+            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"] + " (" + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...)";
         } else {
             opt.innerText = APP_CONFIG.USER_TYPES[key]["label"];
         }
