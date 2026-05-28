@@ -80,6 +80,18 @@ function getPriceId(label) {
     return id;
 }
 
+function getUserTypeId(label) {
+    var id = 0;
+    Object.keys(APP_CONFIG.USER_TYPES).forEach(key => {
+        if (label == APP_CONFIG.USER_TYPES[key]["label"])
+        {
+            id = key;
+            return;
+        }
+    });
+    return id;
+}
+
 
 /* === HTML RENDERING === */
 function renderMaterialIconText(icon, text) {
@@ -373,6 +385,82 @@ function renderEventData(event, details = false) {
     }
 
     return eventData;
+}
+
+async function navigatorShareEvent(event, event_url) {
+    const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
+    const event_desc = `Regarde cet évènement !
+
+Titre: ${event.title}
+Type: ${event_title}
+Lieu: ${event.location_name}
+Date: ${formatDateForUI(event.event_date)}
+`;
+    
+    const clipBoardText = `${event_desc}\n${event_url}`;
+    navigator.clipboard.writeText(clipBoardText);
+
+    if (navigator.share) {
+        try {
+            var file = null;
+            if (event.image_url) {
+                const response = await fetch(event.image_url);
+                const blob = await response.blob();
+
+                file = new File([blob], "event-image.jpg", {
+                    type: blob.type
+                });
+            }
+            
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: event_title,
+                    text: event_desc,
+                    url: event_url,
+                    files: [file]
+                });
+            } else {
+                // fallback: share link
+                await navigator.share({
+                    title: event_title,
+                    text: event_desc,
+                    url: event_url,
+                });
+            }
+
+        } catch (err) {
+            if (err.name === "AbortError") return err;
+        }
+    } else {
+        return "share feature not available on device";
+    }
+}
+
+async function navigatorShareProfile(profile, profile_url) {
+    const profile_title = profile.name;
+    const profile_desc = `Regarde cette requête contributeur officiel !
+
+Nom: ${profile.name}
+Email: ${profile.email}
+Demande: ${profile.official_request_details}
+`;
+    
+    const clipBoardText = `${profile_desc}\n${profile_url}`;
+    navigator.clipboard.writeText(clipBoardText);
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: profile_title,
+                text: profile_desc,
+                url: profile_url,
+            });
+        } catch (err) {
+            if (err.name === "AbortError") return err;
+        }
+    } else {
+        return "share feature not available on device";
+    }
 }
 
 function handleAccordion(accordion, accordionId) {

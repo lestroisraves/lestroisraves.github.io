@@ -6,7 +6,7 @@ import {
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
-    searchInput
+    searchInput, shareEvent, sharePendingEvent, shareProfile
 } from "./account.js";
 
 async function handleClick(el) {
@@ -66,7 +66,16 @@ async function handleClick(el) {
             openMyEvent(el.dataset.showMyeventId);
             break;
 
+        case "share-pending-event":
+            sharePendingEvent(el.dataset.id);
+            break;
+
         case "share-event":
+            shareEvent(el.dataset.id);
+            break;
+
+        case "share-profile":
+            shareProfile(el.dataset.id);
             break;
 
         case "edit-event":

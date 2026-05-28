@@ -14,6 +14,56 @@ APP_CONFIG = {
         2: "Modérateur",
         3: "Admin"
     },
+    USER_TYPES: {
+        0: {
+            "label": "Particulier",
+            "example": ["habitant"]
+        },
+        1: {
+            "label": "Acteur individuel",
+            "example": ["artiste indépendant", "Auteur / Ecrivain", "Musicien", "Dj", "Performeur"]
+        },
+        2: {
+            "label": "Organisation artistique",
+            "example": ["compagnie", "orchestre", "groupe de musique", "collectif", "troupe"]
+        },
+        3: {
+            "label": "Structure évènementielle",
+            "example": ["société de production", "agence", "festival", "programmateur", "organisateur"]
+        },
+        4: {
+            "label": "Lieu culturel privé",
+            "example": ["théatre", "salle de concert", "bar", "galerie", "cinéma"]
+        },
+        5: {
+            "label": "Lieu public",
+            "example": ["médiathèque", "musée", "théatree", "centre", "MJC"]
+        },
+        6: {
+            "label": "Collectif",
+            "example": ["collectif artistique", "groupe citoyen", "réseau militant"]
+        },
+        7: {
+            "label": "Acteur du patrimoine et du tourisme",
+            "example": ["office de tourisme", "site patrimonial", "parc historique"]
+        },
+        8: {
+            "label": "Média culturel",
+            "example": ["radio", "TV", "platefrom numérique", "label", "maison d'édition", "studio"]
+        },
+        9: {
+            "label": "Acteur social",
+            "example": ["centre social", "maison de quartier", "structure", "animateur culturel", "réseau éducatif", "EHPAD", "MJC", "ONG"]
+        },
+        10: {
+            "label": "Association",
+            "example": []
+        },
+        11: {
+            "label": "Autre",
+            "example": []
+        }
+    },
     CATEGORIES: {
         0: {
             "label": "Concert",

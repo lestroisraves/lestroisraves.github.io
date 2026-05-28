@@ -38,6 +38,8 @@ const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
 const myEventsList = document.getElementById("my-events-list");
 
+const userTypeChoice = document.getElementById("user-type");
+
 let user_profile = null;
 export let selected_profile = null;
 export let MY_EVENTS = [];
@@ -220,6 +222,25 @@ function renderOfficialRequests(profile) {
 
 async function initAccountPage() {
     user_profile = null;
+
+    /* init user type select */
+    Object.keys(APP_CONFIG.USER_TYPES).forEach(key => {
+        const opt = document.createElement("option");
+        opt.setAttribute("value", key);
+        opt.innerText = APP_CONFIG.USER_TYPES[key]["label"];
+        userTypeChoice.appendChild(opt);
+
+        if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
+            const sub = document.createElement("option");
+            sub.classList.add("subtitle");
+            sub.disabled = true;
+            sub.innerText = " > " + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...";
+            userTypeChoice.appendChild(sub);
+        }
+    });
+    userTypeChoice.value = APP_CONFIG.USER_TYPES[0]["label"];
+
+    /* init session */
     const { data:{ session } } = await window.supabaseClient.auth.getSession();
     console.log("session:", session);
     const {  data: subscription } = await window.supabaseClient.auth.onAuthStateChange(async (_event, session) =>
@@ -654,6 +675,39 @@ export function searchInput(input) {
 
     input.classList.add("looking");
     suggestions.classList.remove("hidden");
+}
+
+export async function shareEvent(eventId) {
+    const event = PENDING_EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
+    const error = await navigatorShareEvent(event, event_url);
+    if (error) {
+        console.error("Share failed:", error);
+        openSuccessModal("Lien vers l'évènement copié !");
+    }
+}
+
+export async function sharePendingEvent(eventId) {
+    const event = PENDING_EVENTS.find(e => e.id === eventId);
+    if (!event) return;
+    const event_url = `${window.location.href}/account#id=${eventId}&type=pendingevent`;
+    const error = await navigatorShareEvent(event, event_url);
+    if (error) {
+        console.error("Share failed:", error);
+        openSuccessModal("Lien vers l'évènement copié !");
+    }
+}
+
+export async function shareProfile(profileId) {
+    const profile = PROFILES.find(p => p.id === profileId);
+    if (!profile) return;
+    const profile_url = `${window.location.href}/account#id=${profileId}&type=profile`;
+    const error = await navigatorShareProfile(profile, profile_url);
+    if (error) {
+        console.error("Share failed:", error);
+        openSuccessModal("Lien vers le profile copié !");
+    }
 }
 
 
