@@ -1,6 +1,6 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=a723719";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=8d45c89";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);

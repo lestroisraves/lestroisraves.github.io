@@ -1,8 +1,8 @@
 console.log("executing:", "edit_event.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=a723719";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=a723719";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=a723719";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=8d45c89";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=8d45c89";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=8d45c89";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
