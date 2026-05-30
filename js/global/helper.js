@@ -384,11 +384,10 @@ Titre: ${event.title}
 Type: ${event_title}
 Lieu: ${event.location_name}
 Date: ${formatDateForUI(event.event_date)}
-
-${event_url}
 `;
     
-    navigator.clipboard.writeText(event_desc);
+    const clipBoardText = `${event_desc}\n${event_url}`;
+    navigator.clipboard.writeText(clipBoardText);
 
     if (navigator.share) {
         try {
@@ -406,13 +405,15 @@ ${event_url}
                 await navigator.share({
                     title: event_title,
                     text: event_desc,
+                    url: event_url,
                     files: [file]
                 });
             } else {
                 // fallback: share link
                 await navigator.share({
                     title: event_title,
-                    text: event_desc
+                    text: event_desc,
+                    url: event_url,
                 });
             }
 
@@ -433,17 +434,17 @@ Email: ${profile.email}
 Status: ${APP_CONFIG.USER_STATUS[profile.status]["label"]}
 Demande: 
 "${profile.official_request_details}"
-
-${profile_url}
 `;
     
-    navigator.clipboard.writeText(profile_desc);
+    const clipBoardText = `${profile_desc}\n${profile_url}`;
+    navigator.clipboard.writeText(clipBoardText);
 
     if (navigator.share) {
         try {
             await navigator.share({
                 title: profile_title,
-                text: profile_desc
+                text: profile_desc,
+                url: profile_url,
             });
         } catch (err) {
             if (err.name === "AbortError") return err;
