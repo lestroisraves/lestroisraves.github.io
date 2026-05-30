@@ -1,7 +1,7 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=0fe2004";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=0fe2004";
+import { openErrorModal } from "./modal.js?v=5303839";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=5303839";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -66,37 +66,11 @@ export function initEventForm(eventData=null) {
     currentImageUrl = null;
     imageToUpload = null;
 
-    /* Configure area  */
-    Object.keys(APP_CONFIG.AREAS).forEach(key => {
-        const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.AREAS[key]["label"]
-        areaList.appendChild(opt);
-    });
-    areaList.value = APP_CONFIG.AREAS[0]["label"];
-
-    /* Configure categories  */
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.CATEGORIES[key]["label"]
-        categoryList.appendChild(opt);
-    });
-    categoryList.value = APP_CONFIG.CATEGORIES[0]["label"];
-
-    /* Configure parental guide */
-    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.PARENTAL_GUIDE[key]["label"]
-        parentalGuideList.appendChild(opt);
-    });
-    parentalGuideList.value = APP_CONFIG.PARENTAL_GUIDE[0]["label"];
-
-    /* Configure price choice */
-    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
-        const opt = document.createElement("option");
-        opt.innerText = APP_CONFIG.PRICE_CHOICES[key]["label"]
-        priceChoiceList.appendChild(opt);
-    });
-    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[0]["label"];
+    /* Configure select lists  */
+    configureSelectList(APP_CONFIG.AREAS, areaList);
+    configureSelectList(APP_CONFIG.CATEGORIES, categoryList);
+    configureSelectList(APP_CONFIG.PARENTAL_GUIDE, parentalGuideList, 0);
+    configureSelectList(APP_CONFIG.PRICE_CHOICES, priceChoiceList, 0);
 
     /* init userTags */
     clearTags();
@@ -106,11 +80,11 @@ export function initEventForm(eventData=null) {
     /* init form with data */
     form.querySelector("#title").value = eventData.title;
     form.querySelector("#location_name").value = eventData.location_name;
-    form.querySelector("#area").value = APP_CONFIG.AREAS[eventData.area]["label"];
+    form.querySelector("#area").value = eventData.area;
     if (eventData.location_address) form.querySelector("#location_name").value = eventData.location_name;
     if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
-    form.querySelector("#category").value = APP_CONFIG.CATEGORIES[eventData.category]["label"];
-    form.querySelector("#pg").value = APP_CONFIG.PARENTAL_GUIDE[eventData.pg]["label"];
+    form.querySelector("#category").value = eventData.category;
+    form.querySelector("#pg").value = eventData.pg;
     form.querySelector("#event_date").value = eventData.event_date;
     if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));
@@ -118,7 +92,7 @@ export function initEventForm(eventData=null) {
     if (eventData.email) form.querySelector("#email").value = eventData.email;
     if (eventData.site_url) form.querySelector("#site_url").value = eventData.site_url;
     if (eventData.to_eat) form.querySelector('input[name="to_eat"]').checked = eventData.to_eat;
-    priceChoiceList.value = APP_CONFIG.PRICE_CHOICES[eventData.price]["label"];
+    priceChoiceList.value = eventData.price;
     if (eventData.price == 2) {
         if (eventData.max_price && (eventData.max_price > 0)) {
             form.querySelector('#max_price').value = eventData.max_price;
@@ -135,7 +109,7 @@ export function initEventForm(eventData=null) {
 }
 
 export function priceChanged(target) {
-    if (target.value == "Payant") {
+    if (target.value == 2) {
         minPrice.disabled = false;
         maxPrice.disabled = false;
     }
@@ -242,10 +216,9 @@ export function getEventFormPayload() {
     }
 
     /* set price */
-    const priceChoiceId = getPriceId(priceChoiceList.value);
     var min_price = null;
     var max_price = null;
-    if (priceChoiceId == 2) {
+    if (priceChoiceList.value == 2) {
         min_price = minPrice.value.trim() === "" ? null: Number(minPrice.value);
         max_price = maxPrice.value.trim() === "" ? null: Number(maxPrice.value);
         if (min_price && max_price && (min_price > max_price))
@@ -269,22 +242,22 @@ export function getEventFormPayload() {
         // event_date: done later
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
-        area: getAreaId(areaList.value),
+        area: areaList.value,
         location_address: form.querySelector('#location_address').value,
         tags,
         // pending: done later
         is_test: userTags.includes("is_test"),
         // created_by: done later
         // creator: done later
-        price: priceChoiceId,
+        price: priceChoiceList.value,
         min_price: min_price,
         max_price: max_price,
-        category: getCategoryId(categoryList.value),
+        category: categoryList.value,
         // image_url: done later
         phone: phoneNumber,
         email: form.querySelector("#email").value,
         site_url: form.querySelector('#site_url').value,
-        pg: getPgId(parentalGuideList.value),
+        pg: parentalGuideList.value,
         to_eat: toEat
     }
 

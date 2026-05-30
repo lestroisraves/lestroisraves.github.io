@@ -27,7 +27,9 @@
 
             <label class="pico">
                 Zone géographique *
-                <select name="select" id="area" required></select>
+                <select name="select" id="area" required>
+                    <option value="" disabled selected hidden>Choisissez...</option>
+                </select>
             </label>
 
             <label class="pico">
@@ -42,7 +44,9 @@
 
             <label class="pico">
                 Catégorie *
-                <select name="select" id="category" required></select>
+                <select name="select" id="category" required>
+                    <option value="" disabled selected hidden>Choisissez...</option>
+                </select>
             </label>
 
             <label class="pico">
@@ -96,7 +100,7 @@
 
             <label class="pico">
                 Prix / participation *
-                <select name="select" id="price-choice" required data-change-type="price-choice"></select>
+                <select name="select" id="price-choice" data-change-type="price-choice" required></select>
             </label>
 
             <label class="pico">
