@@ -150,7 +150,7 @@ def generate_events(n: int):
     events.append(format_event_payload(day_delta=0, category=4, title=f"Test Event #1.a", pending=False))
     events.append(format_event_payload(day_delta=0, category=5, title=f"Test Event #1.i", pending=False))
     for i in range(n):
-        events.append(format_event_payload(day_delta=i, category=random.randrange(5), title=f"Test Event #{i + 1}", pending=random.choice([True, False, False, False])))
+        events.append(format_event_payload(day_delta=i, category=random.randrange(6), title=f"Test Event #{i + 1}", pending=random.choice([True, False, False, False])))
     return events
 
 
@@ -171,6 +171,7 @@ def generate_users(n: int):
             "name": f"{USER_NAME_PREFIX} {i}",
             "pwd": f"{USER_EMAIL_PREFIX}{i}",
             "role": role,
+            "status": random.randrange(12),
             "official_request": official_request,
             "official_request_details": official_request_details
         }
@@ -193,7 +194,7 @@ def update_supabase_users(users: list):
             {
                 "email": user["email"],
                 "password": user["pwd"],
-                "user_metadata": {"display_name": user["name"]},
+                "user_metadata": {"display_name": user["name"], "status": user["status"]},
             }
         )
         supabase_db.table("profiles").update(

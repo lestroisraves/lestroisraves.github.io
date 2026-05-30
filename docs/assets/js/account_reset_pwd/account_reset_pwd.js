@@ -46,7 +46,7 @@ async function resetPassword() {
     openSuccessModal("Mot de passe réinitialisé ! Vous allez être redirigé automatiquement.");
     
     setTimeout(() => {
-        window.location.href = "../account";
+        window.location.href = `../account`;
     }, 3000);
 }
 

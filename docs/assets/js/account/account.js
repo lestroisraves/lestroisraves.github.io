@@ -38,7 +38,7 @@ const myEventsSection = document.getElementById("my-events-section");
 const myEvents = document.getElementById("my-events");
 const myEventsList = document.getElementById("my-events-list");
 
-const userTypeChoice = document.getElementById("user-type");
+const userTypeChoice = document.getElementById("status");
 
 let user_profile = null;
 export let selected_profile = null;
@@ -48,6 +48,45 @@ export let PENDING_EVENTS = [];
 export let OFFICIAL_REQUESTS = [];
 
 /* === FUNCTIONS === */
+async function initAccountPage() {
+    user_profile = null;
+
+    /* init user type select */
+    Object.keys(APP_CONFIG.USER_STATUS).forEach(key => {
+        const opt = document.createElement("option");
+        opt.setAttribute("value", key);
+        if (APP_CONFIG.USER_STATUS[key]["example"].length > 0) {
+            opt.innerText = APP_CONFIG.USER_STATUS[key]["label"] + " (" + APP_CONFIG.USER_STATUS[key]["example"].join(", ") + ", etc...)";
+        } else {
+            opt.innerText = APP_CONFIG.USER_STATUS[key]["label"];
+        }
+        userTypeChoice.appendChild(opt);
+    });
+    userTypeChoice.value = APP_CONFIG.USER_STATUS[0]["label"];
+
+    /* init session */
+    const { data:{ session } } = await window.supabaseClient.auth.getSession();
+    console.log("session:", session);
+    const {  data: subscription } = await window.supabaseClient.auth.onAuthStateChange(async (_event, session) =>
+    {
+        if (session?.user) {
+            const { data: profile, error } = await window.supabaseClient.from('profiles')
+                .select("*")
+                .eq('id', session.user.id)
+                .single();
+
+            if (!error){
+                await showAccount(session.user, profile);
+                return
+            }
+            console.error(error);
+        }
+        showLogin();
+    });
+  
+    return subscription; // (optional) for unsubscribe later
+}
+
 function searchMatches(item, value, container) {
     switch(container) {
         case "official-requests":
@@ -220,53 +259,6 @@ function renderOfficialRequests(profile) {
     return html;
 }
 
-async function initAccountPage() {
-    user_profile = null;
-
-    /* init user type select */
-    Object.keys(APP_CONFIG.USER_TYPES).forEach(key => {
-        const opt = document.createElement("option");
-        opt.setAttribute("value", key);
-        if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
-            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"] + "\n > " + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...";
-        } else {
-            opt.innerText = APP_CONFIG.USER_TYPES[key]["label"];
-        }
-        userTypeChoice.appendChild(opt);
-
-        // if (APP_CONFIG.USER_TYPES[key]["example"].length > 0) {
-        //     const sub = document.createElement("option");
-        //     sub.classList.add("subtitle");
-        //     sub.disabled = true;
-        //     sub.innerText = " > " + APP_CONFIG.USER_TYPES[key]["example"].join(", ") + ", etc...";
-        //     userTypeChoice.appendChild(sub);
-        // }
-    });
-    userTypeChoice.value = APP_CONFIG.USER_TYPES[0]["label"];
-
-    /* init session */
-    const { data:{ session } } = await window.supabaseClient.auth.getSession();
-    console.log("session:", session);
-    const {  data: subscription } = await window.supabaseClient.auth.onAuthStateChange(async (_event, session) =>
-    {
-        if (session?.user) {
-            const { data: profile, error } = await window.supabaseClient.from('profiles')
-                .select("*")
-                .eq('id', session.user.id)
-                .single();
-
-            if (!error){
-                await showAccount(session.user, profile);
-                return
-            }
-            console.error(error);
-        }
-        showLogin();
-    });
-  
-    return subscription; // (optional) for unsubscribe later
-}
-
 /* === EXPORTED FUNCTION === */
 export function showLogin() {
     signInContainer.querySelector("#signin-form").reset();
@@ -300,6 +292,7 @@ export async function showAccount(user, profile) {
     permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
+    document.getElementById("account-status").innerText = APP_CONFIG.USER_STATUS[user_profile.status]["label"];
     document.getElementById("account-role").innerText = APP_CONFIG.ROLES[user_profile.role];
 
     /* configure roles */
@@ -426,11 +419,14 @@ export async function signup() {
     const displayName = signUpForm.querySelector("#display_name").value.trim();
     const email = signUpForm.querySelector("#email").value.trim();
     const password = signUpForm.querySelector("#password").value;
+    const status = parseInt(signUpForm.querySelector("#status").value, 10);
     const button = signUpForm.querySelector("#button");
 
     /* init UI */
     hideNoticeError();
     button.setAttribute("aria-busy", "true");
+
+    console.log("status", status)
 
     const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
@@ -438,7 +434,8 @@ export async function signup() {
         options: {
             emailRedirectTo: APP_CONFIG.EMAILCONFIRMED_REDIRECT_URL,
             data: {
-                display_name: displayName
+                display_name: displayName,
+                status: status
             }
         }
     })
@@ -682,9 +679,9 @@ export function searchInput(input) {
 }
 
 export async function shareEvent(eventId) {
-    const event = PENDING_EVENTS.find(e => e.id === eventId);
+    const event = MY_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
+    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
     const error = await navigatorShareEvent(event, event_url);
     if (error) {
         console.error("Share failed:", error);
@@ -695,7 +692,7 @@ export async function shareEvent(eventId) {
 export async function sharePendingEvent(eventId) {
     const event = PENDING_EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${window.location.href}/account#id=${eventId}&type=pendingevent`;
+    const event_url = `${SITE_URL}/account#id=${eventId}&type=pendingevent`;
     const error = await navigatorShareEvent(event, event_url);
     if (error) {
         console.error("Share failed:", error);
@@ -704,9 +701,11 @@ export async function sharePendingEvent(eventId) {
 }
 
 export async function shareProfile(profileId) {
+    console.log("shareProfile")
     const profile = PROFILES.find(p => p.id === profileId);
     if (!profile) return;
-    const profile_url = `${window.location.href}/account#id=${profileId}&type=profile`;
+    console.log(profile)
+    const profile_url = `${SITE_URL}/account#id=${profileId}&type=profile`;
     const error = await navigatorShareProfile(profile, profile_url);
     if (error) {
         console.error("Share failed:", error);

@@ -128,6 +128,13 @@
     background: #e8f0fe;
     color: #1a3fb4;
     font-size: 0.7rem;
+
+    
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .detail-section {

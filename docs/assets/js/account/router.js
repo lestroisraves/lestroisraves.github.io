@@ -60,6 +60,7 @@ async function handleClick(el) {
             break;
 
         case "share-profile":
+            shareProfile(el.dataset.id);
             break;
 
         case "show-myevent":
@@ -72,10 +73,6 @@ async function handleClick(el) {
 
         case "share-event":
             shareEvent(el.dataset.id);
-            break;
-
-        case "share-profile":
-            shareProfile(el.dataset.id);
             break;
 
         case "edit-event":

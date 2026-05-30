@@ -14,7 +14,7 @@ APP_CONFIG = {
         2: "Modérateur",
         3: "Admin"
     },
-    USER_TYPES: {
+    USER_STATUS: {
         0: {
             "label": "Particulier",
             "example": ["habitant"]

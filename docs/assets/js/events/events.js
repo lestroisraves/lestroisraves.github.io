@@ -522,7 +522,7 @@ export function openEvent(eventId) {
 export async function shareEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
+    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
     const error = await navigatorShareEvent(event, event_url);
     if (error) {
         console.error("Share failed:", error);

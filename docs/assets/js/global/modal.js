@@ -140,6 +140,14 @@ export function openProfileModal(profile) {
                     <span class="label">Email</span>
                     <span id="account-email" class="value detail-user">${profile.email}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="label">Status</span>
+                    <span id="account-status" class="value detail-user">${APP_CONFIG.USER_STATUS[profile.status]["label"]}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Contributeur</span>
+                    <span id="account-role" class="value detail-user">${APP_CONFIG.ROLES[profile.role]}</span>
+                </div>
             </div>
         </div>
 
@@ -167,17 +175,22 @@ export function openEventModal(event, type, user_profile=null) {
 
     const eventData = renderEventData(event, true);
 
-    eventModal.querySelector("#modal-share-btn").dataset.id = currentEvent.id;
+    
+    eventModal.querySelector("#modal-share-btn").classList.remove("hidden");
     eventModal.querySelector("#modal-share-btn").dataset.action = "share-event";
+    eventModal.querySelector("#modal-share-btn").disabled = false;
+    eventModal.querySelector("#modal-share-btn").dataset.id = currentEvent.id;
+
     eventModal.querySelector("#modal-edit-event-btn").dataset.id = currentEvent.id;
 
     switch (type) {
         case "my-event":
-            
             eventModal.querySelector("#modal-edit-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-delete-event-btn").classList.remove("hidden");
             eventModal.querySelector("#modal-accept-event-btn").classList.add("hidden");
             eventModal.querySelector("#modal-reject-event-btn").classList.add("hidden");
+
+            if (event.pending) eventModal.querySelector("#modal-share-btn").classList.add("hidden");
             break;
 
         case "pending-event":

@@ -1,5 +1,26 @@
 # Supabase
 
+## add trigger function when new user is created
+When nex user is created with signup, you can trigger a function that will push the new user in profiles table, with some more attributes from meta-data.
+
+Go to `Database > functions` and create new `trigger` function called `handle_new_user`
+
+```sql
+begin
+  insert into public.profiles (id, name, role, status, email)
+  values (
+    new.id,
+    new.raw_user_meta_data ->> 'display_name',
+    0,
+    new.raw_user_meta_data ->> 'status',
+    new.email
+  )
+  on conflict (id) do nothing;
+
+  return new;
+end;
+```
+
 ## Delete old events
 In `Integration` be sure that `pg_cron` extension is installed so you can create a Job in `CRON`.
 

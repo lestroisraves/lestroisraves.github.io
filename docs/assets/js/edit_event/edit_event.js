@@ -36,7 +36,6 @@ async function initEditEventPage() {
 
         if (error) {
             console.log("Error:", error);
-            // window.location.href = "../";
             openErrorModal("ERREUR survenue durant le chargement de l'évènement");
             return;
         }
@@ -51,7 +50,7 @@ function showLoginWarning() {
     hideNoticeTip();
     submitContainer.hidden = true;
     accountDetail.hidden = true;
-    window.location.href = "../account/";
+    window.location.href = `../account/`;
 }
 
 function showEdit(user, profile, event) {
@@ -101,7 +100,7 @@ export async function editEvent() {
     payload.pending = user_profile.role == 0;
     payload.created_by = user_profile?.id ?? null;
     payload.creator_name = user_profile?.name ?? null;
-    payload.image_url = image_url;
+    payload.image_url = imageUrl;
     console.log("submit event payload (for edit):", payload);
 
     const { error } = await window.supabaseClient

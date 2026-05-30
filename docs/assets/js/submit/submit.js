@@ -30,7 +30,7 @@ function showLoginWarning() {
     hideNoticeTip();
     accountDetail.hidden = true;
     submitContainer.hidden = true;
-    window.location.href = "../account/";
+    window.location.href = `../account/`
 }
 
 function showSubmit(user, profile) {
