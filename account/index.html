@@ -690,7 +690,7 @@
 
             <label>
                 Votre status
-                <select name="select" id="user-type" required></select>
+                <select name="select" id="status" required></select>
             </label>
 
             <div>
@@ -715,14 +715,16 @@
 
             <div class="account-details">
 
-                <div class="detail-section">
+                <div id="detail-section"  class="detail-section">
                     <div class="detail-row">
                         <span class="label">Email</span>
                         <span id="account-email" class="value detail-user"></span>
                     </div>
-                </div>
+                    <div class="detail-row">
+                        <span class="label">Status</span>
+                        <span id="account-status" class="value detail-user"></span>
+                    </div>
 
-                <div id="detail-section" class="detail-section">
                     <div class="detail-row">
                         <span class="label">Contributeur</span>
                         <span id="account-role" class="value detail-user"></span>
@@ -894,7 +896,7 @@
 
 </div>
 
-<script type="module" defer src="../assets/js/account/router.js?v=8d45c89"></script>
+<script type="module" defer src="../assets/js/account/router.js?v=0fe2004"></script>
 <html data-theme="light">
 
 
@@ -972,13 +974,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=8d45c89"></script>
+        <script src="../assets/js/global/config.js?v=0fe2004"></script>
       
-        <script src="../assets/js/global/helper.js?v=8d45c89"></script>
+        <script src="../assets/js/global/helper.js?v=0fe2004"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=8d45c89"></script>
+        <script src="../assets/js/global/user_profile.js?v=0fe2004"></script>
       
-        <script src="../assets/js/global/supabase.js?v=8d45c89"></script>
+        <script src="../assets/js/global/supabase.js?v=0fe2004"></script>
       
     
   </body>

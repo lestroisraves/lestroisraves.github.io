@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm, sendOfficialRequest,
     setConfirmBtnState, setSendBtnState
-} from "../global/modal.js?v=8d45c89";
+} from "../global/modal.js?v=0fe2004";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
     searchInput, shareEvent, sharePendingEvent, shareProfile
-} from "./account.js?v=8d45c89";
+} from "./account.js?v=0fe2004";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -60,6 +60,7 @@ async function handleClick(el) {
             break;
 
         case "share-profile":
+            shareProfile(el.dataset.id);
             break;
 
         case "show-myevent":
@@ -72,10 +73,6 @@ async function handleClick(el) {
 
         case "share-event":
             shareEvent(el.dataset.id);
-            break;
-
-        case "share-profile":
-            shareProfile(el.dataset.id);
             break;
 
         case "edit-event":

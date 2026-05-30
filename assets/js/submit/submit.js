@@ -1,8 +1,8 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=8d45c89";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=8d45c89";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=8d45c89";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=0fe2004";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=0fe2004";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=0fe2004";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -30,7 +30,7 @@ function showLoginWarning() {
     hideNoticeTip();
     accountDetail.hidden = true;
     submitContainer.hidden = true;
-    window.location.href = "../account/";
+    window.location.href = `../account/`
 }
 
 function showSubmit(user, profile) {

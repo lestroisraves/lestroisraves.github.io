@@ -80,18 +80,6 @@ function getPriceId(label) {
     return id;
 }
 
-function getUserTypeId(label) {
-    var id = 0;
-    Object.keys(APP_CONFIG.USER_TYPES).forEach(key => {
-        if (label == APP_CONFIG.USER_TYPES[key]["label"])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
 
 /* === HTML RENDERING === */
 function renderMaterialIconText(icon, text) {
@@ -389,16 +377,18 @@ function renderEventData(event, details = false) {
 
 async function navigatorShareEvent(event, event_url) {
     const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
-    const event_desc = `Regarde cet évènement !
+    const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
+    const event_desc = `${msg_title}
 
 Titre: ${event.title}
 Type: ${event_title}
 Lieu: ${event.location_name}
 Date: ${formatDateForUI(event.event_date)}
+
+${event_url}
 `;
     
-    const clipBoardText = `${event_desc}\n${event_url}`;
-    navigator.clipboard.writeText(clipBoardText);
+    navigator.clipboard.writeText(event_desc);
 
     if (navigator.share) {
         try {
@@ -416,15 +406,13 @@ Date: ${formatDateForUI(event.event_date)}
                 await navigator.share({
                     title: event_title,
                     text: event_desc,
-                    url: event_url,
                     files: [file]
                 });
             } else {
                 // fallback: share link
                 await navigator.share({
                     title: event_title,
-                    text: event_desc,
-                    url: event_url,
+                    text: event_desc
                 });
             }
 
@@ -442,18 +430,20 @@ async function navigatorShareProfile(profile, profile_url) {
 
 Nom: ${profile.name}
 Email: ${profile.email}
-Demande: ${profile.official_request_details}
+Status: ${APP_CONFIG.USER_STATUS[profile.status]["label"]}
+Demande: 
+"${profile.official_request_details}"
+
+${profile_url}
 `;
     
-    const clipBoardText = `${profile_desc}\n${profile_url}`;
-    navigator.clipboard.writeText(clipBoardText);
+    navigator.clipboard.writeText(profile_desc);
 
     if (navigator.share) {
         try {
             await navigator.share({
                 title: profile_title,
-                text: profile_desc,
-                url: profile_url,
+                text: profile_desc
             });
         } catch (err) {
             if (err.name === "AbortError") return err;

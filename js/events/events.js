@@ -1,6 +1,6 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=8d45c89";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=0fe2004";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -522,7 +522,7 @@ export function openEvent(eventId) {
 export async function shareEvent(eventId) {
     const event = EVENTS.find(e => e.id === eventId);
     if (!event) return;
-    const event_url = `${window.location.href}#id=${eventId}&type=myevent`;
+    const event_url = `${SITE_URL}#id=${eventId}&type=myevent`;
     const error = await navigatorShareEvent(event, event_url);
     if (error) {
         console.error("Share failed:", error);
