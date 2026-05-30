@@ -54,7 +54,7 @@ async function initAccountPage() {
     /* init user type select */
     Object.keys(APP_CONFIG.USER_STATUS).forEach(key => {
         const opt = document.createElement("option");
-        opt.setAttribute("value", key);
+        opt.value =key;
         if (APP_CONFIG.USER_STATUS[key]["example"].length > 0) {
             opt.innerText = APP_CONFIG.USER_STATUS[key]["label"] + " (" + APP_CONFIG.USER_STATUS[key]["example"].join(", ") + ", etc...)";
         } else {
@@ -62,8 +62,7 @@ async function initAccountPage() {
         }
         userTypeChoice.appendChild(opt);
     });
-    userTypeChoice.value = APP_CONFIG.USER_STATUS[0]["label"];
-
+    
     /* init session */
     const { data:{ session } } = await window.supabaseClient.auth.getSession();
     console.log("session:", session);
@@ -419,7 +418,7 @@ export async function signup() {
     const displayName = signUpForm.querySelector("#display_name").value.trim();
     const email = signUpForm.querySelector("#email").value.trim();
     const password = signUpForm.querySelector("#password").value;
-    const status = parseInt(signUpForm.querySelector("#status").value, 10);
+    const status = parseInt(userTypeChoice.value, 10);
     const button = signUpForm.querySelector("#button");
 
     /* init UI */
@@ -519,7 +518,7 @@ export async function sendResetPasswordRequest() {
 }
 
 export async function updateProfileRole() {
-    const new_role = getRoleId(roleList.value);
+    const new_role = roleList.value;
 
     if (!selected_profile || (new_role == selected_profile.role)) {
         return;

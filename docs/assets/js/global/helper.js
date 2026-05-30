@@ -19,89 +19,6 @@ function localizeAuthError(error) {
   return dict[code] || "Une erreur est survenue. Veuillez réessayer.";
 }
 
-/* === DATA HELPER === */
-function getCategoryId(label) {
-    var id = 4;
-    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        if (label == APP_CONFIG.CATEGORIES[key]["label"])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
-function getAreaId(label) {
-    var id = 0;
-    Object.keys(APP_CONFIG.AREAS).forEach(key => {
-        if (label == APP_CONFIG.AREAS[key]["label"])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
-function getRoleId(label) {
-    var id = 0;
-    Object.keys(APP_CONFIG.ROLES).forEach(key => {
-        if (label == APP_CONFIG.ROLES[key])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
-function getPgId(label) {
-    var id = 0;
-    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        if (label == APP_CONFIG.PARENTAL_GUIDE[key]["label"])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
-function getPriceId(label) {
-    var id = 0;
-    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
-        if (label == APP_CONFIG.PRICE_CHOICES[key]["label"])
-        {
-            id = key;
-            return;
-        }
-    });
-    return id;
-}
-
-
-/* === HTML RENDERING === */
-function renderMaterialIconText(icon, text) {
-    return `<span class="event-icon-text">
-                <span class="material-symbols-outlined">${icon}</span>
-                <span class="text">${text}</span>
-            </span>
-            `
-}
-
-function linkify(text) {
-    const urlRegex = /(\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+)/gi;
-
-    return text.replace(urlRegex, (url) => {
-        const href = url.startsWith("http")
-            ? url
-            : `https://${url}`;
-
-        return `<a class="website" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-    });
-}
-
 /* === DATE & TIME === */
 function formatDateStr(date) {
     const y = date.getFullYear();
@@ -189,6 +106,29 @@ function formatDateRange(startDate, endDate) {
     }
 }
 
+
+/* === HTML RENDERING === */
+function renderMaterialIconText(icon, text) {
+    return `<span class="event-icon-text">
+                <span class="material-symbols-outlined">${icon}</span>
+                <span class="text">${text}</span>
+            </span>
+            `
+}
+
+function linkify(text) {
+    const urlRegex = /(\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+)/gi;
+
+    return text.replace(urlRegex, (url) => {
+        const href = url.startsWith("http")
+            ? url
+            : `https://${url}`;
+
+        return `<a class="website" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
+
 function renderAccountPermissionDetails() {
     return `
         <div class="detail-section-list">
@@ -255,7 +195,6 @@ function setEventImage(container, url) {
     //     placeholder.textContent = "image";
     // };
 }
-
 
 function renderEventData(event, details = false) {
     const eventData = event;
@@ -375,6 +314,19 @@ function renderEventData(event, details = false) {
     return eventData;
 }
 
+function configureSelectList(configList, selectList, defaultValue=null) {
+    Object.keys(configList).forEach(key => {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.innerText = configList[key]["label"]
+        selectList.appendChild(opt);
+    });
+    if (defaultValue != null) {
+        selectList.value = defaultValue;
+    }
+}
+
+/* === OTHERS === */
 async function navigatorShareEvent(event, event_url) {
     const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
     const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
