@@ -49,7 +49,7 @@ document.addEventListener("change", (event) => {
 });
 
 window.addEventListener("load", () => {
-    document.documentElement.classList.add("app-ready");
+    document.documentElement.classList.add("ready");
 });
 
 
