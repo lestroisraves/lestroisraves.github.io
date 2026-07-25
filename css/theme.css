@@ -84,10 +84,19 @@
     transition: opacity 0.2s ease;
 }
 
-html.app-ready .md-main,
-html.app-ready .md-content {
+html.ready .md-main,
+html.ready .md-content {
     opacity: 1;
-    visibility: visible;
+    transition: opacity .2s ease;
+}
+
+/* html.ready .md-content {
+    opacity: 1;
+    transition: opacity .2s ease;
+}  */
+
+html:not(.ready) .main-content {
+    visibility: hidden;
 }
 
 .md-grid {

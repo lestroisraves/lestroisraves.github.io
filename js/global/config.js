@@ -1,6 +1,6 @@
 console.log("executing:", "config.js");
 
-SITE_URL = "https://rcsculture.github.io"
+SITE_URL = "https://lestroisraves.github.io"
 
 APP_CONFIG = {
     SUPABASE_URL: "https://jpicbqssqixagnwejefu.supabase.co",

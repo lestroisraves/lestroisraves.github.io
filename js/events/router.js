@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=5303839";
+} from "../global/modal.js?v=dev";
 
 import { 
     openEvent, searchInput, 
@@ -119,13 +119,11 @@ document.addEventListener("input", (event) => {
     handleInput(el);
 });
 
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("app-ready");
-});
-
-
 document.addEventListener("submit", (event) => {
     event.preventDefault();
+});
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("ready");
 });
 
