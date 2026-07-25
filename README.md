@@ -1,4 +1,4 @@
-# Rabastens-Coufouleux-Salvagnac Calendrier d'évènements culturels
+# Les Trois Raves: agenda culturel du Rabastinois
 
 Ce projet a pour but d'offrir un site web proposant les différents évènements culturels disponibles à Rabastens, Coufouleux, Salvagnac (81 Tarn) et aux alentours.
 
@@ -11,5 +11,5 @@ Il existe 4 type d'utilisateurs:
 * **Administrateur**: modérateur du site web: ils ont la possibilité de refuser ou d'accepter la publication d'un évènement, ils peuvent accepter ou refuser la requête d'un contributeur à passer 'officiel'. La liste des admins et leur contact est disponible sur le site web.
 
 ---
-[![github](https://img.shields.io/badge/rcsculture-github.io-black?style=for-the-badge&logo=github&logoColor=white)](https://rcsculture.github.io)
+[![github](https://img.shields.io/badge/lestroisraves-github.io-black?style=for-the-badge&logo=github&logoColor=white)](https://lestroisraves.github.io)
 [![supabase](https://img.shields.io/badge/supabase-backend-darkgreen?style=for-the-badge&logo=github&logoColor=white)](https://supabase.com/dashboard/project/jpicbqssqixagnwejefu)

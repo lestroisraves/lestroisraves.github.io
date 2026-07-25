@@ -119,13 +119,11 @@ document.addEventListener("input", (event) => {
     handleInput(el);
 });
 
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("app-ready");
-});
-
-
 document.addEventListener("submit", (event) => {
     event.preventDefault();
+});
+
+window.addEventListener("load", () => {
+    document.documentElement.classList.add("ready");
 });
 
