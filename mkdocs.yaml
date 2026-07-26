@@ -1,12 +1,13 @@
 
 site_name: Les Trois Raves
-site_subtitle: Agenda culturel du Rabastinois
+site_subtitle: "Bienvenue sur l'agenda culturel du Rabastinois 💚"
+site_description: "A Rabastens, Coufouleux, Salvagnac et aux alentours: retrouvez vos concerts, spectacles, expositions, lectures, et tout autre évènements !"
 site_url: https://lestroisraves.github.io
 
 theme:
   name: material
   favicon: assets/images/logo.ico
-  logo: assets/images/logo.svg
+  logo: assets/images/logo.png
   custom_dir: docs/assets
   palette:
     - scheme: default

@@ -88,27 +88,12 @@
 
     <!-- Subtitle -->
     <div class="subtitle-ticker">
-        <!-- <a
-            href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
-            title="{{ config.site_name | e }}"
-            class="md-header__button md-logo"
-            aria-label="{{ config.site_name }}"
-            data-md-component="logo"
-        >
-            {% include "partials/logo.html" %}
-        </a> -->
-        <!-- <span class="custom-md-subtitle">
-            {{ config.site_subtitle }}
-        </span> -->
         <div class="subtitle-ticker__track">
-            <span>Bienvenue sur l'agenda culturel du Rabastinois.
-                A Rabastens, Coufouleux, Salvagnac et aux alentours:
-                retrouvez vos concerts, spectacles, expositions, lectures, et tout autre événèments !
-            </span>
-            <span>Bienvenue sur l'agenda culturel du Rabastinois.
-                A Rabastens, Coufouleux, Salvagnac et aux alentours:
-                retrouvez vos concerts, spectacles, expositions, lectures, et tout autre événèments !
-            </span>
+            <!-- repet twice for smoother tracking -->
+            <span>{{ config.site_subtitle }}</span>
+            <span>{{ config.site_description }}</span>
+            <span>{{ config.site_subtitle }}</span>
+            <span>{{ config.site_description }}</span>
         </div>
     </div>
     

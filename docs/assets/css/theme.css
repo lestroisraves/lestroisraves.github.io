@@ -68,51 +68,28 @@
     background: var(--primary-fg);
 }
 
-/* .md-header__topic:not([data-md-component]) {
-    display: flex;
-    flex-direction: column; */
-    /* justify-content: center;
-    align-content: center;
-    line-height: 1; */
-    
+.md-logo img {
+    height: 64px;
+    width: auto;
+}
 
-    /* position: relative;
-    top: 0.3rem; */
-/* } */
-
-/* .md-header__topic:not([data-md-component])::after {
-    content: "Agenda culturel du Rabastinois";
-    display: block;
-    font-size: 0.55rem;
-    opacity: 0.75;
-    font-weight: 400;
-} */
-
-/* .md-header__ellipsis {
-    display: block;
-    align-content: center;
-} */
-/* .custom-md-subtitle {
-    width: 100%;
-    font-size: 0.6rem;
-    opacity: 0.75;
-    font-weight: 400;
-} */
-
+/* Subtitle banner */
 .subtitle-ticker {
     width: 100%;
     overflow: hidden;
     background: var(--md-primary-fg-color);
     color: white;
-    height: 32px;
     display: flex;
     align-items: center;
+    padding-top: 0;
+    padding-bottom: 0.2rem;
 }
 
 .subtitle-ticker__track {
     display: flex;
     width: max-content;
     animation: ticker 20s linear infinite;
+    font-size: 0.65rem;
 }
 
 .subtitle-ticker__track span {
@@ -129,21 +106,6 @@
         transform: translateX(-50%);
     }
 }
-
-/* .md-header__topic.site-title {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    line-height: 1;
-    gap: 0.1rem;
-
-}
-
-.md-ellipsis.subtitle {
-    font-size: 0.6rem;
-    opacity: 0.75;
-    font-weight: 400;
-} */
 
 /* color footer */
 .md-footer-meta__inner {
