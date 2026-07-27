@@ -7,17 +7,17 @@
 }
 
 
-/* .spinner {
+.spinner {
     position: relative;
-    width: 160px;
-    height: 160px;
+    width: 64px;
+    height: 64px;
 }
 
 .spinner-ring {
     position: absolute;
     inset: 0;
 
-    border: 6px solid transparent;
+    border: 6px solid #ccc;
     border-top-color: var(--primary-fg);
     border-radius: 50%;
 
@@ -25,14 +25,10 @@
 }
 
 .spinner-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 95%;
-    height: 95%;
+    width: 120px;
+    height: 120px;
 
-    transform: translate(-50%, -50%);
-    object-fit: contain;
+    animation: bass 0.8s ease-in-out infinite;
 }
 
 @keyframes spin {
@@ -42,14 +38,6 @@
     to {
         transform: rotate(360deg);
     }
-} */
-
-
-.spinner-logo {
-    width: 120px;
-    height: 120px;
-
-    animation: bass 0.8s ease-in-out infinite;
 }
 
 @keyframes bass {
