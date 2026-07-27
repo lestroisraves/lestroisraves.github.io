@@ -13,15 +13,18 @@ const tilesView = document.getElementById("tiles-view");
 const agendaView = document.getElementById("agenda-view");
 const calendarEl = document.getElementById("calendar");
 const search = document.getElementById("event-search");
+const catFilters = document.getElementById("category-filter");
 const addFiltersBtn = document.getElementById("more-filter-btn");
 const addFilters = document.getElementById("more-filters");
-const switchViewBtn = document.getElementById("switch-view-btn");
-const tabs = document.getElementById("event-tabs");
+const switchViewArea = document.getElementById("view-switch");
 const catTabs = document.getElementById("category-tabs");
+const whenTabs = document.getElementById("when-tabs");
+const areaTabs = document.getElementById("area-tabs");
 const pgTabs = document.getElementById("pg-tabs");
 const priceTabs = document.getElementById("price-tabs");
-const areaTabs = document.getElementById("area-tabs");
 const emptyState = document.getElementById("empty-state");
+
+const tabs = document.getElementById("event-tabs");
 
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
@@ -152,10 +155,10 @@ function initHeader() {
 
 function showHeader() {
     tabs.classList.remove("hidden");
-    catTabs.classList.remove("hidden");
+    catFilters.classList.remove("hidden");
     addFiltersBtn.classList.remove("hidden");
     search.hidden = false;
-    switchViewBtn.classList.remove("hidden");
+    switchViewArea.classList.remove("hidden");
 }
 
 function applyFilter() {
@@ -324,8 +327,8 @@ function renderTiles() {
 
     tilesView.hidden = false;
     agendaView.hidden = true;
-    switchViewBtn.querySelector('[data-view="tiles"]').classList.add("active");
-    switchViewBtn.querySelector('[data-view="agenda"]').classList.remove("active");
+    switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
+    switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
     loading.style.display = "none";
 
     if (eventId) {
@@ -418,8 +421,8 @@ function renderCalendar(events=EVENTS) {
 
     tilesView.hidden = true;
     agendaView.hidden = false;
-    switchViewBtn.querySelector('[data-view="tiles"]').classList.remove("active");
-    switchViewBtn.querySelector('[data-view="agenda"]').classList.add("active");
+    switchViewArea.querySelector('[data-view="tiles"]').classList.remove("active");
+    switchViewArea.querySelector('[data-view="agenda"]').classList.add("active");
     loading.style.display = "none";
 }
 
@@ -650,11 +653,13 @@ export function toggleAdditionalFilter(filterBtn) {
 
     if (isOpen) {
         addFilters.classList.add("hidden");
+        catTabTitle.classList.add("hidden");
         filterBtn.querySelector(".text").innerText = "Plus de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
     } else {
         /* open this one */
         addFilters.classList.remove("hidden");
+        catTabTitle.classList.remove("hidden");
         filterBtn.querySelector(".text").innerText = "Moins de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
     }

@@ -1,39 +1,51 @@
-<section id="event-tabs" class="events-tabs hidden">
+<!-- <section id="event-tabs" class="events-tabs hidden">
     <button id="group-tab" class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
     <button id="group-tab" class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
     <button id="group-tab" class="tab" data-action="select-tab" data-target="later">Prochainement</button>
-</section>
+</section> -->
 
-<section id="category-tabs" class="events-tabs category hidden"></section>
+
+<section id="category-filter" class="more-filters hidden">
+    <section id="category-tabs" class="events-tabs category"></section>
+</section>
 
 <section id="more-filters" class="more-filters hidden">
+    <span class="tab-title">Quand ?</span>
+    <section id="event-tabs" class="events-tabs">
+        <button id="group-tab" class="tab" data-action="select-tab" data-target="today">Aujourd'hui</button>
+        <button id="group-tab" class="tab" data-action="select-tab" data-target="tomorrow">Demain</button>
+        <button id="group-tab" class="tab" data-action="select-tab" data-target="later">Prochainement</button>
+    </section>
+    <span class="tab-title">Où ?</span>
     <section id="area-tabs" class="events-tabs area"></section>
-    <section id="pg-tabs" class="events-tabs pg"></section>
+    <span class="tab-title">Quel prix ?</span>
     <section id="price-tabs" class="events-tabs price"></section>
+    <span class="tab-title">Quel public ?</span>
+    <section id="pg-tabs" class="events-tabs pg"></section>
+    <span class="tab-title">Recherche :</span>
+    <section id="event-search" class="autocomplete" hidden>
+        <input
+            type="text"
+            id="data-search"
+            class="data-search round"
+            placeholder="Rechercher par titre, lieu ou tag..."
+            autocomplete="off"
+            data-input-type="event-search"
+        />
+        <div class="suggestions round hidden"></div>
+    </section>
 </section>
 
-<div>
+<div id="view-switch" class="view-switch hidden">
+    <div></div>
     <button id="more-filter-btn" class="more-filter-btn hidden" data-action="filter-toggle" aria-expanded="false">
         <span class="text">Plus de filtres</span>
         <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
     </button>
-</div>
-
-<section id="event-search" class="autocomplete" hidden>
-    <input
-        type="text"
-        id="data-search"
-        class="data-search round"
-        placeholder="Rechercher par titre, lieu ou tag..."
-        autocomplete="off"
-        data-input-type="event-search"
-    />
-    <div class="suggestions round hidden"></div>
-</section>
-
-<div id="switch-view-btn" class="view-switch hidden">
-    <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
-    <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+    <div class="view-switch-btn">
+        <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
+        <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+    </div>
 </div>
 
 <div id="tiles-view" hidden></div>
