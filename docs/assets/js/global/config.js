@@ -68,39 +68,39 @@ APP_CONFIG = {
         0: {
             "label": "Concert",
             "icon": "music_note_2",
-            "color": "#3838AB",
-            "color_light": "#eef2ff"
+            "color": "#FF46A0",
+            "color_light": "#ffeef6"
         },
         1: {
             "label": "Spectacle vivant",
             "label_short": "Spectacle",
             "icon": "theater_comedy",
-            "color": "#15803d",
-            "color_light": "#f0fdf4"
+            "color": "#0064BF",
+            "color_light": "#eaf5ff"
         },
         2: {
             "label": "Projection",
             "icon": "video_camera_back",
-            "color": "#d97706",
-            "color_light": "#fffbeb"
+            "color": "#01A971",
+            "color_light": "#f6fffc"
         },
         3: {
-            "label": "Art visuel",
+            "label": "Exposition",
             "icon": "palette",
-            "color": "#ec4899",
-            "color_light": "#fdf2f8"
+            "color": "#D99AB4",
+            "color_light": "#fff0f6"
         },
         4: {
-            "label": "Litérature",
+            "label": "Rencontre",
             "icon": "auto_stories",
-            "color": "#02659A",
-            "color_light": "#D1E5FB"
+            "color": "#FF9F1F",
+            "color_light": "#fff8ef"
         },
         5: {
             "label": "Autre",
             "icon": "star",
-            "color": "#914a4a",
-            "color_light": "#fff0f0"
+            "color": "#DDDB2A",
+            "color_light": "#fffff1"
         }
     },
     PARENTAL_GUIDE: {
@@ -144,6 +144,20 @@ APP_CONFIG = {
         },
         2: {
             "label": "Ailleurs",
+            "icon": "explore_nearby"
+        }
+    },
+    WHEN: {
+        0: {
+            "label": "Aujourd'hui",
+            "icon": "explore_nearby"
+        },
+        1: {
+            "label": "Demain",
+            "icon": "explore_nearby"
+        },
+        2: {
+            "label": "Prochainement",
             "icon": "explore_nearby"
         }
     },

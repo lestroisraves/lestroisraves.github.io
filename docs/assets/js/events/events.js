@@ -12,19 +12,18 @@ const loading = document.getElementById("loading-screen");
 const tilesView = document.getElementById("tiles-view");
 const agendaView = document.getElementById("agenda-view");
 const calendarEl = document.getElementById("calendar");
-const search = document.getElementById("event-search");
-const catFilters = document.getElementById("category-filter");
-const addFiltersBtn = document.getElementById("more-filter-btn");
-const addFilters = document.getElementById("more-filters");
-const switchViewArea = document.getElementById("view-switch");
-const catTabs = document.getElementById("category-tabs");
-const whenTabs = document.getElementById("when-tabs");
-const areaTabs = document.getElementById("area-tabs");
-const pgTabs = document.getElementById("pg-tabs");
-const priceTabs = document.getElementById("price-tabs");
-const emptyState = document.getElementById("empty-state");
 
-const tabs = document.getElementById("event-tabs");
+const toolbar = document.getElementById("toolbar");
+const switchViewArea = document.getElementById("switch-view-btns");
+const moreFiltersArea = document.getElementById("more-filters");
+const resetFilterBtn = document.getElementById("reset-filter-btn");
+
+const catOptions = document.getElementById("category-options");
+const areaOptions = document.getElementById("area-options");
+const pgOptions = document.getElementById("pg-options");
+const priceOptions = document.getElementById("price-options");
+const whenOptions = document.getElementById("when-options");
+const emptyState = document.getElementById("empty-state");
 
 const today = startOfDay(new Date());
 const tomorrow = addDays(today, 1);
@@ -44,10 +43,18 @@ let touchEndX = 0;
 let user_profile = null;
 let EVENTS = [];
 let activeFilters = {
-    category: new Set(),
-    pg: new Set(),
-    price: new Set(),
-    area: new Set()
+    category: new Set(Object.keys(APP_CONFIG.CATEGORIES)),
+    pg: new Set(Object.keys(APP_CONFIG.PARENTAL_GUIDE)),
+    price: new Set(Object.keys(APP_CONFIG.PRICE_CHOICES)),
+    area: new Set(Object.keys(APP_CONFIG.AREAS)),
+    when: new Set(Object.keys(APP_CONFIG.WHEN)),
+};
+const filterOptions = {
+    category: APP_CONFIG.CATEGORIES,
+    pg: APP_CONFIG.PARENTAL_GUIDE,
+    price: APP_CONFIG.PRICE_CHOICES,
+    area: APP_CONFIG.AREAS,
+    when: APP_CONFIG.WHEN,
 };
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
@@ -128,104 +135,59 @@ function groupByDateWithCounts(events) {
 }
 
 function initHeader() {
-    /* init category tabs */
-    catTabs.innerHTML = ""
+    /* init category options */
+    catOptions.innerHTML = ""
     Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
-        catTabs.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
+        catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
     });
 
-    /* init pg tabs */
-    pgTabs.innerHTML = ""
+    /* init pg options */
+    pgOptions.innerHTML = ""
     Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        pgTabs.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
+        pgOptions.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
     });
 
-    /* init pg tabs */
-    priceTabs.innerHTML = ""
+    /* init pg options */
+    priceOptions.innerHTML = ""
     Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
-        priceTabs.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
+        priceOptions.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
     });
 
-     /* init pg tabs */
-    areaTabs.innerHTML = ""
+    /* init pg options */
+    areaOptions.innerHTML = ""
     Object.keys(APP_CONFIG.AREAS).forEach(key => {
-        areaTabs.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
+        areaOptions.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
+    });
+
+    /* init when options */
+    whenOptions.innerHTML = ""
+    Object.keys(APP_CONFIG.WHEN).forEach(key => {
+        whenOptions.innerHTML += renderOptionBtn("when", key, APP_CONFIG.WHEN[key], false); 
     });
 }
 
 function showHeader() {
-    tabs.classList.remove("hidden");
-    catFilters.classList.remove("hidden");
-    addFiltersBtn.classList.remove("hidden");
-    search.hidden = false;
-    switchViewArea.classList.remove("hidden");
+    toolbar.classList.remove("hidden");
 }
 
-function applyFilter() {
-    const hasAnyFilter =
-    activeFilters.category.size > 0 ||
-    activeFilters.pg.size > 0 || 
-    activeFilters.price.size > 0 ||
-    activeFilters.area.size > 0;
-
-    if (!tilesView.hidden) {
-        /* apply filters on tiles */
-        document.querySelectorAll(`.event-tile`).forEach(tile => {
-            if (!hasAnyFilter) {
-                tile.classList.remove("hidden");
-                return;
-            }
-
-            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area));
-        });
-        updateEmptyState();
-
-    } else  {
-        /* apply filters on agenda */
-        var filteredEvents;
-        if (!hasAnyFilter) {
-            filteredEvents = EVENTS;
-        } else {
-            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area)));
-        }
-        renderCalendar(filteredEvents);
-    }
-
-}
-
-function updateEmptyState() {
-    document.querySelectorAll(".section-tab.no-empty.selected").forEach( section => {
-        const sectionHasVisibleTile = [...section.querySelectorAll(".event-tile")]
-            .some(tile => !tile.classList.contains("hidden"))
-        section.hidden = !sectionHasVisibleTile;
-    });
-
-    const hasAnyVisibleTile = [...document.querySelectorAll(".section-tab.no-empty")]
-        .filter(section => !section.hidden)
-        .some(section => 
-            [...section.querySelectorAll(".event-tile")]
-                .some(tile => !tile.classList.contains("hidden"))
-        );
-    if (hasAnyVisibleTile) {
-        emptyState.classList.add("hidden");
-    } else {
-        emptyState.classList.remove("hidden");
-    }
-}
-
-function renderOptionBtn(type, key, config) {
+function renderOptionBtn(type, key, config, withicon=true) {
     const label = config["label_short"] ? config["label_short"] : config["label"];
-    const icon = config["icon"];
-    return `<button id="${type}-${key}-option" class="option-btn ${type} ${type}-${key}" data-action="select-option" data-filter-type="${type}" data-filter-key="${key}">
-                <span class="material-symbols-outlined">${icon}</span>
+    const iconHtml = withicon
+        ? `<span class="material-symbols-outlined">${config["icon"]}</span>`
+        : "";
+    const action = (key == "when")
+        ? "select-when-option"
+        : "select-option";
+    return `<button id="${type}-${key}-option" class="option-btn ${type} ${type}-${key} active" data-action="${action}" data-filter-type="${type}" data-filter-key="${key}">
+                ${iconHtml}
                 <span class="text">${label}</span>
             </button>`
 }
 
-function renderSection(sectionId, sectionTitle, subtitle, events) {
+function renderSection(sectionKey, sectionTitle, subtitle, events) {
     if (events.length === 0) {
         return `
-        <div class="section-tab empty selected" data-id="${sectionId}">
+        <div class="section-tab empty selected" data-key="${sectionKey}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -237,7 +199,7 @@ function renderSection(sectionId, sectionTitle, subtitle, events) {
     }
 
     return `
-        <div class="section-tab section-${sectionId} no-empty selected" data-id="${sectionId}">
+        <div class="section-tab section-${sectionKey} no-empty selected" data-key="${sectionKey}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
                 <br>
@@ -321,9 +283,9 @@ function renderTiles() {
     grouped.later = sortByDate(grouped.later);
 
     tilesView.innerHTML =
-        renderSection("today", "Aujourd'hui", formatEventDate(today), grouped.today) +
-        renderSection("tomorrow", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("later", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
+        renderSection("0", "Aujourd'hui", formatEventDate(today), grouped.today) +
+        renderSection("1", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
+        renderSection("2", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
     tilesView.hidden = false;
     agendaView.hidden = true;
@@ -339,6 +301,84 @@ function renderTiles() {
         el.focus();
         el.click();
         eventId = null;
+    }
+}
+
+function applyFilter() {
+    const hasAnyFilter =
+    activeFilters.category.size > 0 ||
+    activeFilters.pg.size > 0 || 
+    activeFilters.price.size > 0 ||
+    activeFilters.area.size > 0;
+
+    if (!tilesView.hidden) {
+
+        /* apply filters on tiles */
+        document.querySelectorAll(`.event-tile`).forEach(tile => {
+            if (!hasAnyFilter) {
+                tile.classList.remove("hidden");
+                return;
+            }
+
+            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area));
+        });
+
+
+        console.log(activeFilters.when)
+        /* apply when filter only on tiles */
+        if (activeFilters.when.size > 0) {
+            document.querySelectorAll(".section-tab.no-empty")
+                .forEach(section => {
+                    section.hidden = true;
+                    section.classList.remove("selected");
+                });
+
+            activeFilters.when.forEach(key => {
+                document.querySelectorAll(`.section-${key}.no-empty`)
+                    .forEach(section => {
+                        section.hidden = false;
+                        section.classList.add("selected");
+                    });
+            })
+        } else {
+            document.querySelectorAll(".section-tab.no-empty")
+                .forEach(section => {
+                    section.hidden = false;
+                    section.classList.add("selected");
+                });
+        }
+
+        updateEmptyState();
+
+    } else  {
+        /* apply filters on agenda */
+        var filteredEvents;
+        if (!hasAnyFilter) {
+            filteredEvents = EVENTS;
+        } else {
+            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area)));
+        }
+        renderCalendar(filteredEvents);
+    }
+}
+
+function updateEmptyState() {
+    document.querySelectorAll(".section-tab.no-empty.selected").forEach( section => {
+        const sectionHasVisibleTile = [...section.querySelectorAll(".event-tile")]
+            .some(tile => !tile.classList.contains("hidden"))
+        section.hidden = !sectionHasVisibleTile;
+    });
+
+    const hasAnyVisibleTile = [...document.querySelectorAll(".section-tab.no-empty")]
+        .filter(section => !section.hidden)
+        .some(section => 
+            [...section.querySelectorAll(".event-tile")]
+                .some(tile => !tile.classList.contains("hidden"))
+        );
+    if (hasAnyVisibleTile) {
+        emptyState.classList.add("hidden");
+    } else {
+        emptyState.classList.remove("hidden");
     }
 }
 
@@ -506,11 +546,11 @@ function copyToClipboard(event_desc, event_url) {
 export function switchView(view) {
     if (view === "tiles") {
         tilesView.hidden = false;
-        document.querySelectorAll("#group-tab").forEach(t => t.disabled = false);
+        document.querySelectorAll(`[data-filter-type="when"]`).forEach(btn => btn.disabled = false);
         renderTiles();
     } else {
         tilesView.hidden = true;
-        document.querySelectorAll("#group-tab").forEach(t => t.disabled = true);
+        document.querySelectorAll(`[data-filter-type="when"]`).forEach(btn => btn.disabled = true);
         // for calendar view, applyFilter function will call renderCalendar
     }
     applyFilter();
@@ -597,11 +637,11 @@ export function searchInput(input) {
     suggestions.classList.remove("hidden");
 }
 
-export function selectTab(tab) {
+export function selectWhenOption(tab) {
     const wasActive = tab.classList.contains("active");
 
     // reset everything
-    document.querySelectorAll("#group-tab")
+    document.querySelectorAll("#when-tab")
         .forEach(t => t.classList.remove("active"));
 
     if (wasActive) {
@@ -632,16 +672,54 @@ export function selectTab(tab) {
     updateEmptyState();
 }
 
+export function resetFilter() {
+    Object.keys(activeFilters).forEach(type => {
+        activeFilters[type] = new Set(
+            Object.keys(filterOptions[type])
+        );
+    });
+
+    document
+        .querySelectorAll("[data-filter-type]")
+        .forEach(btn => btn.classList.add("active"));
+
+    resetFilterBtn.classList.add("hidden");
+
+    applyFilter();
+}
+
 export function selectFilterOption(optionBtn) {
     const type = optionBtn.dataset.filterType;
     const key = optionBtn.dataset.filterKey;
 
-    if (activeFilters[type].has(key)) {
-        activeFilters[type].delete(key);
-        optionBtn.classList.remove("active");
-    } else {
+    // First interaction on this filter group
+    if (Object.keys(filterOptions[type]).length == activeFilters[type].size) {
+        // First interaction on this filter group, deactivate all filters
+        activeFilters[type].clear();
+        document
+            .querySelectorAll(`[data-filter-type="${type}"]`)
+            .forEach(btn => btn.classList.remove("active"));
+
+        // then add selected one
         activeFilters[type].add(key);
         optionBtn.classList.add("active");
+
+    } else {
+        // Normal toggle behavior
+        if (activeFilters[type].has(key)) {
+            activeFilters[type].delete(key);
+            optionBtn.classList.remove("active");
+        } else {
+            activeFilters[type].add(key);
+            optionBtn.classList.add("active");
+        }
+    }
+
+    // handle reset filter btn
+    if (Object.keys(activeFilters).some(type => activeFilters[type].size !== Object.keys(filterOptions[type]).length)) {
+        resetFilterBtn.classList.remove("hidden");
+    } else {
+        resetFilterBtn.classList.add("hidden");
     }
 
     applyFilter();
@@ -652,14 +730,12 @@ export function toggleAdditionalFilter(filterBtn) {
     filterBtn.setAttribute("aria-expanded", String(!isOpen));
 
     if (isOpen) {
-        addFilters.classList.add("hidden");
-        catTabTitle.classList.add("hidden");
+        moreFiltersArea.classList.add("hidden");
         filterBtn.querySelector(".text").innerText = "Plus de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_down";
     } else {
         /* open this one */
-        addFilters.classList.remove("hidden");
-        catTabTitle.classList.remove("hidden");
+        moreFiltersArea.classList.remove("hidden");
         filterBtn.querySelector(".text").innerText = "Moins de filtres";
         filterBtn.querySelector(".chevron").innerText = "keyboard_arrow_up";
     }
