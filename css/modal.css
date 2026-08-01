@@ -228,7 +228,7 @@
 }
 
 .details-textarea::placeholder {
-    color: var(--secondary-gray4);
+    color: var(--primary-gray);
 }
 
 .details-textarea:focus {

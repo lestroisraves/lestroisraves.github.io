@@ -5,8 +5,14 @@
 :root,
 [data-md-color-scheme="default"]
 {
-    --primary-white:                    #ffffff;
-    --secondary-gray4:                  #aaaaaa;
+    --primary-fg:                       #E0E0E6;
+    --primary-background:               #F5F5F5;
+    --primary-text:                     #0D2C87;
+    --primary-subtext:                  #818FBA;
+    --primary-textarea:                 #837e7e;
+
+    --primary-gray:                     #aaaaaa;
+
     --primary-success:                  #0b6b3b;
     --primary-success--lighter:         #f3fbf5;
     --primary-success--text:            #1b5e20;
@@ -23,37 +29,36 @@
     --primary-basic--lighter:           #DFE3EB;
     --primary-basic--text:              #48536B;
     --primary-tag-color:                #085066;
-    --primary-textarea:                 #837e7e;
-
-    --primary-pg:                       #9b2076;
-    --primary-price:                    #20619e;
-    --primary-area:                     #a78519;
+    
+    /* --primary-pg:                       #9b2076;
+    --primary-price:                    #20619e; */
+    --primary-option:                   #a78519;
+    --primary-option--light:            #fcf5e0;
 
     /* currently used colors */
-    --primary-fg:                       var(--pico-primary);
     --md-primary-color:                 var(--primary-fg);
+
+    /* text color */
+    --md-default-fg-color:              var(--primary-text);
+    --md-default-fg-color--light:       var(--primary-subtext);
+
     /* redefine scrollbar colors */
     --md-accent-fg-color:               var(--primary-fg);
-    /* --md-typeset-color:                  var(--pico-color); */
 
     /* redefine header colors */
     --md-primary-fg-color:              var(--primary-fg);
-    --md-primary-bg-color:              var(--primary-white);
+    --md-primary-bg-color:              var(--primary-text);
 
     /* redefine footer colors */
-    /* "Copyright..." */
-    --md-footer-fg-color--light:        var(--primary-white);
-    /* "Made with" */
-    --md-footer-fg-color--lighter:      var(--primary-white);
-    /* hover on "Made with" */
-    --md-footer-fg-color:               var(--pico-primary-hover);
+    --md-footer-fg-color--light:        var(--primary-text); /* "Copyright..." */
+    --md-footer-fg-color--lighter:      var(--primary-text); /* "Made with" */
 }
+
 
 .md-tabs {
     background: rgba(0, 0, 0, 0.25);
     color: var(--md-primary-bg-color);
 }
-
 
 .md-sidebar--primary {
     background: var(--primary-fg);
@@ -63,9 +68,18 @@
     background: var(--primary-fg);
 }
 
+.md-nav__link {
+    color: var(--primary-subtext);
+}
+
+.md-nav__link:hover,
+.md-nav__link--active {
+    color: var(--primary-text) !important;
+}
 
 .md-header {
     background: var(--primary-fg);
+    box-shadow: none !important;
 }
 
 .md-logo img {
@@ -81,12 +95,13 @@
 .subtitle-ticker {
     width: 100%;
     overflow: hidden;
-    background: var(--md-primary-fg-color);
-    color: white;
+    background: var(--primary-fg);
+    color: var(--primary-text);
     display: flex;
     align-items: center;
     padding-top: 0;
     padding-bottom: 0.2rem;
+    margin-bottom: 0;
 }
 
 .subtitle-ticker__track {
@@ -99,6 +114,7 @@
 .subtitle-ticker__track span {
     padding-right: 4rem;
     white-space: nowrap;
+    color: var(--primary-subtext)
 }
 
 @keyframes ticker {
@@ -111,19 +127,14 @@
     }
 }
 
-.md-main__inner {
+.md-container,
+.md-main,
+.md-main__inner,
+.md-content,
+.md-content__inner,
+.md-typeset {
+    padding: 0;
     margin: 0;
-}
-
-
-/* color footer */
-.md-footer-meta__inner {
-    background: var(--primary-fg);
-}
-
-/* Hide h1 */
-.md-content h1:first-of-type {
-    display: none;
 }
 
 .md-main,
@@ -132,22 +143,40 @@
     transition: opacity 0.2s ease;
 }
 
+.md-main__inner {
+    gap: 0;
+}
+
 html.ready .md-main,
 html.ready .md-content {
     opacity: 1;
     transition: opacity .2s ease;
 }
 
-/* html.ready .md-content {
-    opacity: 1;
-    transition: opacity .2s ease;
-}  */
+.md-typeset {
+    margin: 0;
+    padding: 0;
+}
+
+.md-typeset > h1:first-child {
+    display: none;
+}
+
+.md-typeset > *:first-child {
+    margin-top: 0 !important;
+}
+
+.md-typeset::before {
+    display: none;
+}
+
 
 html:not(.ready) .main-content {
     visibility: hidden;
 }
 
 .md-grid {
+    margin-top: 0rem;
     max-width: initial;
 }
 
@@ -158,13 +187,13 @@ hr {
 
 table, th, td {
     /* define table borders */
-    border: 1px solid var(--secondary-gray4);
+    border: 1px solid var(--primary-gray);
     border-collapse: collapse;
 }
 
 th {
     /* define table header style */
-    background-color: var(--secondary-gray4);
+    background-color: var(--primary-gray);
     color: #000000;
     border: 1px solid #000;
     border-top: 0;
@@ -173,15 +202,18 @@ th {
 
 table tr:first-child th {
     /* define header border left */
-    border-left: 1px solid var(--secondary-gray4);
+    border-left: 1px solid var(--primary-gray);
 }
 
 table tr th:last-child {
     /* define header border right */
-    border-right: 1px solid var(--secondary-gray4);
+    border-right: 1px solid var(--primary-gray);
 }
 
 /* footer */
+.md-footer-meta__inner {
+    background: var(--primary-fg);
+}
 
 .footer-links {
     display: flex;
@@ -201,6 +233,7 @@ table tr th:last-child {
     opacity: 0.6;
 }
 
+/* Typeset */
 .md-typeset h1, h2, h3, h4, h5, h6 {
     font-weight: bold !important;
     color: var(--md-default--fg-color) !important;

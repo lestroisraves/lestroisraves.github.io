@@ -5,28 +5,27 @@ import {
 
 import { 
     openEvent, searchInput, 
-    selectTab, selectFilterOption, toggleAdditionalFilter,
+    selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
     handleSwipe, shareEvent
 } from "./events.js"
 
 const container = document.getElementById("events");
 const header = document.getElementById("event-list-header");
-const tabs = document.getElementById("event-tabs");
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
     switch (el.dataset.action) {
-        case "select-tab":
-            selectTab(el);
-            break;
-
         case "select-option":
             selectFilterOption(el);
             break;
 
         case "filter-toggle":
             toggleAdditionalFilter(el);
+            break;
+
+        case "reset-filter":
+            resetFilter();
             break;
 
         case "switch-view":

@@ -61,7 +61,7 @@
 .calendar-header .day-letter {
     font-weight: 400;
     font-size: 0.7rem;
-    color: var(--secondary-gray4);
+    color: var(--primary-gray);
 }
 
 .calendar-day {
