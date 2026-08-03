@@ -218,6 +218,7 @@ table tr th:last-child {
 
 /* footer */
 .md-footer-meta__inner {
+    display: none;
     background: var(--primary-fg);
 }
 
