@@ -19,7 +19,6 @@ export function renderSection(sectionKey, sectionTitle, subtitle, events) {
         <div class="section-tab empty selected" data-key="${sectionKey}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
-                <span class="section-subtitle">${subtitle}</span>
             </div>
             <div class="event-list"></div>
         </div>
@@ -30,7 +29,6 @@ export function renderSection(sectionKey, sectionTitle, subtitle, events) {
         <div class="section-tab section-${sectionKey} no-empty selected" data-key="${sectionKey}">
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
-                <span class="section-subtitle">${subtitle}</span>
             </div>
             <div class="event-list">
                 ${events.map(renderEventTile).join("")}

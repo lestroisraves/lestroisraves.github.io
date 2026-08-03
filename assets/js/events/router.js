@@ -11,7 +11,6 @@ import {
 } from "./events.js"
 
 const container = document.getElementById("events");
-const header = document.getElementById("event-list-header");
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
