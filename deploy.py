@@ -6,6 +6,7 @@ import shutil
 import re
 import yaml
 import argparse
+import random
 
 __TESTING__ = os.getenv("RCS_TESTING", "FALSE")  # for testing development only
 PROJECT_ROOT_FOLDER = os.path.expandvars("$PROJECT_ROOT_FOLDER")
@@ -92,13 +93,16 @@ def build():
 
 def patch_js_version(hash: str):
     print("[[[[[[ path .js import with hash ]]]]]]")
+
+    rand_h = random.getrandbits(32)
+    rand_h = f"{rand_h:08x}"
     
-    pattern = re.compile(r"\.js\?v=dev")
-    replacement = f".js?v={hash}"
+    pattern = re.compile(r"\?v=dev")
+    replacement = f"?v={rand_h}.{hash}"
 
     for root, _, files in os.walk(os.path.join(PROJECT_ROOT_FOLDER, "site")):
         for filename in files:
-            if not filename.lower().endswith((".md", ".js", ".yaml", "html")):
+            if not filename.lower().endswith((".js", ".yaml", ".html")):
                 continue
 
             path = os.path.join(root, filename)

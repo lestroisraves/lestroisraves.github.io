@@ -72,8 +72,7 @@ APP_CONFIG = {
             "color_light": "#ffeef6"
         },
         1: {
-            "label": "Spectacle vivant",
-            "label_short": "Spectacle",
+            "label": "Spectacle",
             "icon": "theater_comedy",
             "color": "#0064BF",
             "color_light": "#eaf5ff"
@@ -110,12 +109,12 @@ APP_CONFIG = {
         },
         1: {
             "label": "Pour les enfants",
-            "label_short": "Enfants",
+            "label": "Enfants",
             "icon": "child_hat"
         },
         2: {
             "label": "Déconseillé aux enfants",
-            "label_short": "Adultes",
+            "label": "Adultes",
             "icon": "18_up_rating"
         }
     },
@@ -149,16 +148,14 @@ APP_CONFIG = {
     },
     WHEN: {
         0: {
-            "label": "Aujourd'hui",
-            "icon": "explore_nearby"
+            "label": "Aujourd'hui"
         },
+        // 1: {
+        //     "label": "Demain",
+        //     "icon": "explore_nearby"
+        // },
         1: {
-            "label": "Demain",
-            "icon": "explore_nearby"
-        },
-        2: {
-            "label": "Prochainement",
-            "icon": "explore_nearby"
+            "label": "Prochainement"
         }
     },
     API_TIMEOUT_MS: 5000

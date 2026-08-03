@@ -52,22 +52,22 @@ function formatEventDate(dateStr) {
     return `<strong>${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</strong>`;
 }
 
+function formatEventTime(timeStr) {
+    // assume "18:30:45" => "18:30"
+    const [hour, min] = timeStr.slice(0, 5).split(":");
+    if (min == "00") {
+        return `${hour}h`;
+    } else {
+        return `${hour}h${min}`;
+    }
+}
+
 function formatEventDateTime(dateStr, timeStr) {
     var formattedDate = formatEventDate(dateStr);
-
-    // Build final string
     if (timeStr) {
-        // assume "18:30:45" => "18:30"
-        const [hour, min] = timeStr.slice(0, 5).split(":");
-        if (min == "00") {
-            formattedDate += ` - ${hour}h`;
-        } else {
-            formattedDate += ` - ${hour}h${min}`;
-        }
-        
+        formattedDate += ` - ${formatEventTime(timeStr)}`
     }
-
-  return formattedDate;
+    return formattedDate;
 }
 
 function startOfDay(date) {
@@ -200,7 +200,7 @@ function renderEventData(event, details = false) {
     const eventData = event;
 
     eventData.categoryHtml = `
-        <div class="event-meta category cat-${eventData.category}" style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
+        <div class="event-category category cat-${eventData.category}" style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
             ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
         </div>
     `
@@ -223,7 +223,14 @@ function renderEventData(event, details = false) {
             eventData.priceLabel = eventData.max_price + " €";
         }
     }
-    
+
+    eventData.timeHtml = eventData.event_start_time
+        ? `<span class="event-time event-icon-text">
+             <span class="material-symbols-outlined">schedule</span>
+             <span class="text">${formatEventTime(eventData.event_start_time)}</span>
+           </span>`
+        : "";
+
     switch (eventData.pg)
     {
         case 0:

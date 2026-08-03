@@ -89,7 +89,7 @@
 .badge.pending {
     display: inline-flex;
     align-items: center;
-    color: #d97706;
+    color: var(--primary-pending-event);
     background-color: #ffeedb;
     /* gap: 0.1rem; */
     min-width: 0;
