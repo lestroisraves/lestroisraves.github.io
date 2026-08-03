@@ -62,7 +62,6 @@ export function renderEventTile(event) {
             </div>
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
-                ${eventData.parentalGuideHtml}
             </div>
             ${eventData.tagsHtml}
         </div>
