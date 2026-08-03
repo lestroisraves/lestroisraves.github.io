@@ -2,6 +2,10 @@ console.log("executing:", "events.js");
 
 import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=dev";
 
+import { renderOptionBtn, renderSection, renderEventTile,
+         renderDots, renderEventSuggestion
+} from "./renderevents.js?v=dev";
+
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
 const params = new URLSearchParams(hash);
@@ -170,110 +174,6 @@ function showHeader() {
     toolbar.classList.remove("hidden");
 }
 
-function renderOptionBtn(type, key, config, withicon=true) {
-    const label = config["label_short"] ? config["label_short"] : config["label"];
-    const iconHtml = withicon
-        ? `<span class="material-symbols-outlined">${config["icon"]}</span>`
-        : "";
-    const action = (key == "when")
-        ? "select-when-option"
-        : "select-option";
-    return `<button id="${type}-${key}-option" class="option-btn ${type} ${type}-${key} active" data-action="${action}" data-filter-type="${type}" data-filter-key="${key}">
-                ${iconHtml}
-                <span class="text">${label}</span>
-            </button>`
-}
-
-function renderSection(sectionKey, sectionTitle, subtitle, events) {
-    if (events.length === 0) {
-        return `
-        <div class="section-tab empty selected" data-key="${sectionKey}">
-            <div class="section-header">
-                <span class="section-title">${sectionTitle}</span>
-                <br>
-                <span class="section-subtitle">${subtitle}</span>
-            </div>
-            <div class="event-list"></div>
-        </div>
-        `;
-    }
-
-    return `
-        <div class="section-tab section-${sectionKey} no-empty selected" data-key="${sectionKey}">
-            <div class="section-header">
-                <span class="section-title">${sectionTitle}</span>
-                <br>
-                <span class="section-subtitle">${subtitle}</span>
-            </div>
-            <div class="event-list">
-                ${events.map(renderEventTile).join("")}
-            </div>
-        </div>
-    `;
-}
-
-function renderEventTile(event) {
-    const eventData = renderEventData(event);
-
-    return `
-        <div class="event-tile" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}"
-                data-action="show-event" role="link" tabindex="0"
-                data-event-id="${eventData.id}"
-                data-category="${eventData.category}"
-                data-pg="${eventData.pg}"
-                data-price="${eventData.price}"
-                data-area="${eventData.area}"
-                data-date="${eventData.event_date}">
-            <div class="event-content" >
-                <div class="event-title">${event.title}</div>
-                ${eventData.categoryHtml}
-                <div class="event-meta place">
-                    ${eventData.locationHtml}
-                    ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
-                </div>
-                <div class="event-meta">
-                    ${renderMaterialIconText("sell", eventData.priceLabel)}
-                    ${eventData.parentalGuideHtml}
-                </div>
-                ${eventData.tagsHtml}
-            </div>
-        </div>
-    `;
-}
-
-function renderDots(dayMap) {
-    if (!dayMap) return "";
-
-    return Object.entries(dayMap).map(([category, count]) => {
-        const color = APP_CONFIG.CATEGORIES[category]["color"] || "#999";
-
-        const label = count > 1 ? count : "";
-
-        return `
-            <span
-                class="calendar-dot"
-                style="background:${color}"
-            >
-                ${label}
-            </span>
-        `;
-    }).join("");
-}
-
-function renderEventSuggestion(event) {
-    const eventData = renderEventData(event);
-    const html = `
-        <div class="event-suggestion-title non-wrap">${event.title}</div>
-        <div class="event-suggestion-meta non-wrap">
-            <div style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
-            .
-            <div>${formatEventDateTime(eventData.event_date)}</div>
-            .
-            <div class>${eventData.location_name}</div>
-        </div>
-    `
-    return html;
-}
 
 function renderTiles() {
     const grouped = groupEvents(EVENTS);
@@ -303,6 +203,7 @@ function renderTiles() {
         eventId = null;
     }
 }
+
 
 function applyFilter() {
     const hasAnyFilter =

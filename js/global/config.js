@@ -72,8 +72,7 @@ APP_CONFIG = {
             "color_light": "#ffeef6"
         },
         1: {
-            "label": "Spectacle vivant",
-            "label_short": "Spectacle",
+            "label": "Spectacle",
             "icon": "theater_comedy",
             "color": "#0064BF",
             "color_light": "#eaf5ff"
@@ -110,12 +109,12 @@ APP_CONFIG = {
         },
         1: {
             "label": "Pour les enfants",
-            "label_short": "Enfants",
+            "label": "Enfants",
             "icon": "child_hat"
         },
         2: {
             "label": "Déconseillé aux enfants",
-            "label_short": "Adultes",
+            "label": "Adultes",
             "icon": "18_up_rating"
         }
     },

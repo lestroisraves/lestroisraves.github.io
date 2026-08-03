@@ -12,6 +12,11 @@
     --primary-textarea:                 #837e7e;
 
     --primary-gray:                     #aaaaaa;
+    --primary-dark:                     #242424;
+
+    --primary-pending-event:            #d97706;
+
+    --primary-tag-color:                #085066;
 
     --primary-success:                  #0b6b3b;
     --primary-success--lighter:         #f3fbf5;
@@ -28,12 +33,14 @@
     --primary-basic:                    #48536B;
     --primary-basic--lighter:           #DFE3EB;
     --primary-basic--text:              #48536B;
-    --primary-tag-color:                #085066;
+    
     
     /* --primary-pg:                       #9b2076;
     --primary-price:                    #20619e; */
-    --primary-option:                   #a78519;
-    --primary-option--light:            #fcf5e0;
+    /* --primary-option:                   #a78519;
+    --primary-option--light:            #fcf5e0; */
+    --primary-option:                   #0D2C87;
+    --primary-option--light:            #F3ECE9;
 
     /* currently used colors */
     --md-primary-color:                 var(--primary-fg);
