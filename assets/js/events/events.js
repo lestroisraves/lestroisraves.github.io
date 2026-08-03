@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=199f4a53.e4211ed";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=26bbbb8f.e4211ed";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=199f4a53.e4211ed";
+} from "./renderevents.js?v=26bbbb8f.e4211ed";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -217,9 +217,15 @@ function renderTiles() {
 function applyFilter() {
     const hasAnyFilter =
     activeFilters.category.size > 0 ||
-    activeFilters.pg.size > 0 || 
-    activeFilters.price.size > 0 ||
+    // activeFilters.pg.size > 0 || 
+    // activeFilters.price.size > 0 ||
     activeFilters.area.size > 0;
+
+    const hideAll = 
+    activeFilters.category.size == 0 ||
+    // activeFilters.pg.size == 0 || 
+    // activeFilters.price.size == 0 ||
+    activeFilters.area.size == 0;
 
     if (!tilesView.hidden) {
 
@@ -228,13 +234,14 @@ function applyFilter() {
             if (!hasAnyFilter) {
                 tile.classList.remove("hidden");
                 return;
+            } else if (hideAll) {
+                tile.classList.add("hidden");
+                return;
             }
 
             tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area));
         });
 
-
-        console.log(activeFilters.when)
         /* apply when filter only on tiles */
         if (activeFilters.when.size > 0) {
             document.querySelectorAll(".section-tab.no-empty")

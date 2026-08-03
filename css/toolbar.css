@@ -46,12 +46,17 @@
 
 /* filters */
 .filter-title {
-    margin-top: 0.1rem;
+    /* margin-top: 0.1rem; */
     /* margin: 0; */
     padding-left: 0.4rem;
     font-weight: 500;
     font-size: 0.7rem;
     color: var(--primary-subtext);
+}
+
+.md-typeset hr.filter-line {
+    padding: 0;
+    margin: 0.2rem 0 0.2rem 0;
 }
 
 .fine-filters {
@@ -93,9 +98,13 @@
     flex-direction: row;
     align-items: center;
     /* margin-top: 0.2rem; */
-    /* padding-left: 0.4rem; */
+    padding-left: 0.4rem;
     font-size: 0.65rem;
     color: var(--primary-subtext);
+}
+
+.filter-switch input {
+    font-size: 0.7rem;
 }
 
 
@@ -152,7 +161,7 @@
     display: flex;
     flex-direction: column;
     background-color: var(--primary-fg);
-    /* gap: 0.2rem; */
+    gap: 0.2rem;
 }
 
 .more-filters.hidden {
@@ -161,7 +170,7 @@
 
 /* SEARCH */
 .autocomplete {
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
     width: 100%;
 }
 
