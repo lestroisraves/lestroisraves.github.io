@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm, sendOfficialRequest,
     setConfirmBtnState, setSendBtnState
-} from "../global/modal?v=7c40aef1.e4211ed";
+} from "../global/modal.js?v=a96ba14e.e4211ed";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
     searchInput, shareEvent, sharePendingEvent, shareProfile
-} from "./account?v=7c40aef1.e4211ed";
+} from "./account.js?v=a96ba14e.e4211ed";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
