@@ -132,7 +132,8 @@
 .filter-title {
     margin-top: 0.4rem;
     padding-left: 0.4rem;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 0.75rem;
     color: var(--primary-subtext);
 }
 
@@ -216,7 +217,7 @@
     width: 100%;
 
     margin-top: 0;
-    padding: 0.4rem 0.2rem;
+    padding: 0.33rem 0.2rem;
     gap: 0.1rem;
 
     border-radius: 999px;
@@ -238,7 +239,7 @@
 }
 
 .option-btn .text {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 } 
 
 .option-btn:hover {
