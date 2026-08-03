@@ -1,65 +1,70 @@
-<div id="toolbar" class="toolbar hidden">
-    <section class="more-filters">
-        <section id="category-options" class="filter-options category"></section>
-    </section>
 
-    <section id="more-filters" class="more-filters hidden">
-        <span class="filter-title">Où ?</span>
-        <section id="area-options" class="filter-options area"></section>
-        <span class="filter-title">Quel prix ?</span>
-        <section id="price-options" class="filter-options price"></section>
-        <span class="filter-title">Quel public ?</span>
-        <section id="pg-options" class="filter-options pg"></section>
-        <span class="filter-title">Quand ?</span>
-        <section id="when-options" class="filter-options when"></section>
-        <span class="filter-title">Recherche :</span>
-        <section id="event-search" class="autocomplete">
-            <input
-                type="text"
-                id="data-search"
-                class="data-search round"
-                placeholder="Rechercher par titre, lieu ou tag..."
-                autocomplete="off"
-                data-input-type="event-search"
-            />
-            <div class="suggestions round hidden"></div>
+<div class="events-page">
+    <div id="toolbar" class="toolbar hidden">
+        <section class="more-filters">
+            <section id="category-options" class="filter-options category"></section>
         </section>
-    </section>
 
-    <div class="toolbar-btn">
-        <div class="filter-btns">
-            <button id="more-filter-btn" class="more-filter-btn" data-action="filter-toggle" aria-expanded="false">
-                <span class="text">Plus de filtres</span>
-                <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
-            </button>
-            <button id="reset-filter-btn" class="reset-filter-btn hidden" data-action="reset-filter" aria-expanded="false">
-                <span class="text">Reset</span>
-                <span class="material-symbols-outlined ico">filter_alt_off</span>
-            </button>
-        </div>
-        <div id="switch-view-btns" class="switch-view-btns">
-            <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
-            <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+        <section id="more-filters" class="more-filters hidden">
+            <span class="filter-title">Où ?</span>
+            <section id="area-options" class="filter-options area"></section>
+            <span class="filter-title">Quel prix ?</span>
+            <section id="price-options" class="filter-options price"></section>
+            <span class="filter-title">Quel public ?</span>
+            <section id="pg-options" class="filter-options pg"></section>
+            <span class="filter-title">Quand ?</span>
+            <section id="when-options" class="filter-options when"></section>
+            <span class="filter-title">Recherche :</span>
+            <section id="event-search" class="autocomplete">
+                <input
+                    type="text"
+                    id="data-search"
+                    class="data-search round"
+                    placeholder="Rechercher par titre, lieu ou tag..."
+                    autocomplete="off"
+                    data-input-type="event-search"
+                />
+                <div class="suggestions round hidden"></div>
+            </section>
+        </section>
+
+        <div class="toolbar-btn">
+            <div class="filter-btns">
+                <button id="more-filter-btn" class="more-filter-btn" data-action="filter-toggle" aria-expanded="false">
+                    <span class="text">Plus de filtres</span>
+                    <span class="material-symbols-outlined chevron">keyboard_arrow_down</span>
+                </button>
+                <button id="reset-filter-btn" class="reset-filter-btn hidden" data-action="reset-filter" aria-expanded="false">
+                    <span class="text">Reset</span>
+                    <span class="material-symbols-outlined ico">filter_alt_off</span>
+                </button>
+            </div>
+            <div id="switch-view-btns" class="switch-view-btns">
+                <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
+                <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="tiles-view" hidden></div>
+    <div class="events-main">
+        <div id="tiles-view" hidden></div>
 
-<div id="agenda-view" hidden>
-    <div class="calendar-header-bar">
-        <span id="today-btn" class="material-symbols-outlined" data-action="nav-today">restart_alt</span>
-        <div class="calendar-header-nav">
-            <button id="prev-month" data-action="nav-prev-month"><</button>
-            <span id="calendar-title"></span>
-            <button id="next-month" data-action="nav-next-month">></button>
+        <div id="agenda-view" hidden>
+            <div class="calendar-header-bar">
+                <span id="today-btn" class="material-symbols-outlined" data-action="nav-today">restart_alt</span>
+                <div class="calendar-header-nav">
+                    <button id="prev-month" data-action="nav-prev-month"><</button>
+                    <span id="calendar-title"></span>
+                    <button id="next-month" data-action="nav-next-month">></button>
+                </div>
+                <span></span>
+            </div>
+            <div id="calendar" class="calendar"></div>
         </div>
-        <span></span>
-    </div>
-    <div id="calendar" class="calendar"></div>
-</div>
 
-<div id="empty-state" class="empty-state hidden">
-    <span class="material-symbols-outlined">visibility_off</span>
-    <span class="text">Aucun évènement à afficher</span>
+        <div id="empty-state" class="empty-state hidden">
+            <span class="material-symbols-outlined">visibility_off</span>
+            <span class="text">Aucun évènement à afficher</span>
+        </div>
+    </div>
 </div>

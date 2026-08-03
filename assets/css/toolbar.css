@@ -3,6 +3,8 @@
     background-color: var(--primary-fg);
     padding: 0.4rem;
     z-index: 4000;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--primary-subtext);
 }
 
 .toolbar.hidden {

@@ -1,44 +1,17 @@
+.events-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.events-main {
+    flex: 1;
+    overflow-y: auto;
+}
+
 #tiles-view,
 #agenda-view {
     transition: opacity 0.2s ease;
-}
-
-.btn-outline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-
-    padding: 0.45rem 0.9rem;
-    border: 2px solid currentColor;
-    border-radius: 999px;
-
-    background: transparent;
-    color: var(--md-primary-fg-color, #3f51b5);
-
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-
-    transition: 
-        background-color 0.15s ease,
-        color 0.15s ease;
-}
-
-.btn-outline:hover {
-    background-color: color-mix(
-        in srgb,
-        currentColor 10%,
-        transparent
-    );
-}
-
-.btn-outline:active {
-    transform: translateY(1px);
-}
-
-/* Icon sizing */
-.btn-outline .material-symbols-outlined {
-    font-size: 1rem;
 }
 
 .section-header {
@@ -68,7 +41,6 @@
     font-size: 0.65rem;
     color: var(--primary-subtext);
 }
-
 
 .event-tile {
     display: flex;
