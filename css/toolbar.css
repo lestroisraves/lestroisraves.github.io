@@ -129,12 +129,13 @@
 }
 
 .more-filters {
-    margin: 0;
+    margin: 0.4rem 0 0 0;
     padding: 0;
     position: relative;
     display: flex;
     flex-direction: column;
     background-color: var(--primary-fg);
+    /* gap: 0.2rem; */
 }
 
 .more-filters.hidden {
@@ -142,7 +143,8 @@
 }
 
 .filter-title {
-    margin-top: 0.4rem;
+    /* margin-top: 0.4rem; */
+    margin: 0;
     padding-left: 0.4rem;
     font-weight: 500;
     font-size: 0.75rem;
@@ -151,6 +153,7 @@
 
 /* SEARCH */
 .autocomplete {
+    margin-top: 0.4rem;
     width: 100%;
 }
 
