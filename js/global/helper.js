@@ -231,11 +231,6 @@ function renderEventData(event, details = false) {
            </span>`
         : "";
 
-    // eventData.timeHtml = eventData.event_start_time
-    //     ? `<span class="event-time">${formatEventTime(eventData.event_start_time)}</span>`
-    //     : "";
-    
-    
     switch (eventData.pg)
     {
         case 0:

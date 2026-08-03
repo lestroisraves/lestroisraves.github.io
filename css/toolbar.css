@@ -1,6 +1,8 @@
 .toolbar {
+    position: sticky;
     background-color: var(--primary-fg);
     padding: 0.4rem;
+    z-index: 4000;
 }
 
 .toolbar.hidden {
