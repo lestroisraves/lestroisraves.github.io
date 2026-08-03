@@ -61,12 +61,6 @@
     --md-footer-fg-color--lighter:      var(--primary-text); /* "Made with" */
 }
 
-html,
-body {
-    height: 100%;
-}
-
-
 .md-tabs {
     background: rgba(0, 0, 0, 0.25);
     color: var(--md-primary-bg-color);
@@ -147,8 +141,6 @@ body {
 .md-typeset {
     padding: 0;
     margin: 0;
-    height: 100%;
-    overflow: hidden;
 }
 
 .md-main,

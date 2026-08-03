@@ -148,16 +148,14 @@ APP_CONFIG = {
     },
     WHEN: {
         0: {
-            "label": "Aujourd'hui",
-            "icon": "explore_nearby"
+            "label": "Aujourd'hui"
         },
+        // 1: {
+        //     "label": "Demain",
+        //     "icon": "explore_nearby"
+        // },
         1: {
-            "label": "Demain",
-            "icon": "explore_nearby"
-        },
-        2: {
-            "label": "Prochainement",
-            "icon": "explore_nearby"
+            "label": "Prochainement"
         }
     },
     API_TIMEOUT_MS: 5000

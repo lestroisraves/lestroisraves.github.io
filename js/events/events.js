@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=20e67a65.7144c46";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=0be29e5f.7144c46";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=20e67a65.7144c46";
+} from "./renderevents.js?v=0be29e5f.7144c46";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -76,10 +76,10 @@ function groupEvents(events) {
         if (eventDate.getTime() === today.getTime()) {
             groups.today.push(event);
         }
-        else if (eventDate.toDateString() == tomorrow.toDateString()) { 
-            groups.tomorrow.push(event);
-        }
-        else if (eventDate > tomorrow) {
+        // else if (eventDate.toDateString() == tomorrow.toDateString()) { 
+        //     groups.tomorrow.push(event);
+        // }
+        else if (eventDate > today) {
             groups.later.push(event);
         }
     });
@@ -145,29 +145,38 @@ function initHeader() {
         catOptions.innerHTML += renderOptionBtn("category", key, APP_CONFIG.CATEGORIES[key]); 
     });
 
-    /* init pg options */
-    pgOptions.innerHTML = ""
-    Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-        pgOptions.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
-    });
-
-    /* init pg options */
-    priceOptions.innerHTML = ""
-    Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
-        priceOptions.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
-    });
-
-    /* init pg options */
+    /* init areas options */
     areaOptions.innerHTML = ""
     Object.keys(APP_CONFIG.AREAS).forEach(key => {
         areaOptions.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
     });
 
+    // /* init pg options */
+    // pgOptions.innerHTML = ""
+    // Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
+    //     pgOptions.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
+    // });
+
+    // /* init price options */
+    // priceOptions.innerHTML = ""
+    // Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
+    //     priceOptions.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
+    // });
+
+
     /* init when options */
-    whenOptions.innerHTML = ""
-    Object.keys(APP_CONFIG.WHEN).forEach(key => {
-        whenOptions.innerHTML += renderOptionBtn("when", key, APP_CONFIG.WHEN[key], false); 
-    });
+    // whenOptions.innerHTML = ""
+    // Object.keys(APP_CONFIG.WHEN).forEach(key => {
+    //     whenOptions.innerHTML += renderOptionBtn("when", key, APP_CONFIG.WHEN[key], false); 
+    // });
+
+    document.body.classList.add("events-page");
+    document.querySelector(".md-container").classList.add("events-page");
+    document.querySelector(".md-main").classList.add("events-page");
+    document.querySelector(".md-main__inner").classList.add("events-page");
+    document.querySelector(".md-content").classList.add("events-page");
+    document.querySelector(".md-content__inner").classList.add("events-page");
+    document.querySelector(".md-typeset").classList.add("events-page");
 }
 
 function showHeader() {
@@ -184,8 +193,8 @@ function renderTiles() {
 
     tilesView.innerHTML =
         renderSection("0", "Aujourd'hui", formatEventDate(today), grouped.today) +
-        renderSection("1", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
-        renderSection("2", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
+        // renderSection("1", "Demain", formatEventDate(tomorrow), grouped.tomorrow) +
+        renderSection("1", "Prochainement", "Dès le " + formatEventDate(afterTomorrow), grouped.later);
 
     tilesView.hidden = false;
     agendaView.hidden = true;

@@ -1,8 +1,8 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=20e67a65.7144c46";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=20e67a65.7144c46";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=20e67a65.7144c46";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=0be29e5f.7144c46";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=0be29e5f.7144c46";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=0be29e5f.7144c46";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");

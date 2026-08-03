@@ -1,3 +1,18 @@
+html.events-page,
+body.events-page {
+    height: 100%;
+}
+
+.md-container.events-page,
+.md-main.events-page,
+.md-main__inner.events-page,
+.md-content.events-page,
+.md-content__inner.events-page,
+.md-typeset.events-page {
+    height: 100%;
+    overflow: hidden;
+}
+
 .events-page {
     display: flex;
     flex-direction: column;
