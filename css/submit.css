@@ -10,7 +10,7 @@
   line-height: 1;
 
   cursor: pointer;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .back-btn:hover {
