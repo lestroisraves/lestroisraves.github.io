@@ -313,8 +313,7 @@ function renderEventData(event, details = false) {
             : "";
 
         eventData.descriptionHtml = eventData.long_description
-            ? `<hr style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}; background-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
-               <p id="modal-description" class="modal-description">${linkify(eventData.long_description)}</p>`
+            ? `<div id="modal-description" class="modal-description">${linkify(eventData.long_description)}</div>`
             : "";
     }
 

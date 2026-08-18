@@ -20,7 +20,7 @@ export function renderSection(sectionKey, sectionTitle, subtitle, events) {
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
             </div>
-            <div class="event-list"></div>
+            <div></div>
         </div>
         `;
     }
@@ -30,7 +30,7 @@ export function renderSection(sectionKey, sectionTitle, subtitle, events) {
             <div class="section-header">
                 <span class="section-title">${sectionTitle}</span>
             </div>
-            <div class="event-list">
+            <div>
                 ${events.map(renderEventTile).join("")}
             </div>
         </div>
@@ -57,7 +57,7 @@ export function renderEventTile(event) {
 
         <div class="event-content">
             <div class="event-title">${event.title}</div>
-            <div class="event-meta place">
+            <div class="event-meta">
                     ${eventData.locationHtml}
             </div>
             <div class="event-meta">
@@ -97,7 +97,7 @@ export function renderEventSuggestion(event) {
             .
             <div>${formatEventDateTime(eventData.event_date)}</div>
             .
-            <div class>${eventData.location_name}</div>
+            <div>${eventData.location_name}</div>
         </div>
     `
     return html;

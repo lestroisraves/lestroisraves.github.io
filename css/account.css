@@ -1,3 +1,9 @@
+/* ============================================================
+   account.css — Account pages
+   Form tiles, section titles, details, permissions, badges,
+   accordions, user quote.
+   ============================================================ */
+
 .formtile-tile {
     max-width: 420px;
     margin: 1rem auto;
@@ -217,11 +223,6 @@
 .user-quote::-webkit-scrollbar-thumb {
     background: rgba(0,0,0,0.2);
     border-radius: 4px;
-}
-
-#user-type option.subtitle {
-    font-size: 0.65rem; 
-    padding: 0;
 }
 
 .non-wrap {

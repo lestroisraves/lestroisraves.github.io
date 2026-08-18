@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=0bc95b9f.e4211ed";
+} from "../global/modal.js?v=19b1e2e4.9b1f453";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput

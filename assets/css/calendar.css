@@ -1,3 +1,8 @@
+/* ============================================================
+   calendar.css — Agenda / calendar view
+   Grid, header bar, day cells, dots.
+   ============================================================ */
+
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -99,19 +104,6 @@
 .calendar-day.clickable:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-date {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.calendar-event {
-    font-size: 0.7rem;
-    background: #eef0fb;
-    border-radius: 4px;
-    padding: 2px 4px;
-    margin-bottom: 2px;
 }
 
 .calendar-dots {

@@ -1,3 +1,9 @@
+/* ============================================================
+   theme.css — Global theme
+   Color variables & palette overrides, MkDocs Material layout
+   overrides, subtitle banner, typography, tables, footer.
+   ============================================================ */
+
 :root {
     color-scheme: light;
 }
