@@ -1,7 +1,7 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=39e0a4f0.7b83450";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=39e0a4f0.7b83450";
+import { openErrorModal } from "./modal.js?v=a5b07994.2ca3509";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=a5b07994.2ca3509";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -69,7 +69,6 @@ export function initEventForm(eventData=null) {
     /* Configure select lists  */
     configureSelectList(APP_CONFIG.AREAS, areaList);
     configureSelectList(APP_CONFIG.CATEGORIES, categoryList);
-    configureSelectList(APP_CONFIG.PARENTAL_GUIDE, parentalGuideList, 0);
     configureSelectList(APP_CONFIG.PRICE_CHOICES, priceChoiceList, 0);
 
     /* init userTags */
@@ -81,10 +80,11 @@ export function initEventForm(eventData=null) {
     form.querySelector("#title").value = eventData.title;
     form.querySelector("#location_name").value = eventData.location_name;
     form.querySelector("#area").value = eventData.area;
-    if (eventData.location_address) form.querySelector("#location_name").value = eventData.location_name;
+    if (eventData.location_address) form.querySelector("#location_address").value = eventData.location_address;
     if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
     form.querySelector("#category").value = eventData.category;
-    form.querySelector("#pg").value = eventData.pg;
+    form.querySelector("#min_age").value = eventData.min_age;
+    form.querySelector("#max_age").value = eventData.max_age;
     form.querySelector("#event_date").value = eventData.event_date;
     if (eventData.event_start_time) form.querySelector("#event_start_time").value = eventData.event_start_time;
     if (eventData.tags) eventData.tags.forEach(t => addTag(t));

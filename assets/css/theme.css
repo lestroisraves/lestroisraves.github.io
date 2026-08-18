@@ -16,6 +16,9 @@
     --primary-text:                     #0D2C87;
     --primary-subtext:                  #818FBA;
     --primary-textarea:                 #837e7e;
+    --primary-link:                     #4527a0;
+    --primary-link--hover:              #673ab7;
+    --primary-link--active:             #311b92;
 
     --primary-gray:                     #aaaaaa;
     --primary-dark:                     #242424;
@@ -165,6 +168,10 @@ html.ready .md-content {
     transition: opacity .2s ease;
 }
 
+.page-container {
+    margin: 0.4rem;
+}
+
 .md-typeset {
     margin: 0;
     padding: 0;
@@ -212,6 +219,19 @@ th {
     border-bottom: 0;
 }
 
+.page-container a {
+    color: var(--primary-link);
+    text-decoration: none;
+}
+
+.page-container a:hover {
+    color: var(--primary-link--hover);
+}
+
+.page-container a:active {
+    color: var(--primary-link--active);
+}
+
 table tr:first-child th {
     /* define header border left */
     border-left: 1px solid var(--primary-gray);
@@ -255,25 +275,32 @@ table tr th:last-child {
 .md-typeset h1 {
     font-size: 2.5em;
 }
+
 .md-typeset h2 {
     font-size: 2em;
 }
+
 .md-typeset h3 {
     font-size: 1.7em;
 }
+
 .md-typeset h4 {
     font-size: 1.4em;
 }
+
 .md-typeset h5 {
     font-size: 1.2em;
 }
+
 .md-typeset h6 {
     /* define h6 format (invisible in table of contents) */
     font-size: 1em !important;
 }
+
 .md-typeset p {
     font-size: 0.85em;
 }
+
 .pico input {
     font-size: 0.85em;
 }
