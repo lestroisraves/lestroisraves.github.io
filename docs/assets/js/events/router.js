@@ -7,7 +7,7 @@ import {
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe, shareEvent
+    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -84,6 +84,14 @@ async function handleInput(el) {
 
         case "confirm-code":
             setConfirmBtnState(el);
+            break;
+
+        case "filter-switch":
+            toggleFilterSwitch(el);
+            break;
+
+        case "filter-age":
+            updateAgeFilter(el);
             break;
 
         default:

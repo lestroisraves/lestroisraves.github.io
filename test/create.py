@@ -111,6 +111,12 @@ def format_event_payload(day_delta, category, title, pending):
         image = "misc.webp"
         location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])
 
+    min_age = random.choice([None, random.randrange(12)])
+    if min_age is not None:
+        max_age = random.choice([None, random.randrange(min_age + 1, 13)])
+    else:
+        max_age = random.choice([None, random.randrange(6, 10)])
+
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
         "creator_name": "Olivier Gohier",
@@ -131,7 +137,8 @@ def format_event_payload(day_delta, category, title, pending):
         "phone": random.choice([None, "+33 6 01 12 13 14"]),
         "site_url": random.choice([None, "https://rcsculture.github.io"]),
         "to_eat": random.choice([True, False]),
-        "pg": random.randrange(3),
+        "min_age": min_age,
+        "max_age": max_age,
         "tags": random.sample(TEST_TAGS, k=random.randint(0, min(3, len(TEST_TAGS)))) + ["is_test"],
         "image_url": SUPABASE_IMAGE_STORAGE + image
     }

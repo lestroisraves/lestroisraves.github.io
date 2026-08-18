@@ -224,27 +224,24 @@ function renderEventData(event, details = false) {
         }
     }
 
+    eventData.ageLabel = "Tout public";
+    if (eventData.min_age && eventData.min_age > 0) {
+        if (eventData.max_age && eventData.max_age > eventData.min_age) {
+            eventData.ageLabel = "De " + eventData.min_age + " à " + eventData.max_age + " ans";
+        }
+        else {
+            eventData.ageLabel = "À partir de " + eventData.min_age + " ans";
+        }
+    } else if (eventData.max_age && eventData.max_age > 0) {
+        eventData.ageLabel = "Jusqu'à " + eventData.max_age + " ans";
+    }
+
     eventData.timeHtml = eventData.event_start_time
         ? `<span class="event-time event-icon-text">
              <span class="material-symbols-outlined">schedule</span>
              <span class="text">${formatEventTime(eventData.event_start_time)}</span>
            </span>`
         : "";
-
-    switch (eventData.pg)
-    {
-        case 0:
-            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[0]["icon"], APP_CONFIG.PARENTAL_GUIDE[0]["label"]);
-            break;
-
-        case 1:
-            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[1]["icon"], APP_CONFIG.PARENTAL_GUIDE[1]["label"]);
-            break;
-
-        case 2:
-            eventData.parentalGuideHtml = renderMaterialIconText(APP_CONFIG.PARENTAL_GUIDE[2]["icon"], APP_CONFIG.PARENTAL_GUIDE[2]["label"]);
-            break;
-    }
 
     if (details) {
         // render extra information for event modal

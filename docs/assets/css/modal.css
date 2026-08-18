@@ -61,13 +61,13 @@
 
 .event-modal-title {
     display: flex;
-    align-items: center;
+    align-items: top;
 
     margin: 0;
     padding: 0.3rem 2.4rem 0.3rem 0.6rem;
 
     color: var(--primary-text);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     overflow-wrap: anywhere;
 }

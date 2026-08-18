@@ -234,7 +234,7 @@ export function openEventModal(event, type, user_profile=null) {
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
             </div>
             <div class="event-meta">
-                ${eventData.parentalGuideHtml}
+                ${renderMaterialIconText("guardian", eventData.ageLabel)}
             </div>
             ${eventData.addressHtml}
             ${eventData.eatHtml}
