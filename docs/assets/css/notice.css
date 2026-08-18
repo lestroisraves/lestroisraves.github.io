@@ -1,3 +1,8 @@
+/* ============================================================
+   notice.css — Notice banners
+   Base notice, tip and error variants.
+   ============================================================ */
+
 .notice {
     display: flex;
     align-items: flex-start;
@@ -43,19 +48,8 @@
     color: var(--primary-success--text);
 }
 
-.notice-warning {
-    background-color: var(--primary-warning--lighter);
-    border-left: 4px solid var(--primary-warning);
-    color: var(--primary-warning--text);
-}
-
 .notice-error {
     background-color: var(--primary-error--lighter);
     border-left: 4px solid var(--primary-error);
     color: var(--primary-error--text);
-}
-
-.notice.compact {
-    padding: 0.6rem 0.8rem;
-    font-size: 0.85rem;
 }

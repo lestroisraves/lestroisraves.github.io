@@ -131,7 +131,7 @@ export function openProfileModal(profile) {
     profileModalContent.innerHTML = `
         <div class="account-section-title">
             <span class="material-symbols-outlined" aria-hidden="true">person</span>
-            <span id="account-name" class="account-name">${profile.name}</span>
+            <span id="account-name">${profile.name}</span>
         </div>
 
         <div class="account-details">
@@ -153,7 +153,7 @@ export function openProfileModal(profile) {
 
         <div class="account-section-title">
             <span class="material-symbols-outlined" aria-hidden="true">format_quote</span>
-            <span class="account-name">Description de la demande</span>
+            <span>Description de la demande</span>
         </div>
         <blockquote class="user-quote">${linkify(profile.official_request_details)}</blockquote>
     `;
@@ -220,16 +220,16 @@ export function openEventModal(event, type, user_profile=null) {
         ${eventData.imageHtml}
         <div id="modal-title" class="event-title">${event.title}</div>
         ${eventData.categoryHtml}
-        <div class="event-meta place">
+        <div class="event-meta">
             ${eventData.locationHtml}
         </div>
         <div class="event-meta">
             ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
         </div>
-        <div class="event-meta place">
+        <div class="event-meta">
             ${renderMaterialIconText("sell", eventData.priceLabel)}
         </div>
-        <div class="event-meta place">
+        <div class="event-meta">
             ${eventData.parentalGuideHtml}
         </div>
         ${eventData.addressHtml}

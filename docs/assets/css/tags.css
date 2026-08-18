@@ -1,3 +1,8 @@
+/* ============================================================
+   tags.css — Tag input component
+   Input container and tag chips.
+   ============================================================ */
+
 .tag-input-container {
     display: flex;
     flex-wrap: wrap;

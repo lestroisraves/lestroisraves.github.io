@@ -1,3 +1,9 @@
+/* ============================================================
+   toolbar.css — Events toolbar
+   Switch-view buttons, filter bar, filter option buttons
+   (category / area), search.
+   ============================================================ */
+
 .toolbar {
     position: sticky;
     background-color: var(--primary-fg);
@@ -339,7 +345,6 @@
 }
 
 @media (max-width: 340px) {
-    .tab,
     .option-btn .text {
         white-space: nowrap;
         overflow: hidden;

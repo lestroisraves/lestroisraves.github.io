@@ -1,3 +1,9 @@
+/* ============================================================
+   events.css — Events page
+   Page layout, sections, event tiles, event meta/details,
+   small tiles, suggestions, empty state, responsive.
+   ============================================================ */
+
 html.events-page,
 body.events-page {
     height: 100%;
@@ -49,13 +55,6 @@ body.events-page {
     font-weight: 700;
     text-transform: uppercase;
     color: var(--primary-text);
-}
-
-.section-subtitle {
-    margin: 0;
-    padding: 0;
-    font-size: 0.65rem;
-    color: var(--primary-subtext);
 }
 
 .event-tile {
@@ -110,13 +109,11 @@ body.events-page {
     justify-content: left;
 }
 
-.small-event-tile:hover,
 .event-tile:hover {
     transform: translateX(-2px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.small-event-tile:focus,
 .event-tile:focus {
     outline-offset: 2px;
 }
@@ -225,11 +222,6 @@ body.events-page {
     white-space: normal;
 }
 
-.event-icon-text .btn {
-    display: inline-flex;
-    align-items: center;
-}
-
 .event-icon-text .material-symbols-outlined {
     font-size: 0.8rem;
     padding: 0;
@@ -322,18 +314,7 @@ body.events-page {
     margin-bottom: 0rem; */
 }
 
-.event-short-description {
-    margin: 0 0 0 0.1rem;
-    font-size: 0.70rem;
-}
-
-.event-images img {
-    max-width: 160px;
-    border-radius: 6px;
-    object-fit: cover;
-}
-
-/* SMALL TILES */
+/* === SMALL TILES === */
 .event-small-tile {
     position: relative;
     display: flex;
@@ -434,7 +415,7 @@ body.events-page {
     text-overflow: ellipsis;
 }
 
-/* EMPTY STATE */
+/* === EMPTY STATE === */
 .empty-state {
     display: flex;
     align-items: center;

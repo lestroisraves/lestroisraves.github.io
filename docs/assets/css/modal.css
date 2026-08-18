@@ -1,4 +1,9 @@
-/* === EVENT CARD ===*/
+/* ============================================================
+   modal.css — Modals
+   Overlay, event/profile cards, action buttons, confirm code.
+   ============================================================ */
+
+/* === EVENT CARD === */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -174,11 +179,6 @@
     background: transparent;
     pointer-events: none;
 }
-
-.modal-btn.material-icons {
-    font-size: 1rem;
-}
-
 
 .modal-small {
     max-width: 420px;
