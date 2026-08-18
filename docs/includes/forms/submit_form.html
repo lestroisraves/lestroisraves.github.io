@@ -1,4 +1,4 @@
-<div id="submit-container" hidden>
+<div id="submit-container" class="page-container" hidden>
     <div id="account-detail" class="account-tile detail-section" hidden>
         <div class="detail-row">
             <span class="label">Contributeur</span>
@@ -50,11 +50,6 @@
             </label>
 
             <label class="pico">
-                Guide parental *
-                <select name="select" id="pg" required></select>
-            </label>
-
-            <label class="pico">
                 Date *
                 <input type="date" id="event_date" required>
             </label>
@@ -73,6 +68,17 @@
             <div class="tag-input-container" id="tag-container">
                 <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
             </div>
+
+            <label class="pico">
+                Age du public
+                <input id="min_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age minimum" step=1 min=0 max=18>
+                <input id="max_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age maximum" step=1 min=0 max=18>
+            </label>
+
+            <label class="pico">
+                Prix réduit
+                <input type="number" id="min_price" placeholder="0.00" step=0.01 min=0 disabled>
+            </label>
 
             <label class="pico">
                 Téléphone
