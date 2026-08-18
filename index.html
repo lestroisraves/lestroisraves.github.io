@@ -570,25 +570,29 @@
         </section>
 
         <section id="more-filters" class="more-filters hidden">
+            <hr class="filter-line">
             <span class="filter-title">Où ?</span>
             <section id="area-options" class="filter-options area"></section>
+            <div class="filter-age">
+                <span class="filter-title">Age du public ?</span>
+                <div class="age-inputs">
+                    <div class="age-field">
+                        <input type="text" name="filter-min-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age minimum" autocomplete="off" data-input-type="filter-age" />
+                        <span class="age-suffix">an(s)</span>
+                    </div>
+                    <span class="age-sep">–</span>
+                    <div class="age-field">
+                        <input type="text" name="filter-max-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age maximum" autocomplete="off" data-input-type="filter-age" />
+                        <span class="age-suffix">an(s)</span>
+                    </div>
+                </div>
+            </div>
             <hr class="filter-line">
             <label class="filter-switch pico">
-                <input name="filter-for-kids" type="checkbox" role="switch" />
-                <span>Spécial bambins seulement</span>
-            </label>
-            <label class="filter-switch pico">
-                <input name="filter-free" type="checkbox" role="switch" />
+                <input name="filter-free" type="checkbox" role="switch" data-input-type="filter-switch" />
                 <span >Gratuit/prix libre seulement</span>
             </label>
 
-            <!-- <span class="filter-title">Quel prix ?</span>
-            <section id="price-options" class="filter-options price"></section>
-            <span class="filter-title">Quel public ?</span>
-            <section id="pg-options" class="filter-options pg"></section> -->
-            <!-- <span class="filter-title">Quand ?</span>
-            <section id="when-options" class="filter-options when"></section> -->
-            <!-- <span class="filter-title">Recherche :</span> -->
             <section id="event-search" class="autocomplete">
                 <input
                     type="text"
@@ -643,7 +647,7 @@
     </div>
 </div>
 
-<script type="module" defer src="assets/js/events/router.js?v=19b1e2e4.9b1f453"></script>
+<script type="module" defer src="assets/js/events/router.js?v=495780fb.d935aa3"></script>
 <html data-theme="light">
 
 
@@ -745,13 +749,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="assets/js/global/config.js?v=19b1e2e4.9b1f453"></script>
+        <script src="assets/js/global/config.js?v=495780fb.d935aa3"></script>
       
-        <script src="assets/js/global/helper.js?v=19b1e2e4.9b1f453"></script>
+        <script src="assets/js/global/helper.js?v=495780fb.d935aa3"></script>
       
-        <script src="assets/js/global/user_profile.js?v=19b1e2e4.9b1f453"></script>
+        <script src="assets/js/global/user_profile.js?v=495780fb.d935aa3"></script>
       
-        <script src="assets/js/global/supabase.js?v=19b1e2e4.9b1f453"></script>
+        <script src="assets/js/global/supabase.js?v=495780fb.d935aa3"></script>
       
     
   </body>

@@ -51,9 +51,7 @@
 
 /* filters */
 .filter-title {
-    /* margin-top: 0.1rem; */
-    /* margin: 0; */
-    padding-left: 0.4rem;
+    padding: 0 0 0 0.4rem;
     font-weight: 500;
     font-size: 0.7rem;
     color: var(--primary-subtext);
@@ -104,6 +102,67 @@
     font-size: 0.7rem;
 }
 
+.filter-age {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0;
+    /* padding-left: 0.4rem; */
+}
+
+.age-inputs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.age-sep {
+    color: var(--primary-subtext);
+    font-size: 0.75rem;
+}
+
+.age-field {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.age-suffix {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--primary-subtext);
+    pointer-events: none;
+    display: none;
+}
+
+.age-input:not(:placeholder-shown) + .age-suffix {
+    display: block;
+}
+
+.age-input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    color: var(--primary-textarea);
+    border-radius: 5px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.age-input.round {
+    border-radius: 20px;
+}
+
+.age-input.invalid {
+    color: var(--primary-error--text);
+    background-color: var(--primary-error--lighter);
+    border: 1px solid var(--primary-error--text);
+}
+
 .reset-filter-btn {
     padding-left: 0.5rem;
     color: var(--primary-error--text);
@@ -152,7 +211,7 @@
 
 .more-filters {
     margin: 0;
-    padding: 0;
+    padding: 0.2rem 0 0 0;
     position: relative;
     display: flex;
     flex-direction: column;

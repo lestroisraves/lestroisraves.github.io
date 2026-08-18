@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=19b1e2e4.9b1f453";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=495780fb.d935aa3";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=19b1e2e4.9b1f453";
+} from "./renderevents.js?v=495780fb.d935aa3";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -48,15 +48,14 @@ let user_profile = null;
 let EVENTS = [];
 let activeFilters = {
     category: new Set(Object.keys(APP_CONFIG.CATEGORIES)),
-    pg: new Set(Object.keys(APP_CONFIG.PARENTAL_GUIDE)),
-    price: new Set(Object.keys(APP_CONFIG.PRICE_CHOICES)),
     area: new Set(Object.keys(APP_CONFIG.AREAS)),
     when: new Set(Object.keys(APP_CONFIG.WHEN)),
+    free: false, // only free (0) and free-price (1) events
+    minAge: null, // audience age range chosen by the user (null = unset)
+    maxAge: null,
 };
 const filterOptions = {
     category: APP_CONFIG.CATEGORIES,
-    pg: APP_CONFIG.PARENTAL_GUIDE,
-    price: APP_CONFIG.PRICE_CHOICES,
     area: APP_CONFIG.AREAS,
     when: APP_CONFIG.WHEN,
 };
@@ -151,25 +150,6 @@ function initHeader() {
         areaOptions.innerHTML += renderOptionBtn("area", key, APP_CONFIG.AREAS[key]); 
     });
 
-    // /* init pg options */
-    // pgOptions.innerHTML = ""
-    // Object.keys(APP_CONFIG.PARENTAL_GUIDE).forEach(key => {
-    //     pgOptions.innerHTML += renderOptionBtn("pg", key, APP_CONFIG.PARENTAL_GUIDE[key]); 
-    // });
-
-    // /* init price options */
-    // priceOptions.innerHTML = ""
-    // Object.keys(APP_CONFIG.PRICE_CHOICES).forEach(key => {
-    //     priceOptions.innerHTML += renderOptionBtn("price", key, APP_CONFIG.PRICE_CHOICES[key]); 
-    // });
-
-
-    /* init when options */
-    // whenOptions.innerHTML = ""
-    // Object.keys(APP_CONFIG.WHEN).forEach(key => {
-    //     whenOptions.innerHTML += renderOptionBtn("when", key, APP_CONFIG.WHEN[key], false); 
-    // });
-
     document.body.classList.add("events-page");
     document.querySelector(".md-container").classList.add("events-page");
     document.querySelector(".md-main").classList.add("events-page");
@@ -217,14 +197,10 @@ function renderTiles() {
 function applyFilter() {
     const hasAnyFilter =
     activeFilters.category.size > 0 ||
-    // activeFilters.pg.size > 0 || 
-    // activeFilters.price.size > 0 ||
     activeFilters.area.size > 0;
 
     const hideAll = 
     activeFilters.category.size == 0 ||
-    // activeFilters.pg.size == 0 || 
-    // activeFilters.price.size == 0 ||
     activeFilters.area.size == 0;
 
     if (!tilesView.hidden) {
@@ -239,7 +215,7 @@ function applyFilter() {
                 return;
             }
 
-            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area));
+            tile.classList.toggle("hidden", !matchesFilters(tile.dataset.category, tile.dataset.pg, tile.dataset.price, tile.dataset.area, tile.dataset.minAge, tile.dataset.maxAge));
         });
 
         /* apply when filter only on tiles */
@@ -273,7 +249,7 @@ function applyFilter() {
         if (!hasAnyFilter) {
             filteredEvents = EVENTS;
         } else {
-            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area)));
+            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area), event.min_age, event.max_age));
         }
         renderCalendar(filteredEvents);
     }
@@ -429,20 +405,10 @@ async function loadEvents() {
     showHeader();
 }
 
-function matchesFilters(category, pg, price, area) {
+function matchesFilters(category, pg, price, area, minAge, maxAge) {
     if (
         activeFilters.category.size > 0 &&
         !activeFilters.category.has(category)
-    ) return false;
-
-    if (
-        activeFilters.pg.size > 0 &&
-        !activeFilters.pg.has(pg)
-    ) return false;
-
-    if (
-        activeFilters.price.size > 0 &&
-        !activeFilters.price.has(price)
     ) return false;
 
     if (
@@ -450,7 +416,31 @@ function matchesFilters(category, pg, price, area) {
         !activeFilters.area.has(area)
     ) return false;
 
+    if (activeFilters.free && price !== "0" && price !== "1") return false;
+
+    const ageRangeValid = activeFilters.minAge === null
+        || activeFilters.maxAge === null
+        || activeFilters.minAge <= activeFilters.maxAge;
+
+    if (ageRangeValid && (activeFilters.minAge !== null || activeFilters.maxAge !== null)) {
+        const toNum = (v, fallback) =>
+            (v === null || v === undefined || v === "" || v === "null") ? fallback : Number(v);
+        const eventMin = toNum(minAge, 0);
+        const eventMax = toNum(maxAge, Infinity);
+        const wantMin = activeFilters.minAge ?? 0;
+        const wantMax = activeFilters.maxAge ?? Infinity;
+        // keep events whose audience range overlaps the chosen range
+        if (eventMin > wantMax || eventMax < wantMin) return false;
+    }
+
     return true;
+}
+
+function isFiltered() {
+    const optionsDirty = Object.keys(filterOptions).some(
+        type => activeFilters[type].size !== Object.keys(filterOptions[type]).length
+    );
+    return optionsDirty || activeFilters.free || activeFilters.minAge !== null || activeFilters.maxAge !== null;
 }
 
 function copyToClipboard(event_desc, event_url) {
@@ -590,17 +580,71 @@ export function selectWhenOption(tab) {
 }
 
 export function resetFilter() {
-    Object.keys(activeFilters).forEach(type => {
+    Object.keys(filterOptions).forEach(type => {
         activeFilters[type] = new Set(
             Object.keys(filterOptions[type])
         );
     });
+    activeFilters.free = false;
+    activeFilters.minAge = null;
+    activeFilters.maxAge = null;
 
     document
         .querySelectorAll("[data-filter-type]")
         .forEach(btn => btn.classList.add("active"));
 
+    document
+        .querySelectorAll('[data-input-type="filter-switch"]')
+        .forEach(sw => sw.checked = false);
+
+    document
+        .querySelectorAll('[data-input-type="filter-age"]')
+        .forEach(inp => {
+            inp.value = "";
+            inp.classList.remove("invalid");
+        });
+
     resetFilterBtn.classList.add("hidden");
+
+    applyFilter();
+}
+
+export function toggleFilterSwitch(input) {
+    if (input.name === "filter-free") {
+        activeFilters.free = input.checked;
+    }
+
+    resetFilterBtn.classList.toggle("hidden", !isFiltered());
+
+    applyFilter();
+}
+
+export function updateAgeFilter(input) {
+    // keep digits only, max 2 chars, clamp to 0..18
+    const digits = input.value.replace(/\D/g, "").slice(0, 2);
+    let num = digits === "" ? null : Number(digits);
+    if (num !== null && num > 18) num = 18;
+    input.value = num === null ? "" : String(num);
+
+    if (input.name === "filter-min-age") {
+        activeFilters.minAge = num;
+    } else if (input.name === "filter-max-age") {
+        activeFilters.maxAge = num;
+    }
+
+    const minInput = document.querySelector('[name="filter-min-age"]');
+    const maxInput = document.querySelector('[name="filter-max-age"]');
+
+    // invalid when max < min: flag the last edited input, age filter stays inactive
+    const invalid = activeFilters.minAge !== null
+        && activeFilters.maxAge !== null
+        && activeFilters.minAge > activeFilters.maxAge;
+
+    minInput.classList.remove("invalid");
+    maxInput.classList.remove("invalid");
+    if (invalid) input.classList.add("invalid");
+
+    resetFilterBtn.classList.toggle("hidden", !isFiltered());
 
     applyFilter();
 }
@@ -633,7 +677,7 @@ export function selectFilterOption(optionBtn) {
     }
 
     // handle reset filter btn
-    if (Object.keys(activeFilters).some(type => activeFilters[type].size !== Object.keys(filterOptions[type]).length)) {
+    if (isFiltered()) {
         resetFilterBtn.classList.remove("hidden");
     } else {
         resetFilterBtn.classList.add("hidden");

@@ -48,6 +48,8 @@ export function renderEventTile(event) {
             data-pg="${eventData.pg}"
             data-price="${eventData.price}"
             data-area="${eventData.area}"
+            data-min-age="${eventData.min_age}"
+            data-max-age="${eventData.max_age}"
             data-date="${eventData.event_date}">
         <div class="event-side">
             <div class="event-category">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
@@ -58,10 +60,11 @@ export function renderEventTile(event) {
         <div class="event-content">
             <div class="event-title">${event.title}</div>
             <div class="event-meta">
-                    ${eventData.locationHtml}
+                ${eventData.locationHtml}
             </div>
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
+                ${renderMaterialIconText("guardian", eventData.ageLabel)}
             </div>
             ${eventData.tagsHtml}
         </div>
