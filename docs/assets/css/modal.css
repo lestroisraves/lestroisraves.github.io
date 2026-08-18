@@ -48,8 +48,39 @@
 }
 
 .modal-card.event {
-    border-left: 6px solid var(--pico-primary);
     padding: 0rem;
+}
+
+.event-modal-header {
+    display: flex;
+    align-items: stretch;
+
+    padding: 0;
+    margin: 0;
+}
+
+.event-modal-title {
+    display: flex;
+    align-items: center;
+
+    margin: 0;
+    padding: 0.3rem 2.4rem 0.3rem 0.6rem;
+
+    color: var(--primary-text);
+    font-size: 0.9rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.modal-card.event .event-image-wrapper {
+    border-radius: 0;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.4rem;
 }
 
 .modal-card hr {
@@ -83,19 +114,35 @@
     color: #000;
 }
 
-.modal-content h2 {
-    margin-top: 0;
-}
-
 .modal-content p {
     font-size: 0.8rem;
     line-height: 1.5;
 }
 
 .modal-description {
-    padding: 0 1rem;
-    margin: 0;
+    color: var(--primary-text);
+    padding-left: 0.2rem;
+    font-style: italic;
+    font-size: 0.6rem;
+    line-height: 1.5;
     white-space: pre-line;
+}
+
+.modal-description a {
+    color: #4527a0;
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    overflow-wrap: anywhere;
+}
+
+.modal-description a:hover {
+    color: #673ab7;
+}
+
+.modal-description a:active {
+    color: #311b92;
 }
 
 .modal-actions {
@@ -103,7 +150,7 @@
     gap: 0.8rem;
     flex-direction: column;
     justify-content: center;
-    margin-top: 0.8rem;
+    margin-top: 0rem;
 }
 
 .modal-actions.row {

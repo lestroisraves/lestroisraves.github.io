@@ -126,7 +126,7 @@ def format_event_payload(day_delta, category, title, pending):
         "price": price,
         "min_price": min_price,
         "max_price": max_price,
-        "long_description": random.choice([None, f"This is a generated test event.\n\nBe Cool.\nDon't panic.\nParty hard.\n\nwww.github.com"]),
+        "long_description": random.choice([None, f"This is a generated test event.\nBe Cool.\nDon't panic.\nParty hard.\nwww.github.com"]),
         "pending": pending,
         "phone": random.choice([None, "+33 6 01 12 13 14"]),
         "site_url": random.choice([None, "https://rcsculture.github.io"]),
@@ -150,7 +150,8 @@ def generate_events(n: int):
     events.append(format_event_payload(day_delta=0, category=4, title=f"Test Event #1.a", pending=False))
     events.append(format_event_payload(day_delta=0, category=5, title=f"Test Event #1.i", pending=False))
     for i in range(n):
-        events.append(format_event_payload(day_delta=i, category=random.randrange(6), title=f"Test Event #{i + 1}", pending=random.choice([True, False, False, False])))
+        title = random.choice([f"This is a very very long Test Event #{i + 1} sdfsddsfs sdfg sdgs", f"Test Event #{i + 1}"])
+        events.append(format_event_payload(day_delta=i, category=random.randrange(6), title=title, pending=random.choice([True, False, False, False])))
     return events
 
 

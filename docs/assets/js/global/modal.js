@@ -4,7 +4,6 @@ const successModal = document.getElementById("success-modal");
 const errorModal = document.getElementById("error-modal");
 
 const eventModal = document.getElementById("event-modal");
-const eventModalCard = document.getElementById("event-card");
 const eventModalContent = document.getElementById("event-modal-content");
 
 const profileModal = document.getElementById("profile-modal");
@@ -217,36 +216,41 @@ export function openEventModal(event, type, user_profile=null) {
     }
 
     eventModalContent.innerHTML = `
+        <header class="event-modal-header" style="--event-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
+            <div class="event-side">
+                <div class="event-category">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+                <div class="event-date">${formatEventDate(eventData.event_date)}</div>
+                ${eventData.timeHtml}
+            </div>
+            <span id="modal-title" class="event-modal-title">${event.title}</span>
+        </header>
         ${eventData.imageHtml}
-        <div id="modal-title" class="event-title">${event.title}</div>
-        ${eventData.categoryHtml}
-        <div class="event-meta">
-            ${eventData.locationHtml}
+
+        <div class="event-details">
+            <div class="event-meta">
+                ${eventData.locationHtml}
+            </div>
+            <div class="event-meta">
+                ${renderMaterialIconText("sell", eventData.priceLabel)}
+            </div>
+            <div class="event-meta">
+                ${eventData.parentalGuideHtml}
+            </div>
+            ${eventData.addressHtml}
+            ${eventData.eatHtml}
+            ${eventData.siteUrlHtml}
+            ${eventData.phoneHtml}
+            ${eventData.emailHtml}
+            ${eventData.pendingHtml}
+            ${eventData.creatorHtml}
+            ${eventData.tagsHtml}
+            ${eventData.descriptionHtml}
         </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("event", formatEventDateTime(eventData.event_date, eventData.event_start_time))}
-        </div>
-        <div class="event-meta">
-            ${renderMaterialIconText("sell", eventData.priceLabel)}
-        </div>
-        <div class="event-meta">
-            ${eventData.parentalGuideHtml}
-        </div>
-        ${eventData.addressHtml}
-        ${eventData.eatHtml}
-        ${eventData.siteUrlHtml}
-        ${eventData.phoneHtml}
-        ${eventData.emailHtml}
-        ${eventData.pendingHtml}
-        ${eventData.creatorHtml}
-        ${eventData.tagsHtml}
-        ${eventData.descriptionHtml}
     `;
 
     console.log("event modal data:", eventData);
 
     /* apply category style */
-    eventModalCard.style.borderColor = APP_CONFIG.CATEGORIES[eventData.category]["color"];
     eventModalContent.querySelector(".image-placeholder").style.background = APP_CONFIG.CATEGORIES[eventData.category]["color_light"];
     eventModalContent.querySelector("#img-ico").style.color = APP_CONFIG.CATEGORIES[eventData.category]["color"];
 
