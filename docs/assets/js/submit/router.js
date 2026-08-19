@@ -5,7 +5,7 @@ import {
 
 import { 
     priceChanged, handleImageChoice, formatPhoneInput, toggleCategory
-} from "../global/eventform.js"
+} from "../global/eventform.js?v=dev"
 
 import { 
     addTag, removeLastTag

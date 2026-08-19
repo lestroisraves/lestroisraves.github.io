@@ -21,6 +21,32 @@ begin
 end;
 ```
 
+## Daily limit for publication
+
+```sql
+create or replace function check_daily_event_limit()
+returns trigger
+language plpgsql
+as $$
+declare
+    event_count integer;
+begin
+    select count(*)
+    into event_count
+    from events
+    where author_id = new.author_id
+      and created_at >= date_trunc('day', now());
+
+    if event_count >= 20 then
+        raise exception 'La limite de publication par jour est atteinte (20)';
+    end if;
+
+    return new;
+end;
+$$;
+
+```
+
 ## Delete old events
 In `Integration` be sure that `pg_cron` extension is installed so you can create a Job in `CRON`.
 
