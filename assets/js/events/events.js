@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=af24c378.3d3cbf2";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=d541dae8.b2091c6";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=af24c378.3d3cbf2";
+} from "./renderevents.js?v=d541dae8.b2091c6";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -170,9 +170,6 @@ function markOverflowingTags() {
         el.classList.toggle("overflowing", el.scrollWidth > el.clientWidth + 1);
     });
 }
-
-window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
-
 
 function renderTiles() {
     const grouped = groupEvents(EVENTS);

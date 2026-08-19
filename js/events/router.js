@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=af24c378.3d3cbf2";
+} from "../global/modal.js?v=d541dae8.b2091c6";
 
 import { 
     openEvent, searchInput, 
@@ -100,6 +100,8 @@ async function handleInput(el) {
 }
 
 /* === LISTENERS === */
+window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
+
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
     const el = event.target.closest("[data-action]");
