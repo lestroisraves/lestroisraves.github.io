@@ -67,6 +67,7 @@ body.events-page {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     padding: 0;
+    padding-right: 0.4rem;
 }
 
 .event-tile.hidden {
@@ -240,6 +241,19 @@ body.events-page {
     overflow-wrap: break-word;
 }
 
+/* location (and meta) on a single ellipsed line inside the tile */
+.event-tile .event-icon-text .text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* modal: wrap only at word boundaries, never mid-word */
+.event-details .event-icon-text .text {
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
 .event-icon-text .text.creator {
     display: inline-flex;
     align-items: center;
@@ -303,6 +317,34 @@ body.events-page {
     margin: 0.1rem 0;
 }
 
+/* tile: single row of tags, clipped with a trailing ellipsis when it overflows */
+.event-tile .event-tags {
+    position: relative;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    padding-right: 0.2rem;
+}
+
+.event-tile .event-tags.overflowing {
+    padding-right: 0.9rem;
+}
+
+.event-tile .event-tags.overflowing::after {
+    content: "…";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    padding-left: 0.5rem;
+    color: var(--primary-subtext);
+    background: linear-gradient(to right, transparent, var(--primary-background) 45%);
+}
+
+/* modal: let tags flow onto extra rows */
+.event-details .event-tags {
+    flex-wrap: wrap;
+}
+
 .tag {
     display: inline-block;
     background: var(--primary-subtext);
@@ -311,6 +353,8 @@ body.events-page {
     border-radius: 10px;
     font-size: 0.55rem;
     margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
     /* margin-right: 0.3rem;
     margin-bottom: 0rem; */
 }

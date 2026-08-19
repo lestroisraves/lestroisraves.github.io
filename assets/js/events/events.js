@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=2cd440e1.2ca3509";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=7340bfb5.2ca3509";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=2cd440e1.2ca3509";
+} from "./renderevents.js?v=7340bfb5.2ca3509";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -164,6 +164,16 @@ function showHeader() {
 }
 
 
+// Flag tile tag rows that overflow so CSS can show a trailing ellipsis.
+function markOverflowingTags() {
+    tilesView.querySelectorAll(".event-tile .event-tags").forEach(el => {
+        el.classList.toggle("overflowing", el.scrollWidth > el.clientWidth + 1);
+    });
+}
+
+window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
+
+
 function renderTiles() {
     const grouped = groupEvents(EVENTS);
 
@@ -181,6 +191,8 @@ function renderTiles() {
     switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
     switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
     loading.style.display = "none";
+
+    requestAnimationFrame(markOverflowingTags);
 
     if (eventId) {
         console.log("show event id:", eventId);

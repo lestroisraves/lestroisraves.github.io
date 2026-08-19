@@ -207,7 +207,7 @@ function renderEventData(event, details = false) {
     eventData.locationHtml = `
         <span class="event-icon-text">
             <span class="material-symbols-outlined">place</span>
-            <span class="text"><strong>${eventData.location_name}</strong></span>
+            <span class="text"><strong>${eventData.location_name} - ${eventData.location_address_town}</strong></span>
         </span>
     `
 
@@ -254,11 +254,9 @@ function renderEventData(event, details = false) {
                     <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${APP_CONFIG.CATEGORIES[eventData.category]["icon"]}</span></div>
                 </div>`;
 
-        eventData.addressHtml = eventData.location_address
-            ? `<div class="event-meta">
-                    ${renderMaterialIconText("distance", eventData.location_address)}
-               </div>`
-            : "";
+        eventData.locationAddress = eventData.location_address_2
+            ? `${eventData.location_address}, ${eventData.location_address_2}, ${eventData.location_address_code} ${eventData.location_address_town}`
+            : `${eventData.location_address} ${eventData.location_address_code} ${eventData.location_address_town}`;
 
         eventData.phoneHtml = eventData.phone
             ? ` <div class="event-meta">

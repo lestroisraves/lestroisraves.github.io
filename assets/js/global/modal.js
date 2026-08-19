@@ -228,15 +228,20 @@ export function openEventModal(event, type, user_profile=null) {
 
         <div class="event-details">
             <div class="event-meta">
-                ${eventData.locationHtml}
+                <span class="event-icon-text">
+                <span class="material-symbols-outlined">place</span>
+                <span class="text"><strong>${eventData.location_name}</strong></span>
+            </span>
             </div>
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
             </div>
             <div class="event-meta">
-                ${renderMaterialIconText("guardian", eventData.ageLabel)}
+                ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
-            ${eventData.addressHtml}
+            <div class="event-meta">
+                ${renderMaterialIconText("distance", eventData.locationAddress)}
+            </div>
             ${eventData.eatHtml}
             ${eventData.siteUrlHtml}
             ${eventData.phoneHtml}
