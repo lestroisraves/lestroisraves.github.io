@@ -4,22 +4,34 @@
    ============================================================ */
 
 .back-btn {
-  width: 36px;
-  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0.6rem 0 0.2rem 0.8rem;
 
-  border: none;
+  border: 1px solid var(--primary-subtext);
+  border-radius: 50%;
   color: var(--primary-textarea);
-  background: transparent;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 
-  font-size: 1.5rem;
   line-height: 1;
-
   cursor: pointer;
   z-index: 100;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .back-btn:hover {
-  color: black;
+  color: #fff;
+  background: var(--primary-link);
+  border-color: var(--primary-link);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.back-btn .material-symbols-outlined {
+  font-size: 1.3rem;
 }
 
 .label-help {

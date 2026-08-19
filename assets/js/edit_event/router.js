@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
-} from "../global/modal.js?v=1c559e92.ac80ce2";
+} from "../global/modal.js?v=f9d8104d.0d2e491";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory
@@ -13,7 +13,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=1c559e92.ac80ce2"
+} from "../global/address.js?v=f9d8104d.0d2e491"
 
 import { 
     editEvent, goBack
