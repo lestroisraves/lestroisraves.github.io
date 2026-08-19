@@ -33,8 +33,14 @@
             </label>
 
             <label class="pico">
-                Adresse du lieu
-                <input type="text" id="location_address" placeholder="">
+                Adresse du lieu *
+                <div id="address-autocomplete" class="address-autocomplete">
+                    <input type="text" id="location_address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
+                    <div class="address-suggestions hidden"></div>
+                </div>
+                <input type="text" id="location_address_2" placeholder="Complément d'adresse">
+                <input type="number" id="location_address_code" inputmode="numeric" placeholder="Code postal *" required>
+                <input type="text" id="location_address_town" placeholder="Ville *" required>
             </label>
 
             <label class="pico">

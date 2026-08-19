@@ -59,3 +59,40 @@
     color: #ccc;
 }
 
+/* Address autocomplete (Google Places) */
+.address-autocomplete {
+    position: relative;
+    width: 100%;
+}
+
+.address-autocomplete .address-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 30;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--md-default-bg-color);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.address-autocomplete .address-suggestions.hidden {
+    display: none;
+}
+
+.address-suggestion {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.8rem;
+    color: var(--primary-textarea);
+    cursor: pointer;
+}
+
+.address-suggestion:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+

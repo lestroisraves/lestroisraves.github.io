@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=a5b07994.2ca3509";
+} from "../global/modal.js?v=2cd440e1.2ca3509";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput
@@ -10,6 +10,10 @@ import {
 import { 
     addTag, removeLastTag
 } from "../global/tags.js"
+
+import { 
+    searchAddress, selectAddress, hideAddressSuggestions
+} from "../global/address.js?v=2cd440e1.2ca3509"
 
 import { 
     editEvent, goBack
@@ -41,6 +45,10 @@ async function handleClick(el, e) {
             removeImage();
             break;
 
+        case "select-address":
+            selectAddress(el);
+            break;
+
         case "submit-event":
             await editEvent();
             break;
@@ -58,6 +66,10 @@ async function handleInput(el) {
     switch (el.dataset.inputType) {
         case "phone":
             formatPhoneInput(el);
+            break;
+
+        case "address-search":
+            searchAddress(el);
             break;
 
         default:
@@ -124,6 +136,11 @@ document.addEventListener("change", (event) => {
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleChange(el);
+});
+
+document.addEventListener("focusout", (event) => {
+    if (!event.target.closest('[data-input-type="address-search"]')) return;
+    setTimeout(hideAddressSuggestions, 150); // let a suggestion click register first
 });
 
 window.addEventListener("load", () => {
