@@ -258,7 +258,7 @@ export function openEventModal(event, type, user_profile=null) {
                 ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
             <div class="event-meta">
-                ${renderMaterialIconText("distance", eventData.locationAddress)}
+                ${eventData.locationAddressHtml}
             </div>
             ${eventData.eatHtml}
             ${eventData.siteUrlHtml}
