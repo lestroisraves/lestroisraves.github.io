@@ -176,6 +176,15 @@ export function getEventFormPayload() {
     const start_time = form.querySelector('#event_start_time').value;
     const toEat = form.querySelector('input[name="to_eat"]').checked;
 
+    /* combine address parts (keeps postal code + town in the saved address) */
+    const addressStreet = form.querySelector('#location_address').value.trim();
+    const addressExtra = form.querySelector('#location_address_2').value.trim();
+    const addressCode = form.querySelector('#location_address_code').value.trim();
+    const addressTown = form.querySelector('#location_address_town').value.trim();
+    const location_address = [addressStreet, addressExtra, `${addressCode} ${addressTown}`.trim()]
+        .filter(Boolean)
+        .join(", ");
+
     var phoneNumber = null;
 
     /* reset form custom validity */
@@ -243,7 +252,7 @@ export function getEventFormPayload() {
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
         area: areaList.value,
-        location_address: form.querySelector('#location_address').value,
+        location_address: location_address,
         tags,
         // pending: done later
         is_test: userTags.includes("is_test"),

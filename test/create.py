@@ -30,6 +30,7 @@ TEST_TAGS = [
     "electro",
     "clown",
     "accoustique",
+    "Trans punk fusion musette qui pique"
 ]
 
 OPTIONS=supabase.ClientOptions(httpx_client=httpx.Client(verify=False))
@@ -94,13 +95,13 @@ def format_event_payload(day_delta, category, title, pending):
 
     if category == 0:
         image = "celine.webp"
-        location_name = random.choice(["Bikini", "Le Rex", "Café des Sports", "Métronum"])
+        location_name = random.choice(["Café du bord du monde", "Chez l'Olive", "Café des Sports", "Dans la ruelle a coté de la pharmarcie derrière le panneau vert"])
     elif category == 1:
         image = "cirque.webp"
-        location_name = random.choice(["Colo N Co", "Le pré vert", "La briqueterie"])
+        location_name = random.choice(["Colo N Co", "Le Pré Vert", "La Briqueterie"])
     elif category == 2:
         image = "projection.webp"
-        location_name = random.choice(["La Halle Rabastens", "Cinéma Albi", "Chez Vincent", "Promenade des Lices"])
+        location_name = random.choice(["La Halle", "La confiserie", "Chez Vincent", "Promenade des Lices"])
     elif category == 3:
         image = "peinture.webp"
         location_name = random.choice(["Musé Des Arts", "Au Cercle", "Café du bord du monde", "Chez Jeanine"])
@@ -109,7 +110,7 @@ def format_event_payload(day_delta, category, title, pending):
         location_name = random.choice(["Musé Des Livres", "La confiserie", "Chez Julien", "Au livre enchainé"])
     else:
         image = "misc.webp"
-        location_name = random.choice(["Café des Sports", "La Halle Rabastens", "Chez L'Olive", "Le Rouge qui tache"])
+        location_name = random.choice(["Café des Sports", "La Halle", "Chez L'Olive", "Le Rouge en mélée"])
 
     min_age = random.choice([None, random.randrange(12)])
     if min_age is not None:
@@ -128,7 +129,10 @@ def format_event_payload(day_delta, category, title, pending):
         "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
         "location_name": location_name,
         "area": random.randrange(3),
-        "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])} 81{random.randrange(800, 899)} {random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])}",
+        "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])}",
+        "location_address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
+        "location_address_code": f"81{random.randrange(800, 899)}",
+        "location_address_town": random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"]),
         "price": price,
         "min_price": min_price,
         "max_price": max_price,

@@ -164,6 +164,16 @@ function showHeader() {
 }
 
 
+// Flag tile tag rows that overflow so CSS can show a trailing ellipsis.
+function markOverflowingTags() {
+    tilesView.querySelectorAll(".event-tile .event-tags").forEach(el => {
+        el.classList.toggle("overflowing", el.scrollWidth > el.clientWidth + 1);
+    });
+}
+
+window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
+
+
 function renderTiles() {
     const grouped = groupEvents(EVENTS);
 
@@ -181,6 +191,8 @@ function renderTiles() {
     switchViewArea.querySelector('[data-view="tiles"]').classList.add("active");
     switchViewArea.querySelector('[data-view="agenda"]').classList.remove("active");
     loading.style.display = "none";
+
+    requestAnimationFrame(markOverflowingTags);
 
     if (eventId) {
         console.log("show event id:", eventId);

@@ -2,6 +2,9 @@ console.log("executing:", "modal.js");
 
 const successModal = document.getElementById("success-modal");
 const errorModal = document.getElementById("error-modal");
+const ageHelpModal = document.getElementById("age-help-modal");
+const tagHelpModal = document.getElementById("tag-help-modal");
+const endDateHelpModal = document.getElementById("end-date-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -123,6 +126,21 @@ export function openErrorModal(text) {
     document.body.style.overflow = "hidden";
 }
 
+export function openAgeHelpModal() {
+    ageHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openTagHelpModal() {
+    tagHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openEndDateHelpModal() {
+    endDateHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
 export function openProfileModal(profile) {
     currentProfile = profile;
     currentModal = profileModal;
@@ -228,15 +246,20 @@ export function openEventModal(event, type, user_profile=null) {
 
         <div class="event-details">
             <div class="event-meta">
-                ${eventData.locationHtml}
+                <span class="event-icon-text">
+                <span class="material-symbols-outlined">place</span>
+                <span class="text"><strong>${eventData.location_name}</strong></span>
+            </span>
             </div>
             <div class="event-meta">
                 ${renderMaterialIconText("sell", eventData.priceLabel)}
             </div>
             <div class="event-meta">
-                ${renderMaterialIconText("guardian", eventData.ageLabel)}
+                ${renderMaterialIconText("face", eventData.ageLabel)}
             </div>
-            ${eventData.addressHtml}
+            <div class="event-meta">
+                ${renderMaterialIconText("distance", eventData.locationAddress)}
+            </div>
             ${eventData.eatHtml}
             ${eventData.siteUrlHtml}
             ${eventData.phoneHtml}
@@ -410,6 +433,11 @@ export function closeModal(target) {
         case "profile-modal":
         case "official-request-modal":
             closeCurrentModal();
+            break;
+
+        default:
+            modal.classList.add("hidden");
+            document.body.style.overflow = "";
             break;
     }
 }

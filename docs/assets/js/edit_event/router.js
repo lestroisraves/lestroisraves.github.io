@@ -1,6 +1,6 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState
+    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal
 } from "../global/modal.js?v=dev";
 
 import { 
@@ -10,6 +10,10 @@ import {
 import { 
     addTag, removeLastTag
 } from "../global/tags.js"
+
+import { 
+    searchAddress, selectAddress, hideAddressSuggestions
+} from "../global/address.js?v=dev"
 
 import { 
     editEvent, goBack
@@ -41,12 +45,28 @@ async function handleClick(el, e) {
             removeImage();
             break;
 
+        case "select-address":
+            selectAddress(el);
+            break;
+
         case "submit-event":
             await editEvent();
             break;
 
         case "close-modal":
             closeModal(el);
+            break;
+
+        case "open-age-help":
+            openAgeHelpModal();
+            break;
+
+        case "open-tag-help":
+            openTagHelpModal();
+            break;
+
+        case "open-end-date-help":
+            openEndDateHelpModal();
             break;
 
         default:
@@ -58,6 +78,10 @@ async function handleInput(el) {
     switch (el.dataset.inputType) {
         case "phone":
             formatPhoneInput(el);
+            break;
+
+        case "address-search":
+            searchAddress(el);
             break;
 
         default:
@@ -124,6 +148,11 @@ document.addEventListener("change", (event) => {
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleChange(el);
+});
+
+document.addEventListener("focusout", (event) => {
+    if (!event.target.closest('[data-input-type="address-search"]')) return;
+    setTimeout(hideAddressSuggestions, 150); // let a suggestion click register first
 });
 
 window.addEventListener("load", () => {
