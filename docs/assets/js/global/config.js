@@ -102,34 +102,15 @@ APP_CONFIG = {
             "color_light": "#fffff1"
         }
     },
-    PARENTAL_GUIDE: {
-        0: {
-            "label": "Tout public",
-            "icon": "check_circle"
-        },
-        1: {
-            "label": "Pour les enfants",
-            "label": "Enfants",
-            "icon": "child_hat"
-        },
-        2: {
-            "label": "Déconseillé aux enfants",
-            "label": "Adultes",
-            "icon": "18_up_rating"
-        }
-    },
     PRICE_CHOICES: {
         0: {
-            "label": "Gratuit",
-            "icon": "cruelty_free"
+            "label": "Gratuit"
         },
         1: {
-            "label": "Prix libre",
-            "icon": "volunteer_activism"
+            "label": "Prix libre"
         },
         2: {
-            "label": "Payant",
-            "icon": "euro"
+            "label": "Payant"
         }
     },
     AREAS: {
@@ -150,10 +131,6 @@ APP_CONFIG = {
         0: {
             "label": "Aujourd'hui"
         },
-        // 1: {
-        //     "label": "Demain",
-        //     "icon": "explore_nearby"
-        // },
         1: {
             "label": "Prochainement"
         }

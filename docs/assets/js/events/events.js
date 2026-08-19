@@ -109,7 +109,7 @@ function groupByDateWithCategories(events) {
             map[date] = new Set(); // ✅ unique types
         }
 
-        map[date].add(event.category); // integer or string
+        eventCategoryIds(event).forEach(cat => map[date].add(cat));
     });
 
     return map;
@@ -125,13 +125,12 @@ function groupByDateWithCounts(events) {
             map[date] = {};
         }
 
-        const type = event.category;
-
-        if (!map[date][type]) {
-            map[date][type] = 0;
-        }
-
-        map[date][type]++;
+        eventCategoryIds(event).forEach(type => {
+            if (!map[date][type]) {
+                map[date][type] = 0;
+            }
+            map[date][type]++;
+        });
     });
 
     return map;
@@ -258,7 +257,7 @@ function applyFilter() {
         if (!hasAnyFilter) {
             filteredEvents = EVENTS;
         } else {
-            filteredEvents = EVENTS.filter(event => matchesFilters(String(event.category), String(event.pg), String(event.price), String(event.area), event.min_age, event.max_age));
+            filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.pg), String(event.price), String(event.area), event.min_age, event.max_age));
         }
         renderCalendar(filteredEvents);
     }
@@ -415,9 +414,10 @@ async function loadEvents() {
 }
 
 function matchesFilters(category, pg, price, area, minAge, maxAge) {
+    const cats = String(category).split(",").filter(Boolean);
     if (
         activeFilters.category.size > 0 &&
-        !activeFilters.category.has(category)
+        !cats.some(c => activeFilters.category.has(c))
     ) return false;
 
     if (

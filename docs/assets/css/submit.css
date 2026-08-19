@@ -4,22 +4,34 @@
    ============================================================ */
 
 .back-btn {
-  width: 36px;
-  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0.6rem 0 0.2rem 0.8rem;
 
-  border: none;
+  border: 1px solid var(--primary-subtext);
+  border-radius: 50%;
   color: var(--primary-textarea);
-  background: transparent;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 
-  font-size: 1.5rem;
   line-height: 1;
-
   cursor: pointer;
   z-index: 100;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .back-btn:hover {
-  color: black;
+  color: #fff;
+  background: var(--primary-link);
+  border-color: var(--primary-link);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.back-btn .material-symbols-outlined {
+  font-size: 1.3rem;
 }
 
 .label-help {
@@ -151,5 +163,53 @@
 
 .address-suggestion:hover {
     background: rgba(0, 0, 0, 0.06);
+}
+
+/* === Category multi-select chips === */
+.category-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+/* .pico scopes Pico's conditional button theme; override it here */
+.pico .category-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: auto;
+    padding: 0.2rem 0.6rem;
+    margin: 0;
+    border: 2px solid var(--chip-color, var(--primary-subtext));
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-textarea);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pico .category-chip .material-symbols-outlined {
+    font-size: 1.1rem;
+    color: var(--chip-color, var(--primary-subtext));
+}
+
+.pico .category-chip:hover {
+    background: color-mix(in srgb, var(--chip-color) 12%, transparent);
+}
+
+.pico .category-chip.selected {
+    background: var(--chip-color);
+    border-color: var(--chip-color);
+    color: #fff;
+}
+
+.pico .category-chip.selected .material-symbols-outlined {
+    color: #fff;
 }
 

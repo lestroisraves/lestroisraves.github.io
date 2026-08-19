@@ -151,18 +151,19 @@ def format_event_payload(day_delta, category, title, pending):
 def generate_events(n: int):
     events = []
     print("generate events...")
-    events.append(format_event_payload(day_delta=0, category=0, title=f"Test Event #1.a", pending=False))
-    events.append(format_event_payload(day_delta=0, category=0, title=f"Test Event #1.b", pending=False))
-    events.append(format_event_payload(day_delta=0, category=1, title=f"Test Event #1.c", pending=False))
-    events.append(format_event_payload(day_delta=0, category=1, title=f"Test Event #1.d", pending=False))
-    events.append(format_event_payload(day_delta=0, category=2, title=f"Test Event #1.e", pending=False))
-    events.append(format_event_payload(day_delta=0, category=3, title=f"Test Event #1.f", pending=False))
-    events.append(format_event_payload(day_delta=0, category=3, title=f"Test Event #1.g", pending=False))
-    events.append(format_event_payload(day_delta=0, category=4, title=f"Test Event #1.a", pending=False))
-    events.append(format_event_payload(day_delta=0, category=5, title=f"Test Event #1.i", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["0", "1", "2"], title=f"Test Event #1.a", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["0"], title=f"Test Event #1.b", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["1"], title=f"Test Event #1.c", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["1"], title=f"Test Event #1.d", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["2"], title=f"Test Event #1.e", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["3"], title=f"Test Event #1.f", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["3"], title=f"Test Event #1.g", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["4"], title=f"Test Event #1.a", pending=False))
+    events.append(format_event_payload(day_delta=0, category=["5"], title=f"Test Event #1.i", pending=False))
     for i in range(n):
         title = random.choice([f"This is a very very long Test Event #{i + 1} sdfsddsfs sdfg sdgs", f"Test Event #{i + 1}"])
-        events.append(format_event_payload(day_delta=i, category=random.randrange(6), title=title, pending=random.choice([True, False, False, False])))
+        category = sorted(random.sample([str(c) for c in range(6)], k=random.randint(1, 6)))
+        events.append(format_event_payload(day_delta=i, category=category, title=title, pending=random.choice([True, False, False, False])))
     return events
 
 

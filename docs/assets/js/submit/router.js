@@ -1,10 +1,10 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal
+    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
 } from "../global/modal.js?v=dev";
 
 import { 
-    priceChanged, handleImageChoice, formatPhoneInput
+    priceChanged, handleImageChoice, formatPhoneInput, toggleCategory
 } from "../global/eventform.js"
 
 import { 
@@ -37,6 +37,10 @@ async function handleClick(el, e) {
             document.getElementById("event-image").click()  // wrapper to input type="file"
             break;
 
+        case "toggle-category":
+            toggleCategory(el);
+            break;
+
         case "select-address":
             selectAddress(el);
             break;
@@ -59,6 +63,10 @@ async function handleClick(el, e) {
 
         case "open-end-date-help":
             openEndDateHelpModal();
+            break;
+
+        case "open-category-help":
+            openCategoryHelpModal();
             break;
 
         default:

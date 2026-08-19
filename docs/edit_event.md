@@ -5,7 +5,7 @@ hide:
 ---
 
 {% block back %}
-<button id="back-btn" class="back-btn" data-action="go-back" hidden>←</button>
+<button id="back-btn" class="back-btn" data-action="go-back" aria-label="Retour" hidden><span class="material-symbols-outlined">arrow_back</span></button>
 {% endblock %}
 {% include 'includes/modals/popup.html' %}
 {% include 'includes/modals/notices.html' %}

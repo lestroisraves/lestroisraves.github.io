@@ -227,11 +227,11 @@ function renderEventSmallTile(event, type) {
         : ""
     
     const html = `
-        <div class="event-small-tile ${pending}" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
+        <div class="event-small-tile ${pending}" style="border-color: ${eventData.categoryColor};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${event.title}</span>
                 <span class="event-small-meta non-wrap">
-                    <span style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};"><strong>${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</strong></span>
+                    <span style="color: ${eventData.categoryColor};"><strong>${eventData.categoryLabel}</strong></span>
                     .
                     <span>${formatEventDateTime(eventData.event_date)}</span>
                     .

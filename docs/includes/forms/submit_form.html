@@ -21,6 +21,16 @@
             </label>
 
             <label class="pico">
+                <span class="label-help">
+                    Catégories *
+                    <button type="button" class="help-btn" data-action="open-category-help" aria-label="Aide : catégories">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
+                <div id="category-choices" class="category-choices"></div>
+            </label>
+
+            <label class="pico">
                 Nom du lieu *
                 <input type="text" id="location_name" placeholder="" required>
             </label class="pico">
@@ -49,13 +59,6 @@
             </label>
 
             <label class="pico">
-                Catégorie *
-                <select name="select" id="category" required>
-                    <option value="" disabled selected hidden>Choisissez...</option>
-                </select>
-            </label>
-
-            <label class="pico">
                 Date *
                 <input type="date" id="event_date" required>
             </label>
@@ -77,7 +80,7 @@
 
             <label for="tag-input" class="pico">
                 <span class="label-help">
-                     Tags *
+                    Tags *
                     <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
                         <span class="material-symbols-outlined">help</span>
                     </button>

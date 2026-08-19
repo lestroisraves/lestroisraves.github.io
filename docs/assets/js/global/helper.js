@@ -128,6 +128,38 @@ function linkify(text) {
     });
 }
 
+/* === CATEGORIES (an event may have several) === */
+function eventCategoryIds(event) {
+    const c = event.category;
+    if (Array.isArray(c)) return c.map(Number).filter(n => !Number.isNaN(n));
+    if (c === null || c === undefined || c === "") return [];
+    if (typeof c === "string") return c.split(",").map(s => Number(s.trim())).filter(n => !Number.isNaN(n));
+    return [Number(c)];
+}
+
+function categoryLabel(ids) {
+    if (!ids || ids.length === 0) return "";
+    if (ids.length > 1) return "Mixte";
+    return APP_CONFIG.CATEGORIES[ids[0]]["label"];
+}
+
+function categoryPrimaryId(ids) {
+    return (ids && ids.length) ? ids[0] : 0;
+}
+
+/* pie ("camembert") background of all category colors; solid when only one */
+function categoryPieBackground(ids) {
+    if (!ids || ids.length === 0) return APP_CONFIG.CATEGORIES[0]["color"];
+    if (ids.length === 1) return APP_CONFIG.CATEGORIES[ids[0]]["color"];
+    const slice = 360 / ids.length;
+    const stops = ids.map((id, i) =>
+        `${APP_CONFIG.CATEGORIES[id]["color"]} ${i * slice}deg ${(i + 1) * slice}deg`
+    );
+    // start at 45° so 2/4-way splits land on diagonals, not the vertical/horizontal axes
+    return `conic-gradient(from 45deg, ${stops.join(", ")})`;
+}
+
+
 
 function renderAccountPermissionDetails() {
     return `
@@ -199,9 +231,18 @@ function setEventImage(container, url) {
 function renderEventData(event, details = false) {
     const eventData = event;
 
+    /* categories: normalize to an array + derived display fields */
+    eventData.categoryIds = eventCategoryIds(event);
+    eventData.categoryPrimaryId = categoryPrimaryId(eventData.categoryIds);
+    eventData.categoryLabel = categoryLabel(eventData.categoryIds);
+    eventData.categoryPie = categoryPieBackground(eventData.categoryIds);
+    eventData.categoryColor = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["color"];
+    eventData.categoryColorLight = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["color_light"];
+    eventData.categoryIcon = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["icon"];
+
     eventData.categoryHtml = `
-        <div class="event-category category cat-${eventData.category}" style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
-            ${renderMaterialIconText(APP_CONFIG.CATEGORIES[eventData.category]["icon"], APP_CONFIG.CATEGORIES[eventData.category]["label"])}
+        <div class="event-category category cat-${eventData.categoryPrimaryId}" style="color: ${eventData.categoryColor};">
+            ${renderMaterialIconText(eventData.categoryIcon, eventData.categoryLabel)}
         </div>
     `
     eventData.locationHtml = `
@@ -251,7 +292,7 @@ function renderEventData(event, details = false) {
                     <img class="event-thumbnail" alt="image évènement">
                 </div>`
             : ` <div class="event-image-wrapper">
-                    <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${APP_CONFIG.CATEGORIES[eventData.category]["icon"]}</span></div>
+                    <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${eventData.categoryIcon}</span></div>
                 </div>`;
 
         eventData.locationAddress = eventData.location_address_2
@@ -337,7 +378,7 @@ function configureSelectList(configList, selectList, defaultValue=null) {
 
 /* === OTHERS === */
 async function navigatorShareEvent(event, event_url) {
-    const event_title = APP_CONFIG.CATEGORIES[event.category]["label"];
+    const event_title = categoryLabel(eventCategoryIds(event));
     const msg_title = event.pending ? "Ici un évènement en attente de publication :" : "Regarde cet évènement !";
     const event_desc = `${msg_title}
 
