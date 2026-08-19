@@ -1,7 +1,7 @@
 console.log("executing:", "contacts.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=f9d8104d.0d2e491";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=f9d8104d.0d2e491";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=e2ff0bf3.37392b2";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=e2ff0bf3.37392b2";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");

@@ -1,7 +1,7 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=f9d8104d.0d2e491";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=f9d8104d.0d2e491";
+import { openErrorModal } from "./modal.js?v=e2ff0bf3.37392b2";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=e2ff0bf3.37392b2";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -86,6 +86,7 @@ export function toggleCategory(el) {
         el.classList.add("selected");
         el.setAttribute("aria-pressed", "true");
     }
+    console.log("selectedCategories:", selectedCategories);
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -100,6 +101,7 @@ export function initEventForm(eventData=null) {
 
     /* init category choices */
     selectedCategories = new Set();
+    renderCategoryChoices();
 
     /* init userTags */
     clearTags();
@@ -277,6 +279,7 @@ export function getEventFormPayload() {
     };
 
     /* require at least one category */
+    console.log("selectedCategories:", selectedCategories);
     if (selectedCategories.size === 0) {
         openErrorModal("Choisissez au moins une catégorie");
         return;
@@ -293,6 +296,9 @@ export function getEventFormPayload() {
         location_name: form.querySelector('#location_name').value,
         area: areaList.value,
         location_address: location_address,
+        location_address_2: addressExtra === "" ? null : addressExtra,
+        location_address_code: addressCode,
+        location_address_town: addressTown,
         tags,
         // pending: done later
         is_test: userTags.includes("is_test"),
@@ -306,7 +312,8 @@ export function getEventFormPayload() {
         phone: phoneNumber,
         email: form.querySelector("#email").value,
         site_url: form.querySelector('#site_url').value,
-        pg: parentalGuideList.value,
+        min_age: form.querySelector('#min_age').value.trim() === "" ? null : Number(form.querySelector('#min_age').value),
+        max_age: form.querySelector('#max_age').value.trim() === "" ? null : Number(form.querySelector('#max_age').value),
         to_eat: toEat
     }
 
