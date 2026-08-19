@@ -171,9 +171,6 @@ function markOverflowingTags() {
     });
 }
 
-window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
-
-
 function renderTiles() {
     const grouped = groupEvents(EVENTS);
 

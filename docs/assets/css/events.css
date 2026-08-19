@@ -306,6 +306,15 @@ body.events-page {
     background: rgba(103, 58, 183, 0.15);
 }
 
+.event-icon-text .text.contact a.map {
+    background: rgba(234, 67, 53, 0.08);
+    color: #c5221f;
+}
+
+.event-icon-text .text.contact a.map:hover {
+    background: rgba(234, 67, 53, 0.15);
+}
+
 .event-icon-text .text.creator .material-symbols-outlined {
     color: #1a3fb4;
 }

@@ -143,6 +143,8 @@
     font-size: 0.6rem;
     line-height: 1.5;
     white-space: pre-line;
+    /* base text font + color-emoji fallback so raw emoji render */
+    font-family: var(--md-text-font-family, "Roboto"), "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
 }
 
 .modal-description a {

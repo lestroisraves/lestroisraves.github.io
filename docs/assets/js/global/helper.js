@@ -258,6 +258,14 @@ function renderEventData(event, details = false) {
             ? `${eventData.location_address}, ${eventData.location_address_2}, ${eventData.location_address_code} ${eventData.location_address_town}`
             : `${eventData.location_address} ${eventData.location_address_code} ${eventData.location_address_town}`;
 
+        // clickable address -> universal Google Maps link (opens the app on mobile)
+        const mapQuery = encodeURIComponent(`${eventData.location_name}, ${eventData.locationAddress}`);
+        eventData.locationAddressHtml = `
+            <span class="event-icon-text">
+                <span class="material-symbols-outlined">distance</span>
+                <span class="text contact"><a class="map" href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" rel="noopener noreferrer">${eventData.locationAddress}</a></span>
+            </span>`;
+
         eventData.phoneHtml = eventData.phone
             ? ` <div class="event-meta">
                     <span class="event-icon-text">

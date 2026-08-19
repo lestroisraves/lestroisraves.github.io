@@ -136,7 +136,7 @@ def format_event_payload(day_delta, category, title, pending):
         "price": price,
         "min_price": min_price,
         "max_price": max_price,
-        "long_description": random.choice([None, f"This is a generated test event.\nBe Cool.\nDon't panic.\nParty hard.\nwww.github.com"]),
+        "long_description": random.choice([None, f"This is a generated test event.\nBe Cool 😎.\nDon't panic 👌.\nParty hard 🖤.\nwww.github.com"]),
         "pending": pending,
         "phone": random.choice([None, "+33 6 01 12 13 14"]),
         "site_url": random.choice([None, "https://rcsculture.github.io"]),

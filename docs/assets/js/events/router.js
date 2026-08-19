@@ -100,6 +100,8 @@ async function handleInput(el) {
 }
 
 /* === LISTENERS === */
+window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
+
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
     const el = event.target.closest("[data-action]");
