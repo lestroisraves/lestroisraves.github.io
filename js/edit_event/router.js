@@ -1,10 +1,10 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal
-} from "../global/modal.js?v=d541dae8.b2091c6";
+    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
+} from "../global/modal.js?v=1c559e92.ac80ce2";
 
 import { 
-    priceChanged, handleImageChoice, removeImage, formatPhoneInput
+    priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory
 } from "../global/eventform.js"
 
 import { 
@@ -13,7 +13,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=d541dae8.b2091c6"
+} from "../global/address.js?v=1c559e92.ac80ce2"
 
 import { 
     editEvent, goBack
@@ -41,6 +41,10 @@ async function handleClick(el, e) {
             document.getElementById("event-image").click()  // wrapper to input type="file"
             break;
         
+        case "toggle-category":
+            toggleCategory(el);
+            break;
+
         case "remove-image":
             removeImage();
             break;
@@ -67,6 +71,10 @@ async function handleClick(el, e) {
 
         case "open-end-date-help":
             openEndDateHelpModal();
+            break;
+
+        case "open-category-help":
+            openCategoryHelpModal();
             break;
 
         default:

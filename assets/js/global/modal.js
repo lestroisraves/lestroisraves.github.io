@@ -5,6 +5,7 @@ const errorModal = document.getElementById("error-modal");
 const ageHelpModal = document.getElementById("age-help-modal");
 const tagHelpModal = document.getElementById("tag-help-modal");
 const endDateHelpModal = document.getElementById("end-date-help-modal");
+const categoryHelpModal = document.getElementById("category-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -141,6 +142,11 @@ export function openEndDateHelpModal() {
     document.body.style.overflow = "hidden";
 }
 
+export function openCategoryHelpModal() {
+    categoryHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
 export function openProfileModal(profile) {
     currentProfile = profile;
     currentModal = profileModal;
@@ -234,9 +240,9 @@ export function openEventModal(event, type, user_profile=null) {
     }
 
     eventModalContent.innerHTML = `
-        <header class="event-modal-header" style="--event-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">
-            <div class="event-side">
-                <div class="event-category">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+        <header class="event-modal-header" style="--event-color: ${eventData.categoryColor};">
+            <div class="event-side" style="background: ${eventData.categoryPie}">
+                <div class="event-category">${eventData.categoryLabel}</div>
                 <div class="event-date">${formatEventDate(eventData.event_date)}</div>
                 ${eventData.timeHtml}
             </div>
@@ -274,8 +280,8 @@ export function openEventModal(event, type, user_profile=null) {
     console.log("event modal data:", eventData);
 
     /* apply category style */
-    eventModalContent.querySelector(".image-placeholder").style.background = APP_CONFIG.CATEGORIES[eventData.category]["color_light"];
-    eventModalContent.querySelector("#img-ico").style.color = APP_CONFIG.CATEGORIES[eventData.category]["color"];
+    eventModalContent.querySelector(".image-placeholder").style.background = eventData.categoryColorLight;
+    eventModalContent.querySelector("#img-ico").style.color = eventData.categoryColor;
 
 
     if (eventData.image_url) {

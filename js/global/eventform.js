@@ -1,7 +1,7 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=d541dae8.b2091c6";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=d541dae8.b2091c6";
+import { openErrorModal } from "./modal.js?v=1c559e92.ac80ce2";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=1c559e92.ac80ce2";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -9,7 +9,7 @@ const today = startOfDay(new Date());
 
 const form = document.getElementById("event-form");
 const areaList = document.getElementById("area");
-const categoryList = document.getElementById("category");
+const categoryChoices = document.getElementById("category-choices");
 const parentalGuideList = document.getElementById("pg");
 const priceChoiceList = document.getElementById("price-choice");
 const minPrice = document.getElementById("min_price");
@@ -19,6 +19,7 @@ const deleteImageBtn = document.getElementById("remove-image-btn");
 
 let currentImageUrl = null;
 let imageToUpload = null;
+let selectedCategories = new Set();
 
 /* === LOCAL FUNCTIONS === */
 async function resizeImage(file, maxWidth = 1200, quality = 0.8) {
@@ -60,6 +61,33 @@ function showImagePreview(image_name, image_src) {
     form.querySelector("#file-name").textContent = image_name;
 }
 
+function renderCategoryChoices() {
+    categoryChoices.innerHTML = "";
+    Object.keys(APP_CONFIG.CATEGORIES).forEach(key => {
+        const cat = APP_CONFIG.CATEGORIES[key];
+        const isSelected = selectedCategories.has(key);
+        categoryChoices.innerHTML += `
+            <button type="button" class="category-chip ${isSelected ? "selected" : ""}" data-action="toggle-category" data-category="${key}" style="--chip-color: ${cat.color};" aria-pressed="${isSelected}">
+                <span class="material-symbols-outlined">${cat.icon}</span>
+                ${cat.label}
+            </button>`;
+    });
+}
+
+/* === EXPORTED FUNCTIONS === */
+export function toggleCategory(el) {
+    const key = el.dataset.category;
+    if (selectedCategories.has(key)) {
+        selectedCategories.delete(key);
+        el.classList.remove("selected");
+        el.setAttribute("aria-pressed", "false");
+    } else {
+        selectedCategories.add(key);
+        el.classList.add("selected");
+        el.setAttribute("aria-pressed", "true");
+    }
+}
+
 /* === EXPORTED FUNCTIONS === */
 export function initEventForm(eventData=null) {
     form.reset()
@@ -68,8 +96,10 @@ export function initEventForm(eventData=null) {
 
     /* Configure select lists  */
     configureSelectList(APP_CONFIG.AREAS, areaList);
-    configureSelectList(APP_CONFIG.CATEGORIES, categoryList);
     configureSelectList(APP_CONFIG.PRICE_CHOICES, priceChoiceList, 0);
+
+    /* init category choices */
+    selectedCategories = new Set();
 
     /* init userTags */
     clearTags();
@@ -80,9 +110,13 @@ export function initEventForm(eventData=null) {
     form.querySelector("#title").value = eventData.title;
     form.querySelector("#location_name").value = eventData.location_name;
     form.querySelector("#area").value = eventData.area;
-    if (eventData.location_address) form.querySelector("#location_address").value = eventData.location_address;
+    form.querySelector("#location_address").value = eventData.location_address;
+    form.querySelector("#location_address_2").value = eventData.location_address_2 || "";
+    form.querySelector("#location_address_code").value = eventData.location_address_code || "";
+    form.querySelector("#location_address_town").value = eventData.location_address_town || "";
     if (eventData.long_description) form.querySelector("#long_description").value = eventData.long_description;
-    form.querySelector("#category").value = eventData.category;
+    eventCategoryIds(eventData).forEach(id => selectedCategories.add(String(id)));
+    renderCategoryChoices();
     form.querySelector("#min_age").value = eventData.min_age;
     form.querySelector("#max_age").value = eventData.max_age;
     form.querySelector("#event_date").value = eventData.event_date;
@@ -241,6 +275,12 @@ export function getEventFormPayload() {
         form.reportValidity(); // shows native errors
         return;
     };
+
+    /* require at least one category */
+    if (selectedCategories.size === 0) {
+        openErrorModal("Choisissez au moins une catégorie");
+        return;
+    }
         
     const tags = userTags.map((t) => t.trim().toLowerCase())
         .filter(Boolean);
@@ -261,7 +301,7 @@ export function getEventFormPayload() {
         price: priceChoiceList.value,
         min_price: min_price,
         max_price: max_price,
-        category: categoryList.value,
+        category: Array.from(selectedCategories).map(Number).sort((a, b) => a - b),
         // image_url: done later
         phone: phoneNumber,
         email: form.querySelector("#email").value,

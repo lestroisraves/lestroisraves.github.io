@@ -1,7 +1,7 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=d541dae8.b2091c6";
-import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=d541dae8.b2091c6";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=1c559e92.ac80ce2";
+import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=1c559e92.ac80ce2";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -227,11 +227,11 @@ function renderEventSmallTile(event, type) {
         : ""
     
     const html = `
-        <div class="event-small-tile ${pending}" style="border-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
+        <div class="event-small-tile ${pending}" style="border-color: ${eventData.categoryColor};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${event.title}</span>
                 <span class="event-small-meta non-wrap">
-                    <span style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};"><strong>${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</strong></span>
+                    <span style="color: ${eventData.categoryColor};"><strong>${eventData.categoryLabel}</strong></span>
                     .
                     <span>${formatEventDateTime(eventData.event_date)}</span>
                     .

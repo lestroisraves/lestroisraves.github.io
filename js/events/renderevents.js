@@ -41,18 +41,18 @@ export function renderEventTile(event) {
     const eventData = renderEventData(event);
 
     return `
-    <div class="event-tile" style="--event-color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]}"
+    <div class="event-tile" style="--event-color: ${eventData.categoryColor}"
             data-action="show-event" role="link" tabindex="0"
             data-event-id="${eventData.id}"
-            data-category="${eventData.category}"
+            data-category="${eventData.categoryIds.join(",")}"
             data-pg="${eventData.pg}"
             data-price="${eventData.price}"
             data-area="${eventData.area}"
             data-min-age="${eventData.min_age}"
             data-max-age="${eventData.max_age}"
             data-date="${eventData.event_date}">
-        <div class="event-side">
-            <div class="event-category">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+        <div class="event-side" style="background: ${eventData.categoryPie}">
+            <div class="event-category">${eventData.categoryLabel}</div>
             <div class="event-date">${formatEventDate(eventData.event_date)}</div>
             ${eventData.timeHtml}
         </div>
@@ -96,7 +96,7 @@ export function renderEventSuggestion(event) {
     const html = `
         <div class="event-suggestion-title non-wrap">${event.title}</div>
         <div class="event-suggestion-meta non-wrap">
-            <div style="color: ${APP_CONFIG.CATEGORIES[eventData.category]["color"]};">${APP_CONFIG.CATEGORIES[eventData.category]["label"]}</div>
+            <div style="color: ${eventData.categoryColor};">${eventData.categoryLabel}</div>
             .
             <div>${formatEventDateTime(eventData.event_date)}</div>
             .

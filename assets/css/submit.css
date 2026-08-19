@@ -153,3 +153,51 @@
     background: rgba(0, 0, 0, 0.06);
 }
 
+/* === Category multi-select chips === */
+.category-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+/* .pico scopes Pico's conditional button theme; override it here */
+.pico .category-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: auto;
+    padding: 0.2rem 0.6rem;
+    margin: 0;
+    border: 2px solid var(--chip-color, var(--primary-subtext));
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-textarea);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pico .category-chip .material-symbols-outlined {
+    font-size: 1.1rem;
+    color: var(--chip-color, var(--primary-subtext));
+}
+
+.pico .category-chip:hover {
+    background: color-mix(in srgb, var(--chip-color) 12%, transparent);
+}
+
+.pico .category-chip.selected {
+    background: var(--chip-color);
+    border-color: var(--chip-color);
+    color: #fff;
+}
+
+.pico .category-chip.selected .material-symbols-outlined {
+    color: #fff;
+}
+
