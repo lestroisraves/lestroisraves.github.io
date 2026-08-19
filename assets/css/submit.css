@@ -96,6 +96,27 @@
 .address-autocomplete {
     position: relative;
     width: 100%;
+    /* flex column kills the inline descender gap below the input */
+    display: flex;
+    flex-direction: column;
+    /* carry the input's spacing here so the panel can hug the input's bottom */
+    /* margin-bottom: var(--pico-spacing, 1rem); */
+}
+
+.pico .search-address {
+    margin-bottom: 0rem;
+}
+
+.pico .search-address.looking {
+    border-color: var(--primary-link);
+    border-bottom-color: transparent;
+    border-radius: 10px 10px 0 0;
+    box-shadow: none;
+    margin-bottom: 0rem;
+}
+
+.address-autocomplete .search-address {
+    margin-bottom: 0;
 }
 
 .address-autocomplete .address-suggestions {
@@ -104,13 +125,16 @@
     left: 0;
     right: 0;
     z-index: 30;
+    margin-top: 0;
 
     display: flex;
     flex-direction: column;
 
     background: var(--md-default-bg-color);
+    border: 1px solid var(--primary-link);
+    border-top: none;
     border-radius: 0 0 10px 10px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18); */
     overflow: hidden;
 }
 

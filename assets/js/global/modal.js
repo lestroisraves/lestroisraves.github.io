@@ -3,6 +3,8 @@ console.log("executing:", "modal.js");
 const successModal = document.getElementById("success-modal");
 const errorModal = document.getElementById("error-modal");
 const ageHelpModal = document.getElementById("age-help-modal");
+const tagHelpModal = document.getElementById("tag-help-modal");
+const endDateHelpModal = document.getElementById("end-date-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -126,6 +128,16 @@ export function openErrorModal(text) {
 
 export function openAgeHelpModal() {
     ageHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openTagHelpModal() {
+    tagHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openEndDateHelpModal() {
+    endDateHelpModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 

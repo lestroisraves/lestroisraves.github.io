@@ -35,6 +35,7 @@ async function runSearch(input) {
 
     const value = input.value.trim();
     if (value.length < 3) {
+        input.classList.remove("looking");
         hideAddressSuggestions();
         return;
     }
@@ -55,6 +56,7 @@ async function runSearch(input) {
 
     currentFeatures = data?.features || [];
     if (currentFeatures.length === 0) {
+        input.classList.remove("looking");
         hideAddressSuggestions();
         return;
     }
@@ -71,6 +73,7 @@ async function runSearch(input) {
         els.suggestionsEl.appendChild(div);
     });
 
+    input.classList.add("looking");
     els.suggestionsEl.classList.remove("hidden");
 }
 
@@ -88,6 +91,7 @@ export function selectAddress(el) {
     els.input.value = props.name || props.label || els.input.value;
     if (els.codeInput) els.codeInput.value = props.postcode || "";
     if (els.townInput) els.townInput.value = props.city || "";
+    if (els.input) els.input.classList.remove("looking");
     hideAddressSuggestions();
 }
 
@@ -95,6 +99,7 @@ export function hideAddressSuggestions() {
     const els = getEls();
     if (!els?.suggestionsEl) return;
     els.suggestionsEl.innerHTML = "";
+    if (els.input) els.input.classList.remove("looking");
     els.suggestionsEl.classList.add("hidden");
     currentFeatures = [];
 }

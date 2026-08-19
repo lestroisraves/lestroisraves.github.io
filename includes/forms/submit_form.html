@@ -35,7 +35,7 @@
             <label class="pico">
                 Adresse du lieu *
                 <div id="address-autocomplete" class="address-autocomplete">
-                    <input type="text" id="location_address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
+                    <input type="text" id="location_address" class="search-address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
                     <div class="address-suggestions hidden"></div>
                 </div>
                 <input type="text" id="location_address_2" placeholder="Complément d'adresse">
@@ -61,7 +61,12 @@
             </label>
 
             <label id="end_date_container" class="pico" hidden>
-                Date de fin (si plusieurs jours)
+                <span class="label-help">
+                    Date de fin (si plusieurs jours)
+                    <button type="button" class="help-btn" data-action="open-end-date-help" aria-label="Aide : fin de l'évènement">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
                 <input type="date" id="end_date">
             </label>
 
@@ -70,20 +75,27 @@
                 <input type="time" id="event_start_time">
             </label>
 
-            <label for="tag-input" class="pico">Tags (mots-clefs pour décrire l'évènement, 4 maximum)</label>
+            <label for="tag-input" class="pico">
+                <span class="label-help">
+                     Tags *
+                    <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
+            </label>
             <div class="tag-input-container" id="tag-container">
                 <input type="text" id="tag-input" data-action="tag-input" placeholder="Suggestions: enfants, rock, cirque..." autocomplete="off">
             </div>
 
             <label class="pico">
                 <span class="label-help">
-                    Age du public
+                    Âge du public
                     <button type="button" class="help-btn" data-action="open-age-help" aria-label="Aide : âge du public">
                         <span class="material-symbols-outlined">help</span>
                     </button>
                 </span>
-                <input id="min_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age minimum" step=1 min=0 max=18>
-                <input id="max_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age maximum" step=1 min=0 max=18>
+                <input id="min_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Âge minimum" step=1 min=0 max=18>
+                <input id="max_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Âge maximum" step=1 min=0 max=18>
             </label>
 
             <label class="pico">
