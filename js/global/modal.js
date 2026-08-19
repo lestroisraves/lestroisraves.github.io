@@ -2,6 +2,7 @@ console.log("executing:", "modal.js");
 
 const successModal = document.getElementById("success-modal");
 const errorModal = document.getElementById("error-modal");
+const ageHelpModal = document.getElementById("age-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -120,6 +121,11 @@ export function openSuccessModal(text) {
 export function openErrorModal(text) {
     errorModal.querySelector("#text").innerText = text;
     errorModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openAgeHelpModal() {
+    ageHelpModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 
@@ -415,6 +421,11 @@ export function closeModal(target) {
         case "profile-modal":
         case "official-request-modal":
             closeCurrentModal();
+            break;
+
+        default:
+            modal.classList.add("hidden");
+            document.body.style.overflow = "";
             break;
     }
 }

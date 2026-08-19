@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState
-} from "../global/modal.js?v=7340bfb5.2ca3509";
+    setConfirmBtnState, openAgeHelpModal
+} from "../global/modal.js?v=78f2d0f4.2ca3509";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput
@@ -13,7 +13,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=7340bfb5.2ca3509"
+} from "../global/address.js?v=78f2d0f4.2ca3509"
 
 import { 
     editEvent, goBack
@@ -55,6 +55,10 @@ async function handleClick(el, e) {
 
         case "close-modal":
             closeModal(el);
+            break;
+
+        case "open-age-help":
+            openAgeHelpModal();
             break;
 
         default:

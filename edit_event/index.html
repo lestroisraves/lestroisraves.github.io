@@ -490,6 +490,23 @@
         </div>
     </div>
 </div>
+
+<div id="age-help-modal" class="modal-overlay info hidden" data-action="close-modal">
+    <div class="modal-card info" data-no-action role="dialog" aria-modal="true">
+        <button class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="modal-content help">
+            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Âge du public</h3>
+            <p>Indiquez la tranche d'âge à laquelle s'adresse l'évènement (de 0 à 18 ans).</p>
+            <ul>
+                <li><strong>Âge minimum</strong> : âge à partir duquel l'évènement est adapté.</li>
+                <li><strong>Âge maximum</strong> : âge jusqu'auquel l'évènement reste adapté.</li>
+            </ul>
+            <p>Laissez les deux champs vides pour un évènement tout public.</p>
+        </div>
+    </div>
+</div>
 <div id="notice-tip" class="notice notice-tip hidden">
     <span class="notice-icon">💡</span>
     <div class="notice-content">
@@ -589,7 +606,12 @@
             </div>
 
             <label class="pico">
-                Age du public
+                <span class="label-help">
+                    Age du public
+                    <button type="button" class="help-btn" data-action="open-age-help" aria-label="Aide : âge du public">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
                 <input id="min_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age minimum" step=1 min=0 max=18>
                 <input id="max_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age maximum" step=1 min=0 max=18>
             </label>
@@ -664,7 +686,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/edit_event/router.js?v=7340bfb5.2ca3509"></script>
+<script type="module" defer src="../assets/js/edit_event/router.js?v=78f2d0f4.2ca3509"></script>
 <html data-theme="light">
 
 
@@ -766,13 +788,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=7340bfb5.2ca3509"></script>
+        <script src="../assets/js/global/config.js?v=78f2d0f4.2ca3509"></script>
       
-        <script src="../assets/js/global/helper.js?v=7340bfb5.2ca3509"></script>
+        <script src="../assets/js/global/helper.js?v=78f2d0f4.2ca3509"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=7340bfb5.2ca3509"></script>
+        <script src="../assets/js/global/user_profile.js?v=78f2d0f4.2ca3509"></script>
       
-        <script src="../assets/js/global/supabase.js?v=7340bfb5.2ca3509"></script>
+        <script src="../assets/js/global/supabase.js?v=78f2d0f4.2ca3509"></script>
       
     
   </body>

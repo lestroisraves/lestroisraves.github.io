@@ -22,6 +22,39 @@
   color: black;
 }
 
+.label-help {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* .pico scopes Pico's conditional button theme; override it here */
+.pico .help-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--primary-subtext);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.pico .help-btn:hover {
+    color: var(--primary-link);
+    background: transparent;
+}
+
+.pico .help-btn .material-symbols-outlined {
+    font-size: 1.1rem;
+}
+
 .submit-tile {
     max-width: 720px;
     margin: 0.5rem auto;

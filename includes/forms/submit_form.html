@@ -76,7 +76,12 @@
             </div>
 
             <label class="pico">
-                Age du public
+                <span class="label-help">
+                    Age du public
+                    <button type="button" class="help-btn" data-action="open-age-help" aria-label="Aide : âge du public">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                </span>
                 <input id="min_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age minimum" step=1 min=0 max=18>
                 <input id="max_age" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="Age maximum" step=1 min=0 max=18>
             </label>
