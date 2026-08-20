@@ -115,22 +115,17 @@ function groupByDateWithCategories(events) {
     return map;
 }
 
-function groupByDateWithCounts(events) {
+function groupByDateEvents(events) {
     const map = {};
 
     events.forEach(event => {
         const date = event.event_date;
 
         if (!map[date]) {
-            map[date] = {};
+            map[date] = []; // one entry per event
         }
 
-        eventCategoryIds(event).forEach(type => {
-            if (!map[date][type]) {
-                map[date][type] = 0;
-            }
-            map[date][type]++;
-        });
+        map[date].push(eventCategoryIds(event));
     });
 
     return map;
@@ -294,7 +289,7 @@ function renderCalendar(events=EVENTS) {
     // converts Sunday=0 → Sunday=6 (Monday-first calendar)
     const totalDays = lastDay.getDate();
     const monthStr = String(month + 1).padStart(2, "0");
-    const grouped = groupByDateWithCounts(events);
+    const grouped = groupByDateEvents(events);
     var html = '';
 
     // Loop 35 cells (5 weeks)
