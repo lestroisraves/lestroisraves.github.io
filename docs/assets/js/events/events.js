@@ -507,7 +507,9 @@ export function searchInput(input) {
                 !event.pending &&
                 (event.title.toLowerCase().includes(v) ||
                 event.location_name.toLowerCase().includes(v) ||
-                event.tags.some(tag => tag.toLowerCase().includes(v))))
+                event.tags.some(tag => tag.toLowerCase().includes(v)) ||
+                event.location_address_town.toLowerCase().includes(v))
+            )
             
             if (found) {
                 const el = document.querySelector(`[data-event-id="${event.id}"]`);
