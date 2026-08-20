@@ -73,6 +73,8 @@
     
       <link rel="stylesheet" href="../assets/css/account.css">
     
+      <link rel="stylesheet" href="../assets/css/contacts.css">
+    
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -618,11 +620,38 @@
         <img src="assets/images/logo.png" class="spinner-logo">
     </div> -->
 </div>
-<div id="contacts-container" hidden>
+<div id="contacts-container" class="contacts-container" hidden>
+
+    <section class="account-tile">
+        <div class="account-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">info</span>
+            <span>À propos du projet</span>
+        </div>
+        <p class="team-text">
+            <strong>Les Trois Raves</strong> est l'agenda culturel collaboratif du Rabastinois&nbsp;:
+            Rabastens, Coufouleux, Salvagnac et les alentours. Le site recense les évènements
+            culturels de la région et permet à chacun·e de proposer les siens. C'est un projet
+            libre et bénévole, animé et modéré par une petite équipe de passionné·e·s.
+        </p>
+    </section>
+
+    <section class="account-tile">
+        <div class="account-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+            <span>L'équipe de modération</span>
+        </div>
+        <p class="team-text">
+            Une question, un problème, une suggestion d'amélioration&nbsp;? N'hésitez pas à
+            contacter l'un·e d'entre nous, on vous répondra avec plaisir&nbsp;!
+        </p>
+        <div id="team-list" class="team-grid">
+            <div class="team-empty">Chargement de l'équipe…</div>
+        </div>
+    </section>
 
 </div>
 
-<script type="module" defer src="../assets/js/contacts/router.js?v=14530204.1205665"></script>
+<script type="module" defer src="../assets/js/contacts/router.js?v=2a0155cd.a20ea17"></script>
 <html data-theme="light">
 
 
@@ -724,13 +753,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=14530204.1205665"></script>
+        <script src="../assets/js/global/config.js?v=2a0155cd.a20ea17"></script>
       
-        <script src="../assets/js/global/helper.js?v=14530204.1205665"></script>
+        <script src="../assets/js/global/helper.js?v=2a0155cd.a20ea17"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=14530204.1205665"></script>
+        <script src="../assets/js/global/user_profile.js?v=2a0155cd.a20ea17"></script>
       
-        <script src="../assets/js/global/supabase.js?v=14530204.1205665"></script>
+        <script src="../assets/js/global/supabase.js?v=2a0155cd.a20ea17"></script>
       
     
   </body>
