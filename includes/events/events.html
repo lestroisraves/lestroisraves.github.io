@@ -7,10 +7,16 @@
 
         <section id="more-filters" class="more-filters hidden">
             <hr class="filter-line">
-            <span class="filter-title">Où ?</span>
+            <span class="filter-title">
+                Où ?
+                <span class="material-symbols-outlined" data-action="open-area-help" aria-label="Aide : zone géographique">help</span>
+            </span>
             <section id="area-options" class="filter-options area"></section>
             <div class="filter-age">
-                <span class="filter-title">Age du public ?</span>
+                <span class="filter-title">
+                    Age du public ?
+                    <span class="material-symbols-outlined" data-action="open-age-help" aria-label="Aide : âge du public">help</span>
+                </span>
                 <div class="age-inputs">
                     <div class="age-field">
                         <input type="text" name="filter-min-age" class="age-input round" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="Age minimum" autocomplete="off" data-input-type="filter-age" />
@@ -54,6 +60,7 @@
                 </button>
             </div>
             <div id="switch-view-btns" class="switch-view-btns">
+                <span class="material-symbols-outlined help-btn" data-action="open-view-help" aria-label="Aide : affichage et filtres">help</span>
                 <span class="material-symbols-outlined" data-action="switch-view" data-view="tiles">view_agenda</span>
                 <span class="material-symbols-outlined" data-action="switch-view" data-view="agenda">calendar_month</span>
             </div>

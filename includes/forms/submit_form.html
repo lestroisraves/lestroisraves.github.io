@@ -36,13 +36,6 @@
             </label class="pico">
 
             <label class="pico">
-                Zone géographique *
-                <select name="select" id="area" required>
-                    <option value="" disabled selected hidden>Choisissez...</option>
-                </select>
-            </label>
-
-            <label class="pico">
                 Adresse du lieu *
                 <div id="address-autocomplete" class="address-autocomplete">
                     <input type="text" id="location_address" class="search-address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
@@ -51,11 +44,6 @@
                 <input type="text" id="location_address_2" placeholder="Complément d'adresse">
                 <input type="number" id="location_address_code" inputmode="numeric" placeholder="Code postal *" required>
                 <input type="text" id="location_address_town" placeholder="Ville *" required>
-            </label>
-
-            <label class="pico">
-                Description de l'évènement
-                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
             </label>
 
             <label class="pico">
@@ -78,9 +66,14 @@
                 <input type="time" id="event_start_time">
             </label>
 
+            <label class="pico">
+                Description de l'évènement
+                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
+            </label>
+            
             <label for="tag-input" class="pico">
                 <span class="label-help">
-                    Tags *
+                    Tags
                     <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
                         <span class="material-symbols-outlined">help</span>
                     </button>
@@ -131,7 +124,7 @@
             </label>
 
             <label class="pico">
-                Prix / participation *
+                Prix / participation
                 <select name="select" id="price-choice" data-change-type="price-choice" required></select>
             </label>
 

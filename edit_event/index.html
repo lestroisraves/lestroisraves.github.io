@@ -488,6 +488,7 @@
             <span class="notice-icon">❌</span>
             <span id="text"></span>
         </div>
+        <div id="message" class="error-message"></div>
     </div>
 </div>
 
@@ -551,6 +552,40 @@
         </div>
     </div>
 </div>
+
+<div id="area-help-modal" class="modal-overlay info hidden" data-action="close-modal">
+    <div class="modal-card info" data-no-action role="dialog" aria-modal="true">
+        <button class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="modal-content help">
+            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Où ?</h3>
+            <p>Filtrez les évènements par zone géographique, déterminée à partir du code postal du lieu.</p>
+            <ul>
+                <li><strong>Rabas/Couf</strong> : évènements situés dans le 81800.</li>
+                <li><strong>Salvagnac</strong> : évènements situés dans le 81630.</li>
+                <li><strong>Ailleurs</strong> : évènements situés dans les autres communes.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="view-help-modal" class="modal-overlay info hidden" data-action="close-modal">
+    <div class="modal-card info" data-no-action role="dialog" aria-modal="true">
+        <button class="modal-close" data-allow-action data-action="close-modal" aria-label="Fermer">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="modal-content help">
+            <h3 class="help-title"><span class="notice-icon">ℹ️</span> Affichage &amp; filtres</h3>
+            <p>Utilisez les boutons pour choisir le mode d'affichage des évènements :</p>
+            <ul>
+                <li><strong>Liste</strong> : les évènements à venir, regroupés par période.</li>
+                <li><strong>Agenda</strong> : les évènements sur un calendrier mensuel.</li>
+            </ul>
+            <p>Ouvrez « Plus de filtres » pour affiner la recherche par zone, âge du public, prix ou mot-clé.</p>
+        </div>
+    </div>
+</div>
 <div id="notice-tip" class="notice notice-tip hidden">
     <span class="notice-icon">💡</span>
     <div class="notice-content">
@@ -610,13 +645,6 @@
             </label class="pico">
 
             <label class="pico">
-                Zone géographique *
-                <select name="select" id="area" required>
-                    <option value="" disabled selected hidden>Choisissez...</option>
-                </select>
-            </label>
-
-            <label class="pico">
                 Adresse du lieu *
                 <div id="address-autocomplete" class="address-autocomplete">
                     <input type="text" id="location_address" class="search-address" placeholder="Numéro et rue *" autocomplete="off" data-input-type="address-search" required>
@@ -625,11 +653,6 @@
                 <input type="text" id="location_address_2" placeholder="Complément d'adresse">
                 <input type="number" id="location_address_code" inputmode="numeric" placeholder="Code postal *" required>
                 <input type="text" id="location_address_town" placeholder="Ville *" required>
-            </label>
-
-            <label class="pico">
-                Description de l'évènement
-                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
             </label>
 
             <label class="pico">
@@ -652,9 +675,14 @@
                 <input type="time" id="event_start_time">
             </label>
 
+            <label class="pico">
+                Description de l'évènement
+                <textarea id="long_description" class="formtile-longtext" placeholder=""></textarea>
+            </label>
+
             <label for="tag-input" class="pico">
                 <span class="label-help">
-                    Tags *
+                    Tags
                     <button type="button" class="help-btn" data-action="open-tag-help" aria-label="Aide : tags">
                         <span class="material-symbols-outlined">help</span>
                     </button>
@@ -705,7 +733,7 @@
             </label>
 
             <label class="pico">
-                Prix / participation *
+                Prix / participation
                 <select name="select" id="price-choice" data-change-type="price-choice" required></select>
             </label>
 
@@ -745,7 +773,7 @@
     </article>
 </div>
 
-<script type="module" defer src="../assets/js/edit_event/router.js?v=e2ff0bf3.37392b2"></script>
+<script type="module" defer src="../assets/js/edit_event/router.js?v=738bd028.a8357e4"></script>
 <html data-theme="light">
 
 
@@ -847,13 +875,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=e2ff0bf3.37392b2"></script>
+        <script src="../assets/js/global/config.js?v=738bd028.a8357e4"></script>
       
-        <script src="../assets/js/global/helper.js?v=e2ff0bf3.37392b2"></script>
+        <script src="../assets/js/global/helper.js?v=738bd028.a8357e4"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=e2ff0bf3.37392b2"></script>
+        <script src="../assets/js/global/user_profile.js?v=738bd028.a8357e4"></script>
       
-        <script src="../assets/js/global/supabase.js?v=e2ff0bf3.37392b2"></script>
+        <script src="../assets/js/global/supabase.js?v=738bd028.a8357e4"></script>
       
     
   </body>

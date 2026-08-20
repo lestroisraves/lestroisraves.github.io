@@ -116,11 +116,13 @@ APP_CONFIG = {
     AREAS: {
         0: {
             "label": "Rabas/Couf",
-            "icon": "explore_nearby"
+            "icon": "explore_nearby",
+            "codes": ["81800"]
         },
         1: {
             "label": "Salvagnac",
-            "icon": "explore_nearby"
+            "icon": "explore_nearby",
+            "codes": ["81630"]
         },
         2: {
             "label": "Ailleurs",

@@ -1,8 +1,8 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=e2ff0bf3.37392b2";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=e2ff0bf3.37392b2";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=e2ff0bf3.37392b2";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=738bd028.a8357e4";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=738bd028.a8357e4";
+import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=738bd028.a8357e4";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -120,9 +120,9 @@ export async function submitEvent() {
         if (error) {
             button.setAttribute("aria-busy", "false");
             if ((new_event.nb_days > 1) && (day > 0)) {
-                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`);
+                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`, error.message ? error.message : null);
             } else {
-                openErrorModal("Problème de publication");
+                openErrorModal("Problème de publication", error.message ? error.message : null);
             }
             console.error(error);
             return;

@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState
-} from "../global/modal.js?v=e2ff0bf3.37392b2";
+    setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
+} from "../global/modal.js?v=738bd028.a8357e4";
 
 import { 
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter
+    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
 } from "./events.js"
 
 const container = document.getElementById("events");
@@ -29,6 +29,18 @@ async function handleClick(el, e) {
 
         case "switch-view":
             switchView(el.dataset.view);
+            break;
+
+        case "open-age-help":
+            openAgeHelpModal();
+            break;
+
+        case "open-area-help":
+            openAreaHelpModal();
+            break;
+
+        case "open-view-help":
+            openViewHelpModal();
             break;
 
         case "nav-prev-month":

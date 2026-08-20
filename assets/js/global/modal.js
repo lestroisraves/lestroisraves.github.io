@@ -6,6 +6,8 @@ const ageHelpModal = document.getElementById("age-help-modal");
 const tagHelpModal = document.getElementById("tag-help-modal");
 const endDateHelpModal = document.getElementById("end-date-help-modal");
 const categoryHelpModal = document.getElementById("category-help-modal");
+const areaHelpModal = document.getElementById("area-help-modal");
+const viewHelpModal = document.getElementById("view-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -121,8 +123,11 @@ export function openSuccessModal(text) {
     document.body.style.overflow = "hidden";
 }
 
-export function openErrorModal(text) {
+export function openErrorModal(text, message=null) {
     errorModal.querySelector("#text").innerText = text;
+    if (message !== null) {
+        errorModal.querySelector("#message").innerText = message;
+    }
     errorModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -144,6 +149,16 @@ export function openEndDateHelpModal() {
 
 export function openCategoryHelpModal() {
     categoryHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openAreaHelpModal() {
+    areaHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openViewHelpModal() {
+    viewHelpModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 

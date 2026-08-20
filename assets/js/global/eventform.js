@@ -1,14 +1,13 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=e2ff0bf3.37392b2";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=e2ff0bf3.37392b2";
+import { openErrorModal } from "./modal.js?v=738bd028.a8357e4";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=738bd028.a8357e4";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
 const today = startOfDay(new Date());
 
 const form = document.getElementById("event-form");
-const areaList = document.getElementById("area");
 const categoryChoices = document.getElementById("category-choices");
 const parentalGuideList = document.getElementById("pg");
 const priceChoiceList = document.getElementById("price-choice");
@@ -96,7 +95,6 @@ export function initEventForm(eventData=null) {
     imageToUpload = null;
 
     /* Configure select lists  */
-    configureSelectList(APP_CONFIG.AREAS, areaList);
     configureSelectList(APP_CONFIG.PRICE_CHOICES, priceChoiceList, 0);
 
     /* init category choices */
@@ -111,7 +109,6 @@ export function initEventForm(eventData=null) {
     /* init form with data */
     form.querySelector("#title").value = eventData.title;
     form.querySelector("#location_name").value = eventData.location_name;
-    form.querySelector("#area").value = eventData.area;
     form.querySelector("#location_address").value = eventData.location_address;
     form.querySelector("#location_address_2").value = eventData.location_address_2 || "";
     form.querySelector("#location_address_code").value = eventData.location_address_code || "";
@@ -294,7 +291,6 @@ export function getEventFormPayload() {
         // event_date: done later
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
-        area: areaList.value,
         location_address: location_address,
         location_address_2: addressExtra === "" ? null : addressExtra,
         location_address_code: addressCode,

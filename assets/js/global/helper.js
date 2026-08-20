@@ -147,6 +147,18 @@ function categoryPrimaryId(ids) {
     return (ids && ids.length) ? ids[0] : 0;
 }
 
+/* === AREA (derived from the event postal code) === */
+function eventAreaId(event) {
+    const code = String(event.location_address_code ?? "").trim();
+    let fallback = null;
+    for (const key of Object.keys(APP_CONFIG.AREAS)) {
+        const codes = APP_CONFIG.AREAS[key]["codes"];
+        if (!codes) { fallback = key; continue; }  // area without codes = "Ailleurs"
+        if (codes.includes(code)) return key;
+    }
+    return fallback;
+}
+
 /* pie ("camembert") background of all category colors; solid when only one */
 function categoryPieBackground(ids) {
     if (!ids || ids.length === 0) return APP_CONFIG.CATEGORIES[0]["color"];
@@ -240,11 +252,24 @@ function renderEventData(event, details = false) {
     eventData.categoryColorLight = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["color_light"];
     eventData.categoryIcon = APP_CONFIG.CATEGORIES[eventData.categoryPrimaryId]["icon"];
 
+    /* area derived from the postal code */
+    eventData.areaId = eventAreaId(event);
+
     eventData.categoryHtml = `
         <div class="event-category category cat-${eventData.categoryPrimaryId}" style="color: ${eventData.categoryColor};">
             ${renderMaterialIconText(eventData.categoryIcon, eventData.categoryLabel)}
         </div>
     `
+    eventData.categoriesHtml = eventData.categoryIds && eventData.categoryIds.length
+        ? `<div class="event-categories">${eventData.categoryIds.map(id => {
+                const cat = APP_CONFIG.CATEGORIES[id];
+                return `<span class="category-label" style="color: white; background: ${cat["color"]};">
+                    <span class="material-symbols-outlined">${cat["icon"]}</span>
+                    <span class="text">${cat["label"]}</span>
+                </span>`;
+            }).join("")}</div>`
+        : "";
+
     eventData.locationHtml = `
         <span class="event-icon-text">
             <span class="material-symbols-outlined">place</span>
