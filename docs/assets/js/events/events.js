@@ -388,6 +388,11 @@ async function loadEvents() {
         .select("*")
         .eq("pending", false)
 
+    // test events are only visible when developing locally
+    if (!APP_CONFIG.DEV) {
+        query = query.not("is_test", "is", true);
+    }
+
     const { data, error } = await query.order("event_date", { ascending: true });
 
     if (error) {

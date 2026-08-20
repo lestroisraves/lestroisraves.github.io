@@ -7,11 +7,9 @@ import re
 import yaml
 import argparse
 import random
+import argparse
 
-__TESTING__ = os.getenv("RCS_TESTING", "FALSE")  # for testing development only
 PROJECT_ROOT_FOLDER = os.path.expandvars("$PROJECT_ROOT_FOLDER")
-if __TESTING__ == "TRUE":
-    print("==== TESTING MODE ENABLED ====")
 SEPARATOR = "-----------------------------"
 
 # -----------------------------------------
@@ -124,6 +122,32 @@ def patch_js_version(hash: str):
     print(SEPARATOR)
 
 
+def patch_dev_flag():
+    print("[[[[[[ patch APP_CONFIG.DEV flag ]]]]]]")
+    config_path = os.path.join(PROJECT_ROOT_FOLDER, "site", "assets", "js", "global", "config.js")
+    if not os.path.isfile(config_path):
+        error(f"config.js not found: {config_path}")
+        sys.exit(1)
+
+    with open(config_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    new_content, count = re.subn(
+        r"const DEPLOY_DEV = (?:true|false);",
+        f"const DEPLOY_DEV = false;",
+        content,
+    )
+    if count == 0:
+        error("DEPLOY_DEV marker not found in config.js")
+        sys.exit(1)
+
+    with open(config_path, "w", encoding="utf-8") as f:
+        f.write(new_content)
+
+    success(f"APP_CONFIG.DEV set to false")
+    print(SEPARATOR)
+
+
 def push():
     print("[[[[[[ Publish on GitHub ]]]]]]")
     run(f"ghp-import -n -p -f site")
@@ -135,9 +159,17 @@ def push():
 # Main
 # -----------------------------------------
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Deploy the website")
+    parser.add_argument("--release", action="store_true", help="Deploy a release (default is dev)")
+    args = parser.parse_args()
+
     hash = initialization()
-    # check_git_repos()
     build()
     patch_js_version(hash)
+    if args.release:
+        patch_dev_flag()
+
+    # check_git_repos()
+    
     push()
     sys.exit(0)
