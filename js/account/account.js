@@ -1,7 +1,7 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=738bd028.a8357e4";
-import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=738bd028.a8357e4";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=011d6b2b.1cd59a9";
+import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=011d6b2b.1cd59a9";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);

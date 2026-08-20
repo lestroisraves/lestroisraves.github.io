@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=738bd028.a8357e4";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=011d6b2b.1cd59a9";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=738bd028.a8357e4";
+} from "./renderevents.js?v=011d6b2b.1cd59a9";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -388,6 +388,11 @@ async function loadEvents() {
         .select("*")
         .eq("pending", false)
 
+    // test events are only visible when developing locally
+    if (!APP_CONFIG.DEV) {
+        query = query.not("is_test", "is", true);
+    }
+
     const { data, error } = await query.order("event_date", { ascending: true });
 
     if (error) {
@@ -507,7 +512,9 @@ export function searchInput(input) {
                 !event.pending &&
                 (event.title.toLowerCase().includes(v) ||
                 event.location_name.toLowerCase().includes(v) ||
-                event.tags.some(tag => tag.toLowerCase().includes(v))))
+                event.tags.some(tag => tag.toLowerCase().includes(v)) ||
+                event.location_address_town.toLowerCase().includes(v))
+            )
             
             if (found) {
                 const el = document.querySelector(`[data-event-id="${event.id}"]`);
