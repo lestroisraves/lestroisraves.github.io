@@ -3,7 +3,7 @@ console.log("executing:", "config.js");
 SITE_URL = "https://lestroisraves.github.io"
 
 /* DEPLOY_DEV is patched to true/false at deploy time by deploy.py (env DEV) */
-const DEPLOY_DEV = false;
+const DEPLOY_DEV = true;
 
 APP_CONFIG = {
     DEV: DEPLOY_DEV || ["localhost", "127.0.0.1"].includes(window.location.hostname),
