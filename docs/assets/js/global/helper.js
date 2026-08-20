@@ -128,6 +128,16 @@ function linkify(text) {
     });
 }
 
+/* === ROLES === */
+function roleId(roleLabel) {
+    for (const [id, label] of Object.entries(APP_CONFIG.ROLES)) {
+        if (label === roleLabel) {
+            return id;
+        }
+    }
+    return null;
+}
+
 /* === CATEGORIES (an event may have several) === */
 function eventCategoryIds(event) {
     const c = event.category;

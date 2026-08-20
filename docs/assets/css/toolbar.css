@@ -244,6 +244,12 @@
     width: 100%;
 }
 
+.autocomplete.account {
+    padding: 0.4rem 0;
+    margin-bottom: 0.4rem;
+    width: 100%;
+}
+
 .autocomplete.hidden {
     display: none;
 }
@@ -257,6 +263,11 @@
     color: var(--primary-textarea);
     border-radius: 5px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.data-search.account {
+    padding: 0.9rem 0.9rem;
+    
 }
 
 .data-search.round {

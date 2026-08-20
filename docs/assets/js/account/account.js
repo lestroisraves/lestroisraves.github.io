@@ -518,7 +518,7 @@ export async function sendResetPasswordRequest() {
 }
 
 export async function updateProfileRole() {
-    const new_role = roleList.value;
+    const new_role = roleId(roleList.value);
 
     if (!selected_profile || (new_role == selected_profile.role)) {
         return;
