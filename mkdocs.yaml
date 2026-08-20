@@ -80,6 +80,7 @@ extra_css:
   - assets/css/calendar.css
   - assets/css/submit.css
   - assets/css/account.css
+  - assets/css/contacts.css
 
 plugins:
     - macros
