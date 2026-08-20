@@ -47,7 +47,7 @@ export function renderEventTile(event) {
             data-category="${eventData.categoryIds.join(",")}"
             data-pg="${eventData.pg}"
             data-price="${eventData.price}"
-            data-area="${eventData.area}"
+            data-area="${eventData.areaId}"
             data-min-age="${eventData.min_age}"
             data-max-age="${eventData.max_age}"
             data-date="${eventData.event_date}">

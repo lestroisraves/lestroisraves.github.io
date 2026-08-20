@@ -24,27 +24,54 @@ end;
 ## Daily limit for publication
 
 ```sql
-create or replace function check_daily_event_limit()
+create or replace function public.check_daily_event_limit()
 returns trigger
 language plpgsql
 as $$
 declare
     event_count integer;
+    user_role smallint;
+    max_events integer;
 begin
+    select role
+    into user_role
+    from public.profiles
+    where id = new.created_by;
+
+    -- Define limits by role
+    case
+        when user_role >= 2 then
+            return new; -- unlimited
+        when user_role = 1 then
+            max_events := 50;
+        else
+            max_events := 10;
+    end case;
+
     select count(*)
     into event_count
-    from events
-    where author_id = new.author_id
-      and created_at >= date_trunc('day', now());
+    from public.events
+    where created_by = new.created_by
+      and created_at >= current_date
+      and created_at < current_date + interval '1 day';
 
-    if event_count >= 20 then
-        raise exception 'La limite de publication par jour est atteinte (20)';
+    if event_count >= max_events then
+        raise exception
+            'Limitation de publication atteinte (%)', max_events;
     end if;
 
     return new;
 end;
 $$;
+```
 
+Then:
+```sql
+create trigger trg_daily_event_limit
+before insert on public.events
+for each row
+execute function public.check_daily_event_limit();
+``
 ```
 
 ## Delete old events

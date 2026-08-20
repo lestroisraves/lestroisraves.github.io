@@ -7,7 +7,7 @@ import {
     openEvent, searchInput, 
     selectWhenOption, selectFilterOption, toggleAdditionalFilter, resetFilter,
     switchView, navPrevMonth, navNextMonth, navToday, calendarSelectDay,
-    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter
+    handleSwipe, shareEvent, toggleFilterSwitch, updateAgeFilter, markOverflowingTags
 } from "./events.js"
 
 const container = document.getElementById("events");

@@ -121,8 +121,11 @@ export function openSuccessModal(text) {
     document.body.style.overflow = "hidden";
 }
 
-export function openErrorModal(text) {
+export function openErrorModal(text, message=null) {
     errorModal.querySelector("#text").innerText = text;
+    if (message !== null) {
+        errorModal.querySelector("#message").innerText = message;
+    }
     errorModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }

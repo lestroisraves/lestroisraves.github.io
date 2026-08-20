@@ -162,14 +162,6 @@ function showHeader() {
     toolbar.classList.remove("hidden");
 }
 
-
-// Flag tile tag rows that overflow so CSS can show a trailing ellipsis.
-function markOverflowingTags() {
-    tilesView.querySelectorAll(".event-tile .event-tags").forEach(el => {
-        el.classList.toggle("overflowing", el.scrollWidth > el.clientWidth + 1);
-    });
-}
-
 function renderTiles() {
     const grouped = groupEvents(EVENTS);
 
@@ -257,7 +249,7 @@ function applyFilter() {
         if (!hasAnyFilter) {
             filteredEvents = EVENTS;
         } else {
-            filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.pg), String(event.price), String(event.area), event.min_age, event.max_age));
+            filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.pg), String(event.price), eventAreaId(event), event.min_age, event.max_age));
         }
         renderCalendar(filteredEvents);
     }
@@ -459,6 +451,13 @@ function copyToClipboard(event_desc, event_url) {
 }
 
 /* === EXPORTED FUNCTIONS === */
+// Flag tile tag rows that overflow so CSS can show a trailing ellipsis.
+export function markOverflowingTags() {
+    tilesView.querySelectorAll(".event-tile .event-tags").forEach(el => {
+        el.classList.toggle("overflowing", el.scrollWidth > el.clientWidth + 1);
+    });
+}
+
 export function switchView(view) {
     if (view === "tiles") {
         tilesView.hidden = false;

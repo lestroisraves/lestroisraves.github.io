@@ -118,6 +118,14 @@ def format_event_payload(day_delta, category, title, pending):
     else:
         max_age = random.choice([None, random.randrange(6, 10)])
 
+    location_address_code = random.choice(["81800", "81630", f"81{random.randrange(800, 899)}"])
+    if location_address_code == "81800":
+        location_address_town = random.choice(["Rabastens", "Coufouleux"])
+    elif location_address_code == "81630":
+        location_address_town = "Salvagnac" 
+    else:
+        location_address_town = random.choice(["Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"])
+
     return {
         "created_by": "f2bb3c93-cb32-44e6-8f02-c3f819edb2c4",
         "creator_name": "Olivier Gohier",
@@ -128,11 +136,10 @@ def format_event_payload(day_delta, category, title, pending):
         "event_date": (date.today() + timedelta(days=day_delta)).isoformat(),
         "event_start_time": random.choice([None, time(hour=random.randrange(13, 23), minute=random.randrange(0, 45, step = 15)).isoformat()]),
         "location_name": location_name,
-        "area": random.randrange(3),
         "location_address": f"{random.randrange(1, 50)} {random.choice(["rue", "place", "avenue", "boulevard"])} {random.choice(["Saint Michel", "Général de Gaulle", "Du Printemps", "Jérome"])}",
         "location_address_2": random.choice([None, None, None, "2ème étage", "Rez-de-chaussée", "Derrière le buisson"]),
-        "location_address_code": f"81{random.randrange(800, 899)}",
-        "location_address_town": random.choice(["Rabastens", "Coufouleux", "Saint-Sulpice", "Salvagnac", "Loupiac", "L'Isle-sur-Tarn"]),
+        "location_address_code": location_address_code,
+        "location_address_town": location_address_town,
         "price": price,
         "min_price": min_price,
         "max_price": max_price,

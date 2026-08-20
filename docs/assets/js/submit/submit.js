@@ -120,9 +120,9 @@ export async function submitEvent() {
         if (error) {
             button.setAttribute("aria-busy", "false");
             if ((new_event.nb_days > 1) && (day > 0)) {
-                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`);
+                openErrorModal(`Problème de publication (jour ${day+1})\nCependant les premiers jours de l'évènement ont sans doute été publiés`, error.message ? error.message : null);
             } else {
-                openErrorModal("Problème de publication");
+                openErrorModal("Problème de publication", error.message ? error.message : null);
             }
             console.error(error);
             return;
