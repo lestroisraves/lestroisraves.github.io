@@ -130,3 +130,9 @@
 
     pointer-events: no
 }
+
+.calendar-dot-more {
+    width: auto;
+    background: var(--md-default-fg-color--lighter, #ccc);
+    color: var(--md-default-fg-color, #333);
+}

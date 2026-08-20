@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=e76b8a7a.1124c62";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=204cc423.1205665";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=e76b8a7a.1124c62";
+} from "./renderevents.js?v=204cc423.1205665";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -115,22 +115,17 @@ function groupByDateWithCategories(events) {
     return map;
 }
 
-function groupByDateWithCounts(events) {
+function groupByDateEvents(events) {
     const map = {};
 
     events.forEach(event => {
         const date = event.event_date;
 
         if (!map[date]) {
-            map[date] = {};
+            map[date] = []; // one entry per event
         }
 
-        eventCategoryIds(event).forEach(type => {
-            if (!map[date][type]) {
-                map[date][type] = 0;
-            }
-            map[date][type]++;
-        });
+        map[date].push(eventCategoryIds(event));
     });
 
     return map;
@@ -294,7 +289,7 @@ function renderCalendar(events=EVENTS) {
     // converts Sunday=0 → Sunday=6 (Monday-first calendar)
     const totalDays = lastDay.getDate();
     const monthStr = String(month + 1).padStart(2, "0");
-    const grouped = groupByDateWithCounts(events);
+    const grouped = groupByDateEvents(events);
     var html = '';
 
     // Loop 35 cells (5 weeks)

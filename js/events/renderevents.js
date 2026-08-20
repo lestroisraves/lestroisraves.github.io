@@ -72,23 +72,23 @@ export function renderEventTile(event) {
     `;
 }
 
-export function renderDots(dayMap) {
-    if (!dayMap) return "";
+export function renderDots(dayEvents) {
+    if (!dayEvents || !dayEvents.length) return "";
 
-    return Object.entries(dayMap).map(([category, count]) => {
-        const color = APP_CONFIG.CATEGORIES[category]["color"] || "#999";
+    const MAX = 5; // one dot per event, cap to keep the cell readable
+    const shown = dayEvents.slice(0, MAX);
 
-        const label = count > 1 ? count : "";
-
-        return `
-            <span
-                class="calendar-dot"
-                style="background:${color}"
-            >
-                ${label}
-            </span>
-        `;
+    let html = shown.map(ids => {
+        const background = categoryPieBackground(ids);
+        return `<span class="calendar-dot" style="background:${background}"></span>`;
     }).join("");
+
+    const extra = dayEvents.length - MAX;
+    if (extra > 0) {
+        html += `<span class="calendar-dot calendar-dot-more">+${extra}</span>`;
+    }
+
+    return html;
 }
 
 export function renderEventSuggestion(event) {
