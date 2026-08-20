@@ -1,6 +1,6 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState
+    setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
 } from "../global/modal.js?v=dev";
 
 import { 
@@ -29,6 +29,18 @@ async function handleClick(el, e) {
 
         case "switch-view":
             switchView(el.dataset.view);
+            break;
+
+        case "open-age-help":
+            openAgeHelpModal();
+            break;
+
+        case "open-area-help":
+            openAreaHelpModal();
+            break;
+
+        case "open-view-help":
+            openViewHelpModal();
             break;
 
         case "nav-prev-month":

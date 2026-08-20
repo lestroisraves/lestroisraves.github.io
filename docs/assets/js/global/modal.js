@@ -6,6 +6,8 @@ const ageHelpModal = document.getElementById("age-help-modal");
 const tagHelpModal = document.getElementById("tag-help-modal");
 const endDateHelpModal = document.getElementById("end-date-help-modal");
 const categoryHelpModal = document.getElementById("category-help-modal");
+const areaHelpModal = document.getElementById("area-help-modal");
+const viewHelpModal = document.getElementById("view-help-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -147,6 +149,16 @@ export function openEndDateHelpModal() {
 
 export function openCategoryHelpModal() {
     categoryHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openAreaHelpModal() {
+    areaHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openViewHelpModal() {
+    viewHelpModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 

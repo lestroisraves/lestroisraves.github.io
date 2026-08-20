@@ -51,10 +51,24 @@
 
 /* filters */
 .filter-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.2rem;
     padding: 0 0 0 0.4rem;
     font-weight: 500;
     font-size: 0.7rem;
     color: var(--primary-subtext);
+}
+
+.filter-title .material-symbols-outlined {
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.filter-title .material-symbols-outlined:hover {
+    color: var(--primary-link);
 }
 
 .md-typeset hr.filter-line {
@@ -107,6 +121,7 @@
     flex-direction: column;
     gap: 0.2rem;
     padding: 0;
+    padding-top: 0.2rem;
     /* padding-left: 0.4rem; */
 }
 
