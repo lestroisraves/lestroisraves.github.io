@@ -295,15 +295,35 @@ function renderEventData(event, details = false) {
             ${renderMaterialIconText(eventData.categoryIcon, eventData.categoryLabel)}
         </div>
     `
-    eventData.categoriesHtml = eventData.categoryIds && eventData.categoryIds.length
-        ? `<div class="event-categories">${eventData.categoryIds.map(id => {
-                const cat = APP_CONFIG.CATEGORIES[id];
-                return `<span class="category-label" style="color: white; background: ${cat["color"]};">
+    if (eventData.categoryIds && eventData.categoryIds.length) {
+        const catRows = eventData.categoryIds.map(id => {
+            const cat = APP_CONFIG.CATEGORIES[id];
+            return `<span class="category-row">
+                <span class="category-badge" style="background: ${cat["color"]};" title="${cat["label"]}">
                     <span class="material-symbols-outlined">${cat["icon"]}</span>
-                    <span class="text">${cat["label"]}</span>
-                </span>`;
-            }).join("")}</div>`
-        : "";
+                </span>
+                <span class="category-row-label" style="color: ${cat["color"]};">${cat["label"]}</span>
+            </span>`;
+        }).join("");
+
+        eventData.categoriesHtml = eventData.categoryIds.length === 1
+            ? `<div class="event-categories single">
+                    <div class="event-categories-body">
+                        <div class="event-categories-rows">${catRows}</div>
+                    </div>
+                </div>`
+            : `<div class="event-categories">
+                    <input type="checkbox" id="cat-toggle-${eventData.id}" class="event-categories-toggle">
+                    <label class="event-categories-body" for="cat-toggle-${eventData.id}">
+                        <div class="event-categories-rows">${catRows}</div>
+                        <span class="event-categories-chevron">
+                            <span class="material-symbols-outlined chevron">expand_more</span>
+                        </span>
+                    </label>
+                </div>`;
+    } else {
+        eventData.categoriesHtml = "";
+    }
 
     eventData.locationHtml = `
         <span class="event-icon-text">

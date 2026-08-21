@@ -264,6 +264,7 @@ export function openEventModal(event, type, user_profile=null) {
             <span id="modal-title" class="event-modal-title">${event.title}</span>
         </header>
         ${eventData.imageHtml}
+        ${eventData.categoriesHtml}
 
         <div class="event-details">
             <div class="event-meta">
