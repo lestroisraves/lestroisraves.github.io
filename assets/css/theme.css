@@ -11,8 +11,9 @@
 :root,
 [data-md-color-scheme="default"]
 {
-    --primary-fg:                       #E0E0E6;
-    --primary-background:               #F5F5F5;
+    --primary-fg:                       #CFD5E2;
+    --primary-pico:                     ##525F7A;
+    --primary-background:               #EFF1F4;
     --primary-text:                     #0D2C87;
     --primary-subtext:                  #818FBA;
     --primary-textarea:                 #837e7e;
