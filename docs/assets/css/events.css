@@ -372,23 +372,38 @@ body.events-page {
 .event-small-tile {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0.5rem;
 
-    padding: 0.1rem 0.5rem;
-    margin-top: 0.6rem;
+    margin-top: 0.55rem;
     border-radius: 8px;
-    border-left: 4px solid var(--pico-primary);
     background: var(--pico-card-background-color, #fff);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.event-small-tile:hover
+.event-small-tile:hover,
 .event-small-tile:focus {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    outline: none;
+}
+
+.event-small-side {
+    flex-shrink: 0;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: var(--event-color);
+    border-radius: 8px 0 0 8px;
+}
+
+.event-small-side .material-symbols-outlined {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
 .event-small-tile.pending::after {
@@ -416,22 +431,56 @@ body.events-page {
 .event-small-main {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 0;
     min-width: 0;
+    flex: 1;
+    padding: 0.25rem 0;
 }
 
 .event-small-title {
     font-weight: 600;
+    font-size: 0.65rem;
+    color: var(--primary-dark);
+    line-height: 1.25;
+}
+
+.event-small-loc {
+    font-size: 0.55rem;
+    color: #444;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .event-small-meta {
-    font-size: 0.60rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.52rem;
     color: #666;
-
-    white-space: normal;
-    overflow-wrap: break-word;
+    line-height: 1.25;
 
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.event-small-cat {
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.event-small-sep {
+    color: var(--primary-gray);
+    flex-shrink: 0;
+}
+
+.event-small-chevron {
+    align-self: center;
+    flex-shrink: 0;
+    padding-right: 0.4rem;
+    color: var(--primary-gray);
+    font-size: 1.1rem;
 }
 
 .event-suggestion {
