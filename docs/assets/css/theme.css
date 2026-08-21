@@ -11,14 +11,17 @@
 :root,
 [data-md-color-scheme="default"]
 {
-    --primary-fg:                       #E0E0E6;
-    --primary-background:               #F5F5F5;
+    --primary-fg:                       #CFD5E2;
+    --primary-pico:                     ##525F7A;
+    --primary-background:               #EFF1F4;
     --primary-text:                     #0D2C87;
     --primary-subtext:                  #818FBA;
     --primary-textarea:                 #837e7e;
     --primary-link:                     #4527a0;
     --primary-link--hover:              #673ab7;
     --primary-link--active:             #311b92;
+    --primary-notice--bg:               #f8f9fd;  
+    --primary-notice--text:             #1a237e;
 
     --primary-gray:                     #aaaaaa;
     --primary-dark:                     #242424;

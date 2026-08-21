@@ -6,7 +6,7 @@
     max-width: 720px;
     margin: 0.5rem auto;
     padding: 0.8rem 0.8rem;
-    background: var(--md-default-bg-color);
+    background: var(--primary-notice--bg);
     border-radius: 10px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: -between;
     gap: 0.4rem;
-    color: #3f51b5;
+    color: var(--primary-notice--text);
     font-size: 1rem;
     font-weight: 600;
 }
@@ -36,5 +36,5 @@
     margin: 0.6rem 0 0.2rem;
     font-size: 0.9rem;
     line-height: 1.5;
-    color: var(--md-default-fg-color);
+    color: var(--primary-notice--text);
 }
