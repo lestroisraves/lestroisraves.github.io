@@ -53,13 +53,13 @@
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    color: var(--primary-subtext);
+    color: var(--primary-text);
     cursor: pointer;
     line-height: 1;
 }
 
 .pico .help-btn:hover {
-    color: var(--primary-link);
+    color: var(--primary-subtext);
     background: transparent;
 }
 

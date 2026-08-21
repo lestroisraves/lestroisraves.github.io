@@ -1,7 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=d4f3f045.1a479aa";
-import { showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=d4f3f045.1a479aa";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=a3c06106.4346c9a";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -261,8 +260,6 @@ function renderOfficialRequests(profile) {
 /* === EXPORTED FUNCTION === */
 export function showLogin() {
     signInContainer.querySelector("#signin-form").reset();
-    hideNoticeError();
-    showNoticeTip("Connectez vous pour publier vos événements et contribuer à l'agenda culturel.");
     rstPwdContainer.hidden = true;
     signupContainer.hidden = true;
     accountContainer.hidden = true;
@@ -272,8 +269,6 @@ export function showLogin() {
 
 export function showSignup() {
     signupContainer.querySelector("#signup-form").reset();
-    hideNoticeError();
-    showNoticeTip("Créez un compte pour publier vos événements et contribuer à l'agenda culturel.");
     signInContainer.hidden = true;
     rstPwdContainer.hidden = true;
     signupContainer.hidden = false;
@@ -284,10 +279,7 @@ export function showSignup() {
 export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
-
-    hideNoticeTip();
-    hideNoticeError();
-
+    
     permissionDetails.innerHTML = renderAccountPermissionDetails();
     document.getElementById("account-email").innerText = user.email;
     document.getElementById("account-name").innerText = profile.name;
@@ -405,8 +397,6 @@ export async function showAccount(user, profile) {
 
 export function showResetPassword() {
     rstPwdContainer.querySelector("#rstpwd-form").reset();
-    hideNoticeError();
-    showNoticeTip("Demandez la réinitialisation de votre mot de passe et vous recevrer un email de:\n" + APP_CONFIG.EMAIL_ADDRESS);
     signInContainer.hidden = true;
     rstPwdContainer.hidden = false;
     signupContainer.hidden = true;
@@ -422,7 +412,6 @@ export async function signup() {
     const button = signUpForm.querySelector("#button");
 
     /* init UI */
-    hideNoticeError();
     button.setAttribute("aria-busy", "true");
 
     console.log("status", status)
@@ -442,7 +431,7 @@ export async function signup() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showNoticeError(localizeAuthError(error));
+        openErrorModal(localizeAuthError(error));
         console.error("sign-up failed:", error);
         return;
     }
@@ -454,7 +443,6 @@ export async function login() {
     const button = signInForm.querySelector("#button");
 
     /* init UI */
-    hideNoticeError();
     button.setAttribute("aria-busy", "true");
 
     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
@@ -465,7 +453,7 @@ export async function login() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showNoticeError(localizeAuthError(error));
+        openErrorModal(localizeAuthError(error));
         console.error("sign-in failed:", error);
         return;
     }
@@ -475,13 +463,12 @@ export async function logout() {
     console.log("loggin out");
 
     /* init UI */
-    hideNoticeError();
 
     try {
         const { error } = await window.supabaseClient.auth.signOut();
         if (error) throw error;
     } catch (err) {
-        noticeErrorText.innerText = localizeAuthError(err);
+        openErrorModal(localizeAuthError(err));
         console.error("sign-out failed:", err);
     }
     user_profile = null;
@@ -498,7 +485,6 @@ export async function sendResetPasswordRequest() {
     const button = rstPwdForm.querySelector("#button");
 
     /* init UI */
-    hideNoticeError();
     button.setAttribute("aria-busy", "true");
     
     const { error } = await window.supabaseClient.auth.resetPasswordForEmail(
@@ -511,7 +497,7 @@ export async function sendResetPasswordRequest() {
     button.setAttribute("aria-busy", "false");
 
     if (error) {
-        showNoticeError(localizeAuthError(error));
+        openErrorModal(localizeAuthError(error));
         console.error("reset password request failed:", error);
         return;
     }

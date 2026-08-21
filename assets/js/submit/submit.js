@@ -1,8 +1,7 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=d4f3f045.1a479aa";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=d4f3f045.1a479aa";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=d4f3f045.1a479aa";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=a3c06106.4346c9a";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=a3c06106.4346c9a";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -27,7 +26,6 @@ async function initSubmitPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    hideNoticeTip();
     accountDetail.hidden = true;
     submitContainer.hidden = true;
     window.location.href = `../account/`
@@ -73,14 +71,12 @@ function showSubmit(user, profile) {
     }
 
     /* initialize form */
-    configNoticeTip("wide");
     initEventForm();
     form.querySelector("#end_date_container").hidden = false;
     form.querySelector("#cancel-btn").hidden = true;
     form.querySelector("#cancel-btn").disabled = true;
 
     /* show page */
-    showNoticeTip("Suivant le type de contributeur que vous êtes, vous pouvez publier un nouvel évènement instantanément ou avec un délais de trois jours", "Publiez ici un évènement");
     accountDetail.hidden = false;
     submitContainer.hidden = false;
     loading.style.display = "none";

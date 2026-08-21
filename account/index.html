@@ -712,20 +712,6 @@
         </div>
     </div>
 </div>
-<div id="notice-tip" class="notice notice-tip hidden">
-    <span class="notice-icon">💡</span>
-    <div class="notice-content">
-        <strong id="title" class="notice-title hidden"></strong>
-        <p id="text"></p>
-    </div>
-</div>
-
-<div id="notice-error" class="notice notice-error hidden">
-    <div class="notice-content">
-        <span class="notice-icon">❌</span>
-        <span id="text"></span>
-    </div>
-</div>
 
 <div id="loading-screen">
     <div class="spinner"><div class="spinner-ring"></div></div>
@@ -734,6 +720,15 @@
     </div> -->
 </div>
 <div id="rstpwd-container" class="page-container" hidden>
+    <section class="notice-tile">
+        <div class="notice-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">info</span>
+            <span id="title">Réinitialiser le mot de passe</span>
+        </div>
+        <p id="text" class="notice-text">
+            <strong>Demandez</strong> la réinitialisation de votre mot de passe et vous recevrez un email.
+        </p>
+    </section>
     <article class="formtile-tile pico">
         <form id="rstpwd-form">
             <label>
@@ -747,7 +742,7 @@
             </label>
 
             <div>
-                <button type="submit" id="button" data-action="send-reset-password-request">Reinitialiser le mot de passe</button>
+                <button type="submit" id="button" data-action="send-reset-password-request">Envoyer</button>
             </div>
         </form>
 
@@ -758,6 +753,15 @@
     </article>
 </div>
 <div id="signin-container" class="page-container" hidden>
+    <section class="notice-tile">
+        <div class="notice-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">info</span>
+            <span id="title">Sign-In</span>
+        </div>
+        <p id="text" class="notice-text">
+            <strong>Connectez vous</strong> pour publier vos évènements et contribuer à l'agenda culturel.
+        </p>
+    </section>
     <article class="formtile-tile pico">
         <form id="signin-form">
             <label>
@@ -796,6 +800,15 @@
     </article>
 </div>
 <div id="signup-container" class="page-container" hidden>
+    <section class="notice-tile">
+        <div class="notice-section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">info</span>
+            <span id="title">Sign-Up</span>
+        </div>
+        <p id="text" class="notice-text">
+            <strong>Créez un compte</strong> pour publier vos événements et contribuer à l'agenda culturel.
+        </p>
+    </section>
     <article class="formtile-tile pico">
         <form id="signup-form">
             <label>
@@ -1039,7 +1052,7 @@
 
 </div>
 
-<script type="module" defer src="../assets/js/account/router.js?v=d4f3f045.1a479aa"></script>
+<script type="module" defer src="../assets/js/account/router.js?v=a3c06106.4346c9a"></script>
 <html data-theme="light">
 
 
@@ -1141,13 +1154,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="../assets/js/global/config.js?v=d4f3f045.1a479aa"></script>
+        <script src="../assets/js/global/config.js?v=a3c06106.4346c9a"></script>
       
-        <script src="../assets/js/global/helper.js?v=d4f3f045.1a479aa"></script>
+        <script src="../assets/js/global/helper.js?v=a3c06106.4346c9a"></script>
       
-        <script src="../assets/js/global/user_profile.js?v=d4f3f045.1a479aa"></script>
+        <script src="../assets/js/global/user_profile.js?v=a3c06106.4346c9a"></script>
       
-        <script src="../assets/js/global/supabase.js?v=d4f3f045.1a479aa"></script>
+        <script src="../assets/js/global/supabase.js?v=a3c06106.4346c9a"></script>
       
     
   </body>
