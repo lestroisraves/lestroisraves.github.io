@@ -239,6 +239,16 @@
     color: var(--primary-text);
 }
 
+.cat-filters {
+    margin: 0 0 0.3rem 0;
+    padding: 0.2rem 0 0 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-fg);
+    gap: 0.2rem;
+}
+
 .more-filters {
     margin: 0;
     padding: 0.2rem 0 0 0;
@@ -351,7 +361,7 @@
     border-radius: 999px;
     border: none;
     background: var(--primary-option--light);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
     color: var(--primary-option);
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
