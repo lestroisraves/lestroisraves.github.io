@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=0871f87b.e13b775";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=e8e75f12.e13b775";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -225,19 +225,23 @@ function renderEventSmallTile(event, type) {
         ? "pending"
         : ""
     
+    const town = eventData.location_address_town
+        ? ` - ${eventData.location_address_town}`
+        : ""
+
     const html = `
-        <div class="event-small-tile ${pending}" style="border-color: ${eventData.categoryColor};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
+        <div class="event-small-tile ${pending}" style="--event-color: ${eventData.categoryColor};" role="link" tabindex="0" data-action="${type}" data-${type}-id="${event.id}">
+            <div class="event-small-side" style="background: ${eventData.categoryPie};"></div>
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${event.title}</span>
+                <span class="event-small-loc non-wrap">${eventData.location_name}${town}</span>
                 <span class="event-small-meta non-wrap">
-                    <span style="color: ${eventData.categoryColor};"><strong>${eventData.categoryLabel}</strong></span>
-                    .
-                    <span>${formatEventDateTime(eventData.event_date)}</span>
-                    .
-                    <span class="non-wrap">${eventData.location_name}</span>
+                    <span class="event-small-cat" style="${categoryTextStyle(eventData.categoryIds)}">${eventData.categoryLabel}</span>
+                    <span class="event-small-sep">·</span>
+                    <span>${formatEventDateTime(eventData.event_date, eventData.event_start_time)}</span>
                 </span>
-                
             </div>
+            <span class="material-symbols-outlined event-small-chevron">chevron_right</span>
         </div>
     `
     return html;
@@ -245,13 +249,15 @@ function renderEventSmallTile(event, type) {
 
 function renderOfficialRequests(profile) {
     const html = `
-        <div class="event-small-tile" role="link" tabindex="0" data-action="show-profile" data-show-profile-id="${profile.id}">
+        <div class="event-small-tile" style="--event-color: var(--primary-basic);" role="link" tabindex="0" data-action="show-profile" data-show-profile-id="${profile.id}">
+            <div class="event-small-side">
+                <span class="material-symbols-outlined">artist</span>
+            </div>
             <div class="event-small-main">
                 <span class="event-small-title non-wrap">${profile.name}</span>
-                <span class="event-small-meta">
-                    <span">${profile.email}</span>
-                </span>
+                <span class="event-small-loc non-wrap">${profile.email}</span>
             </div>
+            <span class="material-symbols-outlined event-small-chevron">chevron_right</span>
         </div>
     `
     return html;

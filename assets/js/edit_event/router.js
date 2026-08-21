@@ -1,11 +1,11 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
-} from "../global/modal.js?v=0871f87b.e13b775";
+} from "../global/modal.js?v=e8e75f12.e13b775";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory
-} from "../global/eventform.js?v=0871f87b.e13b775"
+} from "../global/eventform.js?v=e8e75f12.e13b775"
 
 import { 
     addTag, removeLastTag
@@ -13,7 +13,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=0871f87b.e13b775"
+} from "../global/address.js?v=e8e75f12.e13b775"
 
 import { 
     editEvent, goBack

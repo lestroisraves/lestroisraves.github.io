@@ -196,6 +196,16 @@ function categoryPieBackground(ids) {
     return `conic-gradient(from 45deg, ${stops.join(", ")})`;
 }
 
+/* inline text color for a category label; gradient across all colors when "Mixte" */
+function categoryTextStyle(ids) {
+    if (!ids || ids.length <= 1) {
+        const color = APP_CONFIG.CATEGORIES[(ids && ids[0]) || 0]["color"];
+        return `color: ${color};`;
+    }
+    const stops = ids.map(id => APP_CONFIG.CATEGORIES[id]["color"]).join(", ");
+    return `background: linear-gradient(90deg, ${stops}); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;`;
+}
+
 
 
 function renderAccountPermissionDetails() {
