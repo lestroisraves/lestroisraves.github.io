@@ -77,26 +77,91 @@
 }
 
 .event-categories {
-    display: flex;
-    /* justify-content: space-between; */
-    flex-wrap: wrap;
-    gap: 0.3rem;
     padding: 0.4rem 0.4rem 0;
 }
 
-.category-label {
+.event-categories-toggle {
+    display: none;
+}
+
+.event-categories-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    margin: 0;
+}
+
+label.event-categories-body {
+    cursor: pointer;
+}
+
+.event-categories-rows {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.category-row {
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
-    padding: 0.10rem 0.3rem;
-    border-radius: 20px;
-    font-size: 0.55rem;
-    /* font-weight: 600; */
+    gap: 0.3rem;
+}
+
+.category-row-label {
+    display: none;
+    font-size: 0.6rem;
     white-space: nowrap;
 }
 
-.category-label .material-symbols-outlined {
-    font-size: 0.75rem;
+.event-categories.single .category-row-label {
+    display: inline;
+}
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.category-badge .material-symbols-outlined {
+    font-size: 0.65rem;
+}
+
+.event-categories-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.event-categories-chevron .chevron {
+    font-size: 1rem;
+    color: var(--primary-gray);
+    transition: transform 0.2s ease;
+}
+
+/* expanded: circles stack in a column and labels appear beside them */
+.event-categories-toggle:checked ~ .event-categories-body {
+    align-items: flex-start;
+}
+
+.event-categories-toggle:checked ~ .event-categories-body .event-categories-rows {
+    flex-direction: column;
+}
+
+.event-categories-toggle:checked ~ .event-categories-body .category-row-label {
+    display: inline;
+}
+
+.event-categories-toggle:checked ~ .event-categories-body .chevron {
+    transform: rotate(180deg);
 }
 
 .event-details {
