@@ -116,15 +116,30 @@ function renderMaterialIconText(icon, text) {
             `
 }
 
-function linkify(text) {
-    const urlRegex = /(\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+)/gi;
+function escapeHtml(text) {
+    return String(text).replace(/[&<>"']/g, (c) => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+    ));
+}
 
-    return text.replace(urlRegex, (url) => {
+function linkify(text) {
+    if (!text) return "";
+    const urlRegex = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi;
+
+    return escapeHtml(text).replace(urlRegex, (url) => {
+        // trailing punctuation is part of the sentence, not the URL
+        const trailing = url.match(/[.,!?:)\]}]+$/);
+        let tail = "";
+        if (trailing) {
+            tail = trailing[0];
+            url = url.slice(0, -tail.length);
+        }
+
         const href = url.startsWith("http")
             ? url
             : `https://${url}`;
 
-        return `<a class="website" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        return `<a class="website" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>${tail}`;
     });
 }
 
