@@ -159,11 +159,12 @@ body.events-page {
 }
 
 .image-placeholder.no-image {
-    min-height: 130px;
+    min-height: 100px;
 }
 
 .image-placeholder .material-symbols-outlined {
     font-size: 64px;
+    color: var(--primary-gray);
 }
 
 .event-thumbnail {

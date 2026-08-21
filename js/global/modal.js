@@ -295,11 +295,6 @@ export function openEventModal(event, type, user_profile=null) {
 
     console.log("event modal data:", eventData);
 
-    /* apply category style */
-    eventModalContent.querySelector(".image-placeholder").style.background = eventData.categoryColorLight;
-    eventModalContent.querySelector("#img-ico").style.color = eventData.categoryColor;
-
-
     if (eventData.image_url) {
         setEventImage(eventModalContent, event.image_url);
     }

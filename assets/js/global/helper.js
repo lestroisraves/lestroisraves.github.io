@@ -368,11 +368,11 @@ function renderEventData(event, details = false) {
         // render extra information for event modal
         eventData.imageHtml = eventData.image_url
             ? ` <div class="event-image-wrapper">
-                    <div class="image-placeholder"><span id="img-ico" class="material-symbols-outlined">image</span></div>
+                    <div class="image-placeholder"><span class="material-symbols-outlined">image</span></div>
                     <img class="event-thumbnail" alt="image évènement">
                 </div>`
             : ` <div class="event-image-wrapper">
-                    <div class="image-placeholder no-image"><span id="img-ico" class="material-symbols-outlined">${eventData.categoryIcon}</span></div>
+                    <div class="image-placeholder no-image"><span class="material-symbols-outlined">local_activity</span></div>
                 </div>`;
 
         eventData.locationAddress = eventData.location_address_2
