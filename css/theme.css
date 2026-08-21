@@ -11,22 +11,16 @@
 :root,
 [data-md-color-scheme="default"]
 {
-    --primary-fg:                       #149182;
-    --primary-background:               #e5f4f1;
-
-    --primary-header-text:              #ffffff;
-    --primary-header-text--darker:      #0b463b;
-
-    --primary-text:                     #0f6e63;
-    --primary-subtext:                  #64b4a0;
-    --primary-text--darker:             #0b463b;
-
+    --primary-fg:                       #E0E0E6;
+    --primary-background:               #F5F5F5;
+    --primary-text:                     #0D2C87;
+    --primary-subtext:                  #818FBA;
     --primary-textarea:                 #837e7e;
     --primary-link:                     #4527a0;
     --primary-link--hover:              #673ab7;
     --primary-link--active:             #311b92;
-    --primary-notice--text:             #0f6e63;
-    --primary-notice--bg:               #e5f4f1;
+    --primary-notice--bg:               #f8f9fd;  
+    --primary-notice--text:             #1a237e;
 
     --primary-gray:                     #aaaaaa;
     --primary-dark:                     #242424;
@@ -71,7 +65,7 @@
 
     /* redefine header colors */
     --md-primary-fg-color:              var(--primary-fg);
-    --md-primary-bg-color:              var(--primary-header-text);
+    --md-primary-bg-color:              var(--primary-text);
 
     /* redefine footer colors */
     --md-footer-fg-color--light:        var(--primary-text); /* "Copyright..." */
@@ -137,7 +131,7 @@
 .subtitle-ticker__track span {
     padding-right: 4rem;
     white-space: nowrap;
-    color: var(--primary-header-text)
+    color: var(--primary-subtext)
 }
 
 @keyframes ticker {
