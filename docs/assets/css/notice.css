@@ -1,55 +1,40 @@
 /* ============================================================
    notice.css — Notice banners
-   Base notice, tip and error variants.
    ============================================================ */
 
-.notice {
-    display: flex;
-    align-items: flex-start;
-    max-width: 420px;
-    margin: auto;
-    gap: 0.75rem;
-    padding: 1rem;
-    margin: 1rem 0.4rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-}
-
-.notice.hidden {
-    display: none;
-}
-
-.notice.type-wide {
+.notice-tile {
     max-width: 720px;
+    margin: 0.5rem auto;
+    padding: 0.8rem 0.8rem;
+    background: var(--md-default-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
-.notice-icon {
+.notice-section-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: -between;
+    gap: 0.4rem;
+    color: #3f51b5;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.notice-section-title .material-symbols-outlined {
     font-size: 1.2rem;
-    line-height: 1.2;
 }
 
-.notice-content strong {
-    display: block;
-    margin-bottom: 0.2rem;
+.notice-section-title.details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
 }
 
-.notice-content p {
-    margin: 0;
-}
-
-.notice-title.hidden {
-    display: none;
-}
-
-.notice-tip {
-    background-color: var(--primary-success--lighter);
-    border-left: 4px solid var(--primary-success);
-    color: var(--primary-success--text);
-}
-
-.notice-error {
-    background-color: var(--primary-error--lighter);
-    border-left: 4px solid var(--primary-error);
-    color: var(--primary-error--text);
+.notice-text {
+    margin: 0.6rem 0 0.2rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--md-default-fg-color);
 }

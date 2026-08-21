@@ -2,7 +2,6 @@ console.log("executing:", "edit_event.js");
 
 import { openErrorModal, openSuccessModal } from "../global/modal.js?v=dev";
 import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=dev";
-import { configNoticeTip, showNoticeTip, showNoticeError, hideNoticeError, hideNoticeTip } from "../global/notices.js?v=dev";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -10,12 +9,14 @@ const previousPage = document.referrer;
 const params = new URLSearchParams(hash);
 const eventId = params.get("id");
 
+const notice = document.getElementById("notice-tile");
+const noticeTitle = notice.querySelector("#title");
+const noticeText = notice.querySelector("#text");
+
 const loading = document.getElementById("loading-screen");
 const backBtn = document.getElementById("back-btn");
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
-const accountRole = document.getElementById("account-role");
-const permissionDetails = document.getElementById("detail-permission");
 const submitContainer = document.getElementById("submit-container");
 
 let user_profile = null;
@@ -47,7 +48,6 @@ async function initEditEventPage() {
 
 function showLoginWarning() {
     user_profile = null;
-    hideNoticeTip();
     submitContainer.hidden = true;
     accountDetail.hidden = true;
     window.location.href = `../account/`;
@@ -57,14 +57,14 @@ function showEdit(user, profile, event) {
     user_profile = profile;
     
     /* initialize form */
-    configNoticeTip("wide");
     initEventForm(event);
     form.querySelector("#end_date_container").hidden = true;
     form.querySelector("#cancel-btn").hidden = false;
     form.querySelector("#cancel-btn").disabled = false;
 
     /* show page */
-    showNoticeTip(`Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`, "Editer votre évènement");
+    noticeTitle.innerText = "Editer votre évènement";
+    noticeText.innerHTML = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
     backBtn.hidden = false;
     accountDetail.hidden = true;
     submitContainer.hidden = false;

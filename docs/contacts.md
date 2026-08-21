@@ -5,7 +5,6 @@ hide:
 ---
 
 {% include 'includes/modals/popup.html' %}
-{% include 'includes/modals/notices.html' %}
 {% include 'includes/nav/loading.html' %}
 {% include 'includes/contacts/contacts.html' %}
 
