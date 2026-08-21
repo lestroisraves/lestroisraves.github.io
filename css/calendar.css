@@ -29,7 +29,7 @@
 #calendar-title {
     font-weight: 600;
     font-size: 0.8rem;
-    color: var(--primary-textarea);
+    color: var(--primary-subtext);
     min-width: 100px;
     text-align: center;
 }
@@ -37,18 +37,29 @@
 #today-btn,
 .calendar-header-nav button {
     font-size: 0.8rem;
-    color: var(--primary-textarea);
+    color: var(--primary-subtext);
     border: none;
     background: transparent;
     cursor: pointer;
     font-size: 1rem;
 }
 
-#today-btn {
+#today-btn,
+#prev-month,
+#next-month {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--primary-fg);
+    color: var(--primary-subtext);
 }
+
+#today-btn:hover,
+#prev-month:hover,
+#next-month:hover {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-text);
+}
+
 
 .calendar-header {
     font-weight: 600;

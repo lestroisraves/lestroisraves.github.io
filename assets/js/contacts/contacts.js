@@ -18,7 +18,8 @@ async function initContactsPage() {
 }
 
 function renderTeamTile(profile) {
-    const roleLabel = APP_CONFIG.ROLES[profile.role] || "";
+    var roleLabel = APP_CONFIG.ROLES[profile.role] || "";
+    if (profile.label) roleLabel += ` / ${profile.label}`;
 
     return `
         <a class="team-tile" href="mailto:${profile.email}">
@@ -37,7 +38,7 @@ async function loadTeam() {
 
     const { data, error } = await window.supabaseClient
         .from("profiles")
-        .select("name, email, role")
+        .select("name, email, role, label")
         .gte("role", 2) /* modérateurs (2) et admins (3) */
         .order("role", { ascending: false })
         .order("name", { ascending: true });

@@ -220,6 +220,23 @@
     width: 6px;
 }
 
+.user-quote a {
+    color: var(--primary-link);
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 0.15s ease;
+}
+
+.user-quote a:hover {
+    color: var(--primary-link--hover);
+}
+
+.user-quote a:active {
+    color: var(--primary-link--active);
+}
+
 .user-quote::-webkit-scrollbar-thumb {
     background: rgba(0,0,0,0.2);
     border-radius: 4px;
