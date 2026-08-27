@@ -12,7 +12,7 @@
 [data-md-color-scheme="default"]
 {
     --primary-fg:                       #CFD5E2;
-    --primary-pico:                     ##525F7A;
+    --primary-pico:                     #525F7A;
     --primary-background:               #EFF1F4;
     --primary-text:                     #0D2C87;
     --primary-subtext:                  #818FBA;
@@ -24,11 +24,11 @@
     --primary-notice--text:             #1a237e;
 
     --primary-gray:                     #aaaaaa;
-    --primary-dark:                     #242424;
-
+    --primary-dark: #0D2C87;
     --primary-pending-event:            #d97706;
 
     --primary-tag-color:                #085066;
+    --primary-event-background:         #F3ECE9;
 
     --primary-success:                  #0b6b3b;
     --primary-success--lighter:         #f3fbf5;
@@ -47,10 +47,6 @@
     --primary-basic--text:              #48536B;
     
     
-    /* --primary-pg:                       #9b2076;
-    --primary-price:                    #20619e; */
-    /* --primary-option:                   #a78519;
-    --primary-option--light:            #fcf5e0; */
     --primary-option:                   #0D2C87;
     --primary-option--light:            #F3ECE9;
 
@@ -330,4 +326,26 @@ table tr th:last-child {
     :root {
         color-scheme: light;
     }
+}
+
+/*declaration de couleur P3 Raphal*/
+
+html {
+  --category0: #FF46A0 !important;
+  --category1: #0064BF !important;
+  --category2: #01A971 !important;
+  --category3: #D99AB4 !important;
+  --category4: #FF9F1F !important;
+  --category5: #DDDB2A !important;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  html {
+    --category0: color(display-p3 1 0.2745 0.6275) !important;
+    --category1: color(display-p3 0 0.3922 0.7490) !important;
+    --category2: color(display-p3 0.0039 0.6627 0.4431) !important;
+    --category3: color(display-p3 0.8510 0.6039 0.7059) !important;
+    --category4: color(display-p3 1 0.6235 0.1216) !important;
+    --category5: color(display-p3 0.8667 0.8588 0.1647) !important;
+  }
 }
