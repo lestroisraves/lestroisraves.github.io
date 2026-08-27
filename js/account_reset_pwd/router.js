@@ -1,6 +1,6 @@
 import {
     resetPassword
-} from "./account_reset_pwd.js?v=e66b67e5.e37c02a";
+} from "./account_reset_pwd.js?v=a901b56c.cd94ba9";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
