@@ -354,7 +354,7 @@ body.events-page {
     transform: translateY(-50%);
     padding-left: 0.5rem;
     color: var(--primary-subtext);
-    background: linear-gradient(to right, transparent, var(--primary-background) 45%);
+    background: linear-gradient(to right, transparent, var(--primary-event-background) 45%);
 }
 
 /* modal: let tags flow onto extra rows */
