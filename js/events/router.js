@@ -1,7 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openAreaHelpModal, openViewHelpModal
-} from "../global/modal.js?v=a901b56c.cd94ba9";
+} from "../global/modal.js?v=47df4036.8637dfa";
 
 import { 
     openEvent, searchInput, 
