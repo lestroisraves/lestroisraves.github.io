@@ -328,17 +328,7 @@ table tr th:last-child {
     }
 }
 
-/*declaration de couleur P3 Raphal*/
-
-html {
-  --category0: #FF46A0 !important;
-  --category1: #0064BF !important;
-  --category2: #01A971 !important;
-  --category3: #D99AB4 !important;
-  --category4: #FF9F1F !important;
-  --category5: #DDDB2A !important;
-}
-
+/* declaration de couleur P3 */
 @supports (color: color(display-p3 1 1 1)) {
   html {
     --category0: color(display-p3 1 0.2745 0.6275) !important;
