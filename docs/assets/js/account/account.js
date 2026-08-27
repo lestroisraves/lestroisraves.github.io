@@ -18,6 +18,8 @@ const rstPwdContainer = document.getElementById("rstpwd-container");
 const rstPwdForm = document.getElementById("rstpwd-form");
 const accountContainer = document.getElementById("account-container");
 
+const openModeratorCharterBtn = document.getElementById("open-moderator-charter");
+
 const permissionDetails = document.getElementById("detail-permission");
 const adminSection = document.getElementById("admin-section");
 const superAdminSection = document.getElementById("super-admin-section");
@@ -307,7 +309,8 @@ export async function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
-            roleRequest.hidden = false;
+            roleRequest.classList.remove("hidden");
+            openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
             superAdminSection.hidden = true;
             break;
@@ -318,7 +321,8 @@ export async function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
-            roleRequest.hidden = true;
+            roleRequest.classList.add("hidden");
+            openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
             superAdminSection.hidden = true;
             break;
@@ -330,7 +334,8 @@ export async function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "check"
             permissionAdmin.hidden = false;
             permissionSuperAdmin.hidden = true;
-            roleRequest.hidden = true;
+            roleRequest.classList.add("hidden");
+            openModeratorCharterBtn.classList.remove("hidden");
             adminSection.hidden = false;
             superAdminSection.hidden = true;
 
@@ -360,7 +365,8 @@ export async function showAccount(user, profile) {
             permissionOfficial.querySelector("#icon").innerText = "lock"
             permissionAdmin.hidden = true;
             permissionSuperAdmin.hidden = true;
-            roleRequest.hidden = false;
+            roleRequest.classList.add("hidden");
+            openModeratorCharterBtn.classList.add("hidden");
             adminSection.hidden = true;
             superAdminSection.hidden = true;
     }

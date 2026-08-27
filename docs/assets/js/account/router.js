@@ -1,6 +1,6 @@
 import { 
     closeModal, openConfirmModal, confirm, sendOfficialRequest,
-    setConfirmBtnState, setSendBtnState
+    setConfirmBtnState, setSendBtnState, openModeratorCharterModal
 } from "../global/modal.js?v=dev";
 
 import {
@@ -93,6 +93,10 @@ async function handleClick(el) {
 
         case "close-modal":
             closeModal(el);
+            break;
+
+        case "open-moderator-charter":
+            openModeratorCharterModal();
             break;
 
         default:

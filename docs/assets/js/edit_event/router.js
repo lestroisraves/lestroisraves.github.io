@@ -1,6 +1,7 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
+    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal,
+    openContributorCharterModal
 } from "../global/modal.js?v=dev";
 
 import { 
@@ -75,6 +76,10 @@ async function handleClick(el, e) {
 
         case "open-category-help":
             openCategoryHelpModal();
+            break;
+
+        case "open-contributor-charter":
+            openContributorCharterModal();
             break;
 
         default:
