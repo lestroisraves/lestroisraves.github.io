@@ -214,9 +214,6 @@ export function getEventFormPayload() {
     const addressExtra = form.querySelector('#location_address_2').value.trim();
     const addressCode = form.querySelector('#location_address_code').value.trim();
     const addressTown = form.querySelector('#location_address_town').value.trim();
-    const location_address = [addressStreet, addressExtra, `${addressCode} ${addressTown}`.trim()]
-        .filter(Boolean)
-        .join(", ");
 
     var phoneNumber = null;
 
@@ -291,7 +288,7 @@ export function getEventFormPayload() {
         // event_date: done later
         event_start_time: start_time === "" ? null : start_time,
         location_name: form.querySelector('#location_name').value,
-        location_address: location_address,
+        location_address: addressStreet,
         location_address_2: addressExtra === "" ? null : addressExtra,
         location_address_code: addressCode,
         location_address_town: addressTown,
