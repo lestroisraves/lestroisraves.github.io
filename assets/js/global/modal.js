@@ -8,6 +8,8 @@ const endDateHelpModal = document.getElementById("end-date-help-modal");
 const categoryHelpModal = document.getElementById("category-help-modal");
 const areaHelpModal = document.getElementById("area-help-modal");
 const viewHelpModal = document.getElementById("view-help-modal");
+const contributorCharterModal = document.getElementById("contributor-charter-modal");
+const moderatorCharterModal = document.getElementById("moderator-charter-modal");
 
 const eventModal = document.getElementById("event-modal");
 const eventModalContent = document.getElementById("event-modal-content");
@@ -159,6 +161,16 @@ export function openAreaHelpModal() {
 
 export function openViewHelpModal() {
     viewHelpModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openContributorCharterModal() {
+    contributorCharterModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+export function openModeratorCharterModal() {
+    moderatorCharterModal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 

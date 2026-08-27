@@ -46,3 +46,40 @@
     line-height: 1.5;
     color: var(--primary-notice--text);
 }
+
+.notice-text a {
+    color: var(--primary-link);
+    cursor: pointer;
+}
+
+/* Pill button (matches the category chip look) */
+.notice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.6rem;
+    padding: 0.35rem 0.8rem;
+    border: 2px solid var(--primary-link);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--primary-link);
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.notice-btn .material-symbols-outlined {
+    font-size: 1.1rem;
+}
+
+.notice-btn:hover {
+    background: var(--primary-link);
+    color: #fff;
+}
+
+.notice-btn.hidden {
+    display: none;
+}

@@ -1,11 +1,12 @@
 import { 
     closeModal, openConfirmModal, confirm,
-    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal
-} from "../global/modal.js?v=47df4036.8637dfa";
+    setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal,
+    openContributorCharterModal
+} from "../global/modal.js?v=072062d4.17cf02a";
 
 import { 
     priceChanged, handleImageChoice, removeImage, formatPhoneInput, toggleCategory
-} from "../global/eventform.js?v=47df4036.8637dfa"
+} from "../global/eventform.js?v=072062d4.17cf02a"
 
 import { 
     addTag, removeLastTag
@@ -13,7 +14,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=47df4036.8637dfa"
+} from "../global/address.js?v=072062d4.17cf02a"
 
 import { 
     editEvent, goBack
@@ -75,6 +76,10 @@ async function handleClick(el, e) {
 
         case "open-category-help":
             openCategoryHelpModal();
+            break;
+
+        case "open-contributor-charter":
+            openContributorCharterModal();
             break;
 
         default:

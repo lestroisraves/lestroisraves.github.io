@@ -1,5 +1,5 @@
 <div id="account-container" class="page-container" hidden>
-    <article class="account-tile pico">
+    <article class="account-tile">
         <form id="account-form">
             
             <div class="account-section-title">
@@ -26,16 +26,21 @@
 
                     <div id="detail-permission"></div>
 
-                    <div id="role-request" class="role-request" hidden>
+                    <div id="role-request" class="role-request hidden">
                         <p class="role-request-text">
                             Vous êtes une organisation ou un lieu culturel, une association, un groupe de musique, etc... et vous souhaitez publier instantanément ?
                             <a href="#" id="official-role-request" data-action="open-request-modal">Demandez à être contributeur officiel</a>
                         </p>
                     </div>
+
+                    <button id="open-moderator-charter" class="notice-btn hidden" data-action="open-moderator-charter" aria-label="Ouvrir la charte du modérateur">
+                        <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                        Ouvrir la charte du modérateur
+                    </button>
                 </div>
             </div>
 
-            <div>
+            <div class="pico">
                 <button type="submit" data-action="logout">Se déconnecter</button>
             </div>
         </form>
