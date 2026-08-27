@@ -424,3 +424,45 @@ label.event-categories-body {
     font-size: 0.65rem;
     color: #888;
 }
+
+.confirm-reasons {
+    margin: 0.6rem 0;
+    text-align: left;
+}
+
+.confirm-reasons.hidden {
+    display: none;
+}
+
+.confirm-reasons-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-text);
+}
+
+.confirm-reasons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.confirm-reason-option {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--primary-textarea);
+    cursor: pointer;
+}
+
+.confirm-reason-option input {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+.confirm-reason-text {
+    min-height: 60px;
+}
