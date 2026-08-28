@@ -1,10 +1,12 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=bb2d8258.6b9bce4";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=bb2d8258.6b9bce4";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=326db44c.75258f8";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=326db44c.75258f8";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
+// keep the spinner outside the .ready-gated content so it stays visible while loading
+document.body.appendChild(loading);
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");

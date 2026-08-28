@@ -1,7 +1,7 @@
 console.log("executing:", "edit_event.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=bb2d8258.6b9bce4";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=bb2d8258.6b9bce4";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=326db44c.75258f8";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=326db44c.75258f8";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -65,9 +65,9 @@ function showEdit(user, profile, event) {
     /* show page */
     noticeTitle.innerText = "Editer votre évènement";
     noticeText.innerHTML = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
-    backBtn.hidden = false;
     accountDetail.hidden = true;
     submitContainer.hidden = false;
+    backBtn.classList.remove("hidden");
     loading.style.display = "none";
 }
 

@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=bb2d8258.6b9bce4";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=326db44c.75258f8";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -10,6 +10,8 @@ let itemType = params.get("type");
 history.replaceState(null, "", window.location.pathname + window.location.search);
 
 const loading = document.getElementById("loading-screen");
+// keep the spinner outside the .ready-gated content so it stays visible while loading
+document.body.appendChild(loading);
 const signInContainer = document.getElementById("signin-container");
 const signInForm = document.getElementById("signin-form");
 const signupContainer = document.getElementById("signup-container");

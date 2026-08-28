@@ -2,6 +2,8 @@ console.log("executing:", "contacts.js");
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
+// keep the spinner outside the .ready-gated content so it stays visible while loading
+document.body.appendChild(loading);
 const contactsContainer = document.getElementById("contacts-container");
 const teamList = document.getElementById("team-list");
 
@@ -11,11 +13,11 @@ let user_profile = null;
 async function initContactsPage() {
     console.log("init /contacts/ page");
 
+    await loadTeam();
+
     contactsContainer.hidden = false;
     loading.style.display = "none";
     document.documentElement.classList.add("ready");
-
-    await loadTeam();
 }
 
 function renderTeamTile(profile) {
