@@ -4,19 +4,23 @@
    ============================================================ */
 
 .md-header__brand {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    order: -1;            /* logo + title on the far left */
+    margin-right: auto;   /* push remaining header items to the right */
+    padding-left: 0.6rem;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;  /* logo on the left, title on its right */
     align-items: center;
     gap: 0.4rem;
     text-decoration: none;
     color: var(--primary-text);
 }
 
-/* Logo icon (sits to the right of the title) */
+/* Menu (drawer) button on the very right */
+.md-header__inner > .md-header__button[for="__drawer"] {
+    order: 99;
+}
+
+/* Logo icon (sits to the left of the title) */
 .md-header__brand-logo {
     height: 32px;
     width: auto;
@@ -27,6 +31,7 @@
     font-family: "Monoton", cursive;
     font-size: 1.4rem;
     font-weight: 400; /* Monoton only ships weight 400 */
+    text-transform: uppercase;
     color: var(--primary-text);
     white-space: nowrap;
 }
