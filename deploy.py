@@ -148,10 +148,11 @@ def patch_dev_flag():
     print(SEPARATOR)
 
 
-def push():
+def push(release: bool = False):
     print("[[[[[[ Publish on GitHub ]]]]]]")
-    run(f"ghp-import -n -p -f site")
-    success("Pushed with success on GitHub")
+    remote = "release" if release else "origin"
+    run(f"ghp-import -n -p -f -r {remote} site")
+    success(f"Pushed with success on GitHub ({remote})")
     print(SEPARATOR)
 
 
@@ -171,5 +172,5 @@ if __name__ == "__main__":
 
     # check_git_repos()
     
-    push()
+    push(release=args.release)
     sys.exit(0)

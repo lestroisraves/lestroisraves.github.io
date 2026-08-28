@@ -1,6 +1,6 @@
 console.log("executing:", "config.js");
 
-SITE_URL = "https://lestroisraves.github.io"
+SITE_URL = "https://planetraves.fr"
 
 /* DEPLOY_DEV is patched to true/false at deploy time by deploy.py (env DEV) */
 const DEPLOY_DEV = true;
