@@ -34,7 +34,6 @@
 }
 
 .modal-card {
-    background: #fff;
     border-radius: 12px;
     width: 90%;
     max-width: 520px;
@@ -45,6 +44,21 @@
     overflow-y: auto;
 
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+    /* Scroll shadow: hints that more content is available above/below.
+       The white covers hide the shadow at the very top/bottom; the
+       radial shadows stay pinned while content scrolls (background-attachment:
+       local vs scroll), so they only show when there is more to reveal. */
+    background-color: var(--primary-background);
+    background-image:
+        linear-gradient(var(--primary-background) 30%, rgba(255, 255, 255, 0)),
+        linear-gradient(rgba(255, 255, 255, 0), var(--primary-background) 70%),
+        radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0)),
+        radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0));
+    background-position: center top, center bottom, center top, center bottom;
+    background-repeat: no-repeat;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    background-attachment: local, local, scroll, scroll;
 }
 
 .modal-card.event {
@@ -60,10 +74,6 @@
         linear-gradient(rgba(255, 255, 255, 0), var(--primary-event-background) 70%),
         radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0)),
         radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0));
-    background-position: center top, center bottom, center top, center bottom;
-    background-repeat: no-repeat;
-    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-    background-attachment: local, local, scroll, scroll;
 }
 
 .event-modal-header {
