@@ -163,7 +163,3 @@ document.addEventListener("change", (event) => {
     if (!el) return;
     handleChange(el);
 });
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
-});

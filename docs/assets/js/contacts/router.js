@@ -48,10 +48,6 @@ document.addEventListener("change", (event) => {
     handleChange(el);
 });
 
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
-});
-
 
 document.addEventListener("submit", (event) => {
   event.preventDefault();

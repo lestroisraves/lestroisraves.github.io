@@ -13,6 +13,7 @@ async function initContactsPage() {
 
     contactsContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 
     await loadTeam();
 }

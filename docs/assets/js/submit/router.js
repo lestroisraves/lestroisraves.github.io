@@ -158,10 +158,6 @@ document.addEventListener("focusout", (event) => {
     setTimeout(hideAddressSuggestions, 150); // let a suggestion click register first
 });
 
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
-});
-
 
 document.addEventListener("submit", (event) => {
   event.preventDefault();

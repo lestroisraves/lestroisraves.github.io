@@ -80,6 +80,7 @@ function showSubmit(user, profile) {
     accountDetail.hidden = false;
     submitContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 /* === EXPORTED FUNCTIONS === */

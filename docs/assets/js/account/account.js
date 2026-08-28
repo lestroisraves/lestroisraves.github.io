@@ -273,6 +273,7 @@ export function showLogin() {
     accountContainer.hidden = true;
     signInContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export function showSignup() {
@@ -282,6 +283,7 @@ export function showSignup() {
     signupContainer.hidden = false;
     accountContainer.hidden = true;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export async function showAccount(user, profile) {
@@ -378,6 +380,7 @@ export async function showAccount(user, profile) {
     signupContainer.hidden = true;
     accountContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 
     if (itemId) {
         var el = null;
@@ -414,6 +417,7 @@ export function showResetPassword() {
     signupContainer.hidden = true;
     accountContainer.hidden = true;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export async function signup() {
