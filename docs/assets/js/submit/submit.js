@@ -5,6 +5,8 @@ import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/e
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
+// keep the spinner outside the .ready-gated content so it stays visible while loading
+document.body.appendChild(loading);
 const form = document.getElementById("event-form");
 const accountDetail = document.getElementById("account-detail");
 const accountRole = document.getElementById("account-role");

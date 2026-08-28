@@ -65,9 +65,9 @@ function showEdit(user, profile, event) {
     /* show page */
     noticeTitle.innerText = "Editer votre évènement";
     noticeText.innerHTML = `Vous souhaitez ici éditer un évènement que vous avez créé le ${formatDateForUI(event.created_at)}`;
-    backBtn.hidden = false;
     accountDetail.hidden = true;
     submitContainer.hidden = false;
+    backBtn.classList.remove("hidden");
     loading.style.display = "none";
 }
 
