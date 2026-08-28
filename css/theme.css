@@ -100,7 +100,7 @@
 /* Slightly taller header with a centered logo + title brand */
 .md-header__inner {
     position: relative;
-    min-height: 3.6rem;
+    /* min-height: 3.6rem; */
 }
 
 /* Subtitle banner */
