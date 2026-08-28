@@ -128,6 +128,8 @@ AND created_at <= now() - interval '3 days';
 
 ## Visits
 
+User here a `visits` table to log all connection from a anon or registered user. Only moderators can see statistics.
+
 ```sql
 create table if not exists public.visits (
     visitor_id uuid not null,
