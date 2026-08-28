@@ -4,20 +4,14 @@
    ============================================================ */
 
 .md-header__brand {
-    order: -1;            /* logo + title on the far left */
     margin-right: auto;   /* push remaining header items to the right */
-    padding-left: 0.6rem;
+    padding-left: 0.4rem;
     display: flex;
     flex-direction: row;  /* logo on the left, title on its right */
     align-items: center;
     gap: 0.4rem;
     text-decoration: none;
     color: var(--primary-text);
-}
-
-/* Menu (drawer) button on the very right */
-.md-header__inner > .md-header__button[for="__drawer"] {
-    order: 99;
 }
 
 /* Logo icon (sits to the left of the title) */
@@ -34,4 +28,16 @@
     text-transform: uppercase;
     color: var(--primary-text);
     white-space: nowrap;
+}
+
+/* Open the mobile navigation drawer from the right instead of the left */
+@media screen and (max-width: 76.1875em) {
+    [dir=ltr] .md-sidebar--primary {
+        left: auto;
+        right: -12.1rem;
+    }
+
+    [dir=ltr] [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+        transform: translateX(-12.1rem);
+    }
 }
