@@ -542,7 +542,6 @@ export function openConfirmModal(type, action_type) {
     }
 
     confirmModal.classList.remove("hidden");
-    confirmInput.focus();
 }
 
 export async function confirm(action) {
