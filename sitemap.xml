@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://lestroisraves.github.io/</loc>
+         <loc>https://planetraves.fr/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/account/</loc>
+         <loc>https://planetraves.fr/account/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/account_comfirmed/</loc>
+         <loc>https://planetraves.fr/account_comfirmed/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/account_reset_pwd/</loc>
+         <loc>https://planetraves.fr/account_reset_pwd/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/contacts/</loc>
+         <loc>https://planetraves.fr/contacts/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/edit_event/</loc>
+         <loc>https://planetraves.fr/edit_event/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
     <url>
-         <loc>https://lestroisraves.github.io/submit/</loc>
+         <loc>https://planetraves.fr/submit/</loc>
          <lastmod>2026-08-28</lastmod>
     </url>
 </urlset>

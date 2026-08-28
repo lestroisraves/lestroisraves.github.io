@@ -159,7 +159,7 @@ Détails de l'évènement :
 
 ${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous pouvez répondre à cet email pour nous en faire part.
 
-L'équipe Les Trois Raves`;
+L'équipe Planet Raves`;
 
     await sendEmail({ to: event.creator_email ?? null, subject, body });
     return error;
@@ -190,7 +190,7 @@ Détails de l'évènement :
 
 Pour toute question, vous pouvez répondre à cet email.
 
-L'équipe Les Trois Raves`;
+L'équipe Planet Raves`;
 
     await sendEmail({ to: event.creator_email ?? null, subject, body });
     return error;
@@ -220,7 +220,7 @@ Votre demande de statut de contributeur officiel a été acceptée. Vous pouvez 
 
 Pour toute question, vous pouvez répondre à cet email.
 
-L'équipe Les Trois Raves`;
+L'équipe Planet Raves`;
 
     await sendEmail({ to: profile.email ?? null, subject, body });
     return error;
@@ -244,7 +244,7 @@ Votre demande de statut de contributeur officiel n'a pas été retenue par l'éq
 
 ${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous pouvez répondre à cet email pour nous en faire part.
 
-L'équipe Les Trois Raves`;
+L'équipe Planet Raves`;
 
     await sendEmail({ to: profile.email ?? null, subject, body });
     return error;
