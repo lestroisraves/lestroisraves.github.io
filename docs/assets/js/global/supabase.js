@@ -6,3 +6,60 @@ window.supabaseClient = supabase.createClient(
 );
 
 console.log("supabase client initialized");
+
+// A stale/expired token makes requests fall over ("Invalid Refresh Token"); clear it
+// so the client falls back to the anon key.
+async function ensureValidSession() {
+    try {
+        const { error } = await window.supabaseClient.auth.getSession();
+        if (error) {
+            console.warn("clearing invalid session:", error.message);
+            await window.supabaseClient.auth.signOut({ scope: "local" });
+        }
+    } catch (err) {
+        console.warn("session check failed, clearing:", err);
+        await window.supabaseClient.auth.signOut({ scope: "local" });
+    }
+}
+
+// Cookieless visit tracking: one row per (visitor, month) so repeated views by the
+// same device in a month are not counted twice. Skips the DB call if already logged
+// this month on this device.
+async function trackVisit() {
+    try {
+        const now = new Date();
+        const period = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+        console.log("trackVisit: period", period, "stored guard", localStorage.getItem("visit_period"));
+
+        if (localStorage.getItem("visit_period") === period) {
+            console.log("trackVisit: skipped (already logged this month on this device)");
+            return;
+        }
+
+        let visitorId = localStorage.getItem("visitor_id");
+        if (!visitorId) {
+            visitorId = crypto.randomUUID();
+            localStorage.setItem("visitor_id", visitorId);
+        }
+
+        console.log("trackVisit: inserting", { visitorId, period });
+        const { data, error } = await window.supabaseClient
+            .from("visits")
+            .upsert({ visitor_id: visitorId, period }, { onConflict: "visitor_id,period", ignoreDuplicates: true })
+            .select();
+
+        console.log("trackVisit: result", { data, error });
+
+        if (error) {
+            console.warn("trackVisit insert failed:", error);
+            return; // don't mark done, so it retries next load
+        }
+
+        localStorage.setItem("visit_period", period);
+    } catch (err) {
+        console.warn("trackVisit failed:", err);
+    }
+}
+
+ensureValidSession().then(trackVisit);

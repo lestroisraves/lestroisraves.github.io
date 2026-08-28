@@ -125,3 +125,29 @@ SET pending = false
 WHERE pending = pending
 AND created_at <= now() - interval '3 days';
 ```
+
+## Visits
+
+```sql
+create table if not exists public.visits (
+    visitor_id uuid not null,
+    period text not null,                       -- 'YYYY-MM'
+    first_seen timestamptz not null default now(),
+    primary key (visitor_id, period)
+);
+
+alter table public.visits enable row level security;
+
+-- anyone (logged in or not) can register a visit
+create policy "visits_insert_any" on public.visits
+    for insert to anon, authenticated
+    with check (true);
+
+-- only admins (role >= 3) can read visits for the stats tile
+create policy "visits_select_admin" on public.visits
+    for select to authenticated
+    using (exists (
+        select 1 from public.profiles p
+        where p.id = auth.uid() and p.role >= 2
+    ));
+```

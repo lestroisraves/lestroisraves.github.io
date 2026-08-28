@@ -26,6 +26,10 @@ const permissionDetails = document.getElementById("detail-permission");
 const adminSection = document.getElementById("admin-section");
 const superAdminSection = document.getElementById("super-admin-section");
 
+const statUsers = document.getElementById("stat-users");
+const statEvents = document.getElementById("stat-events");
+const statVisitors = document.getElementById("stat-visitors");
+
 const updateRoleForm = document.getElementById("update-role-form");
 const roleList = document.getElementById("roles");
 
@@ -288,6 +292,29 @@ export function showSignup() {
     document.documentElement.classList.add("ready");
 }
 
+async function getStats() {
+    const { count: usersCount } = await window.supabaseClient
+        .from("profiles")
+        .select("*", { count: "exact", head: true });
+    statUsers.innerText = usersCount ?? "-";
+
+    const { count: eventsCount } = await window.supabaseClient
+        .from("events")
+        .select("*", { count: "exact", head: true });
+    statEvents.innerText = eventsCount ?? "-";
+
+    // average unique visitors per month = total visit rows / number of distinct months
+    const { data: visits } = await window.supabaseClient
+        .from("visits")
+        .select("period");
+    if (visits && visits.length) {
+        const months = new Set(visits.map(v => v.period));
+        statVisitors.innerText = Math.round(visits.length / months.size);
+    } else {
+        statVisitors.innerText = "0";
+    }
+}
+
 export async function showAccount(user, profile) {
     user_profile = profile;
     console.log("user_profile:", user_profile);
@@ -308,6 +335,7 @@ export async function showAccount(user, profile) {
     switch(user_profile.role) {
 
         case 0: /* non official */
+            // statsSection.classList.add("hidden");
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"
@@ -320,6 +348,7 @@ export async function showAccount(user, profile) {
             break;
         
         case 1: /* official */
+            // statsSection.classList.add("hidden");
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
@@ -333,6 +362,7 @@ export async function showAccount(user, profile) {
 
         case 2:
         case 3: /* moderateur/admin */
+            // statsSection.classList.remove("hidden");
             permissionOfficial.classList.remove("denied");
             permissionOfficial.classList.add("granted");
             permissionOfficial.querySelector("#icon").innerText = "check"
@@ -343,6 +373,7 @@ export async function showAccount(user, profile) {
             adminSection.hidden = false;
             superAdminSection.hidden = true;
 
+            await getStats();
             await getPendingEvents();
             await getOfficialRequests();
 
@@ -364,6 +395,7 @@ export async function showAccount(user, profile) {
             break;
         
         default:
+            // statsSection.classList.add("hidden");
             permissionOfficial.classList.add("denied");
             permissionOfficial.classList.remove("granted");
             permissionOfficial.querySelector("#icon").innerText = "lock"

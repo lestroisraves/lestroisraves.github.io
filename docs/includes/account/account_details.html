@@ -105,6 +105,33 @@
 
     <article id="admin-section" class="hidden">
         <div class="account-tile">
+            <div id="stats-section" class="account-section-title details" data-action="accordion" data-accordion-id="stats" aria-expanded="false">
+                <div class="header-left">
+                    <span class="material-symbols-outlined" aria-hidden="true">insights</span>
+                    <span>Statistiques</span>
+                </div>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <div id="stats" class="accordion-container" hidden>
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <span class="label">Utilisateurs inscrits</span>
+                        <span id="stat-users" class="value detail-user">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Évènements</span>
+                        <span id="stat-events" class="value detail-user">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Visiteurs / mois (moy.)</span>
+                        <span id="stat-visitors" class="value detail-user">-</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="account-tile">
             <div id="official-req-section" class="account-section-title details" data-action="accordion" data-accordion-id="official-requests" aria-expanded="false">
                 <div class="header-left">
                     <span class="material-symbols-outlined" aria-hidden="true">send</span>
