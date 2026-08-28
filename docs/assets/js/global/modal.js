@@ -25,6 +25,9 @@ const confirmCodeEl = document.getElementById("confirm-code");
 const confirmInput = document.getElementById("confirm-input");
 const confirmBtn = document.getElementById("confirm-btn");
 const confirmBtnIcon = document.getElementById("confirm-btn-icon");
+const confirmReasons = document.getElementById("confirm-reasons");
+const confirmReasonsList = document.getElementById("confirm-reasons-list");
+const confirmReasonText = document.getElementById("confirm-reason-text");
 
 const officialRequestModal = document.getElementById("official-request-modal");
 const officialRequestInput = document.getElementById("details-input");
@@ -35,6 +38,27 @@ let generatedCode = null;
 let currentEvent = null;
 let currentProfile = null;
 let currentModal = null;
+let sessionProfile = null;
+let eventModalType = null;
+let reasonRequired = false;
+
+// Predefined moderation motives shown as checkboxes in the confirm modal.
+const MODERATION_REASONS = {
+    event: [
+        "Contenu inapproprié",
+        "Doublon",
+        "Informations incorrectes ou incomplètes",
+        "Hors thématique / non culturel",
+        "Spam ou publicité",
+        "Autre",
+    ],
+    request: [
+        "Demande non justifiée",
+        "Informations insuffisantes",
+        "Activité non éligible",
+        "Autre",
+    ],
+};
 
 /* === LOCAL FUNCTIONS === */
 function closeSuccessModal() {
@@ -62,6 +86,35 @@ function closeConfirmModal() {
     confirmModal.classList.add("hidden");
 }
 
+function buildConfirmReasons(kind) {
+    confirmReasonsList.innerHTML = "";
+    (MODERATION_REASONS[kind] || []).forEach((label, i) => {
+        const option = document.createElement("label");
+        option.className = "confirm-reason-option";
+        option.innerHTML = `<input type="checkbox" value="${label}" id="confirm-reason-${i}" data-change-type="confirm-reason"><span>${label}</span>`;
+        confirmReasonsList.appendChild(option);
+    });
+    confirmReasonText.value = "";
+}
+
+function getSelectedReasons() {
+    return Array.from(confirmReasonsList.querySelectorAll("input[type=checkbox]:checked")).map((c) => c.value);
+}
+
+function collectModerationReason() {
+    if (!reasonRequired) return null;
+    return {
+        reasons: getSelectedReasons(),
+        note: confirmReasonText.value.trim(),
+    };
+}
+
+function updateConfirmBtnState() {
+    const codeOk = confirmInput.value === generatedCode;
+    const reasonsOk = !reasonRequired || getSelectedReasons().length > 0;
+    confirmBtn.disabled = !(codeOk && reasonsOk);
+}
+
 async function deleteEvent(event) {
     console.log("deleting event:", event.id);
     const { data, error } = await window.supabaseClient
@@ -84,11 +137,11 @@ async function acceptEvent(event) {
     // todo: send email
 }
 
-async function rejectEvent(event) {
-    console.log("rejecting event:", event.id);
+async function rejectEvent(event, reason = null) {
+    console.log("rejecting event:", event.id, reason);
     const error = await deleteEvent(event);  // if event rejected, it is deleted
 
-    // todo: send email
+    // todo: send email with reason
 }
 
 async function acceptProfile(profile) {
@@ -105,8 +158,8 @@ async function acceptProfile(profile) {
     // todo: send email
 }
 
-async function rejectprofile(profile) {
-    console.log("rejecting official request from user:", profile.id);
+async function rejectprofile(profile, reason = null) {
+    console.log("rejecting official request from user:", profile.id, reason);
     const { error } = await window.supabaseClient
         .from("profiles")
         .update({
@@ -115,7 +168,7 @@ async function rejectprofile(profile) {
         .eq("id", profile.id);
     return error;
 
-    // todo: send email
+    // todo: send email with reason
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -222,6 +275,8 @@ export function openUpdateRoleModal() {
 export function openEventModal(event, type, user_profile=null) {
     currentEvent = event;
     currentModal = eventModal;
+    sessionProfile = user_profile;
+    eventModalType = type;
 
     const eventData = renderEventData(event, true);
 
@@ -334,22 +389,35 @@ export function openConfirmModal(type, action_type) {
     confirmInput.value = "";
     confirmBtn.disabled = true;
 
+    reasonRequired = false;
+    let reasonKind = null;
+
     switch (action_type) {
         case "delete":
-            confirmTitle.innerHTML = "Pour <strong>supprimer l'évènement</strong>, tapez le code suivant :";
+            // confirmTitle.innerHTML = "Pour <strong>supprimer l'évènement</strong>, tapez le code suivant :";
             confirmBtn.innerText = "Supprimer";
             confirmBtnIcon.innerText = "delete";
             confirmBtn.classList.add("delete");
             confirmBtn.classList.remove("info");
             confirmBtn.dataset.actionType = "delete-event";
+            // a moderator deleting an event that isn't theirs must justify it
+            {
+                const isOwnEvent = eventModalType === "my-event"
+                    || (sessionProfile && currentEvent && currentEvent.created_by === sessionProfile.id);
+                if (!isOwnEvent) {
+                    reasonRequired = true;
+                    reasonKind = "event";
+                }
+            }
             break;
 
         case "accept":
+            // confirmTitle.classList.remove("hidden");
             if (type == "event") {
-                confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
+                // confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "accept-event";
             } else {
-                confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
+                // confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "accept-official-request";
             }
             confirmBtn.innerText = "Accepter";
@@ -359,13 +427,15 @@ export function openConfirmModal(type, action_type) {
             break;
 
         case "reject":
+            // confirmTitle.classList.add("hidden");
             if (type == "event") {
-                confirmTitle.innerHTML = "Pour <strong>rejeter la publication</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "reject-event";
+                reasonKind = "event";
             } else {
-                confirmTitle.innerHTML = "Pour <strong>rejeter la requête</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "reject-official-request";
+                reasonKind = "request";
             }
+            reasonRequired = true;
             confirmBtn.innerText = "Rejeter";
             confirmBtn.classList.add("delete");
             confirmBtn.classList.remove("info");
@@ -373,7 +443,7 @@ export function openConfirmModal(type, action_type) {
             break;
 
         default:
-            confirmTitle.innerHTML = "";
+            // confirmTitle.innerHTML = "";
             confirmBtn.innerText = "";
             confirmBtnIcon.innerText = "";
             confirmBtn.classList.remove("delete");
@@ -383,6 +453,15 @@ export function openConfirmModal(type, action_type) {
             
     }
 
+    if (reasonRequired) {
+        buildConfirmReasons(reasonKind);
+        confirmReasons.classList.remove("hidden");
+    } else {
+        confirmReasonsList.innerHTML = "";
+        confirmReasonText.value = "";
+        confirmReasons.classList.add("hidden");
+    }
+
     confirmModal.classList.remove("hidden");
     confirmInput.focus();
 }
@@ -390,6 +469,7 @@ export function openConfirmModal(type, action_type) {
 export async function confirm(action) {
     var successMsg = "";
     var error = null;
+    const reason = collectModerationReason();
     switch (action) {
         
         case "delete-event":
@@ -406,7 +486,7 @@ export async function confirm(action) {
 
         case "reject-event":
             if (!currentEvent) return;
-            error = await rejectEvent(currentEvent);
+            error = await rejectEvent(currentEvent, reason);
             successMsg = "Évènement rejeté ! La page va se rafraichir automatiquement."
             break;
 
@@ -418,7 +498,7 @@ export async function confirm(action) {
 
         case "reject-official-request":
             if (!currentProfile) return;
-            error = await rejectprofile(currentProfile);
+            error = await rejectprofile(currentProfile, reason);
             successMsg = "Requête rejetée ! La page va se rafraichir automatiquement."
             break;
 
@@ -495,7 +575,7 @@ export async function sendOfficialRequest() {
 }
 
 export function setConfirmBtnState(target) {
-    confirmBtn.disabled = target.value !== generatedCode;
+    updateConfirmBtnState();
 }
 
 export function setSendBtnState(target) {

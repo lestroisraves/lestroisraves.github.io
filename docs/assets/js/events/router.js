@@ -111,6 +111,17 @@ async function handleInput(el) {
     }
 }
 
+async function handleChange(el) {
+    switch (el.dataset.changeType) {
+        case "confirm-reason":
+            setConfirmBtnState(el);
+            break;
+
+        default:
+            console.warn("unknown 'change' action:", el.dataset.changeType)
+    }
+}
+
 /* === LISTENERS === */
 window.addEventListener("resize", () => requestAnimationFrame(markOverflowingTags));
 
@@ -137,6 +148,12 @@ document.addEventListener("input", (event) => {
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleInput(el);
+});
+
+document.addEventListener("change", (event) => {
+    const el = event.target.closest("[data-change-type]");
+    if (!el) return;
+    handleChange(el);
 });
 
 document.addEventListener("submit", (event) => {

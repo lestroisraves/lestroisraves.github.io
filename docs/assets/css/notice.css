@@ -52,7 +52,6 @@
     cursor: pointer;
 }
 
-/* Pill button (matches the category chip look) */
 .notice-btn {
     display: inline-flex;
     align-items: center;

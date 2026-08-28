@@ -123,6 +123,17 @@ async function handleInput(el) {
     }
 }
 
+async function handleChange(el) {
+    switch (el.dataset.changeType) {
+        case "confirm-reason":
+            setConfirmBtnState(el);
+            break;
+
+        default:
+            console.warn("unknown 'change' action:", el.dataset.changeType)
+    }
+}
+
 /* === LISTENERS === */
 document.addEventListener("click", async (event) => {
     if (!event.target.closest("[data-allow-action]") && event.target.closest("[data-no-action]")) return;
@@ -145,6 +156,12 @@ document.addEventListener("input", (event) => {
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleInput(el);
+});
+
+document.addEventListener("change", (event) => {
+    const el = event.target.closest("[data-change-type]");
+    if (!el) return;
+    handleChange(el);
 });
 
 window.addEventListener("load", () => {
