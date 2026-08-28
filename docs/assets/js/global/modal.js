@@ -115,12 +115,53 @@ function updateConfirmBtnState() {
     confirmBtn.disabled = !(codeOk && reasonsOk);
 }
 
-async function deleteEvent(event) {
-    console.log("deleting event:", event.id);
+function formatReason(reason) {
+    if (!reason) return "";
+    const lines = [];
+    if (reason.reasons && reason.reasons.length) {
+        lines.push(`Motif(s) : ${reason.reasons.join(", ")}`);
+    }
+    if (reason.note) {
+        lines.push(`Précision complémentaire : ${reason.note}`);
+    }
+    return lines.length ? `${lines.join("\n")}\n\n` : "";
+}
+
+// Recipient + transport are not decided yet (Supabase email vs moderator address).
+async function sendEmail({ to, subject, body }) {
+    // fileLog(`sending email to user: ${to}\n\nsubject: ${subject}\n\nbody:\n${body}`);
+    console.log("preparing email:", { to, subject, body });
+    // TODO: implement sending once the method is chosen, e.g. a Supabase Edge Function:
+    // const { error } = await window.supabaseClient.functions.invoke("send-email", {
+    //     body: { to, subject, body },
+    // });
+    // return error;
+}
+
+async function deleteEvent(event, reason = null) {
+    console.log("deleting event:", event.id, reason);
     const { data, error } = await window.supabaseClient
         .from("events")
         .delete()
         .eq("id", event.id);
+    if (error) return error;
+
+    const subject = `Votre évènement « ${event.title} » a été retiré`;
+    const body =
+`Bonjour ${event.creator_name || ""},
+
+Votre évènement « ${event.title} » a été retiré par l'équipe de modération.
+
+Détails de l'évènement :
+- Titre : ${event.title}
+- Date : ${formatDateForUI(event.event_date)}
+- Lieu : ${event.location_name || "—"}
+
+${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous pouvez répondre à cet email pour nous en faire part.
+
+L'équipe Les Trois Raves`;
+
+    await sendEmail({ to: event.creator_email ?? null, subject, body });
     return error;
 }
 
@@ -132,16 +173,32 @@ async function acceptEvent(event) {
             pending: false
         })
         .eq("id", event.id);
-    return error;
+    if (error) return error;
 
-    // todo: send email
+    const event_url = `${SITE_URL}#id=${event.id}&type=myevent`;
+    const subject = `Votre évènement « ${event.title} » a été publié`;
+    const body =
+`Bonjour ${event.creator_name || ""},
+
+Bonne nouvelle ! Votre évènement est désormais visible en ligne.
+
+Détails de l'évènement :
+- Titre : ${event.title}
+- Date : ${formatDateForUI(event.event_date)}
+- Lieu : ${event.location_name || "—"}
+- Lien : ${event_url}
+
+Pour toute question, vous pouvez répondre à cet email.
+
+L'équipe Les Trois Raves`;
+
+    await sendEmail({ to: event.creator_email ?? null, subject, body });
+    return error;
 }
 
 async function rejectEvent(event, reason = null) {
     console.log("rejecting event:", event.id, reason);
-    const error = await deleteEvent(event);  // if event rejected, it is deleted
-
-    // todo: send email with reason
+    const error = await deleteEvent(event, reason);  // if event rejected, it is deleted
 }
 
 async function acceptProfile(profile) {
@@ -153,12 +210,23 @@ async function acceptProfile(profile) {
             official_request: false
         })
         .eq("id", profile.id);
-    return error;
+    if (error) return error;
 
-    // todo: send email
+    const subject = `Votre demande de statut officiel a été acceptée`;
+    const body =
+`Bonjour ${profile.name || ""},
+
+Votre demande de statut de contributeur officiel a été acceptée. Vous pouvez désormais publier des évènements sans délai.
+
+Pour toute question, vous pouvez répondre à cet email.
+
+L'équipe Les Trois Raves`;
+
+    await sendEmail({ to: profile.email ?? null, subject, body });
+    return error;
 }
 
-async function rejectprofile(profile, reason = null) {
+async function rejectProfile(profile, reason = null) {
     console.log("rejecting official request from user:", profile.id, reason);
     const { error } = await window.supabaseClient
         .from("profiles")
@@ -166,9 +234,20 @@ async function rejectprofile(profile, reason = null) {
             official_request: false
         })
         .eq("id", profile.id);
-    return error;
+    if (error) return error;
 
-    // todo: send email with reason
+    const subject = `Votre demande de statut officiel a été refusée`;
+    const body =
+`Bonjour ${profile.name || ""},
+
+Votre demande de statut de contributeur officiel n'a pas été retenue par l'équipe de modération.
+
+${formatReason(reason)}Si vous n'êtes pas d'accord avec cette décision, vous pouvez répondre à cet email pour nous en faire part.
+
+L'équipe Les Trois Raves`;
+
+    await sendEmail({ to: profile.email ?? null, subject, body });
+    return error;
 }
 
 /* === EXPORTED FUNCTIONS === */
@@ -474,7 +553,7 @@ export async function confirm(action) {
         
         case "delete-event":
             if (!currentEvent) return;
-            error = await deleteEvent(currentEvent);
+            error = await deleteEvent(currentEvent, reason);
             successMsg = "Évènement supprimé ! La page va se rafraichir automatiquement."
             break;
 
@@ -498,7 +577,7 @@ export async function confirm(action) {
 
         case "reject-official-request":
             if (!currentProfile) return;
-            error = await rejectprofile(currentProfile, reason);
+            error = await rejectProfile(currentProfile, reason);
             successMsg = "Requête rejetée ! La page va se rafraichir automatiquement."
             break;
 
