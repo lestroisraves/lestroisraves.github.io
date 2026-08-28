@@ -13,7 +13,6 @@
 {
     --primary-fg:                       #CFD5E2;
     --primary-pico:                     #525F7A;
-    --primary-background:               #EFF1F4;
     --primary-text:                     #0D2C87;
     --primary-subtext:                  #818FBA;
     --primary-textarea:                 #837e7e;
@@ -28,6 +27,8 @@
     --primary-pending-event:            #d97706;
 
     --primary-tag-color:                #085066;
+    /* --primary-background:               #F3ECE9; */
+    --primary-background:               #FFF;
     --primary-event-background:         #F3ECE9;
 
     --primary-success:                  #0b6b3b;
@@ -149,6 +150,7 @@
 .md-typeset {
     padding: 0;
     margin: 0;
+    background: var(--primary-background);
 }
 
 .md-main,
