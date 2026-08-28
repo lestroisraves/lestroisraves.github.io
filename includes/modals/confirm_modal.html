@@ -5,7 +5,7 @@
         </button>
 
         <div class="modal-content">
-            <p id="confirm-title"></p>
+            <!-- <p id="confirm-title" class="confirm-title hidden"></p> -->
 
             <div id="confirm-reasons" class="confirm-reasons hidden">
                 <p class="confirm-reasons-title">Motif(s) de votre décision :</p>
@@ -17,16 +17,18 @@
                 ></textarea>
             </div>
 
-            <div class="confirm-code" id="confirm-code"></div>
-            <input
-                type="text"
-                id="confirm-input"
-                placeholder="Tapez le code"
-                inputmode="numeric"
-                maxlength="4"
-                autocomplete="off"
-                data-input-type="confirm-code"
-            >
+            <div class="confirm-code-row">
+                <div class="confirm-code" id="confirm-code"></div>
+                <input
+                    type="text"
+                    id="confirm-input"
+                    placeholder="Tapez le code ici"
+                    inputmode="numeric"
+                    maxlength="4"
+                    autocomplete="off"
+                    data-input-type="confirm-code"
+                >
+            </div>
         </div>
 
         <div class="modal-actions">

@@ -1,13 +1,13 @@
 import { 
     closeModal, openConfirmModal, confirm, sendOfficialRequest,
     setConfirmBtnState, setSendBtnState, openModeratorCharterModal
-} from "../global/modal.js?v=4a5dd9a4.797a14e";
+} from "../global/modal.js?v=bb2d8258.6b9bce4";
 
 import {
     showSignup, showLogin, showResetPassword, signup, login, logout,
     sendResetPasswordRequest, updateProfileRole, openRoleRequest, openPendingEvent, openMyEvent, openProfile,
     searchInput, shareEvent, sharePendingEvent, shareProfile
-} from "./account.js?v=4a5dd9a4.797a14e";
+} from "./account.js?v=bb2d8258.6b9bce4";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
@@ -162,8 +162,4 @@ document.addEventListener("change", (event) => {
     const el = event.target.closest("[data-change-type]");
     if (!el) return;
     handleChange(el);
-});
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
 });

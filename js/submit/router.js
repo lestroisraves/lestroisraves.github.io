@@ -2,11 +2,11 @@ import {
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState, openAgeHelpModal, openTagHelpModal, openEndDateHelpModal, openCategoryHelpModal, 
     openContributorCharterModal
-} from "../global/modal.js?v=4a5dd9a4.797a14e";
+} from "../global/modal.js?v=bb2d8258.6b9bce4";
 
 import { 
     priceChanged, handleImageChoice, formatPhoneInput, toggleCategory
-} from "../global/eventform.js?v=4a5dd9a4.797a14e"
+} from "../global/eventform.js?v=bb2d8258.6b9bce4"
 
 import { 
     addTag, removeLastTag
@@ -14,7 +14,7 @@ import {
 
 import { 
     searchAddress, selectAddress, hideAddressSuggestions
-} from "../global/address.js?v=4a5dd9a4.797a14e"
+} from "../global/address.js?v=bb2d8258.6b9bce4"
 
 import { 
     submitEvent
@@ -156,10 +156,6 @@ document.addEventListener("change", (event) => {
 document.addEventListener("focusout", (event) => {
     if (!event.target.closest('[data-input-type="address-search"]')) return;
     setTimeout(hideAddressSuggestions, 150); // let a suggestion click register first
-});
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
 });
 
 

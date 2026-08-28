@@ -515,7 +515,7 @@
         </button>
 
         <div class="modal-content">
-            <p id="confirm-title"></p>
+            <!-- <p id="confirm-title" class="confirm-title hidden"></p> -->
 
             <div id="confirm-reasons" class="confirm-reasons hidden">
                 <p class="confirm-reasons-title">Motif(s) de votre décision :</p>
@@ -527,16 +527,18 @@
                 ></textarea>
             </div>
 
-            <div class="confirm-code" id="confirm-code"></div>
-            <input
-                type="text"
-                id="confirm-input"
-                placeholder="Tapez le code"
-                inputmode="numeric"
-                maxlength="4"
-                autocomplete="off"
-                data-input-type="confirm-code"
-            >
+            <div class="confirm-code-row">
+                <div class="confirm-code" id="confirm-code"></div>
+                <input
+                    type="text"
+                    id="confirm-input"
+                    placeholder="Tapez le code ici"
+                    inputmode="numeric"
+                    maxlength="4"
+                    autocomplete="off"
+                    data-input-type="confirm-code"
+                >
+            </div>
         </div>
 
         <div class="modal-actions">
@@ -800,7 +802,7 @@
     </div>
 </div>
 
-<script type="module" defer src="assets/js/events/router.js?v=4a5dd9a4.797a14e"></script>
+<script type="module" defer src="assets/js/events/router.js?v=bb2d8258.6b9bce4"></script>
 <html data-theme="light">
 
 
@@ -902,13 +904,13 @@
       
         <script src="https://unpkg.com/libphonenumber-js@1.13.3/bundle/libphonenumber-min.js"></script>
       
-        <script src="assets/js/global/config.js?v=4a5dd9a4.797a14e"></script>
+        <script src="assets/js/global/config.js?v=bb2d8258.6b9bce4"></script>
       
-        <script src="assets/js/global/helper.js?v=4a5dd9a4.797a14e"></script>
+        <script src="assets/js/global/helper.js?v=bb2d8258.6b9bce4"></script>
       
-        <script src="assets/js/global/user_profile.js?v=4a5dd9a4.797a14e"></script>
+        <script src="assets/js/global/user_profile.js?v=bb2d8258.6b9bce4"></script>
       
-        <script src="assets/js/global/supabase.js?v=4a5dd9a4.797a14e"></script>
+        <script src="assets/js/global/supabase.js?v=bb2d8258.6b9bce4"></script>
       
     
   </body>

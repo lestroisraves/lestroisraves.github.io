@@ -48,12 +48,11 @@ const MODERATION_REASONS = {
         "Contenu inapproprié",
         "Doublon",
         "Informations incorrectes ou incomplètes",
-        "Hors thématique",
+        "Hors thématique / non culturel",
         "Spam ou publicité",
         "Autre",
     ],
     request: [
-        "Profil incomplet",
         "Demande non justifiée",
         "Informations insuffisantes",
         "Activité non éligible",
@@ -116,8 +115,8 @@ function updateConfirmBtnState() {
     confirmBtn.disabled = !(codeOk && reasonsOk);
 }
 
-async function deleteEvent(event, reason = null) {
-    console.log("deleting event:", event.id, reason);
+async function deleteEvent(event) {
+    console.log("deleting event:", event.id);
     const { data, error } = await window.supabaseClient
         .from("events")
         .delete()
@@ -140,7 +139,7 @@ async function acceptEvent(event) {
 
 async function rejectEvent(event, reason = null) {
     console.log("rejecting event:", event.id, reason);
-    const error = await deleteEvent(event, reason);  // if event rejected, it is deleted
+    const error = await deleteEvent(event);  // if event rejected, it is deleted
 
     // todo: send email with reason
 }
@@ -395,7 +394,7 @@ export function openConfirmModal(type, action_type) {
 
     switch (action_type) {
         case "delete":
-            confirmTitle.innerHTML = "Pour <strong>supprimer l'évènement</strong>, tapez le code suivant :";
+            // confirmTitle.innerHTML = "Pour <strong>supprimer l'évènement</strong>, tapez le code suivant :";
             confirmBtn.innerText = "Supprimer";
             confirmBtnIcon.innerText = "delete";
             confirmBtn.classList.add("delete");
@@ -413,11 +412,12 @@ export function openConfirmModal(type, action_type) {
             break;
 
         case "accept":
+            // confirmTitle.classList.remove("hidden");
             if (type == "event") {
-                confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
+                // confirmTitle.innerHTML = "Pour <strong>accepter la publication</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "accept-event";
             } else {
-                confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
+                // confirmTitle.innerHTML = "Pour <strong>accepter la requête</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "accept-official-request";
             }
             confirmBtn.innerText = "Accepter";
@@ -427,12 +427,11 @@ export function openConfirmModal(type, action_type) {
             break;
 
         case "reject":
+            // confirmTitle.classList.add("hidden");
             if (type == "event") {
-                confirmTitle.innerHTML = "Pour <strong>rejeter la publication</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "reject-event";
                 reasonKind = "event";
             } else {
-                confirmTitle.innerHTML = "Pour <strong>rejeter la requête</strong>, tapez le code suivant :";
                 confirmBtn.dataset.actionType = "reject-official-request";
                 reasonKind = "request";
             }
@@ -444,7 +443,7 @@ export function openConfirmModal(type, action_type) {
             break;
 
         default:
-            confirmTitle.innerHTML = "";
+            // confirmTitle.innerHTML = "";
             confirmBtn.innerText = "";
             confirmBtnIcon.innerText = "";
             confirmBtn.classList.remove("delete");
@@ -475,7 +474,7 @@ export async function confirm(action) {
         
         case "delete-event":
             if (!currentEvent) return;
-            error = await deleteEvent(currentEvent, reason);
+            error = await deleteEvent(currentEvent);
             successMsg = "Évènement supprimé ! La page va se rafraichir automatiquement."
             break;
 

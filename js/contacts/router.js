@@ -1,11 +1,11 @@
 import { 
     closeModal, openConfirmModal, confirm,
     setConfirmBtnState
-} from "../global/modal.js?v=4a5dd9a4.797a14e";
+} from "../global/modal.js?v=bb2d8258.6b9bce4";
 
 import { 
 
-} from "./contacts.js?v=4a5dd9a4.797a14e";
+} from "./contacts.js?v=bb2d8258.6b9bce4";
 
 /* === LOCAL FUNCTIONS === */
 async function handleClick(el, e) {
@@ -46,10 +46,6 @@ document.addEventListener("change", (event) => {
     if (!el) return;
     event.preventDefault(); // prevent page scroll on Space
     handleChange(el);
-});
-
-window.addEventListener("load", () => {
-    document.documentElement.classList.add("ready");
 });
 
 

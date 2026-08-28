@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=4a5dd9a4.797a14e";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=bb2d8258.6b9bce4";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -273,6 +273,7 @@ export function showLogin() {
     accountContainer.hidden = true;
     signInContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export function showSignup() {
@@ -282,6 +283,7 @@ export function showSignup() {
     signupContainer.hidden = false;
     accountContainer.hidden = true;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export async function showAccount(user, profile) {
@@ -378,6 +380,7 @@ export async function showAccount(user, profile) {
     signupContainer.hidden = true;
     accountContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 
     if (itemId) {
         var el = null;
@@ -414,6 +417,7 @@ export function showResetPassword() {
     signupContainer.hidden = true;
     accountContainer.hidden = true;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 export async function signup() {

@@ -1,7 +1,7 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=4a5dd9a4.797a14e";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=4a5dd9a4.797a14e";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=bb2d8258.6b9bce4";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=bb2d8258.6b9bce4";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -80,6 +80,7 @@ function showSubmit(user, profile) {
     accountDetail.hidden = false;
     submitContainer.hidden = false;
     loading.style.display = "none";
+    document.documentElement.classList.add("ready");
 }
 
 /* === EXPORTED FUNCTIONS === */
