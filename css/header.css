@@ -16,7 +16,7 @@
 
 /* Logo icon (sits to the left of the title) */
 .md-header__brand-logo {
-    height: 32px;
+    height: 40px;
     width: auto;
 }
 
@@ -28,16 +28,4 @@
     text-transform: uppercase;
     color: var(--primary-text);
     white-space: nowrap;
-}
-
-/* Open the mobile navigation drawer from the right instead of the left */
-@media screen and (max-width: 76.1875em) {
-    [dir=ltr] .md-sidebar--primary {
-        left: auto;
-        right: -12.1rem;
-    }
-
-    [dir=ltr] [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
-        transform: translateX(-12.1rem);
-    }
 }

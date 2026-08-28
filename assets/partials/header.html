@@ -12,8 +12,13 @@
         class="md-header__inner md-grid"
         aria-label="{{ lang.t('header') }}"
     >
+        <!-- Button to open drawer -->
+        <label class="md-header__button md-icon" for="__drawer">
+            {% set icon = config.theme.icon.menu or "material/menu" %}
+            {% include ".icons/" ~ icon ~ ".svg" %}
+        </label>
 
-        <!-- Brand: logo2 + site title (left) -->
+        <!-- Centered brand: logo2 + site title -->
         <a
             href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
             title="{{ config.site_name | e }}"
@@ -21,13 +26,17 @@
             aria-label="{{ config.site_name }}"
             data-md-component="logo"
         >
+            <span class="md-header__brand-title site-title">
+                Planet
+            </span>
+
             <img
                 class="md-header__brand-logo"
-                src="{{ 'assets/images/logo2.png' | url }}"
+                src="{{ 'assets/images/logo3.png' | url }}"
                 alt="{{ config.site_name | e }}"
             >
             <span class="md-header__brand-title site-title">
-                {{ config.site_name }}
+                Raves
             </span>
         </a>
 
@@ -65,12 +74,6 @@
                 {% include "partials/source.html" %}
             </div>
         {% endif %}
-
-        <!-- Button to open drawer (far right) -->
-        <label class="md-header__button md-icon" for="__drawer">
-            {% set icon = config.theme.icon.menu or "material/menu" %}
-            {% include ".icons/" ~ icon ~ ".svg" %}
-        </label>
     </nav>
 
     <!-- Subtitle -->
