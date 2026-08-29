@@ -5,7 +5,7 @@ import {
 async function handleClick(el) {
     switch (el.dataset.action) {
         case "reset-password":
-            resetPassword();
+            await resetPassword();
             break;
 
         default:

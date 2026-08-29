@@ -9,8 +9,8 @@ APP_CONFIG = {
     DEV: DEPLOY_DEV || ["localhost", "127.0.0.1"].includes(window.location.hostname),
     SUPABASE_URL: "https://jpicbqssqixagnwejefu.supabase.co",
     SUPABASE_ANON_KEY: "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_",
-    EMAIL_ADDRESS: "no-reply@rcsculture.gloug.fr",
-    EMAILCONFIRMED_REDIRECT_URL: SITE_URL + "/account_comfirmed/",
+    EMAIL_ADDRESS: "no-reply@planetraves.fr",
+    EMAILCONFIRMED_REDIRECT_URL: SITE_URL + "/account_confirmed/",
     RESETPWD_REDIRECT_URL: SITE_URL + "/account_reset_pwd/",
     ROLES: {
         0: "Non-Officiel",

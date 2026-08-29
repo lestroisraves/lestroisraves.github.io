@@ -551,6 +551,12 @@ export async function sendResetPasswordRequest() {
         console.error("reset password request failed:", error);
         return;
     }
+
+    openSuccessModal("Un email de réinitialisation a été envoyé ! La page va se rafraichir automatiquement.");
+
+    setTimeout(function () {
+        window.location.reload();
+    }, 3000);
 }
 
 export async function updateProfileRole() {

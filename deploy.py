@@ -134,7 +134,8 @@ def patch_dev_flag():
 
     new_content, count = re.subn(
         r"const DEPLOY_DEV = (?:true|false);",
-        f"const DEPLOY_DEV = false;",
+        f"const DEPLOY_DEV = true;",
+        # f"const DEPLOY_DEV = false;",
         content,
     )
     if count == 0:
