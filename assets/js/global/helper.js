@@ -12,6 +12,9 @@ function localizeAuthError(error) {
     "user_already_exists": "Un compte existe déjà avec cet email.",
     "weak_password": "Mot de passe trop faible. Utilisez au moins 8 caractères.",
     "email_not_confirmed": "Veuillez confirmer votre email avant de vous connecter.",
+    "same_password": "Le nouveau mot de passe doit être différent de l'ancien.",
+    "invalid_password": "Mot de passe incorrect.",
+    "invalid_email": "Email invalide.",
   };
   console.log("ERROR:", code)
 

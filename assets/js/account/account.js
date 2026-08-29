@@ -1,6 +1,6 @@
 console.log("executing:", "account.js");
 
-import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=aaacbb67.73048de";
+import {openRoleRequestModal, openProfileModal, openEventModal, openErrorModal, openSuccessModal} from "../global/modal.js?v=12d51295.b47c27c";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -551,6 +551,12 @@ export async function sendResetPasswordRequest() {
         console.error("reset password request failed:", error);
         return;
     }
+
+    openSuccessModal("Un email de réinitialisation a été envoyé ! La page va se rafraichir automatiquement.");
+
+    setTimeout(function () {
+        window.location.reload();
+    }, 3000);
 }
 
 export async function updateProfileRole() {

@@ -4,33 +4,65 @@
    ============================================================ */
 
 .md-header__brand {
-    margin-right: auto;   /* push remaining header items to the right */
-    padding-left: 0.4rem;
+    position: absolute;           /* centered over the full header width */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: row;  /* logo on the left, title on its right */
     align-items: center;
     gap: 0rem;
     text-decoration: none;
-    color: var(--primary-text);
+    color: var(--primary-title);
 }
 
-/* Logo icon (sits to the left of the title) */
+/* Keep the drawer button left and push search/source to the right */
+.md-header__inner > .md-header__button[for="__drawer"] {
+    margin-right: auto;
+}
+
+.md-header__button.md-icon.drawer {
+    color: var(--primary-title);
+}
+
+/* Logo icon (sits to the left of the title) — inline SVG, colored via CSS.
+   Tweak the three knobs below:
+   --logo-color  : main emblem color (defaults to the title color)
+   --logo-detail : carved highlight lines (defaults to header bg so they read as cut-outs)
+   --logo-weight : extra outline thickness in screen px (0 = original shape) */
 .md-header__brand-logo {
-    height: 40px;
+    height: 42px;
     width: auto;
     padding-left: 0;
     padding-right: 0;
     margin-left: 0;
-    margin-right: 0;
+    margin-right: 0.1rem;
+
+    --logo-color: var(--primary-title);
+    --logo-detail: var(--primary-fg);
+    --logo-weight: 0;
+    color: var(--logo-color);
+}
+
+.md-header__brand-logo .logo-main {
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: var(--logo-weight);
+    vector-effect: non-scaling-stroke; /* stroke-width is screen px, not viewBox units */
+}
+
+.md-header__brand-logo .logo-detail {
+    fill: var(--logo-detail);
+    stroke: none;
 }
 
 /* Title text */
 .site-title {
     font-family: "Monoton", cursive;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 400; /* Monoton only ships weight 400 */
     text-transform: uppercase;
-    color: var(--primary-text);
+    color: var(--primary-title);
     white-space: nowrap;
 }
 

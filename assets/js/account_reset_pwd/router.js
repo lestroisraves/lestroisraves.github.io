@@ -1,11 +1,17 @@
 import {
     resetPassword
-} from "./account_reset_pwd.js?v=aaacbb67.73048de";
+} from "./account_reset_pwd.js?v=12d51295.b47c27c";
+
+import {closeModal} from "../global/modal.js?v=12d51295.b47c27c";
 
 async function handleClick(el) {
     switch (el.dataset.action) {
         case "reset-password":
-            resetPassword();
+            await resetPassword();
+            break;
+
+        case "close-modal":
+            closeModal(el);
             break;
 
         default:
