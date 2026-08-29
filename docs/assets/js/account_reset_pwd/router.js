@@ -2,10 +2,16 @@ import {
     resetPassword
 } from "./account_reset_pwd.js?v=dev";
 
+import {closeModal} from "../global/modal.js?v=dev";
+
 async function handleClick(el) {
     switch (el.dataset.action) {
         case "reset-password":
             await resetPassword();
+            break;
+
+        case "close-modal":
+            closeModal(el);
             break;
 
         default:

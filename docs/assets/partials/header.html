@@ -13,7 +13,7 @@
         aria-label="{{ lang.t('header') }}"
     >
         <!-- Button to open drawer -->
-        <label class="md-header__button md-icon" for="__drawer">
+        <label class="md-header__button md-icon drawer" for="__drawer">
             {% set icon = config.theme.icon.menu or "material/menu" %}
             {% include ".icons/" ~ icon ~ ".svg" %}
         </label>
@@ -30,11 +30,7 @@
                 Planet
             </span>
 
-            <img
-                class="md-header__brand-logo"
-                src="{{ 'assets/images/logo3.png' | url }}"
-                alt="{{ config.site_name | e }}"
-            >
+            {% include "images/logo3.svg" %}
             <span class="md-header__brand-title site-title right">
                 Raves
             </span>

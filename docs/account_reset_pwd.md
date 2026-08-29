@@ -4,6 +4,7 @@ hide:
   - toc
 ---
 
+{% include 'includes/modals/popup.html' %}
 {% include 'includes/account/account_reset_pwd.html' %}
 
 

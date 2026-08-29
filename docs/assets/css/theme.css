@@ -21,6 +21,7 @@
     --primary-link--active:             #311b92;
     --primary-notice--bg:               #f8f9fd;  
     --primary-notice--text:             #1a237e;
+    --primary-title:                    #870d54;
 
     --primary-gray:                     #aaaaaa;
     --primary-dark: #0D2C87;
@@ -97,10 +98,12 @@
     box-shadow: none !important;
 }
 
-/* Slightly taller header with a centered logo + title brand */
+/* Slightly taller header with a centered logo + title brand.
+   The brand is position:absolute, so it adds no height; without this the row
+   collapses on desktop (drawer button hidden) and the logo gets cropped. */
 .md-header__inner {
     position: relative;
-    /* min-height: 3.6rem; */
+    min-height: 2.5rem;
 }
 
 /* Subtitle banner */
