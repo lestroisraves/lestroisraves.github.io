@@ -170,19 +170,26 @@ export async function uploadImageFile() {
     if (imageToUpload) {
         console.log("upload image");
         const fileName = `event-${crypto.randomUUID()}.jpg`;
-        const { data, error } = await window.supabaseClient.storage.from("event-images")
+        const storage = window.supabaseClient.storage.from("event-images");
+        const { data, error } = await storage
             .upload(fileName, imageToUpload, {
                 contentType: "image/jpeg",
                 cacheControl: "3600",
                 upsert: false
             });
         if (error) {
-            return {image_url: null, error: error};
+            return {imageUrl: null, error: error};
         }
-        imageToUpload = null;
-        return {image_url: window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl, error: null};
+        const publicUrlResult = storage.getPublicUrl(data.path);
+        const publicUrl = publicUrlResult.data?.publicUrl ?? publicUrlResult.publicURL;
+
+        if (!publicUrl) {
+            return {imageUrl: null, error: new Error("Impossible d'obtenir l'URL publique de l'image")};
+        }
+
+        return {imageUrl: publicUrl, error: null};
     } else {
-        return {image_url: currentImageUrl, error: null};
+        return {imageUrl: currentImageUrl, error: null};
     }
 }
 

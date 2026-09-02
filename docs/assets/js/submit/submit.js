@@ -113,6 +113,7 @@ export async function submitEvent() {
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
         payload.image_url = imageUrl
+        payload.is_test = APP_CONFIG.DEV
         console.log("submit event payload:", payload)
 
         const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
