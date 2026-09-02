@@ -234,8 +234,13 @@ export function getEventFormPayload() {
     /* check phone number */
     if (phoneInput.value && (phoneInput.value != "")) {
         try {
-            phoneNumber = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
-            if (!phoneNumber.isValid()) phoneInput.setCustomValidity("Numéro invalide");
+            const numData = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
+            if (!numData.isValid()) {
+                phoneInput.setCustomValidity("Numéro invalide");
+            } else {
+                phoneNumber = numData.number;
+            
+            }
         } catch {
             phoneInput.setCustomValidity("Numéro invalide");
         }
