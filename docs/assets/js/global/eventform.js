@@ -156,9 +156,9 @@ export function priceChanged(target) {
 }
 
 export async function handleImageChoice(file) {
-    if (file.size > 5_000_000) {
+    if (file.size > 10_000_000) {
         button.setAttribute("aria-busy", "false");
-        openErrorModal("Image trop lourde (5Mo maximum");
+        openErrorModal("Image trop lourde (10Mo maximum");
         eventImage.value = "";
         return;
     }
