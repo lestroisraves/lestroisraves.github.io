@@ -1,7 +1,7 @@
 console.log("executing:", "eventform.js");
 
-import { openErrorModal } from "./modal.js?v=12d51295.b47c27c";
-import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=12d51295.b47c27c";
+import { openErrorModal } from "./modal.js?v=610569b0.1ce6223";
+import { tagInput, userTags, clearTags, addTag } from "./tags.js?v=610569b0.1ce6223";
 // import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 /* === VARIABLES === */
@@ -156,9 +156,9 @@ export function priceChanged(target) {
 }
 
 export async function handleImageChoice(file) {
-    if (file.size > 5_000_000) {
+    if (file.size > 10_000_000) {
         button.setAttribute("aria-busy", "false");
-        openErrorModal("Image trop lourde (5Mo maximum");
+        openErrorModal("Image trop lourde (10Mo maximum");
         eventImage.value = "";
         return;
     }
@@ -170,19 +170,26 @@ export async function uploadImageFile() {
     if (imageToUpload) {
         console.log("upload image");
         const fileName = `event-${crypto.randomUUID()}.jpg`;
-        const { data, error } = await window.supabaseClient.storage.from("event-images")
+        const storage = window.supabaseClient.storage.from("event-images");
+        const { data, error } = await storage
             .upload(fileName, imageToUpload, {
                 contentType: "image/jpeg",
                 cacheControl: "3600",
                 upsert: false
             });
         if (error) {
-            return {image_url: null, error: error};
+            return {imageUrl: null, error: error};
         }
-        imageToUpload = null;
-        return {image_url: window.supabaseClient.storage.from("event-images").getPublicUrl(fileName).data.publicUrl, error: null};
+        const publicUrlResult = storage.getPublicUrl(data.path);
+        const publicUrl = publicUrlResult.data?.publicUrl ?? publicUrlResult.publicURL;
+
+        if (!publicUrl) {
+            return {imageUrl: null, error: new Error("Impossible d'obtenir l'URL publique de l'image")};
+        }
+
+        return {imageUrl: publicUrl, error: null};
     } else {
-        return {image_url: currentImageUrl, error: null};
+        return {imageUrl: currentImageUrl, error: null};
     }
 }
 
@@ -227,8 +234,13 @@ export function getEventFormPayload() {
     /* check phone number */
     if (phoneInput.value && (phoneInput.value != "")) {
         try {
-            phoneNumber = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
-            if (!phoneNumber.isValid()) phoneInput.setCustomValidity("Numéro invalide");
+            const numData = libphonenumber.parsePhoneNumber(form.querySelector('#phone').value);
+            if (!numData.isValid()) {
+                phoneInput.setCustomValidity("Numéro invalide");
+            } else {
+                phoneNumber = numData.number;
+            
+            }
         } catch {
             phoneInput.setCustomValidity("Numéro invalide");
         }

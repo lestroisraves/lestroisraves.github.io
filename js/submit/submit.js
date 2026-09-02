@@ -1,7 +1,7 @@
 console.log("executing:", "submit.js");
 
-import { openErrorModal, openSuccessModal } from "../global/modal.js?v=12d51295.b47c27c";
-import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=12d51295.b47c27c";
+import { openErrorModal, openSuccessModal } from "../global/modal.js?v=610569b0.1ce6223";
+import { initEventForm, getEventFormPayload, uploadImageFile } from "../global/eventform.js?v=610569b0.1ce6223";
 
 /* === VARIABLES === */
 const loading = document.getElementById("loading-screen");
@@ -113,6 +113,7 @@ export async function submitEvent() {
         payload.created_by = user_profile?.id ?? null
         payload.creator_name = user_profile?.name ?? null;
         payload.image_url = imageUrl
+        payload.is_test = APP_CONFIG.DEV
         console.log("submit event payload:", payload)
 
         const { data: event, error } = await window.supabaseClient.from("events").insert(payload);
