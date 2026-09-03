@@ -37,6 +37,13 @@ for /f "usebackq tokens=1,* delims==" %%A in ("%PROJECT_ROOT_FOLDER%\supabase.en
     set "%%A=%%B"
 )
 
+REM Read the Supabase access token from the user's token file
+IF EXIST "%HOME%\.supabase\planetraves.token" (
+    set /p SUPABASE_ACCESS_TOKEN=<"%HOME%\.supabase\planetraves.token"
+) ELSE (
+    echo WARNING: token file not found: "%HOME%\.supabase\planetraves.token"
+)
+
 echo SUCCESS
 
 ENDLOCAL
