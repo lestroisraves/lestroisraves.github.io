@@ -9,14 +9,15 @@ honouring the corporate proxy).
 Commands
 --------
     py sbdb.py                                          full dump of dev (shorthand)
-    py sbdb.py dump    [--env dev]  [--out DIR] [--schema public|all] [--schema-only|--data-only] [--clean] [--include-auth]
+    py sbdb.py dump    [--env dev]  [--out DIR] [--schema public|all] [--schema-only|--data-only] [--clean] [--include-auth] [--include-storage]
     py sbdb.py exec    [--env prod] --file PATH  [--yes]   PATH is a .sql file or a dump folder
     py sbdb.py query   [--env dev]  "SELECT ..."  [--json]
-    py sbdb.py migrate [--from dev] [--to prod] [--out DIR] [--include-data] [--clean] [--include-auth] [--yes]
+    py sbdb.py migrate [--from dev] [--to prod] [--out DIR] [--include-data] [--clean] [--include-auth] [--include-storage] [--yes]
 
 A dump is written as a folder of numbered fragments (00_session, 10_extensions,
-20_types, 30_sequences, 40_functions, 50_tables, 60_data/<table>, 70_constraints,
-75_indexes, 80_sequence_values, 85_views, 90_triggers, 95_policies, 97_cron, 98_grants).
+20_types, 30_sequences, 40_functions, 50_tables, 60_data/<table>, 62_storage_buckets,
+70_constraints, 75_indexes, 80_sequence_values, 85_views, 90_triggers, 95_policies,
+96_storage_policies, 97_cron, 98_grants).
 exec/migrate concatenate a folder's *.sql in name order inside one transaction.
 
 Backends (--backend, default: api)
@@ -432,6 +433,43 @@ def _dump_triggers(backend, schema, out, user_only=False):
         out.write(r["def"] + ";\n")
 
 
+def _write_policy(schema, p, out):
+    roles = p["roles"]
+    if isinstance(roles, str):
+        roles = roles.strip("{}").split(",") if roles else []
+    roles_sql = ", ".join(r.strip('"') for r in roles) or "public"
+    out.write(f"DROP POLICY IF EXISTS {qi(p['policyname'])} ON {qq(schema, p['tablename'])};\n")
+    clauses = [
+        f"CREATE POLICY {qi(p['policyname'])} ON {qq(schema, p['tablename'])}",
+        f"  AS {'PERMISSIVE' if p['permissive'] in (True, 'PERMISSIVE', 't') else 'RESTRICTIVE'}",
+        f"  FOR {p['cmd']}",
+        f"  TO {roles_sql}",
+    ]
+    if p.get("qual") is not None:
+        clauses.append(f"  USING ({p['qual']})")
+    if p.get("with_check") is not None:
+        clauses.append(f"  WITH CHECK ({p['with_check']})")
+    out.write("\n".join(clauses) + ";\n")
+
+
+def _policies(backend, schema):
+    return backend.fetch(f"""
+        SELECT tablename, policyname, permissive, roles, cmd, qual, with_check
+        FROM pg_policies WHERE schemaname = '{schema}'
+        ORDER BY tablename, policyname
+    """)
+
+
+def _dump_policies(backend, schema, out):
+    """Policies only (no ENABLE RLS) — for the Supabase-managed storage schema."""
+    policies = _policies(backend, schema)
+    if not policies:
+        return
+    out.write("\n-- Policies\n")
+    for p in policies:
+        _write_policy(schema, p, out)
+
+
 def _dump_rls(backend, schema, out):
     enabled = backend.fetch(f"""
         SELECT c.relname AS name
@@ -440,33 +478,15 @@ def _dump_rls(backend, schema, out):
         WHERE c.relkind = 'r' AND n.nspname = '{schema}' AND c.relrowsecurity
         ORDER BY c.relname
     """)
-    policies = backend.fetch(f"""
-        SELECT tablename, policyname, permissive, roles, cmd, qual, with_check
-        FROM pg_policies WHERE schemaname = '{schema}'
-        ORDER BY tablename, policyname
-    """)
+    policies = _policies(backend, schema)
     if not enabled and not policies:
         return
     out.write("\n-- Row level security\n")
     for r in enabled:
         out.write(f"ALTER TABLE {qq(schema, r['name'])} ENABLE ROW LEVEL SECURITY;\n")
     for p in policies:
-        roles = p["roles"]
-        if isinstance(roles, str):
-            roles = roles.strip("{}").split(",") if roles else []
-        roles_sql = ", ".join(r.strip('"') for r in roles) or "public"
-        out.write(f"DROP POLICY IF EXISTS {qi(p['policyname'])} ON {qq(schema, p['tablename'])};\n")
-        clauses = [
-            f"CREATE POLICY {qi(p['policyname'])} ON {qq(schema, p['tablename'])}",
-            f"  AS {'PERMISSIVE' if p['permissive'] in (True, 'PERMISSIVE', 't') else 'RESTRICTIVE'}",
-            f"  FOR {p['cmd']}",
-            f"  TO {roles_sql}",
-        ]
-        if p.get("qual") is not None:
-            clauses.append(f"  USING ({p['qual']})")
-        if p.get("with_check") is not None:
-            clauses.append(f"  WITH CHECK ({p['with_check']})")
-        out.write("\n".join(clauses) + ";\n")
+        _write_policy(schema, p, out)
+
 
 
 def _dump_data(backend, schema, table, cols, out):
@@ -545,6 +565,36 @@ def _dump_cron(backend, out):
             )
         else:
             out.write(f"SELECT cron.schedule({lit(j['schedule'])}, {lit(j['command'])});\n")
+
+
+def _plain_columns(backend, schema, table):
+    """Ordered, non-generated column names for a table (empty if it doesn't exist)."""
+    rows = backend.fetch(f"""
+        SELECT a.attname AS name, a.attgenerated AS gen
+        FROM pg_attribute a
+        JOIN pg_class c ON c.oid = a.attrelid
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE n.nspname = '{schema}' AND c.relname = '{table}'
+          AND a.attnum > 0 AND NOT a.attisdropped
+        ORDER BY a.attnum
+    """)
+    return [r["name"] for r in rows if not r["gen"]]
+
+
+def _dump_storage_buckets(backend, out):
+    cols = _plain_columns(backend, "storage", "buckets")
+    if not cols:
+        return
+    select_cols = ", ".join(f"{qi(c)}::text" for c in cols)
+    rows = backend.fetch(f"SELECT {select_cols} FROM storage.buckets ORDER BY id")
+    if not rows:
+        return
+    out.write("\n-- Storage buckets\n")
+    col_list = ", ".join(qi(c) for c in cols)
+    set_cols = ", ".join(f"{qi(c)} = EXCLUDED.{qi(c)}" for c in cols if c != "id")
+    values = ",\n".join("(" + ", ".join(lit(r[c]) for c in cols) + ")" for r in rows)
+    out.write(f'INSERT INTO "storage"."buckets" ({col_list}) VALUES\n{values}\n')
+    out.write(f"ON CONFLICT (id) DO UPDATE SET {set_cols};\n")
 
 
 def _emit(path, write_fn) -> bool:
@@ -640,7 +690,7 @@ def _dump_schema_data_ordered(backend, schema, datadir, only=None):
 
 
 def do_dump(backend, schema, outdir, *, schema_only=False, data_only=False, clean=False,
-            include_auth=False):
+            include_auth=False, include_storage=False):
     schemas = _resolve_schemas(backend, schema)
     tables = {s: _table_columns(backend, s) for s in schemas}
     seqs = {s: _sequences(backend, s) for s in schemas}
@@ -727,6 +777,10 @@ def do_dump(backend, schema, outdir, *, schema_only=False, data_only=False, clea
         _emit(p("42_auth_functions.sql"), lambda o: _dump_functions(backend, "auth", o, user_only=True))
         _emit(p("92_auth_triggers.sql"), lambda o: _dump_triggers(backend, "auth", o, user_only=True))
 
+    if include_storage and not data_only:
+        _emit(p("62_storage_buckets.sql"), lambda o: _dump_storage_buckets(backend, o))
+        _emit(p("96_storage_policies.sql"), lambda o: _dump_policies(backend, "storage", o))
+
     if not schema_only:
         _emit(p("80_sequence_values.sql"), _for_each(_dump_sequence_values))
 
@@ -771,6 +825,7 @@ def cmd_dump(args) -> int:
         data_only=args.data_only,
         clean=args.clean,
         include_auth=args.include_auth,
+        include_storage=args.include_storage,
     )
     success(f"dumped {args.env} -> {out_dir}{os.sep}")
     return 0
@@ -810,7 +865,8 @@ def cmd_migrate(args) -> int:
     )
     do_dump(src, args.schema, out_dir, clean=args.clean,
             schema_only=not args.include_data,
-            include_auth=args.include_auth)
+            include_auth=args.include_auth,
+            include_storage=args.include_storage)
     success(f"dumped {getattr(args, 'from')} -> {out_dir}{os.sep}")
 
     if args.clean:
@@ -856,7 +912,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help='schema to dump, or "all" for every user schema')
     # bare `python sbdb.py` runs a full dev dump
     parser.set_defaults(func=cmd_dump, env="dev", out=None,
-                        schema_only=False, data_only=False, clean=False, include_auth=False)
+                        schema_only=False, data_only=False, clean=False,
+                        include_auth=False, include_storage=False)
     sub = parser.add_subparsers(dest="command")
 
     p_dump = sub.add_parser("dump", help="dump a project to a .sql file")
@@ -867,6 +924,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_dump.add_argument("--clean", action="store_true", help="drop tables before recreating")
     p_dump.add_argument("--include-auth", action="store_true",
                         help="also dump auth.users and related tables (data only)")
+    p_dump.add_argument("--include-storage", action="store_true",
+                        help="also dump storage buckets and storage policies")
     p_dump.set_defaults(func=cmd_dump)
 
     p_exec = sub.add_parser("exec", help="run a .sql file or dump folder against a project")
@@ -889,6 +948,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_mig.add_argument("--clean", action="store_true", help="drop tables before recreating")
     p_mig.add_argument("--include-auth", action="store_true",
                        help="also migrate auth.users and related tables (data only)")
+    p_mig.add_argument("--include-storage", action="store_true",
+                       help="also migrate storage buckets and storage policies")
     p_mig.add_argument("--yes", action="store_true")
     p_mig.set_defaults(func=cmd_migrate)
 
