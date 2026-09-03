@@ -1,10 +1,10 @@
 console.log("executing:", "events.js");
 
-import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=610569b0.1ce6223";
+import { openErrorModal, openEventModal, openSuccessModal } from "../global/modal.js?v=307f4672.66ce8e2";
 
 import { renderOptionBtn, renderSection, renderEventTile,
          renderDots, renderEventSuggestion
-} from "./renderevents.js?v=610569b0.1ce6223";
+} from "./renderevents.js?v=307f4672.66ce8e2";
 
 /* === VARIABLES === */
 const hash = window.location.hash.substring(1);
@@ -243,6 +243,8 @@ function applyFilter() {
         var filteredEvents;
         if (!hasAnyFilter) {
             filteredEvents = EVENTS;
+        } else if (hideAll) {
+            filteredEvents = [];
         } else {
             filteredEvents = EVENTS.filter(event => matchesFilters(eventCategoryIds(event).join(","), String(event.pg), String(event.price), eventAreaId(event), event.min_age, event.max_age));
         }
@@ -352,6 +354,8 @@ function renderCalendar(events=EVENTS) {
     switchViewArea.querySelector('[data-view="tiles"]').classList.remove("active");
     switchViewArea.querySelector('[data-view="agenda"]').classList.add("active");
     loading.style.display = "none";
+    // the tiles empty-state message doesn't apply to the calendar (empty grid speaks for itself)
+    emptyState.classList.add("hidden");
 }
 
 function animateSwipe(direction) {
@@ -393,16 +397,15 @@ async function loadEvents() {
     if (error) {
         console.log("Error:", error);
         tilesView.innerText = "ERREUR survenue durant le chargement des évènements";
-        return;
-    }
-    if (!data || data.length === 0) {
+        loading.style.display = "none";
         return;
     }
 
-    EVENTS = data;
+    EVENTS = data || [];
 
     renderTiles();
     showHeader();
+    updateEmptyState();
 }
 
 function matchesFilters(category, pg, price, area, minAge, maxAge) {

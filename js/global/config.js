@@ -2,13 +2,10 @@ console.log("executing:", "config.js");
 
 SITE_URL = "https://planetraves.fr"
 
-/* DEPLOY_DEV is patched to true/false at deploy time by deploy.py (env DEV) */
-const DEPLOY_DEV = true;
-
 APP_CONFIG = {
-    DEV: DEPLOY_DEV || ["localhost", "127.0.0.1"].includes(window.location.hostname),
-    SUPABASE_URL: "https://jpicbqssqixagnwejefu.supabase.co",
-    SUPABASE_ANON_KEY: "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_",
+    DEV: __DEPLOY_DEV__,
+    SUPABASE_URL: "__SUPABASE_URL__",
+    SUPABASE_ANON_KEY: "__SUPABASE_ANON_KEY__",
     EMAIL_ADDRESS: "no-reply@planetraves.fr",
     EMAILCONFIRMED_REDIRECT_URL: SITE_URL + "/account_confirmed/",
     RESETPWD_REDIRECT_URL: SITE_URL + "/account_reset_pwd/",
