@@ -121,34 +121,7 @@ def patch_js_version(hash: str):
     success("Patch site/ with success")
     print(SEPARATOR)
 
-
-def patch_dev_flag():
-    print("[[[[[[ patch APP_CONFIG.DEV flag ]]]]]]")
-    config_path = os.path.join(PROJECT_ROOT_FOLDER, "site", "assets", "js", "global", "config.js")
-    if not os.path.isfile(config_path):
-        error(f"config.js not found: {config_path}")
-        sys.exit(1)
-
-    with open(config_path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    new_content, count = re.subn(
-        r"const DEPLOY_DEV = (?:true|false);",
-        # f"const DEPLOY_DEV = true;",
-        f"const DEPLOY_DEV = false;",
-        content,
-    )
-    if count == 0:
-        error("DEPLOY_DEV marker not found in config.js")
-        sys.exit(1)
-
-    with open(config_path, "w", encoding="utf-8") as f:
-        f.write(new_content)
-
-    success(f"APP_CONFIG.DEV set to false")
-    print(SEPARATOR)
-
-
+    
 def push(release: bool = False):
     print("[[[[[[ Publish on GitHub ]]]]]]")
     remote = "release" if release else "origin"
@@ -166,11 +139,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     hash = initialization()
+    if args.release:
+        os.environ["DEPLOY_ENV"] = "prod"  # the mkdocs hook injects PROD Supabase creds
     build()
     patch_js_version(hash)
-    if args.release:
-        patch_dev_flag()
-
     # check_git_repos()
     
     push(release=args.release)

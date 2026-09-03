@@ -89,3 +89,6 @@ extra_css:
 
 plugins:
     - macros
+
+hooks:
+  - hooks/supabase_env.py

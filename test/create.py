@@ -11,9 +11,9 @@ import httpx
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
 
-SUPABASE_URL = "https://jpicbqssqixagnwejefu.supabase.co"
-SUPABASE_ANON_KEY = "sb_publishable_2N5OfZFZNISlfbjVUwL8KQ_AR45LsK_"
-SUPABASE_SERVICE_ROLE_KEY = keyring.get_password("rcsculture.supabase.servicerolekey", "rcsculture")
+SUPABASE_URL = os.getenv("SUPABASE_DEV_URL")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_DEV_ANON_KEY")
+SUPABASE_SERVICE_ROLE_KEY = keyring.get_password("planetraves.dev.servicerolekey", "planetraves")
 SUPABASE_IMAGE_STORAGE = f"{SUPABASE_URL}/storage/v1/object/public/event-images/"
 EVENTS_FILE = os.path.expandvars("$PROJECT_ROOT_FOLDER\\test\\dummy-events.json")
 USERS_FILE = os.path.expandvars("$PROJECT_ROOT_FOLDER\\test\\dummy-users.json")
