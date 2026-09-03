@@ -16,7 +16,7 @@ Commands
 
 A dump is written as a folder of numbered fragments (00_session, 10_extensions,
 20_types, 30_sequences, 40_functions, 50_tables, 60_data/<table>, 70_constraints,
-75_indexes, 80_sequence_values, 85_views, 90_triggers, 95_policies, 97_cron).
+75_indexes, 80_sequence_values, 85_views, 90_triggers, 95_policies, 97_cron, 98_grants).
 exec/migrate concatenate a folder's *.sql in name order inside one transaction.
 
 Backends (--backend, default: api)
@@ -519,6 +519,17 @@ def _dump_extensions(backend, out):
         )
 
 
+def _dump_grants(schema, out):
+    out.write("\n-- Grants (Supabase API roles; row access still enforced by RLS)\n")
+    out.write(f"GRANT USAGE ON SCHEMA {qi(schema)} TO {_API_ROLES};\n")
+    out.write(f"GRANT ALL ON ALL TABLES IN SCHEMA {qi(schema)} TO {_API_ROLES};\n")
+    out.write(f"GRANT ALL ON ALL SEQUENCES IN SCHEMA {qi(schema)} TO {_API_ROLES};\n")
+    out.write(f"GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA {qi(schema)} TO {_API_ROLES};\n")
+    out.write(f"ALTER DEFAULT PRIVILEGES IN SCHEMA {qi(schema)} GRANT ALL ON TABLES TO {_API_ROLES};\n")
+    out.write(f"ALTER DEFAULT PRIVILEGES IN SCHEMA {qi(schema)} GRANT ALL ON SEQUENCES TO {_API_ROLES};\n")
+    out.write(f"ALTER DEFAULT PRIVILEGES IN SCHEMA {qi(schema)} GRANT EXECUTE ON FUNCTIONS TO {_API_ROLES};\n")
+
+
 def _dump_cron(backend, out):
     if not backend.fetch("SELECT 1 AS ok FROM pg_extension WHERE extname = 'pg_cron'"):
         return
@@ -573,6 +584,9 @@ _USER_OWNED = (
     " AND o.rolname NOT IN ('authenticator', 'pgbouncer', 'dashboard_user')"
     " AND NOT EXISTS (SELECT 1 FROM pg_depend d WHERE d.objid = {obj} AND d.deptype = 'e')"
 )
+
+# Supabase API roles that need privileges on user objects (access still gated by RLS)
+_API_ROLES = "anon, authenticated, service_role"
 
 
 def _fk_order(backend, schema, names):
@@ -721,6 +735,7 @@ def do_dump(backend, schema, outdir, *, schema_only=False, data_only=False, clea
         _emit(p("90_triggers.sql"), _for_each(_dump_triggers))
         _emit(p("95_policies.sql"), _for_each(_dump_rls))
         _emit(p("97_cron.sql"), lambda o: _dump_cron(backend, o))
+        _emit(p("98_grants.sql"), lambda o: [_dump_grants(s, o) for s in schemas])
 
 
 def _load_sql(path: str) -> str:
