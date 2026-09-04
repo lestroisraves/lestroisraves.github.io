@@ -9,16 +9,21 @@ honouring the corporate proxy).
 Commands
 --------
     py sbdb.py                                          full dump of dev (shorthand)
-    py sbdb.py dump    [--env dev]  [--out DIR] [--schema public|all] [--schema-only|--data-only] [--clean] [--include-auth] [--include-storage]
+    py sbdb.py dump    [--env dev]  [--out DIR] [--schema public|all] [--schema-only|--data-only] [--clean] [--include-auth] [--include-storage] [--include-config] [--include-all]
     py sbdb.py exec    [--env prod] --file PATH  [--yes]   PATH is a .sql file or a dump folder
     py sbdb.py query   [--env dev]  "SELECT ..."  [--json]
-    py sbdb.py migrate [--from dev] [--to prod] [--out DIR] [--include-data] [--clean] [--include-auth] [--include-storage] [--yes]
+    py sbdb.py migrate [--from dev] [--to prod] [--out DIR] [--include-data] [--clean] [--include-auth] [--include-storage] [--include-config] [--include-all] [--yes]
+    py sbdb.py config  [get|apply] [--env dev] [--out DIR | --file PATH] [--yes]
 
 A dump is written as a folder of numbered fragments (00_session, 10_extensions,
 20_types, 30_sequences, 40_functions, 50_tables, 60_data/<table>, 62_storage_buckets,
 70_constraints, 75_indexes, 80_sequence_values, 85_views, 90_triggers, 95_policies,
-96_storage_policies, 97_cron, 98_grants).
-exec/migrate concatenate a folder's *.sql in name order inside one transaction.
+96_storage_policies, 97_cron, 98_grants) plus, with --include-config, a
+config/<name>.json holding the auth service config (site URL, redirect allow list,
+email templates, sign-in settings, external providers). Auth config lives in the
+Supabase Management API, not in SQL, so it needs the api backend / access token.
+exec/migrate concatenate a folder's *.sql in name order inside one transaction;
+config/*.json is applied separately via the Management API.
 
 Backends (--backend, default: api)
     api  Supabase Management API via requests (needs SUPABASE_ACCESS_TOKEN)
@@ -53,8 +58,11 @@ import argparse
 import datetime
 from urllib.parse import quote
 
-SCHEMA_DEFAULT = "public"
+SCHEMA_DEFAULT = "all"
 BATCH = 500
+
+# Management API config resources (fetched over HTTPS, absent from the SQL schema)
+_CONFIG_ENDPOINTS = {"auth": "config/auth"}
 
 # order in which constraints must be applied
 _CONTYPE_ORDER = {"p": 0, "u": 1, "c": 2, "x": 3, "f": 4}
@@ -175,7 +183,8 @@ class ApiBackend:
                 "api backend needs SUPABASE_ACCESS_TOKEN and "
                 f"SUPABASE_{env.upper()}_PROJECT_ID"
             )
-        self._url = f"https://api.supabase.com/v1/projects/{ref}/database/query"
+        self._base = f"https://api.supabase.com/v1/projects/{ref}"
+        self._url = f"{self._base}/database/query"
         self._headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         self._proxies = _proxies()
         self._verify = _requests_verify()
@@ -203,6 +212,28 @@ class ApiBackend:
 
     def execute_script(self, sql: str):
         self._post(sql)
+
+    def _request(self, method: str, path: str, payload=None):
+        resp = self._requests.request(
+            method,
+            f"{self._base}/{path}",
+            json=payload,
+            headers=self._headers,
+            proxies=self._proxies,
+            verify=self._verify,
+            timeout=120,
+        )
+        if resp.status_code >= 400:
+            raise SystemExit(f"API error {resp.status_code}: {resp.text}")
+        if not resp.content:
+            return {}
+        return resp.json()
+
+    def get_config(self, name: str):
+        return self._request("GET", _CONFIG_ENDPOINTS[name])
+
+    def update_config(self, name: str, payload: dict):
+        return self._request("PATCH", _CONFIG_ENDPOINTS[name], payload)
 
 
 def make_backend(kind: str, env: str):
@@ -812,9 +843,71 @@ def _load_sql(path: str) -> str:
 
 
 # -----------------------------------------------------------------------------
+# Project config (auth service: URL config, email templates, sign-in, providers)
+# -----------------------------------------------------------------------------
+def _config_api(backend, env: str):
+    """Config lives in the Management API, so reuse or build an ApiBackend for it."""
+    return backend if isinstance(backend, ApiBackend) else ApiBackend(env)
+
+
+def do_dump_config(api, cfgdir: str):
+    """Write each config resource as pretty JSON into cfgdir; return the names written."""
+    import json
+
+    os.makedirs(cfgdir, exist_ok=True)
+    written = []
+    for name in _CONFIG_ENDPOINTS:
+        data = api.get_config(name)
+        with open(os.path.join(cfgdir, f"{name}.json"), "w", encoding="utf-8", newline="\n") as f:
+            json.dump(data, f, indent=2, sort_keys=True, default=str)
+            f.write("\n")
+        written.append(name)
+    return written
+
+
+def _config_files(path: str):
+    """Resolve (name, filepath) pairs from a JSON file, a config dir, or a dump folder."""
+    if os.path.isfile(path):
+        name = os.path.splitext(os.path.basename(path))[0]
+        return [(name if name in _CONFIG_ENDPOINTS else "auth", path)]
+    found = []
+    for base in (path, os.path.join(path, "config")):
+        for name in _CONFIG_ENDPOINTS:
+            fp = os.path.join(base, f"{name}.json")
+            if os.path.isfile(fp):
+                found.append((name, fp))
+    return found
+
+
+def do_apply_config(api, path: str):
+    """PATCH the Management API with config JSON found at path; return the names applied."""
+    import json
+
+    files = _config_files(path)
+    if not files:
+        raise SystemExit(f"no config JSON found in {path}")
+    names = []
+    for name, fp in files:
+        with open(fp, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        api.update_config(name, payload)
+        names.append(name)
+    return names
+
+
+# -----------------------------------------------------------------------------
 # Commands
 # -----------------------------------------------------------------------------
+def _resolve_include_all(args):
+    """--include-all turns on every include-* flag present on the command."""
+    if getattr(args, "include_all", False):
+        for name in ("include_data", "include_auth", "include_storage", "include_config"):
+            if hasattr(args, name):
+                setattr(args, name, True)
+
+
 def cmd_dump(args) -> int:
+    _resolve_include_all(args)
     backend = make_backend(args.backend, args.env)
     out_dir = args.out or os.path.join(
         "dump", f"{args.env}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
@@ -827,7 +920,34 @@ def cmd_dump(args) -> int:
         include_auth=args.include_auth,
         include_storage=args.include_storage,
     )
+    if getattr(args, "include_config", False):
+        names = do_dump_config(_config_api(backend, args.env), os.path.join(out_dir, "config"))
+        warn(f"config/ contains secrets (provider secrets, SMTP password): {', '.join(names)}")
     success(f"dumped {args.env} -> {out_dir}{os.sep}")
+    return 0
+
+
+def cmd_config(args) -> int:
+    api = ApiBackend(args.env)
+    if args.action == "apply":
+        if not args.file or not os.path.exists(args.file):
+            error(f"path not found: {args.file}")
+            return 1
+        if not _confirm(f"apply config from {args.file} to {args.env}", args.yes):
+            return 1
+        names = do_apply_config(api, args.file)
+        success(f"applied config ({', '.join(names)}) to {args.env}")
+        return 0
+
+    if args.out:
+        names = do_dump_config(api, args.out)
+        warn("config JSON contains secrets (provider secrets, SMTP password)")
+        success(f"dumped {args.env} config ({', '.join(names)}) -> {args.out}{os.sep}")
+    else:
+        import json
+
+        for name in _CONFIG_ENDPOINTS:
+            print(json.dumps(api.get_config(name), indent=2, sort_keys=True, default=str))
     return 0
 
 
@@ -859,6 +979,7 @@ def cmd_query(args) -> int:
 
 
 def cmd_migrate(args) -> int:
+    _resolve_include_all(args)
     src = make_backend(args.backend, getattr(args, "from"))
     out_dir = args.out or os.path.join(
         "dump", f"migrate_{getattr(args, 'from')}_to_{args.to}_{datetime.datetime.now():%Y%m%d_%H%M%S}"
@@ -867,6 +988,8 @@ def cmd_migrate(args) -> int:
             schema_only=not args.include_data,
             include_auth=args.include_auth,
             include_storage=args.include_storage)
+    if args.include_config:
+        do_dump_config(_config_api(src, getattr(args, "from")), os.path.join(out_dir, "config"))
     success(f"dumped {getattr(args, 'from')} -> {out_dir}{os.sep}")
 
     if args.clean:
@@ -876,6 +999,8 @@ def cmd_migrate(args) -> int:
         return 0
     dst = make_backend(args.backend, args.to)
     dst.execute_script(_load_sql(out_dir))
+    if args.include_config:
+        do_apply_config(_config_api(dst, args.to), out_dir)
     success(f"migrated {getattr(args, 'from')} -> {args.to}")
     return 0
 
@@ -913,7 +1038,8 @@ def build_parser() -> argparse.ArgumentParser:
     # bare `python sbdb.py` runs a full dev dump
     parser.set_defaults(func=cmd_dump, env="dev", out=None,
                         schema_only=False, data_only=False, clean=False,
-                        include_auth=False, include_storage=False)
+                        include_auth=False, include_storage=False, include_config=False,
+                        include_all=False)
     sub = parser.add_subparsers(dest="command")
 
     p_dump = sub.add_parser("dump", help="dump a project to a .sql file")
@@ -926,6 +1052,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="also dump auth.users and related tables (data only)")
     p_dump.add_argument("--include-storage", action="store_true",
                         help="also dump storage buckets and storage policies")
+    p_dump.add_argument("--include-config", action="store_true",
+                        help="also dump auth config (url config, email templates, sign-in, providers)")
+    p_dump.add_argument("--include-all", action="store_true",
+                        help="shortcut for --include-auth --include-storage --include-config")
     p_dump.set_defaults(func=cmd_dump)
 
     p_exec = sub.add_parser("exec", help="run a .sql file or dump folder against a project")
@@ -950,8 +1080,20 @@ def build_parser() -> argparse.ArgumentParser:
                        help="also migrate auth.users and related tables (data only)")
     p_mig.add_argument("--include-storage", action="store_true",
                        help="also migrate storage buckets and storage policies")
+    p_mig.add_argument("--include-config", action="store_true",
+                       help="also migrate auth config (url config, email templates, sign-in, providers)")
+    p_mig.add_argument("--include-all", action="store_true",
+                       help="shortcut for --include-data --include-auth --include-storage --include-config")
     p_mig.add_argument("--yes", action="store_true")
     p_mig.set_defaults(func=cmd_migrate)
+
+    p_cfg = sub.add_parser("config", help="get or apply auth config (url, email templates, sign-in, providers)")
+    p_cfg.add_argument("action", nargs="?", choices=["get", "apply"], default="get")
+    p_cfg.add_argument("--env", default="dev")
+    p_cfg.add_argument("--out", help="folder to write config JSON (default: print to stdout)")
+    p_cfg.add_argument("--file", help="config JSON file or dump folder to apply")
+    p_cfg.add_argument("--yes", action="store_true")
+    p_cfg.set_defaults(func=cmd_config)
 
     return parser
 
